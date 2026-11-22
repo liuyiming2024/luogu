@@ -3,9 +3,9 @@
 <title>三类口径与累计统计.md · 离线归档</title><link rel="stylesheet" href="../assets/style.css"></head>
 <body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">00_总览 / 三类口径与累计统计.md</span></header>
 <main class="doc"><h1>三类口径与累计统计</h1>
-<h2>口径（第 4 批定稿，后续各批沿用）</h2>
+<h2>口径（第 4 批定稿，沿用至第 12 批）</h2>
 <ul><li><strong>甲 · 已 hack</strong>：题面内存在确定性测试点使题解代码 WA / RE，且修复要动算法层面</li></ul>
-<p>（移语句、换类型、补分支）。不考虑评测机波动，不主张 TLE / 随机超时。</p>
+<p>（移语句、换类型、补分支、重写循环）。不考虑评测机波动，不主张 TLE / 随机超时。 第 12 批新增一种：<strong>题面空间限制下的确定性 RE</strong>，必须有同限制下的正确解对照。</p>
 <ul><li><strong>乙 · 轻微笔误 / 主动防抄袭</strong>（单列）：改一处字符或数字就对，或作者主动删减、</li></ul>
 <p>拆段、声明示意版。划界用「修复代价」；随机化无正确性保证但有确定性反例的也归这里。</p>
 <ul><li><strong>丙 · 未 hack</strong>：逻辑正确。</li></ul>
@@ -13,8 +13,8 @@
 <ol><li><strong>代码只是辅助，不判完整度</strong>——取到片段只补最小外壳（include、main、必要声明）</li></ol>
 <p>再编译；缺头文件、老式 <code>main(){}</code>、页面吞字符一律不计缺陷，只验核心逻辑。</p>
 <ol><li><strong>题面内</strong>——违反题面保证的输入（越界坐标、超值域、超长度）一律作废，不计 hack。</li></ol>
-<h2>累计（截至第 11 批）</h2>
-<table class="tb"><thead><tr><th>项</th><th>数</th></tr></thead><tbody><tr><td>逐篇验证题解</td><td><strong>76 篇</strong></td></tr><tr><td>甲 · 已 hack</td><td><strong>9 篇</strong></td></tr><tr><td>乙 · 笔误/防抄袭</td><td><strong>9 篇</strong></td></tr><tr><td>丙 · 未 hack</td><td><strong>58 篇</strong></td></tr><tr><td>甲类合法反例</td><td><strong>23 条</strong></td></tr></tbody></table>
-<p>第 12 批进行中：已定位 7 个新编号，尚未完成对拍，暂不计入累计。</p>
-<h2>自查纪律（逐批累加，误判回查自己）</h2>
-<ol><li>搜索摘要 ≠ 文章正文，冲突时以逐字取回为准</li><li>片段先回原文逐字复核；补最小外壳<strong>不能改变语义</strong>（第11批 P3397 教训）</li><li>编译报错先分清是原文、还是自己补的外壳 / 自己写的独立解</li><li>浮点题先对齐标程舍入与 ULP；随机对拍全过不等于没问题，边界点与官方样例单独跑</li><li>数组越界必须实测到具体规模，分清「栈溢出」与「下标越界」两层</li><li>「以为改一处就修好」必须跑修复版复验，再决定甲/乙</li><li>作者自曝的非正解块、思路回顾块、辅助示意版不拿来 hack</li><li>不登录、不提交、不刷接口；保存站只作编号体系旁证</li></ol></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>
+<h2>累计（截至第 12 批）</h2>
+<table class="tb"><thead><tr><th>项</th><th>数</th></tr></thead><tbody><tr><td>逐篇验证题解</td><td><strong>84 篇</strong></td></tr><tr><td>甲 · 已 hack</td><td><strong>13 篇</strong></td></tr><tr><td>乙 · 笔误/防抄袭</td><td><strong>9 篇</strong></td></tr><tr><td>丙 · 未 hack</td><td><strong>62 篇</strong></td></tr><tr><td>甲类合法反例</td><td><strong>31 条</strong></td></tr><tr><td>已登记 8 位 article 编号</td><td><strong>76 个</strong>（含待补录 / 登记不计数）</td></tr></tbody></table>
+<blockquote>编号数 ≠ 验证篇数：另有无 8 位编号的题解（vis 版、辅助示意版、演示版等）， 见 <code>非题解页与待补录登记.md</code> B 节。</blockquote>
+<h2>自查纪律（逐批累加）</h2>
+<ol><li>搜索摘要 ≠ 文章正文，冲突时以逐字取回为准</li><li>片段先回原文逐字复核；补最小外壳<strong>不能改变语义</strong>（第 11 批 P3397 教训）</li><li>编译报错先分清是原文、还是自己补的外壳 / 自己写的独立解</li><li><strong>修复版本身也要复验</strong>（第 12 批 a==0 特判位置教训）</li><li>浮点题先对齐标程舍入与 ULP；随机对拍全过不等于没问题，边界点与官方样例单独跑</li><li>数组越界必须实测到具体规模，分清「栈溢出」与「下标越界」两层</li><li>「以为改一处就修好」必须跑修复版复验，再决定甲/乙</li><li><strong>资源类结论必须有同限制下的正确解对照</strong>（第 12 批 RLIMIT_AS 实验）</li><li>作者自曝的非正解块、思路回顾块、辅助示意版不拿来 hack</li><li>不登录、不提交、不刷接口；保存站只作编号体系旁证</li></ol></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>

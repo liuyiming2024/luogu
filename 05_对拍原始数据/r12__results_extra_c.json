@@ -1,0 +1,56 @@
+{
+ "ehkpairy_fix": {
+  "compile_rc": 0,
+  "tested": 1401,
+  "mismatch": 0,
+  "examples": []
+ },
+ "peak_rss": {
+  "iv10492z_vector": {
+   "exit": 0,
+   "peak_rss_KB": 185128
+  },
+  "o1_xor_对照": {
+   "exit": 0,
+   "peak_rss_KB": 185128
+  }
+ },
+ "rlimit": {
+  "8MB": {
+   "vec": {
+    "rc": -6,
+    "out": "",
+    "err": "terminate called after throwing an instance of 'std::bad_alloc'\n  what():  std::bad_alloc"
+   },
+   "o1": {
+    "rc": 0,
+    "out": "2",
+    "err": ""
+   }
+  },
+  "16MB": {
+   "vec": {
+    "rc": 0,
+    "out": "2",
+    "err": ""
+   },
+   "o1": {
+    "rc": 0,
+    "out": "2",
+    "err": ""
+   }
+  },
+  "32MB": {
+   "vec": {
+    "rc": 0,
+    "out": "2",
+    "err": ""
+   },
+   "o1": {
+    "rc": 0,
+    "out": "2",
+    "err": ""
+   }
+  }
+ }
+}

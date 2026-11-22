@@ -3,18 +3,101 @@
 <title>P1618 · ehkpairy · 题解归档</title><link rel="stylesheet" href="../assets/style.css"></head>
 <body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">题解 / P1618 / ehkpairy</span></header>
 <main class="article"><h1>P1618 <span class="lid">ehkpairy</span></h1>
-<div class="badge 待补录">待补录·未验证</div>
+<div class="badge 甲">甲·已 hack</div>
 <table class="tb meta"><tbody>
 <tr><th>是否题解</th><td>是（题解文章（8 位 article 编号））</td></tr>
-<tr><th>归类</th><td>待补录·未验证</td></tr>
+<tr><th>归类</th><td>甲·已 hack</td></tr>
 <tr><th>批次</th><td>第12批</td></tr>
 <tr><th>可逐字验证</th><td>是</td></tr>
-<tr><th>判定备注</th><td>red()+finish()，已逐字取回，待对拍</td></tr>
+<tr><th>判定备注</th><td>A=0 时 100%a 除零，12 组 SIGFPE；补 a==0 分支后 1401 组 0 不一致</td></tr>
 <tr><th>原文地址</th><td><a href="https://www.luogu.com/article/ehkpairy" referrerpolicy="no-referrer">https://www.luogu.com/article/ehkpairy</a><span class="hint">（离线时链接不可达，仅留来源）</span></td></tr>
 </tbody></table>
-<div class="empty">正文 / 代码待补录：本编号已登记，逐字取回后由 <code>ingest.py</code> 回填。</div>
+<h2>题解代码 · 逐字取回 + 最小外壳（2 份）</h2>
+<p class="hint">代码只是辅助：只补 include / main / 必要声明，缺头文件与页面吞字符不计缺陷，仅验核心逻辑。</p>
+<div class="src"><div class="srcname">r12__P1618_ehkpairy.cpp <span class="hint">· 编号精确匹配</span></div><pre class="code"><code>#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+int a, b, c;
+void red(void);
+bool finish(int i, int j, int k);
+int main() {
+    bool no = true;
+    scanf(&quot;%d%d%d&quot;, &amp;a, &amp;b, &amp;c);
+    red();
+    for (int i = 100 + a - 100 % a; i &lt;= 999; i += a) {
+        int j, k;
+        if (i / a * c &gt; 999) break;
+        j = i / a * b; k = i / a * c;
+        if (finish(i, j, k)) {
+            printf(&quot;%d %d %d\n&quot;, i, j, k);
+            no = false;
+        }
+    }
+    if (no) printf(&quot;No!!!&quot;);
+    return 0;
+}
+void red(void) {
+    if (a == 1) return;
+    for (int i = a; i &gt; 1; --i) {
+        while (!(a % i) &amp;&amp; !(b % i) &amp;&amp; !(c % i))
+            a /= i, b /= i, c /= i;
+        if (a == 1) return;
+    }
+}
+bool finish (int i, int j, int k) {
+    bool ret = true, used[10];
+    memset(used, 0, sizeof(used));
+    used[i % 10] = used[i / 100] = used[i / 10 % 10] = true;
+    used[j % 10] = used[j / 100] = used[j / 10 % 10] = true;
+    used[k % 10] = used[k / 100] = used[k / 10 % 10] = true;
+    for (int i = 1; i &lt; 10; ++i)
+        if (!used[i]) { ret = false; break; }
+    return ret;
+}
+</code></pre></div>
+<div class="src"><div class="srcname">r12__ehkpairy_fix.cpp <span class="hint">· 编号精确匹配</span></div><pre class="code"><code>#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+int a, b, c;
+void red(void);
+bool finish(int i, int j, int k);
+int main() {
+    bool no = true;
+    scanf(&quot;%d%d%d&quot;, &amp;a, &amp;b, &amp;c);
+    if (a == 0) { printf(&quot;No!!!&quot;); return 0; }
+    red();
+    for (int i = 100 + a - 100 % a; i &lt;= 999; i += a) {
+        int j, k;
+        if (i / a * c &gt; 999) break;
+        j = i / a * b; k = i / a * c;
+        if (finish(i, j, k)) {
+            printf(&quot;%d %d %d\n&quot;, i, j, k);
+            no = false;
+        }
+    }
+    if (no) printf(&quot;No!!!&quot;);
+    return 0;
+}
+void red(void) {
+    if (a == 1) return;
+    for (int i = a; i &gt; 1; --i) {
+        while (!(a % i) &amp;&amp; !(b % i) &amp;&amp; !(c % i))
+            a /= i, b /= i, c /= i;
+        if (a == 1) return;
+    }
+}
+bool finish (int i, int j, int k) {
+    bool ret = true, used[10];
+    memset(used, 0, sizeof(used));
+    used[i % 10] = used[i / 100] = used[i / 10 % 10] = true;
+    used[j % 10] = used[j / 100] = used[j / 10 % 10] = true;
+    used[k % 10] = used[k / 100] = used[k / 10 % 10] = true;
+    for (int i = 1; i &lt; 10; ++i)
+        if (!used[i]) { ret = false; break; }
+    return ret;
+}
+</code></pre></div>
 <h2>复现</h2><pre class="code"><code>g++ -std=c++17 -O2 -o /tmp/t 04_复现代码/&lt;对应文件&gt;
 echo &quot;&lt;题面内输入&gt;&quot; | /tmp/t</code></pre>
 <h2>相关报告</h2><ul class="links">
+<li><a href="../reports/洛谷题解逐篇hack清单_第12批.md.html">洛谷题解逐篇hack清单_第12批.md</a></li>
 <li><a href="../reports/三类口径与累计统计.md.html">三类口径与自查纪律</a></li>
 </ul></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>

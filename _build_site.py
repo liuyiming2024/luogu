@@ -153,6 +153,23 @@ articles = []
 for r in ROWS:
     lid, prob, cls = r["编号"], r["题号"], r["归类"]
     codes = list(code_by_lid.get(lid, [])) + list(code_by_prob.get(prob, []))
+    # merge low-frequency ingested body/code (site/data/ingested/<lid>.json)
+    ing = os.path.join(DATA, "ingested", lid + ".json")
+    extra_body = ""
+    if os.path.exists(ing):
+        try:
+            obj = json.load(open(ing, encoding="utf-8"))
+            extra_body = obj.get("content", "")
+            c = obj.get("code", "")
+            if c:
+                if isinstance(c, str):
+                    codes.append({"file": "ingested/" + lid, "text": c, "link": "补录正文"})
+                elif isinstance(c, list):
+                    for it in c:
+                        codes.append({"file": it.get("file", "ingested"),
+                                      "text": it.get("text", ""), "link": "补录正文"})
+        except Exception:
+            pass
     hks = [L for L in hack_lines if lid in L]
     parts = [f"""<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -169,6 +186,9 @@ for r in ROWS:
 <tr><th>原文地址</th><td><a href="{esc(r['URL'])}" referrerpolicy="no-referrer">{esc(r['URL'])}</a><span class="hint">（离线时链接不可达，仅留来源）</span></td></tr>
 </tbody></table>"""]
 
+    if extra_body:
+        parts.append('<h2>题解正文 · 低频补录</h2>')
+        parts.append(md2html(extra_body))
     if codes:
         parts.append(f'<h2>题解代码 · 逐字取回 + 最小外壳（{len(codes)} 份）</h2>')
         parts.append('<p class="hint">代码只是辅助：只补 include / main / 必要声明，缺头文件与页面吞字符不计缺陷，仅验核心逻辑。</p>')
@@ -440,8 +460,9 @@ open(os.path.join(SITE, "README.md"), "w", encoding="utf-8").write(f"""# 离线�
 
 ## 「所有文章」的口径
 
-本站收录 **{len(articles)} 篇 = 项目开始以来已发现并登记的全部题解文章**，
-含「正文/代码待补录」「登记不计数」的条目，一篇不漏。
+本站收录 **{len(articles)} 个 8 位编号 = 项目开始以来已发现并登记的全部题解文章**，
+含「登记不计数」的条目，一篇不漏。另有 8 篇无 8 位编号的题解（vis 版、辅助示意版等）
+只在批次报告中验证，故「逐篇验证 84 篇」与「编号 76 个」口径不同。
 洛谷全站题解约 16 万篇；全量镜像必须有归档数据源或极长时间的低频逐篇取回，
 与「不刷接口、不登录、不把号封了」的约束冲突，所以不假装已经拿到全站。
 
@@ -466,8 +487,7 @@ python3 site/ingest.py new.json
 仓库已设为 **private**。站点内不含账号、密码、令牌；原文链接仅作来源留痕，离线时不可达。
 """)
 
-# 把生成器也放进仓库，方便离线重建
-shutil.copyfile("/data/workspace/_build_site.py", os.path.join(REPO, "_build_site.py"))
+# 生成器本身已位于仓库根目录，clone 后可直接重跑
 
 print("SITE_PAGES", 2 + len(articles) + len(REPORT_FILES))
 print("ARTICLES", len(articles))

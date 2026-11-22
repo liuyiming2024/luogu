@@ -1,0 +1,287 @@
+{
+ "P1618_ehkpairy": {
+  "compile_rc": 0,
+  "compile_err": "",
+  "cases": [],
+  "tested": 1399,
+  "mismatch": 12,
+  "examples": [
+   {
+    "input": "0 1 2",
+    "expected": "No!!!",
+    "actual": "",
+    "rc": -8
+   },
+   {
+    "input": "0 1 3",
+    "expected": "No!!!",
+    "actual": "",
+    "rc": -8
+   },
+   {
+    "input": "0 1 4",
+    "expected": "No!!!",
+    "actual": "",
+    "rc": -8
+   },
+   {
+    "input": "0 1 5",
+    "expected": "No!!!",
+    "actual": "",
+    "rc": -8
+   },
+   {
+    "input": "0 1 6",
+    "expected": "No!!!",
+    "actual": "",
+    "rc": -8
+   },
+   {
+    "input": "0 1 7",
+    "expected": "No!!!",
+    "actual": "",
+    "rc": -8
+   },
+   {
+    "input": "0 1 8",
+    "expected": "No!!!",
+    "actual": "",
+    "rc": -8
+   },
+   {
+    "input": "0 1 9",
+    "expected": "No!!!",
+    "actual": "",
+    "rc": -8
+   },
+   {
+    "input": "0 1 10",
+    "expected": "No!!!",
+    "actual": "",
+    "rc": -8
+   },
+   {
+    "input": "0 1 11",
+    "expected": "No!!!",
+    "actual": "",
+    "rc": -8
+   },
+   {
+    "input": "0 1 12",
+    "expected": "No!!!",
+    "actual": "",
+    "rc": -8
+   },
+   {
+    "input": "0 1 13",
+    "expected": "No!!!",
+    "actual": "",
+    "rc": -8
+   }
+  ]
+ },
+ "P1618_j4zpxmp6": {
+  "compile_rc": 0,
+  "compile_err": "",
+  "cases": [],
+  "tested": 1399,
+  "mismatch": 10,
+  "examples": [
+   {
+    "input": "2 4 6",
+    "expected": "192 384 576\n219 438 657\n273 546 819\n327 654 981",
+    "actual": "192 384 576",
+    "rc": 0
+   },
+   {
+    "input": "2 6 10",
+    "expected": "129 387 645",
+    "actual": "No!!!",
+    "rc": 0
+   },
+   {
+    "input": "4 8 12",
+    "expected": "192 384 576\n219 438 657\n273 546 819\n327 654 981",
+    "actual": "192 384 576",
+    "rc": 0
+   },
+   {
+    "input": "4 12 20",
+    "expected": "129 387 645",
+    "actual": "No!!!",
+    "rc": 0
+   },
+   {
+    "input": "5 10 15",
+    "expected": "192 384 576\n219 438 657\n273 546 819\n327 654 981",
+    "actual": "No!!!",
+    "rc": 0
+   },
+   {
+    "input": "6 12 18",
+    "expected": "192 384 576\n219 438 657\n273 546 819\n327 654 981",
+    "actual": "192 384 576",
+    "rc": 0
+   },
+   {
+    "input": "6 14 16",
+    "expected": "213 497 568\n321 749 856",
+    "actual": "No!!!",
+    "rc": 0
+   },
+   {
+    "input": "8 10 12",
+    "expected": "492 615 738",
+    "actual": "No!!!",
+    "rc": 0
+   },
+   {
+    "input": "2 4 6",
+    "expected": "192 384 576\n219 438 657\n273 546 819\n327 654 981",
+    "actual": "192 384 576",
+    "rc": 0
+   },
+   {
+    "input": "5 10 15",
+    "expected": "192 384 576\n219 438 657\n273 546 819\n327 654 981",
+    "actual": "No!!!",
+    "rc": 0
+   }
+  ],
+  "amplified": []
+ },
+ "P1469_iv10492z": {
+  "compile_rc": 0,
+  "compile_err": "",
+  "cases": [],
+  "tested": 61,
+  "mismatch": 0,
+  "examples": []
+ },
+ "P1469_3aph5o1d_qsort": {
+  "compile_rc": 0,
+  "compile_err": "",
+  "cases": [],
+  "tested": 61,
+  "mismatch": 0,
+  "examples": []
+ },
+ "P1469_3aph5o1d_xor": {
+  "compile_rc": 0,
+  "compile_err": "",
+  "cases": [],
+  "tested": 61,
+  "mismatch": 0,
+  "examples": []
+ },
+ "P1469_utz61eus": {
+  "compile_rc": 0,
+  "compile_err": "",
+  "cases": [],
+  "tested": 22,
+  "mismatch": 10,
+  "examples": [
+   {
+    "input_head": "n=1 arr=[347203479]",
+    "expected": "347203479",
+    "actual": "",
+    "rc": -11
+   },
+   {
+    "input_head": "n=57 arr=[999677528, 809581336, 496574972, 5383408, 224732845, 5383408]",
+    "expected": "514892288",
+    "actual": "",
+    "rc": -11
+   },
+   {
+    "input_head": "n=1 arr=[709051474]",
+    "expected": "709051474",
+    "actual": "",
+    "rc": -11
+   },
+   {
+    "input_head": "n=45 arr=[121818276, 482221418, 763949741, 44790761, 633365634, 970312068]",
+    "expected": "482221418",
+    "actual": "",
+    "rc": -11
+   },
+   {
+    "input_head": "n=39 arr=[57881503, 230648805, 751470798, 374067145, 310134628, 359021821]",
+    "expected": "751470798",
+    "actual": "",
+    "rc": -11
+   },
+   {
+    "input_head": "n=47 arr=[742102922, 544158413, 173566958, 742102922, 988635065, 71139204]",
+    "expected": "293600037",
+    "actual": "",
+    "rc": -11
+   },
+   {
+    "input_head": "n=19 arr=[386384722, 210753760, 48693025, 306774404, 210753760, 4260715]",
+    "expected": "659286077",
+    "actual": "",
+    "rc": -11
+   },
+   {
+    "input_head": "n=39 arr=[219565554, 275880777, 424307446, 906370181, 424307446, 798553818]",
+    "expected": "686834419",
+    "actual": "",
+    "rc": -11
+   },
+   {
+    "input_head": "n=19 arr=[922672294, 825446906, 473587345, 680441115, 175329111, 141691040]",
+    "expected": "680441115",
+    "actual": "",
+    "rc": -11
+   },
+   {
+    "input_head": "n=45 arr=[688471432, 959324114, 636321102, 549219600, 889506321, 762834050]",
+    "expected": "920923515",
+    "actual": "",
+    "rc": -11
+   }
+  ],
+  "mem_profiles": [
+   {
+    "limit_mb": 8,
+    "rc": -11,
+    "actual": ""
+   },
+   {
+    "limit_mb": 64,
+    "rc": -11,
+    "actual": ""
+   },
+   {
+    "limit_mb": 512,
+    "rc": -11,
+    "actual": ""
+   }
+  ]
+ },
+ "P1914_xgwn9tfg": {
+  "compile_rc": 0,
+  "compile_err": "",
+  "cases": [],
+  "tested": 130,
+  "mismatch": 0,
+  "examples": []
+ },
+ "P1046_d8583wuv": {
+  "compile_rc": 0,
+  "compile_err": "",
+  "cases": [],
+  "tested": 304,
+  "mismatch": 0,
+  "examples": []
+ },
+ "P5015_qajlal91": {
+  "compile_rc": 0,
+  "compile_err": "",
+  "cases": [],
+  "tested": 307,
+  "mismatch": 0,
+  "examples": []
+ }
+}

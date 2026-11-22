@@ -1,6 +1,6 @@
 {
  "说明": "已发现的全部 8 位文章编号，按题号升序、同题按编号字典序有序编目；逐条判定是否题解",
- "收录总数": 75,
+ "收录总数": 76,
  "全站规模说明": "洛谷全站题解约 16 万篇；本表为当前已发现并登记的全部编号，非全站遍历结果。新增编号用 ingest.py 低频补录。",
  "articles": [
   {
@@ -235,14 +235,16 @@
    "title": "P1046 题解 · d8583wuv",
    "is_article": "是",
    "article_type": "题解文章（8 位 article 编号）",
-   "class": "待补录·未验证",
+   "class": "丙·未 hack",
    "batch": "第12批",
    "verifiable": "是",
-   "note": "陶陶摘苹果，已逐字取回",
+   "note": "height+30>=a[i]，304 组含边界 0 不一致",
    "url": "https://www.luogu.com/article/d8583wuv",
    "page": "articles/d8583wuv.html",
-   "code_files": [],
-   "has_code": false
+   "code_files": [
+    "r12__P1046_d8583wuv.cpp"
+   ],
+   "has_code": true
   },
   {
    "lid": "f8ckkhfz",
@@ -897,14 +899,18 @@
    "title": "P1469 题解 · 3aph5o1d",
    "is_article": "是",
    "article_type": "题解文章（8 位 article 编号）",
-   "class": "待补录·未验证",
+   "class": "丙·未 hack",
    "batch": "第12批",
    "verifiable": "是",
-   "note": "Pascal 两块（快排/异或），已逐字取回",
+   "note": "Pascal 两块；异或版 61 组全对，快排块为作者非主推铺垫，数组偏小实测未崩",
    "url": "https://www.luogu.com/article/3aph5o1d",
    "page": "articles/3aph5o1d.html",
-   "code_files": [],
-   "has_code": false
+   "code_files": [
+    "r12__P1469_3aph5o1d_qsort.cpp",
+    "r12__P1469_3aph5o1d_xor.cpp",
+    "r12__p1469_o1.cpp"
+   ],
+   "has_code": true
   },
   {
    "lid": "iv10492z",
@@ -912,14 +918,17 @@
    "title": "P1469 题解 · iv10492z",
    "is_article": "是",
    "article_type": "题解文章（8 位 article 编号）",
-   "class": "待补录·未验证",
+   "class": "甲·已 hack",
    "batch": "第12批",
    "verifiable": "是",
-   "note": "vector 累积异或，已逐字取回，待对拍",
+   "note": "O(n) vector 在题面 8Mb 下 SIGABRT；静态 O(1) 对照版同限制正常",
    "url": "https://www.luogu.com/article/iv10492z",
    "page": "articles/iv10492z.html",
-   "code_files": [],
-   "has_code": false
+   "code_files": [
+    "r12__P1469_iv10492z.cpp",
+    "r12__p1469_o1.cpp"
+   ],
+   "has_code": true
   },
   {
    "lid": "utz61eus",
@@ -927,14 +936,17 @@
    "title": "P1469 题解 · utz61eus",
    "is_article": "是",
    "article_type": "题解文章（8 位 article 编号）",
-   "class": "待补录·未验证",
+   "class": "甲·已 hack",
    "batch": "第12批",
    "verifiable": "是",
-   "note": "int a[100000005] 桶排，内存受限，已取回",
+   "note": "桶下标越界+末尾只扫到1e7；3/2 2 10000001 期望 10000001 实际空输出",
    "url": "https://www.luogu.com/article/utz61eus",
    "page": "articles/utz61eus.html",
-   "code_files": [],
-   "has_code": false
+   "code_files": [
+    "r12__P1469_utz61eus.cpp",
+    "r12__p1469_o1.cpp"
+   ],
+   "has_code": true
   },
   {
    "lid": "nxvqnwg8",
@@ -1007,14 +1019,17 @@
    "title": "P1618 题解 · ehkpairy",
    "is_article": "是",
    "article_type": "题解文章（8 位 article 编号）",
-   "class": "待补录·未验证",
+   "class": "甲·已 hack",
    "batch": "第12批",
    "verifiable": "是",
-   "note": "red()+finish()，已逐字取回，待对拍",
+   "note": "A=0 时 100%a 除零，12 组 SIGFPE；补 a==0 分支后 1401 组 0 不一致",
    "url": "https://www.luogu.com/article/ehkpairy",
    "page": "articles/ehkpairy.html",
-   "code_files": [],
-   "has_code": false
+   "code_files": [
+    "r12__P1618_ehkpairy.cpp",
+    "r12__ehkpairy_fix.cpp"
+   ],
+   "has_code": true
   },
   {
    "lid": "j4zpxmp6",
@@ -1022,14 +1037,17 @@
    "title": "P1618 题解 · j4zpxmp6",
    "is_article": "是",
    "article_type": "题解文章（8 位 article 编号）",
-   "class": "待补录·未验证",
+   "class": "甲·已 hack",
    "batch": "第12批",
    "verifiable": "是",
-   "note": "check1/check2 三重枚举，已逐字取回，待对拍",
+   "note": "num1%a 整除门槛漏非最简比例解，10 组 WA；重写核心后 1401 组 0 不一致",
    "url": "https://www.luogu.com/article/j4zpxmp6",
    "page": "articles/j4zpxmp6.html",
-   "code_files": [],
-   "has_code": false
+   "code_files": [
+    "r12__P1618_j4zpxmp6.cpp",
+    "r12__j4zpxmp6_fix.cpp"
+   ],
+   "has_code": true
   },
   {
    "lid": "jm3biw0r",
@@ -1122,14 +1140,16 @@
    "title": "P1914 题解 · xgwn9tfg",
    "is_article": "是",
    "article_type": "题解文章（8 位 article 编号）",
-   "class": "待补录·未验证",
+   "class": "丙·未 hack",
    "batch": "第12批",
    "verifiable": "是",
-   "note": "char a[1001]+putchar，已逐字取回",
+   "note": "n=1..26×5 类串 130 组 0 不一致；页面吞 { 补最小外壳不计缺陷",
    "url": "https://www.luogu.com/article/xgwn9tfg",
    "page": "articles/xgwn9tfg.html",
-   "code_files": [],
-   "has_code": false
+   "code_files": [
+    "r12__P1914_xgwn9tfg.cpp"
+   ],
+   "has_code": true
   },
   {
    "lid": "vgwp3k30",
@@ -1234,6 +1254,23 @@
    "page": "articles/up402yw6.html",
    "code_files": [
     "build__r4__p4995_up402yw6.cpp"
+   ],
+   "has_code": true
+  },
+  {
+   "lid": "qajlal91",
+   "problem": "P5015",
+   "title": "P5015 题解 · qajlal91",
+   "is_article": "是",
+   "article_type": "题解文章（8 位 article 编号）",
+   "class": "丙·未 hack",
+   "batch": "第12批",
+   "verifiable": "是",
+   "note": "getline 逐字符判空格，307 组含空串/全空格/连续空格 0 不一致",
+   "url": "https://www.luogu.com/article/qajlal91",
+   "page": "articles/qajlal91.html",
+   "code_files": [
+    "r12__P5015_qajlal91.cpp"
    ],
    "has_code": true
   },

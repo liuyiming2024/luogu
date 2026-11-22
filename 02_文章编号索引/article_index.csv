@@ -12,7 +12,7 @@
 11,m16r8nbd,P1042,是,题解文章（8 位 article 编号）,是,丙·未 hack,第11批,62525 字符长输入实测；第12批重复发现,https://www.luogu.com/article/m16r8nbd
 12,g17kwzzm,P1044,是,题解文章（8 位 article 编号）,是,丙·未 hack,第8批,两块代码 n=1..18 全枚举全对,https://www.luogu.com/article/g17kwzzm
 13,rlz2fzsx,P1044,是,题解文章（8 位 article 编号）,是,丙·未 hack,第8批,记忆化递归，数组偏小但实测无害,https://www.luogu.com/article/rlz2fzsx
-14,d8583wuv,P1046,是,题解文章（8 位 article 编号）,是,待补录·未验证,第12批,陶陶摘苹果，已逐字取回,https://www.luogu.com/article/d8583wuv
+14,d8583wuv,P1046,是,题解文章（8 位 article 编号）,是,丙·未 hack,第12批,height+30>=a[i]，304 组含边界 0 不一致,https://www.luogu.com/article/d8583wuv
 15,f8ckkhfz,P1046,是,题解文章（8 位 article 编号）,是,丙·未 hack,第7批,未 hack,https://www.luogu.com/article/f8ckkhfz
 16,h4cn628r,P1048,是,题解文章（8 位 article 编号）,是,丙·未 hack,第1批,01背包，33组含 w>T 边界全对,https://www.luogu.com/article/h4cn628r
 17,v3wxayi3,P1049,是,题解文章（8 位 article 编号）,是,乙·笔误/防抄袭,第5批,作者自述随机放弃最优，反例仅作验证数据,https://www.luogu.com/article/v3wxayi3
@@ -52,25 +52,26 @@
 51,beuv9jew,P1425,是,题解文章（8 位 article 编号）,是,丙·未 hack,第7批,全转分钟法；注释说反但代码自洽,https://www.luogu.com/article/beuv9jew
 52,nobyk23w,P1425,是,题解文章（8 位 article 编号）,是,丙·未 hack,第7批,借位减法；第10批重复登记,https://www.luogu.com/article/nobyk23w
 53,2edysvbn,P1428,是,题解文章（8 位 article 编号）,否,登记·不计数,第9批,有 lid，正文只有思路无 AC 代码，登记,https://www.luogu.com/article/2edysvbn
-54,3aph5o1d,P1469,是,题解文章（8 位 article 编号）,是,待补录·未验证,第12批,Pascal 两块（快排/异或），已逐字取回,https://www.luogu.com/article/3aph5o1d
-55,iv10492z,P1469,是,题解文章（8 位 article 编号）,是,待补录·未验证,第12批,vector 累积异或，已逐字取回，待对拍,https://www.luogu.com/article/iv10492z
-56,utz61eus,P1469,是,题解文章（8 位 article 编号）,是,待补录·未验证,第12批,int a[100000005] 桶排，内存受限，已取回,https://www.luogu.com/article/utz61eus
+54,3aph5o1d,P1469,是,题解文章（8 位 article 编号）,是,丙·未 hack,第12批,Pascal 两块；异或版 61 组全对，快排块为作者非主推铺垫，数组偏小实测未崩,https://www.luogu.com/article/3aph5o1d
+55,iv10492z,P1469,是,题解文章（8 位 article 编号）,是,甲·已 hack,第12批,O(n) vector 在题面 8Mb 下 SIGABRT；静态 O(1) 对照版同限制正常,https://www.luogu.com/article/iv10492z
+56,utz61eus,P1469,是,题解文章（8 位 article 编号）,是,甲·已 hack,第12批,桶下标越界+末尾只扫到1e7；3/2 2 10000001 期望 10000001 实际空输出,https://www.luogu.com/article/utz61eus
 57,nxvqnwg8,P1553,是,题解文章（8 位 article 编号）,是,丙·未 hack,第9批,17 个经典边界全过,https://www.luogu.com/article/nxvqnwg8
 58,xmumv7ok,P1563,是,题解文章（8 位 article 编号）,是,乙·笔误/防抄袭,第6批,x<0 漏 x==0，改一处即全对；作者自述打表,https://www.luogu.com/article/xmumv7ok
 59,biep97vd,P1598,是,题解文章（8 位 article 编号）,是,丙·未 hack,第9批,本批唯一 Python 3 题解；第12批重复发现,https://www.luogu.com/article/biep97vd
 60,lgmnaw1h,P1616,是,题解文章（8 位 article 编号）,是,丙·未 hack,第5批,只取第3块最终码，前两块是思路回顾,https://www.luogu.com/article/lgmnaw1h
-61,ehkpairy,P1618,是,题解文章（8 位 article 编号）,是,待补录·未验证,第12批,red()+finish()，已逐字取回，待对拍,https://www.luogu.com/article/ehkpairy
-62,j4zpxmp6,P1618,是,题解文章（8 位 article 编号）,是,待补录·未验证,第12批,check1/check2 三重枚举，已逐字取回，待对拍,https://www.luogu.com/article/j4zpxmp6
+61,ehkpairy,P1618,是,题解文章（8 位 article 编号）,是,甲·已 hack,第12批,A=0 时 100%a 除零，12 组 SIGFPE；补 a==0 分支后 1401 组 0 不一致,https://www.luogu.com/article/ehkpairy
+62,j4zpxmp6,P1618,是,题解文章（8 位 article 编号）,是,甲·已 hack,第12批,num1%a 整除门槛漏非最简比例解，10 组 WA；重写核心后 1401 组 0 不一致,https://www.luogu.com/article/j4zpxmp6
 63,jm3biw0r,P1706,是,题解文章（8 位 article 编号）,是,丙·未 hack,第11批,"STL next_permutation，n=1..6,9 全量一致",https://www.luogu.com/article/jm3biw0r
 64,wiofo14v,P1706,是,题解文章（8 位 article 编号）,是,丙·未 hack,第11批,DFS 回溯 + setw(5),https://www.luogu.com/article/wiofo14v
 65,z3dolqp8,P1739,是,题解文章（8 位 article 编号）,是,丙·未 hack,第11批,count++/-- + 提前 break,https://www.luogu.com/article/z3dolqp8
 66,dmza5ifn,P1803,是,题解文章（8 位 article 编号）,是,丙·未 hack,第3批,文字与代码不一致但实测全对,https://www.luogu.com/article/dmza5ifn
 67,h8ic4o0m,P1909,是,题解文章（8 位 article 编号）,是,丙·未 hack,第6批,搜索摘要与正文冲突，以逐字正文为准,https://www.luogu.com/article/h8ic4o0m
-68,xgwn9tfg,P1914,是,题解文章（8 位 article 编号）,是,待补录·未验证,第12批,char a[1001]+putchar，已逐字取回,https://www.luogu.com/article/xgwn9tfg
+68,xgwn9tfg,P1914,是,题解文章（8 位 article 编号）,是,丙·未 hack,第12批,n=1..26×5 类串 130 组 0 不一致；页面吞 { 补最小外壳不计缺陷,https://www.luogu.com/article/xgwn9tfg
 69,vgwp3k30,P2089,是,题解文章（8 位 article 编号）,是,丙·未 hack,第11批,10 层枚举，峰值方案数 8953,https://www.luogu.com/article/vgwp3k30
 70,b7py0ojt,P2141,是,题解文章（8 位 article 编号）,是,丙·未 hack,第6批,未 hack,https://www.luogu.com/article/b7py0ojt
 71,bv44vwt6,P2240,是,题解文章（8 位 article 编号）,是,丙·未 hack,第5批,浮点舍入自查：printf 为银行家舍入,https://www.luogu.com/article/bv44vwt6
 72,smtoxvvs,P3397,是,题解文章（8 位 article 编号）,是,丙·未 hack,第11批,原文无 using 行；自查外壳引入 map 歧义,https://www.luogu.com/article/smtoxvvs
 73,l6u32sp7,P3959,是,题解文章（8 位 article 编号）,是,丙·未 hack,第1批,Prüfer 全枚举未找到更优解（第2批重判）,https://www.luogu.com/article/l6u32sp7
 74,up402yw6,P4995,是,题解文章（8 位 article 编号）,是,丙·未 hack,第4批,状压 DP 独立解 120 组全对,https://www.luogu.com/article/up402yw6
-75,nzmytiez,P5638,是,题解文章（8 位 article 编号）,是,甲·已 hack,第3批,k>=n 时窗口循环不进，输出总长度,https://www.luogu.com/article/nzmytiez
+75,qajlal91,P5015,是,题解文章（8 位 article 编号）,是,丙·未 hack,第12批,getline 逐字符判空格，307 组含空串/全空格/连续空格 0 不一致,https://www.luogu.com/article/qajlal91
+76,nzmytiez,P5638,是,题解文章（8 位 article 编号）,是,甲·已 hack,第3批,k>=n 时窗口循环不进，输出总长度,https://www.luogu.com/article/nzmytiez

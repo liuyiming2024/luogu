@@ -1,0 +1,58 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>洛谷题解逐篇hack清单_第12批.md · 离线归档</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">01_批次清单 / 洛谷题解逐篇hack清单_第12批.md</span></header>
+<main class="doc"><h1>洛谷题解逐篇 hack 清单 · 第 12 批（低频补录批）</h1>
+<blockquote>本批是「路线 2 · 逐批低频补录」的第一批：把第 12 批定位到的 7 个待补录编号 逐字取回正文 → 本地编译 + 独立正确解对拍 → 判定是否题解与三类归类 → 写回有序编号索引 → 重生成离线站。另低频新增 1 个编号 <code>qajlal91</code>。 <strong>全程 3 次文章正文请求、0 次登录、0 次提交、0 次刷接口。</strong></blockquote>
+<hr>
+<h2>1. 本批 8 篇 · 三类结果</h2>
+<table class="tb"><thead><tr><th>#</th><th>题号</th><th>编号</th><th>是否题解</th><th>归类</th><th>结论</th></tr></thead><tbody><tr><td>77</td><td>P1618</td><td><code>ehkpairy</code></td><td>是</td><td><strong>甲</strong></td><td>A=0 时 <code>100 % a</code> 除零，12 组题面内输入 SIGFPE</td></tr><tr><td>78</td><td>P1618</td><td><code>j4zpxmp6</code></td><td>是</td><td><strong>甲</strong></td><td><code>num1 % a</code> 整除门槛漏掉比例系数非最简的解，10 组 WA</td></tr><tr><td>79</td><td>P1469</td><td><code>iv10492z</code></td><td>是</td><td><strong>甲</strong></td><td>O(n) vector 在题面 8 Mb 限制下确定性 RE（对照版通过）</td></tr><tr><td>80</td><td>P1469</td><td><code>utz61eus</code></td><td>是</td><td><strong>甲</strong></td><td>桶下标越界 + 末尾只遍历到 1e7，定点反例空输出 / SIGSEGV</td></tr><tr><td>81</td><td>P1469</td><td><code>3aph5o1d</code></td><td>是</td><td><strong>丙</strong></td><td>算法二（异或）61 组 0 不一致；算法一为作者非主推铺垫块</td></tr><tr><td>82</td><td>P1914</td><td><code>xgwn9tfg</code></td><td>是</td><td><strong>丙</strong></td><td>n=1..26 × 5 类字符串，130 组 0 不一致</td></tr><tr><td>83</td><td>P1046</td><td><code>d8583wuv</code></td><td>是</td><td><strong>丙</strong></td><td>304 组（含 height+30 边界）0 不一致</td></tr><tr><td>84</td><td>P5015</td><td><code>qajlal91</code></td><td>是</td><td><strong>丙</strong></td><td>307 组（含全空格 / 空行 / 制表符）0 不一致</td></tr></tbody></table>
+<p><strong>累计 84 篇 / 甲 13 / 乙 9 / 丙 62 / 甲类合法反例 31 条。</strong> 编号索引由 75 → <strong>76</strong> 个 8 位编号（本批新增 <code>qajlal91</code>，其余 7 个是既有「待补录」条目转已验证）。</p>
+<blockquote>口径提醒：编号索引数（76）≠ 逐篇验证篇数（84）。差额来自无 8 位编号的题解 （P1002 vis 版、P1018 辅助示意版、P1049 演示版、P1089 浮点自查等，见 <code>02_文章编号索引/非题解页与待补录登记.md</code> B 节）。</blockquote>
+<hr>
+<h2>2. 甲类 · 4 篇逐条</h2>
+<h3>2.1 P1618 <code>ehkpairy</code> —— A=0 除零</h3>
+<p>逐字源码含 <code>red()</code>（把 A:B:C 化为最简）、<code>finish()</code>（1~9 各一次）与 <code>for (int i = 100 + a - 100 % a; i &lt;= 999; i += a)</code>。题面明确 <code>0 ≤ A &lt; B &lt; C ≤ 999</code>， <strong>A 可以为 0</strong>；此时 <code>100 % a</code> 是整数除零，<code>red()</code> 里 <code>a==1</code> 不成立、 <code>for(i=a; i&gt;1; --i)</code> 也不进，a 保持 0。</p>
+<table class="tb"><thead><tr><th>输入</th><th>期望</th><th>实际</th></tr></thead><tbody><tr><td><code>0 1 2</code></td><td><code>No!!!</code></td><td>SIGFPE（rc −8）</td></tr><tr><td><code>0 2 3</code></td><td><code>No!!!</code></td><td>SIGFPE</td></tr><tr><td><code>0 1 10</code></td><td><code>No!!!</code></td><td>SIGFPE</td></tr></tbody></table>
+<p>1399 组（C(21,3) + 60 组随机 + 9 组构造）里 <strong>12 组不一致，全部 A=0</strong>； <code>1 2 3</code> 官方样例等其余 1387 组全对。<strong>修复版</strong>（<code>scanf</code> 之后补 <code>if(a==0){printf(&quot;No!!!&quot;);return 0;}</code>）1401 组 <strong>0 不一致</strong>。</p>
+<p>划界：修复只需补一个分支，代价接近乙；但根因是<strong>未处理题面明确允许的 A=0 边界</strong> （不是笔误），且「补分支」在三类口径里明确归甲。若按修复代价想挪进乙，说一声。</p>
+<blockquote>自查记一笔：第一版修复我把特判误放在 <code>scanf</code> 之前，a 还是全局零值， 造出 38 组假 WA。特判位置回到读入之后才归零——<strong>修复版本身也要复验</strong>。</blockquote>
+<h3>2.2 P1618 <code>j4zpxmp6</code> —— 整除门槛漏解</h3>
+<p>逐字源码三重枚举 <code>num1 = i*100+j*10+k</code>，随后 <code>if (num1 % a) continue;</code> 、<code>num2 = num1/a*b</code>、<code>num3 = num2/b*c</code>。比例 <code>A:B:C</code> 的公因子 t <strong>允许是分数</strong>： 只要 <code>num1·B</code> 与 <code>num1·C</code> 能被 A 整除即可，不要求 <code>num1</code> 被 A 整除。 题面<strong>没有保证 A:B:C 是最简比</strong>（还注明 2022.8.3 新增过 Hack 数据）。</p>
+<table class="tb"><thead><tr><th>输入</th><th>期望</th><th>实际</th></tr></thead><tbody><tr><td><code>2 4 6</code></td><td>4 行（192/219/273/327 组）</td><td>只有 <code>192 384 576</code></td></tr><tr><td><code>5 10 15</code></td><td>4 行</td><td><code>No!!!</code></td></tr><tr><td><code>6 14 16</code></td><td><code>213 497 568</code> / <code>321 749 856</code></td><td><code>No!!!</code></td></tr><tr><td><code>2 6 10</code></td><td><code>129 387 645</code></td><td><code>No!!!</code></td></tr></tbody></table>
+<p>1399 组里 <strong>10 组不一致</strong>，全是非最简比例。<strong>修复版</strong>必须去掉三个整除门槛、 改用 <code>n1*b%a / n1*c%a</code> 交叉相乘并重写 num2/num3 计算——1401 组 <strong>0 不一致</strong>。 <code>ehkpairy</code> 因用 <code>red()</code> 先化简比例，同批所有非最简输入反而全对，构成同题对照。</p>
+<h3>2.3 P1469 <code>iv10492z</code> —— 题面 8 Mb 限制下的确定性 RE</h3>
+<p>逐字源码 <code>vector&lt;int&gt; p; p.resize(n+1);</code> 再做前缀异或 <code>p[i]=p[i]^p[i-1]</code>。 <strong>逻辑正确</strong>（61 组本地对拍 0 不一致），但题面 <code>1 ≤ n ≤ 10⁷+1</code> 且 「空间限制 8 Mb」，vector 需要 <code>4(n+1)</code> 字节 ≈ 40 MB。</p>
+<p>静态编译 + <code>RLIMIT_AS</code> 对照实验（输入 n=3000001，全部 1 成对 + 落单 2，题面内）：</p>
+<table class="tb"><thead><tr><th>限制</th><th><code>iv10492z</code> 静态版</th><th>静态 O(1) 异或对照版</th></tr></thead><tbody><tr><td><strong>8 MB（题面）</strong></td><td><strong>rc −6（SIGABRT / bad_alloc），空输出</strong></td><td>rc 0，输出 <code>2</code></td></tr><tr><td>16 MB</td><td>rc 0，输出 <code>2</code></td><td>rc 0，输出 <code>2</code></td></tr><tr><td>32 MB</td><td>rc 0，输出 <code>2</code></td><td>rc 0，输出 <code>2</code></td></tr></tbody></table>
+<p>同限制下对照版正常 → 不是「限制太死谁都跑不了」，是 O(n) 空间本身。 修复必须删掉 vector、改成单变量累积异或（重写循环体）→ 甲类。 与第 10 批 P1152「10 MB 局部数组爆栈」同型。</p>
+<blockquote>口径边界：这条是<strong>题面空间限制下的确定性 RE</strong>（不是 TLE、不是评测机波动）。 本地无限制时它输出正确；若你的口径只认 WA/RE 数值错、不把 MLE 计入， 这篇可挪丙，说一声。另：沙盒无 <code>/usr/bin/time</code>，且 <code>fork</code> 继承父进程页会让 <code>ru_maxrss</code> 虚高，故峰值 RSS 不作为证据，只采用 RLIMIT_AS 对照。</blockquote>
+<h3>2.4 P1469 <code>utz61eus</code> —— 桶越界 + 遍历截断</h3>
+<p>逐字源码 <code>int a[100000005]</code>（约 400 MB 全局）配 <code>a[k]++</code>，末尾 <code>for(int i=1;i&lt;=10000000;i++)</code> 找 <code>a[i]==1</code>。题面 <code>1 ≤ aᵢ ≤ 10⁹</code>，且只有一只落单。</p>
+<table class="tb"><thead><tr><th>输入</th><th>期望</th><th>实际</th></tr></thead><tbody><tr><td><code>3 / 2 2 9999999</code></td><td><code>9999999</code></td><td><code>9999999</code>（对）</td></tr><tr><td><strong><code>3 / 2 2 10000001</code></strong></td><td><strong><code>10000001</code></strong></td><td><strong>空输出（WA）</strong></td></tr><tr><td><code>3 / 2 2 50000000</code></td><td><code>50000000</code></td><td>空输出（WA）</td></tr><tr><td><code>3 / 2 2 100000000</code></td><td><code>100000000</code></td><td>空输出（WA）</td></tr><tr><td><strong><code>1 / 1000000000</code></strong></td><td><strong><code>1000000000</code></strong></td><td><strong>SIGSEGV（rc −11）</strong></td></tr><tr><td>官方样例 <code>9 / 2 2 1 3 3 3 2 3 1</code></td><td><code>2</code></td><td><code>2</code>（对）</td></tr></tbody></table>
+<p>三层独立缺陷：① 落单值 &gt;1e7 时末尾遍历根本扫不到；② <code>aᵢ &gt; 1e8</code> 时 <code>a[k]++</code> 下标越界（1e9 → 4 GB 偏移）直接崩；③ 400 MB 数组本身远超题面 8 Mb。 最干净的反例是 <code>3 / 2 2 10000001</code>——不依赖崩溃、纯逻辑漏输出。修复必须重写核心。</p>
+<hr>
+<h2>3. 丙类 · 4 篇</h2>
+<ul><li><strong>P1469 <code>3aph5o1d</code></strong>（Pascal）：算法二 <code>s:=s xor t</code> 等价 C++ 版 61 组 0 不一致。</li></ul>
+<p>算法一为作者明写「这不是我要说的思路」的快排铺垫块，按「非主推块不拿来 hack」 纪律不计；另实测等价版 <code>int a[1000001]</code> 在 n=1000001 越界写 <strong>未崩</strong> （落在 BSS 空白、读写同址），与第 7 批 P1003 现象一致—— <strong>数组开小必须实测到具体规模，不能凭直觉</strong>，故只登记潜在风险。 Pascal 编译器在沙盒不可用，按等价逻辑验证并如实标注。</p>
+<ul><li><strong>P1914 <code>xgwn9tfg</code></strong>：<code>char a[1001]</code> + <code>(a[i]-&#x27;a&#x27;+n)%26+&#x27;a&#x27;</code>，</li></ul>
+<p>n=1..26 全枚举 × 5 类字符串共 130 组 0 不一致。原文 <code>int main()</code> 后缺 <code>{</code> 系页面吞字符，补最小外壳，不计缺陷。</p>
+<ul><li><strong>P1046 <code>d8583wuv</code></strong>：<code>height+30&gt;=a[i]</code>，304 组（含全 100 / 全 300 / 130 边界）0 不一致。</li></ul>
+<p>正文片段 <code>for</code> 起止被页面吞字符，按题解文字补全循环体。</p>
+<ul><li><strong>P5015 <code>qajlal91</code></strong>（本批新增编号）：<code>getline(cin,n,&#x27;\n&#x27;)</code> 逐字符判 <code>!=&#x27; &#x27;</code>，</li></ul>
+<p>307 组（含空串、全空格、<code>Ca 45</code>、连续空格、制表符）0 不一致。</p>
+<hr>
+<h2>4. 差点误判 / 自查（本批 4 次）</h2>
+<ol><li><strong>对拍脚本自身超时</strong>：P1618 独立解写成「9! 个排列 × 1399 组」逐组扫，</li></ol>
+<p>约 5 亿次 Python 循环把沙盒跑挂。改为「最简比例 → 全部解」预建索引， <code>gcd(A,B,C)</code> 查表，复杂度降到 O(1)。</p>
+<ol><li><strong>编译全挂</strong>：<code>g++</code> 命令里混进空字符串参数，ld 报 <code>cannot find :</code>，</li></ol>
+<p>9 个程序全部 rc=1；同时目录变量 <code>B</code> 被 P1618 循环变量 <code>B</code> 覆盖成整数。 两处都是我的脚手架，与题解无关。</p>
+<ol><li><strong>修复版假 WA</strong>：<code>a==0</code> 特判放在 <code>scanf</code> 之前（§2.1）。</li><li><strong>内存测量</strong>：<code>ru_maxrss(RUSAGE_CHILDREN)</code> 是累计最大值、</li></ol>
+<p><code>fork</code> 又继承 Python 父进程页，两版都读成 180.8 MB； 且沙盒无 <code>/usr/bin/time</code>。改用<strong>静态编译 + RLIMIT_AS 对照</strong>才拿到干净结论。</p>
+<p>纪律补两条：<strong>修复版本身也要复验</strong>；<strong>资源类结论必须有同限制下的正确解对照</strong>。</p>
+<hr>
+<h2>5. 补录进离线站</h2>
+<p>本批 8 篇已写回 <code>02_文章编号索引/article_index.csv</code>（有序主表）， <code>_build_site.py</code> 从主表重生成 <code>site/</code>：<code>articles/&lt;lid&gt;.html</code> 逐篇页、 <code>reports/</code> 批次报告、<code>data/articles.json</code> 机读主表。 新增编号走 <code>site/ingest.py</code>（本批已修为<strong>同时写 CSV 与主表</strong>，不会再被重建覆盖）。</p>
+<h2>6. 低频声明</h2>
+<table class="tb"><thead><tr><th>动作</th><th>次数</th></tr></thead><tbody><tr><td>文章正文取回（web_fetch）</td><td>3（d8583wuv / qajlal91 / 及既有 7 篇复用上一轮逐字正文）</td></tr><tr><td>题解列表 / 搜索</td><td>1（低频，仅找新编号）</td></tr><tr><td>洛谷登录 / 提交 / 保存站接口</td><td><strong>0</strong></td></tr><tr><td>GitHub API（查询/推送）</td><td>少量，仅归档</td></tr></tbody></table>
+<p>「枚举」始终指<strong>对已发现编号做有序编目</strong>，不对 36⁸ 编号空间或全站做遍历。</p></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>

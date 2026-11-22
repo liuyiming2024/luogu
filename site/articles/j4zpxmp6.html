@@ -3,18 +3,103 @@
 <title>P1618 · j4zpxmp6 · 题解归档</title><link rel="stylesheet" href="../assets/style.css"></head>
 <body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">题解 / P1618 / j4zpxmp6</span></header>
 <main class="article"><h1>P1618 <span class="lid">j4zpxmp6</span></h1>
-<div class="badge 待补录">待补录·未验证</div>
+<div class="badge 甲">甲·已 hack</div>
 <table class="tb meta"><tbody>
 <tr><th>是否题解</th><td>是（题解文章（8 位 article 编号））</td></tr>
-<tr><th>归类</th><td>待补录·未验证</td></tr>
+<tr><th>归类</th><td>甲·已 hack</td></tr>
 <tr><th>批次</th><td>第12批</td></tr>
 <tr><th>可逐字验证</th><td>是</td></tr>
-<tr><th>判定备注</th><td>check1/check2 三重枚举，已逐字取回，待对拍</td></tr>
+<tr><th>判定备注</th><td>num1%a 整除门槛漏非最简比例解，10 组 WA；重写核心后 1401 组 0 不一致</td></tr>
 <tr><th>原文地址</th><td><a href="https://www.luogu.com/article/j4zpxmp6" referrerpolicy="no-referrer">https://www.luogu.com/article/j4zpxmp6</a><span class="hint">（离线时链接不可达，仅留来源）</span></td></tr>
 </tbody></table>
-<div class="empty">正文 / 代码待补录：本编号已登记，逐字取回后由 <code>ingest.py</code> 回填。</div>
+<h2>题解代码 · 逐字取回 + 最小外壳（2 份）</h2>
+<p class="hint">代码只是辅助：只补 include / main / 必要声明，缺头文件与页面吞字符不计缺陷，仅验核心逻辑。</p>
+<div class="src"><div class="srcname">r12__P1618_j4zpxmp6.cpp <span class="hint">· 编号精确匹配</span></div><pre class="code"><code>#include&lt;bits/stdc++.h&gt;
+using namespace std;
+int a,b,c;
+bool check1(int n) {
+    string a = to_string(n);
+    if (a.size() != 3) return 0;
+    for (int i = 0; i &lt; a.size(); i++)
+        for (int j = 0; j &lt; a.size(); j++) {
+            if (i != j)
+                if (a[i] == a[j])
+                    return 0;
+            if (a[i] == &#x27;0&#x27; || a[j] == &#x27;0&#x27;)
+                return 0;
+        }
+    return 1;
+}
+bool check2(int n, int m) {
+    string a = to_string(n), b = to_string(m);
+    for (int i = 0; i &lt; a.size(); i++)
+        for (int j = 0; j &lt; b.size(); j++)
+            if (a[i] == b[j]) return 0;
+    return 1;
+}
+int main(){
+    int cnt = 0;
+    cin &gt;&gt; a &gt;&gt; b &gt;&gt; c;
+    if (a == 0 || b == 0 || c == 0) { cout &lt;&lt; &quot;No!!!&quot;; return 0; }
+    for (int i = 1; i &lt;= 9; i++) {
+        for (int j = 1; j &lt;= 9; j++) {
+            if (i == j) continue;
+            for (int k = 1; k &lt;= 9; k++) {
+                if (i == k || j == k) continue;
+                int num1 = i * 100 + j * 10 + k;
+                if (num1 % a) continue;
+                int num2 = num1 / a * b;
+                if (num2 % b || !check1(num2) || !check2(num1, num2)) continue;
+                int num3 = num2 / b * c;
+                if (num3 % c || !check1(num3) || !check2(num1, num3) || !check2(num2, num3)) continue;
+                cnt++;
+                cout &lt;&lt; num1 &lt;&lt; &quot; &quot; &lt;&lt; num2 &lt;&lt; &quot; &quot; &lt;&lt; num3 &lt;&lt; &quot;\n&quot;;
+            }
+        }
+    }
+    if (cnt == 0) cout &lt;&lt; &quot;No!!!&quot;;
+    return 0;
+}
+</code></pre></div>
+<div class="src"><div class="srcname">r12__j4zpxmp6_fix.cpp <span class="hint">· 编号精确匹配</span></div><pre class="code"><code>#include&lt;bits/stdc++.h&gt;
+using namespace std;
+int a,b,c;
+bool check1(int n){
+    string s=to_string(n);
+    if(s.size()!=3) return 0;
+    for(int i=0;i&lt;s.size();i++) for(int j=0;j&lt;s.size();j++){
+        if(i!=j &amp;&amp; s[i]==s[j]) return 0;
+        if(s[i]==&#x27;0&#x27;||s[j]==&#x27;0&#x27;) return 0;
+    }
+    return 1;
+}
+bool check2(int n,int m){
+    string s=to_string(n),t=to_string(m);
+    for(int i=0;i&lt;s.size();i++) for(int j=0;j&lt;t.size();j++) if(s[i]==t[j]) return 0;
+    return 1;
+}
+int main(){
+    int cnt=0; cin&gt;&gt;a&gt;&gt;b&gt;&gt;c;
+    if(a==0||b==0||c==0){ cout&lt;&lt;&quot;No!!!&quot;; return 0; }
+    for(int i=1;i&lt;=9;i++) for(int j=1;j&lt;=9;j++){
+        if(i==j) continue;
+        for(int k=1;k&lt;=9;k++){
+            if(i==k||j==k) continue;
+            int n1=i*100+j*10+k;
+            if((long long)n1*b%a || (long long)n1*c%a) continue;
+            int n2=(long long)n1*b/a, n3=(long long)n1*c/a;
+            if(!check1(n2)||!check1(n3)) continue;
+            if(!check2(n1,n2)||!check2(n1,n3)||!check2(n2,n3)) continue;
+            cnt++; cout&lt;&lt;n1&lt;&lt;&quot; &quot;&lt;&lt;n2&lt;&lt;&quot; &quot;&lt;&lt;n3&lt;&lt;&quot;\n&quot;;
+        }
+    }
+    if(cnt==0) cout&lt;&lt;&quot;No!!!&quot;;
+    return 0;
+}
+</code></pre></div>
 <h2>复现</h2><pre class="code"><code>g++ -std=c++17 -O2 -o /tmp/t 04_复现代码/&lt;对应文件&gt;
 echo &quot;&lt;题面内输入&gt;&quot; | /tmp/t</code></pre>
 <h2>相关报告</h2><ul class="links">
+<li><a href="../reports/洛谷题解逐篇hack清单_第12批.md.html">洛谷题解逐篇hack清单_第12批.md</a></li>
 <li><a href="../reports/三类口径与累计统计.md.html">三类口径与自查纪律</a></li>
 </ul></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>
