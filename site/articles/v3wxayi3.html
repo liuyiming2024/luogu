@@ -1,0 +1,47 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P1049 · v3wxayi3 · 题解归档</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">题解 / P1049 / v3wxayi3</span></header>
+<main class="article"><h1>P1049 <span class="lid">v3wxayi3</span></h1>
+<div class="badge 乙">乙·笔误/防抄袭</div>
+<table class="tb meta"><tbody>
+<tr><th>是否题解</th><td>是（题解文章（8 位 article 编号））</td></tr>
+<tr><th>归类</th><td>乙·笔误/防抄袭</td></tr>
+<tr><th>批次</th><td>第5批</td></tr>
+<tr><th>可逐字验证</th><td>是</td></tr>
+<tr><th>判定备注</th><td>作者自述随机放弃最优，反例仅作验证数据</td></tr>
+<tr><th>原文地址</th><td><a href="https://www.luogu.com/article/v3wxayi3" referrerpolicy="no-referrer">https://www.luogu.com/article/v3wxayi3</a><span class="hint">（离线时链接不可达，仅留来源）</span></td></tr>
+</tbody></table>
+<h2>题解代码 · 逐字取回 + 最小外壳（1 份）</h2>
+<p class="hint">代码只是辅助：只补 include / main / 必要声明，缺头文件与页面吞字符不计缺陷，仅验核心逻辑。</p>
+<div class="src"><div class="srcname">build__r5__P1049_v3wxayi3.cpp <span class="hint">· 编号精确匹配</span></div><pre class="code"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+int ans,n,c[105],v,s;
+int f(){
+    int vv=v; int st[40],top=0; int q[40],head=1;
+    for(int i=1;i&lt;=n;i++) q[i]=c[i];
+    while(head&lt;=n&amp;&amp;vv&gt;0){
+        while(head&lt;=n&amp;&amp;((rand()%9==0)||vv-q[head]&lt;0))
+            if(vv-q[head]&gt;=0) st[top++]=q[head++];
+            else head++;
+        if(head&lt;=n) vv-=q[head++];
+        while(top) q[--head]=st[--top];
+    }
+    return vv;
+}
+int main(){
+    scanf(&quot;%d%d&quot;,&amp;v,&amp;n);
+    for(int i=1;i&lt;=n;i++) scanf(&quot;%d&quot;,&amp;c[i]);
+    sort(c+1,c+n+1,greater&lt;int&gt;());
+    ans=v;
+    for(int i=1;i&lt;=100;i++) ans=min(ans,f());
+    printf(&quot;%d&quot;,ans);
+    return 0;
+}
+</code></pre></div>
+<h2>复现</h2><pre class="code"><code>g++ -std=c++17 -O2 -o /tmp/t 04_复现代码/&lt;对应文件&gt;
+echo &quot;&lt;题面内输入&gt;&quot; | /tmp/t</code></pre>
+<h2>相关报告</h2><ul class="links">
+<li><a href="../reports/洛谷题解逐篇hack清单_第5批.md.html">洛谷题解逐篇hack清单_第5批.md</a></li>
+<li><a href="../reports/三类口径与累计统计.md.html">三类口径与自查纪律</a></li>
+</ul></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>

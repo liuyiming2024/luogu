@@ -1,0 +1,64 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P1100 · qle49r7h · 题解归档</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">题解 / P1100 / qle49r7h</span></header>
+<main class="article"><h1>P1100 <span class="lid">qle49r7h</span></h1>
+<div class="badge 丙">丙·未 hack</div>
+<table class="tb meta"><tbody>
+<tr><th>是否题解</th><td>是（题解文章（8 位 article 编号））</td></tr>
+<tr><th>归类</th><td>丙·未 hack</td></tr>
+<tr><th>批次</th><td>第11批</td></tr>
+<tr><th>可逐字验证</th><td>是</td></tr>
+<tr><th>判定备注</th><td>转 32 位二进制串交换，0/2^32-1 边界全对</td></tr>
+<tr><th>原文地址</th><td><a href="https://www.luogu.com/article/qle49r7h" referrerpolicy="no-referrer">https://www.luogu.com/article/qle49r7h</a><span class="hint">（离线时链接不可达，仅留来源）</span></td></tr>
+</tbody></table>
+<h2>题解代码 · 逐字取回 + 最小外壳（1 份）</h2>
+<p class="hint">代码只是辅助：只补 include / main / 必要声明，缺头文件与页面吞字符不计缺陷，仅验核心逻辑。</p>
+<div class="src"><div class="srcname">build__r11__s1100.cpp <span class="hint">· 按题号关联</span></div><pre class="code"><code>
+#include&lt;bits/stdc++.h&gt;
+using namespace std;
+long long n;
+string zhuan(long long ans)
+{
+	string a=&quot;&quot;;
+	while(ans)
+	{
+		a=char(ans%2+48)+a;
+		ans/=2;
+	}
+	for(int i=1;a.size()&lt;32;i++)
+	{
+		a=&#x27;0&#x27;+a;
+	}
+	return a;
+}
+string huan(string a)
+{
+	string b=&quot;&quot;;
+	for(int i=16;i&lt;32;i++) b+=a[i];
+	for(int i=0;i&lt;16;i++) b+=a[i];
+	return b;
+}
+long long jieguo(string a)
+{
+	long long k=1,sum=0;
+	for(int i=a.size()-1;i&gt;=0;i--)
+	{
+		sum+=(int(a[i])-48)*k;
+		k*=2;
+	}
+	return sum;
+}
+int main()
+{
+	cin&gt;&gt;n;
+	cout&lt;&lt;jieguo(huan(zhuan(n)));
+	return 0;
+}
+</code></pre></div>
+<h2>复现</h2><pre class="code"><code>g++ -std=c++17 -O2 -o /tmp/t 04_复现代码/&lt;对应文件&gt;
+echo &quot;&lt;题面内输入&gt;&quot; | /tmp/t</code></pre>
+<h2>相关报告</h2><ul class="links">
+<li><a href="../reports/洛谷题解逐篇hack清单_第11批.md.html">洛谷题解逐篇hack清单_第11批.md</a></li>
+<li><a href="../reports/三类口径与累计统计.md.html">三类口径与自查纪律</a></li>
+</ul></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>

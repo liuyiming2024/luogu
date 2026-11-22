@@ -1,0 +1,46 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P1220 · uezud59i · 题解归档</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">题解 / P1220 / uezud59i</span></header>
+<main class="article"><h1>P1220 <span class="lid">uezud59i</span></h1>
+<div class="badge 丙">丙·未 hack</div>
+<table class="tb meta"><tbody>
+<tr><th>是否题解</th><td>是（题解文章（8 位 article 编号））</td></tr>
+<tr><th>归类</th><td>丙·未 hack</td></tr>
+<tr><th>批次</th><td>第1批</td></tr>
+<tr><th>可逐字验证</th><td>是</td></tr>
+<tr><th>判定备注</th><td>越界数据作废后归未 hack（第2批重判）</td></tr>
+<tr><th>原文地址</th><td><a href="https://www.luogu.com/article/uezud59i" referrerpolicy="no-referrer">https://www.luogu.com/article/uezud59i</a><span class="hint">（离线时链接不可达，仅留来源）</span></td></tr>
+</tbody></table>
+<h2>题解代码 · 逐字取回 + 最小外壳（1 份）</h2>
+<p class="hint">代码只是辅助：只补 include / main / 必要声明，缺头文件与页面吞字符不计缺陷，仅验核心逻辑。</p>
+<div class="src"><div class="srcname">build__P1220_uezud59i.cpp <span class="hint">· 编号精确匹配</span></div><pre class="code"><code>
+#include&lt;bits/stdc++.h&gt;
+using namespace std;
+long long n,m,minn,s;
+long long a[100001],b[100001];
+void dfs(int i,int j,int k,int v,int x)
+{
+ if (v&gt;minn) return;
+ if (i==1 &amp;&amp; j==n) { if (v&lt;minn) minn=v; return; }
+ if (k==0) { if (i&gt;1) dfs(i-1,j,0,v+x*abs(a[i-1]-a[i]),x-b[i-1]); if (j&lt;n) dfs(i,j+1,1,v+x*abs(a[i]-a[j+1]),x-b[j+1]); }
+ if (k==1) { if (j&lt;n) dfs(i,j+1,1,v+x*abs(a[j]-a[j+1]),x-b[j+1]); if (i&gt;1) dfs(i-1,j,0,v+x*abs(a[j]-a[i-1]),x-b[i-1]); }
+}
+int main(){
+ cin&gt;&gt;n&gt;&gt;m;
+ minn=1000000000;
+ for (int i=1; i&lt;=n; ++i) { cin&gt;&gt;a[i]&gt;&gt;b[i]; s+=b[i]; }
+ s-=b[m];
+ dfs(m,m,0,0,s);
+ cout&lt;&lt;minn;
+ return 0;
+}
+</code></pre></div>
+<h2>复现</h2><pre class="code"><code>g++ -std=c++17 -O2 -o /tmp/t 04_复现代码/&lt;对应文件&gt;
+echo &quot;&lt;题面内输入&gt;&quot; | /tmp/t</code></pre>
+<h2>相关报告</h2><ul class="links">
+<li><a href="../reports/洛谷题解逐篇hack清单_第10批.md.html">洛谷题解逐篇hack清单_第10批.md</a></li>
+<li><a href="../reports/洛谷题解逐篇hack清单_第11批.md.html">洛谷题解逐篇hack清单_第11批.md</a></li>
+<li><a href="../reports/洛谷题解逐篇hack清单_第1批.md.html">洛谷题解逐篇hack清单_第1批.md</a></li>
+<li><a href="../reports/三类口径与累计统计.md.html">三类口径与自查纪律</a></li>
+</ul></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>

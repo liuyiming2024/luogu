@@ -1,0 +1,100 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P1090 · zcxe384l · 题解归档</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">题解 / P1090 / zcxe384l</span></header>
+<main class="article"><h1>P1090 <span class="lid">zcxe384l</span></h1>
+<div class="badge 丙">丙·未 hack</div>
+<table class="tb meta"><tbody>
+<tr><th>是否题解</th><td>是（题解文章（8 位 article 编号））</td></tr>
+<tr><th>归类</th><td>丙·未 hack</td></tr>
+<tr><th>批次</th><td>第3批</td></tr>
+<tr><th>可逐字验证</th><td>是</td></tr>
+<tr><th>判定备注</th><td>逐字版 pop() 缺 [] 属展示缺陷，不计</td></tr>
+<tr><th>原文地址</th><td><a href="https://www.luogu.com/article/zcxe384l" referrerpolicy="no-referrer">https://www.luogu.com/article/zcxe384l</a><span class="hint">（离线时链接不可达，仅留来源）</span></td></tr>
+</tbody></table>
+<h2>题解代码 · 逐字取回 + 最小外壳（2 份）</h2>
+<p class="hint">代码只是辅助：只补 include / main / 必要声明，缺头文件与页面吞字符不计缺陷，仅验核心逻辑。</p>
+<div class="src"><div class="srcname">build__r3__P1090_zcxe384l.cpp <span class="hint">· 编号精确匹配</span></div><pre class="code"><code>
+#include&lt;bits/stdc++.h&gt;
+using namespace std;
+struct my_priority {
+    vector&lt;int&gt;heap;
+    void init() { heap.push_back(-1e9); }
+    void gao(int pos) {
+        int flag;
+        if(pos*2&gt;heap.size()-1)return;
+        else if(pos*2==heap.size()-1)flag=0;
+        else flag=heap[pos*2]&gt;heap[pos*2+1];
+        if(heap[pos]&gt;heap[pos*2+flag]) { swap(heap[pos],heap[pos*2+flag]); gao(pos*2+flag); }
+        return;
+    }
+    void doit(int i) {
+        while(heap[i]&lt;heap[i/2]) { swap(heap[i],heap[i/2]); i&gt;&gt;=1; }
+        return;
+    }
+    void push(int w) { heap.push_back(w); doit(heap.size()-1); }
+    int top() { return heap[1]; }
+    void pop() { heap[1]=heap(heap.size()-1); heap.pop_back(); gao(1); }
+    int size() { return heap.size()-1; }
+} q;
+int main() {
+    int i,ans=0;
+    int n,tmp;
+    q.init();
+    scanf(&quot;%d&quot;,&amp;n);
+    for(i=1; i&lt;=n; i++) { scanf(&quot;%d&quot;,&amp;tmp); q.push(tmp); }
+    while(q.size()&gt;1) {
+        tmp=q.top(); q.pop();
+        tmp+=q.top(); q.pop();
+        ans+=tmp;
+        q.push(tmp);
+    }
+    printf(&quot;%d\n&quot;,ans);
+    return 0;
+}
+</code></pre></div>
+<div class="src"><div class="srcname">build__r3__P1090_zcxe384l_fixed.cpp <span class="hint">· 编号精确匹配</span></div><pre class="code"><code>
+#include&lt;bits/stdc++.h&gt;
+using namespace std;
+struct my_priority {
+    vector&lt;int&gt;heap;
+    void init() { heap.push_back(-1e9); }
+    void gao(int pos) {
+        int flag;
+        if(pos*2&gt;heap.size()-1)return;
+        else if(pos*2==heap.size()-1)flag=0;
+        else flag=heap[pos*2]&gt;heap[pos*2+1];
+        if(heap[pos]&gt;heap[pos*2+flag]) { swap(heap[pos],heap[pos*2+flag]); gao(pos*2+flag); }
+        return;
+    }
+    void doit(int i) {
+        while(heap[i]&lt;heap[i/2]) { swap(heap[i],heap[i/2]); i&gt;&gt;=1; }
+        return;
+    }
+    void push(int w) { heap.push_back(w); doit(heap.size()-1); }
+    int top() { return heap[1]; }
+    void pop() { heap[1]=heap[heap.size()-1]; heap.pop_back(); gao(1); }
+    int size() { return heap.size()-1; }
+} q;
+int main() {
+    int i,ans=0;
+    int n,tmp;
+    q.init();
+    scanf(&quot;%d&quot;,&amp;n);
+    for(i=1; i&lt;=n; i++) { scanf(&quot;%d&quot;,&amp;tmp); q.push(tmp); }
+    while(q.size()&gt;1) {
+        tmp=q.top(); q.pop();
+        tmp+=q.top(); q.pop();
+        ans+=tmp;
+        q.push(tmp);
+    }
+    printf(&quot;%d\n&quot;,ans);
+    return 0;
+}
+</code></pre></div>
+<h2>复现</h2><pre class="code"><code>g++ -std=c++17 -O2 -o /tmp/t 04_复现代码/&lt;对应文件&gt;
+echo &quot;&lt;题面内输入&gt;&quot; | /tmp/t</code></pre>
+<h2>相关报告</h2><ul class="links">
+<li><a href="../reports/洛谷题解逐篇hack清单_第3批.md.html">洛谷题解逐篇hack清单_第3批.md</a></li>
+<li><a href="../reports/三类口径与累计统计.md.html">三类口径与自查纪律</a></li>
+</ul></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>

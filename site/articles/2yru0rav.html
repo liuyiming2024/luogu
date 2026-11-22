@@ -1,0 +1,40 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P1164 · 2yru0rav · 题解归档</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">题解 / P1164 / 2yru0rav</span></header>
+<main class="article"><h1>P1164 <span class="lid">2yru0rav</span></h1>
+<div class="badge 丙">丙·未 hack</div>
+<table class="tb meta"><tbody>
+<tr><th>是否题解</th><td>是（题解文章（8 位 article 编号））</td></tr>
+<tr><th>归类</th><td>丙·未 hack</td></tr>
+<tr><th>批次</th><td>第5批</td></tr>
+<tr><th>可逐字验证</th><td>是</td></tr>
+<tr><th>判定备注</th><td>三段式 +1 恰好补空集项</td></tr>
+<tr><th>原文地址</th><td><a href="https://www.luogu.com/article/2yru0rav" referrerpolicy="no-referrer">https://www.luogu.com/article/2yru0rav</a><span class="hint">（离线时链接不可达，仅留来源）</span></td></tr>
+</tbody></table>
+<h2>题解代码 · 逐字取回 + 最小外壳（1 份）</h2>
+<p class="hint">代码只是辅助：只补 include / main / 必要声明，缺头文件与页面吞字符不计缺陷，仅验核心逻辑。</p>
+<div class="src"><div class="srcname">build__r5__P1164_2yru0rav.cpp <span class="hint">· 编号精确匹配</span></div><pre class="code"><code>
+#include&lt;bits/stdc++.h&gt;
+using namespace std;
+const int N=110,M=10010;
+int f[N][M],n,m,a[N];
+int main(){
+ cin&gt;&gt;n&gt;&gt;m;
+ for(int i=1;i&lt;=n;i++) cin&gt;&gt;a[i];
+ for(int i=1;i&lt;=n;i++)
+     for(int j=0;j&lt;=m;j++){
+         if(j==a[i]) f[i][j]=f[i-1][j]+1;
+         if(j&gt;a[i]) f[i][j]=f[i-1][j]+f[i-1][j-a[i]];
+         if(j&lt;a[i]) f[i][j]=f[i-1][j];
+     }
+ cout&lt;&lt;f[n][m];
+ return 0;
+}
+</code></pre></div>
+<h2>复现</h2><pre class="code"><code>g++ -std=c++17 -O2 -o /tmp/t 04_复现代码/&lt;对应文件&gt;
+echo &quot;&lt;题面内输入&gt;&quot; | /tmp/t</code></pre>
+<h2>相关报告</h2><ul class="links">
+<li><a href="../reports/洛谷题解逐篇hack清单_第5批.md.html">洛谷题解逐篇hack清单_第5批.md</a></li>
+<li><a href="../reports/三类口径与累计统计.md.html">三类口径与自查纪律</a></li>
+</ul></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>

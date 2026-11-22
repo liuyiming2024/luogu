@@ -1,0 +1,69 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>洛谷题解逐篇hack清单_第4批_三类口径.md · 离线归档</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">01_批次清单 / 洛谷题解逐篇hack清单_第4批_三类口径.md</span></header>
+<main class="doc"><h1>洛谷题解逐篇 hack 清单 · 第 4 批（三类口径）</h1>
+<blockquote>验证日期：2026-11-20。全程本地编译 <code>g++ -std=c++17 -O2</code> + 独立正确解对拍，<strong>不登录、不提交</strong>。 本批起改为<strong>三类</strong>，并<strong>按新口径重判前 3 批</strong>，以本文件为准。</blockquote>
+<hr>
+<h2>0. 口径更新（本批起固定）</h2>
+<h3>代码只是辅助，不判「全不全」</h3>
+<p>题解作者本来就没有被要求贴出完整可提交代码。因此：</p>
+<ul><li>取到代码片段时，我<strong>补最小外壳</strong>（<code>#include</code>、<code>int main</code> 返回类型、必要全局变量声明）后再编译；</li><li><strong>补齐的部分一律不计入题解缺陷</strong>；</li><li><strong>只验证核心逻辑对不对</strong>，不评判代码完整不完整。</li><li>由此，前几批里「缺头文件 CE」「老式 <code>main(){}</code>」「页面渲染吞字符」<strong>不再作为缺陷判定</strong>，统一移到乙类记一笔。</li></ul>
+<h3>三类定义</h3>
+<table class="tb"><thead><tr><th>类</th><th>名称</th><th>判据</th></tr></thead><tbody><tr><td><strong>甲</strong></td><td><strong>已 hack</strong></td><td>题面内存在<strong>确定性</strong>测试点使代码 WA/RE；且修复要动算法层面（移动语句、换类型、补分支、重写判断），不是改一个字面量能救回来的</td></tr><tr><td><strong>乙</strong></td><td><strong>轻微笔误 / 主动防抄袭</strong>（单列）</td><td>代码文本有偏差，但<strong>改一处字符或数字即逻辑正确</strong>；或作者主动删减、拆段、声明为示意版、埋坑。<strong>列出，但不计入 hack 命中</strong></td></tr><tr><td><strong>丙</strong></td><td><strong>未 hack</strong></td><td>核心逻辑正确，反例搜索未命中</td></tr></tbody></table>
+<p>甲类的其余三条硬约束不变：题面范围内、不看评测机波动（不主张 TLE/超时）、结果可复现。</p>
+<p><strong>乙类归并依据</strong>：洛谷题解审核标准明文写有「<strong>不要通过修改代码达到所谓『防抄袭』目的</strong>」「<strong>洛谷有反作弊系统，请各位写题解的时候不要再加各种坑了</strong>」，说明这类文本偏差是真实存在的现象。但我<strong>只按文本形态归类，不臆测作者动机</strong>——不指认某篇&quot;就是故意埋坑&quot;。</p>
+<hr>
+<h2>1. 前 3 批按三类归位（14 篇）</h2>
+<table class="tb"><thead><tr><th>题解</th><th>原判</th><th><strong>新归类</strong></th><th>依据</th></tr></thead><tbody><tr><td>P1002 <code>sfifnfaa</code></td><td>已 hack</td><td><strong>甲</strong></td><td>起点被自己覆盖 + 只判 2 个控制点 + <code>int</code> 溢出，三处叠加</td></tr><tr><td>P1002 <code>yk90rg78</code></td><td>已 hack</td><td><strong>甲</strong></td><td><code>f[0][0]</code> 初始化语句位置错，需移动语句</td></tr><tr><td>P1182 <code>arorhglg</code></td><td>已 hack</td><td><strong>甲</strong></td><td><code>int r</code> 累加溢出，需换类型</td></tr><tr><td>P5638 <code>nzmytiez</code></td><td>已 hack</td><td><strong>甲</strong></td><td>未处理传送目标 clamp 到 n，需补边界分支</td></tr><tr><td>P1018 <code>pmio8se0</code></td><td>已 hack</td><td><strong>乙（移出甲）</strong></td><td><code>n-xx-1</code> → <code>n-xx</code> <strong>只删一个 <code>-1</code></strong>；改后 300 组严格合规随机 <strong>0 不一致</strong>（改前 63 组不一致）。属 off-by-one 笔误</td></tr><tr><td>P1090 <code>zcxe384l</code></td><td>未 hack</td><td><strong>乙</strong></td><td><code>heap(heap.size()-1)</code> → <code>heap[heap.size()-1]</code>，改一对括号；补后 200 组全对</td></tr><tr><td>P1001 <code>zaohomhi</code></td><td>未 hack</td><td>丙</td><td>—</td></tr><tr><td>P1048 <code>h4cn628r</code></td><td>未 hack</td><td>丙</td><td>33 组全对</td></tr><tr><td>P1220 <code>uezud59i</code></td><td>未 hack</td><td>丙</td><td>题面内未命中；旧 C-001 越界数据已作废</td></tr><tr><td>P3959 <code>l6u32sp7</code></td><td>未 hack</td><td>丙</td><td>400 组穷举生成树 0 不一致</td></tr><tr><td>P5179 <code>siyuan</code></td><td>未 hack</td><td>丙</td><td>165 组全对</td></tr><tr><td>P1002 <code>vis</code> 标记版</td><td>未 hack</td><td>丙</td><td>63 组全对</td></tr><tr><td>P1216 <code>ove5v8ck</code></td><td>未 hack</td><td>丙</td><td>两段代码 120+ 组全对</td></tr><tr><td>P1803 <code>dmza5ifn</code></td><td>未 hack</td><td>丙</td><td>400 组全对</td></tr></tbody></table>
+<blockquote><strong>甲类由 5 篇降为 4 篇，合法反例由 14 条降为 10 条</strong>（P1018 的 4 条改列乙类验证数据）。 若你更想按&quot;后果严重度&quot;把 off-by-one 留在甲类，说一句我就挪回去。</blockquote>
+<hr>
+<h2>2. 第 4 批 · 5 篇新题解</h2>
+<table class="tb"><thead><tr><th>#</th><th>题号</th><th>题解</th><th>归类</th><th>结论</th></tr></thead><tbody><tr><td>15</td><td>P4995</td><td>双指针专题测总结（<code>up402yw6</code>）</td><td><strong>丙</strong></td><td>未 hack</td></tr><tr><td>16</td><td>P1216</td><td>DP 笔记（<code>tneoku44</code>）</td><td><strong>丙</strong></td><td>未 hack</td></tr><tr><td>17</td><td>P1002</td><td>滚动数组版（搜索收录页，lid 未取到）</td><td><strong>乙</strong></td><td>数组尺寸笔误，见 §3.2</td></tr><tr><td>18</td><td>P1018</td><td>「不带高精度」示意代码篇</td><td><strong>乙</strong></td><td>作者主动简化的辅助代码，见 §3.3</td></tr><tr><td>19</td><td>P1002</td><td>P1002 题解（<code>qsh0tcmu</code>）</td><td><strong>丙</strong></td><td>未 hack</td></tr></tbody></table>
+<p><strong>累计 19 篇 / 甲 4 篇 / 乙 4 篇（主类）+ 若干条目 / 丙 11 篇 / 甲类合法反例 10 条。</strong></p>
+<h3>2.1 P4995 <code>up402yw6</code> · 丙</h3>
+<p>补最小外壳后核心（逐字）：</p>
+<pre class="code"><code>#define int long long
+int h[300 + 9];
+sort(h + 1, h + n + 1);
+int lt = 1, rt = n, t = 0, now = 0;
+for (int i = 1; i &lt;= n; i ++) {
+    if (i % 2 != 0) { t += (now - h[rt]) * (now - h[rt]); now = h[rt]; rt --; }
+    else            { t += (now - h[lt]) * (now - h[lt]); now = h[lt]; lt ++; }
+}
+cout &lt;&lt; t;</code></pre>
+<p><strong>独立正确解</strong>：状压 DP <code>dp[mask][last]</code> 枚举全部跳跃顺序求最大值，<strong>不依赖贪心结论</strong>。 样例 1 <code>2 / 2 1</code> → 5 ✓；样例 2 <code>3 / 6 3 5</code> → 49 ✓；n=1 → 10000 ✓；<strong>120 组随机（n≤9）0 不一致</strong>。 数组 <code>h[309]</code> 对题面 <code>n ≤ 300</code> 刚好够，<code>#define int long long</code> 也挡住了 <code>h ≤ 10⁴</code> 时平方和约 <code>3×10¹⁰</code> 的溢出；n=300 上界跑通。</p>
+<h3>2.2 P1216 <code>tneoku44</code> · 丙</h3>
+<pre class="code"><code>int a[1001][1001],n;
+for(int i=0;i&lt;n;i++) for(int j=0;j&lt;=i;j++) cin&gt;&gt;a[i][j];
+for(int i=n-1;i&gt;0;i--) for(int j=0;j&lt;i;j++) a[i-1][j]+=max(a[i][j],a[i][j+1]);
+cout&lt;&lt;a[0][0];</code></pre>
+<p>0-based 下三角存法 + 自底向上原地累加，与标准 DP <strong>120 组随机（含 n=1000）+ 全 0 / 全 100 边界 0 不一致</strong>。数组对 <code>r ≤ 1000</code> 够用，<code>int</code> 对值 ≤100 够用。</p>
+<h3>2.3 P1002 <code>qsh0tcmu</code> · 丙</h3>
+<p><code>f[40][40] / s[40][40]</code>、<code>f[2][1]=1</code>、9 个控制点齐全、<code>if(s[i][j]) continue;</code> 配合全局零初始化等价于置 0。<strong>300 组随机（n,m ≤ 20，马坐标 ≤ 20）0 不一致</strong>。</p>
+<hr>
+<h2>3. 乙类清单（单列，不计 hack）</h2>
+<h3>3.1 P1018 <code>pmio8se0</code> — off-by-one 笔误（自甲类移入）</h3>
+<p><code>if(n-xx-1&lt;v) return;</code> 应为 <code>n-xx</code>。改前 300 组合规随机 63 组 WA（<code>6 1 / 123456</code> 期望 74070、实际 69104；<code>k=n-1</code> 输出空串），<strong>改后 300 组 0 不一致</strong>。DP 思路、剪枝框架、高精度乘法 <code>add()</code> 本身都正确。</p>
+<h3>3.2 P1002 滚动数组版 — 数组尺寸笔误（本批新增）</h3>
+<pre class="code"><code>long long f[23];
+bool ma[23][23];                    // ← 坐标 +2 后马控制点最远到 (24,24)
+void work(long long x,long long y){ ... ma[x+2][y+2]=true; ... }</code></pre>
+<p><code>ma</code> 下标 0..22，但 <code>x+2</code> 可达 24，越界写踩到后面的 <code>f[]</code> → 题面内确定性 WA：</p>
+<table class="tb"><thead><tr><th>输入</th><th>期望</th><th>实际</th></tr></thead><tbody><tr><td><code>10 15 20 13</code></td><td><code>3268760</code></td><td><code>5230016</code></td></tr><tr><td><code>8 9 20 15</code></td><td><code>24310</code></td><td><code>843485500</code></td></tr><tr><td><code>18 10 20 20</code></td><td><code>13123110</code></td><td><code>3495893927489421862</code></td></tr></tbody></table>
+<p>400 组随机中 16 组不一致。把 <code>ma[23][23]</code> 改成 <code>ma[27][27]</code>（<strong>只改一个数字</strong>）后，剩余 2 组不一致全是「马控制起点」——违反题面「保证起点不是马的控制点」，<strong>题面合法范围内 0 不一致</strong>。反例仍列出，但不计入甲类。</p>
+<h3>3.3 P1018「不带高精度」示意代码篇 — 主动简化的辅助代码（本批新增）</h3>
+<p>作者原文：「<strong>为方便理解附上一个不带高精度的代码</strong>。带高精度的写法建议用类类型或者结构体并重载运算符实现」，代码为 <code>long long dp[N][N]</code>。N≤40 时结果远超 <code>long long</code>，必然溢出——但作者已明说这是思路示意、不是完整解法。按本批新口径：<strong>这是辅助代码，不拿类型不够去 hack 它</strong>，归乙类。</p>
+<h3>3.4 其余乙类条目（文本形态记录，不改变各篇主类）</h3>
+<table class="tb"><thead><tr><th>题解</th><th>文本形态</th><th>处理</th></tr></thead><tbody><tr><td>P1090 <code>zcxe384l</code></td><td><code>heap(heap.size()-1)</code></td><td>改 <code>[]</code>，补后 200 组全对</td></tr><tr><td>P1216 <code>ove5v8ck</code> 第二块</td><td>缺 <code>#include &lt;iostream&gt;</code> / <code>&lt;algorithm&gt;</code></td><td><strong>按你说的，缺头文件很正常</strong>；补最小外壳后逻辑正确</td></tr><tr><td>P1803 <code>dmza5ifn</code></td><td>老式 <code>main(){</code></td><td>C++17 补 <code>int</code> 返回类型，400 组全对</td></tr><tr><td>P1182 <code>arorhglg</code></td><td><code>scanf(&quot;%d&quot;,&amp;a[i])</code> 写入 <code>long long</code></td><td>编译警告；此处 BSS 清零使 UB 无害，甲类 WA 主因是 <code>int r</code> 溢出</td></tr><tr><td>P1002 <code>vis</code> 版</td><td>搜索摘要里 <code>const int x[]=b;</code></td><td>页面渲染吞字符，按题解文字补全 <code>x/y</code> 数组后 63 组全对</td></tr><tr><td>P5638 <code>nzmytiez</code></td><td>代码拆成核心/初始化/读入/输出/return <strong>5 段</strong>给</td><td>按文章顺序拼成完整程序后验证；分段展示本身不作缺陷</td></tr><tr><td>P3959 <code>l6u32sp7</code></td><td>中间 <code>……</code> 省略段</td><td>按题解文字补全模板部分后验证</td></tr><tr><td>P1220 <code>uezud59i</code></td><td>DFS 函数体写成批注截断形式</td><td>同上</td></tr></tbody></table>
+<hr>
+<h2>4. 甲类合法反例清单（10 条，可直接投喂）</h2>
+<table class="tb"><thead><tr><th>编号</th><th>题解</th><th>输入</th><th>期望</th><th>实际</th></tr></thead><tbody><tr><td>H-001</td><td>P1002 <code>sfifnfaa</code></td><td><code>6 6 3 3</code></td><td><code>6</code></td><td><code>0</code></td></tr><tr><td>H-002</td><td>P1002 <code>sfifnfaa</code></td><td><code>20 20 0 20</code></td><td><code>137846521561</code></td><td><code>0</code></td></tr><tr><td>H-003</td><td>P1002 <code>sfifnfaa</code></td><td><code>20 20 10 10</code></td><td><code>21388094780</code></td><td><code>0</code></td></tr><tr><td>H-004</td><td>P1182 <code>arorhglg</code></td><td><code>100 50</code> + 100×<code>30000000</code></td><td><code>60000000</code></td><td><code>30000000</code></td></tr><tr><td>H-005</td><td>P1182 <code>arorhglg</code></td><td><code>100000 50000</code> + 100000×<code>25000</code></td><td><code>50000</code></td><td><code>25000</code></td></tr><tr><td>H-005b</td><td>P1182 <code>arorhglg</code></td><td><code>100000 50000</code> + 100000×<code>30000</code></td><td><code>60000</code></td><td><code>30000</code></td></tr><tr><td>H-006</td><td>P1002 <code>yk90rg78</code></td><td><code>6 6 3 3</code></td><td><code>6</code></td><td><code>0</code></td></tr><tr><td>H-007</td><td>P1002 <code>yk90rg78</code></td><td><code>20 20 0 20</code></td><td><code>137846521561</code></td><td><code>0</code></td></tr><tr><td>H-008</td><td>P5638 <code>nzmytiez</code></td><td><code>2 100</code> / <code>5</code></td><td><code>0</code></td><td><code>5</code></td></tr><tr><td>H-009</td><td>P5638 <code>nzmytiez</code></td><td><code>3 5</code> / <code>2 3</code></td><td><code>0</code></td><td><code>5</code></td></tr><tr><td>H-010</td><td>P5638 <code>nzmytiez</code></td><td><code>4 4</code> / <code>7 1 9</code></td><td><code>0</code></td><td><code>17</code></td></tr></tbody></table>
+<p><strong>已作废 / 不计</strong>：P1220 越界坐标、P3959「仅无正确性保证」、P1090 <code>n=10000</code> 全 20000（违反题面输出保证）、各类 CE、P5638 朴素版 O(nk) 的 TLE、以及乙类全部反例。</p>
+<hr>
+<h2>5. 保存站状态</h2>
+<p><code>www.luogu.me/article/&lt;lid&gt;</code> 与 <code>api.luogu.me/article/query/&lt;lid&gt;</code> 仍只返回站点框架或 403，首页降级公告（AI 自动化请求导致保存 API 队列堵塞）还在。保存站继续只用于确认归档范围与 8 位 lid 体系，正文从可直读的 <code>www.luogu.com/article/&lt;lid&gt;</code> / <code>www.luogu.org/article/&lt;lid&gt;</code> 逐字取；本批未高频刷接口。</p>
+<hr>
+<h2>6. 下一批</h2>
+<p>三类口径固定，继续一轮一批。优先：</p>
+<ol><li>乙类高发形态：数组尺寸、<code>n-xx-1</code> 型剪枝、<code>()</code> vs <code>[]</code>、比较函数返回值溢出；</li><li>甲类方向：初始化语句位置、类型选择、clamp 边界；</li><li>你随手丢来的任意 <code>article/&lt;lid&gt;</code> 或代码段。</li></ol></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>

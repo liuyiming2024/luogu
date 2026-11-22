@@ -1,0 +1,77 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>洛谷题解逐篇hack清单_第10批.md · 离线归档</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">01_批次清单 / 洛谷题解逐篇hack清单_第10批.md</span></header>
+<main class="doc"><h1>洛谷题解逐篇 hack 清单 · 第 10 批</h1>
+<blockquote>验证日期：2026-11-22。口径沿用第 4 批（三类 + 代码只是辅助、不判完整度），<strong>以第 4 批文件为准</strong>。 全程本地编译 <code>g++ -std=c++17 -O2</code> / <code>gcc -std=c11</code>（C 版）+ 独立正确解对拍，<strong>不登录、不提交</strong>。本批含 1 篇 Pascal 题解，按等价逻辑复刻验证；含 2 篇同题不同解法。</blockquote>
+<hr>
+<h2>0. 本批结果一句话</h2>
+<p>换到 <strong>USACO / NOIP 入门字符串与桶标记</strong> 这一片，<strong>甲类再开一篇</strong>：P1152 <code>h7y41tog</code> 一个 <code>bool vis[10000005]</code> 同时踩中「10MB 局部数组爆 8MB 栈」「差值可达 2e8 但桶只有 1e7」「题面多组只读一组」三层独立缺陷，官方样例 #1 直接 SIGSEGV。</p>
+<p>本批 <strong>9 篇</strong>（甲 1 / 丙 8），<strong>未新开乙类</strong>。累计 56 → <strong>65 篇</strong>，甲 8 → <strong>9</strong>，乙 9（不变），丙 39 → <strong>47</strong>，甲类合法反例 20 → <strong>23 条</strong>。</p>
+<hr>
+<h2>1. 第 10 批总表（9 篇新题解，全部有 8 位 lid）</h2>
+<table class="tb"><thead><tr><th>#</th><th>题号</th><th>题解</th><th>归类</th><th>结论</th></tr></thead><tbody><tr><td>57</td><td>P1152</td><td>题解:P1152 欢乐的跳（<code>h7y41tog</code>）</td><td><strong>甲</strong></td><td>官方样例即 SIGSEGV；三层独立缺陷，修复需重写核心</td></tr><tr><td>58</td><td>P1200</td><td>题解:P1200 你的飞碟在这儿（<code>ictzayja</code>）</td><td>丙</td><td>6 定点（含全 <code>ZZZZZZ</code>）+ 300 组 0 不一致</td></tr><tr><td>59</td><td>P1200</td><td>题解 P1200 你的飞碟在这儿（<code>vckbob2z</code>，Pascal）</td><td>丙</td><td>逐步 mod 47，300 组等价逻辑 0 不一致</td></tr><tr><td>60</td><td>P1424</td><td>题解 P1424 小鱼的航程改进版（<code>apqvl7bn</code>）</td><td>丙</td><td>8 定点（含 n=1e6 上限）+ 200 组 0 不一致</td></tr><tr><td>61</td><td>P1425</td><td>题解 P1425 小鱼的游泳时间（<code>nobyk23w</code>）</td><td>丙</td><td>C 版 + C++ 版各 6 定点 + 193 组 0 不一致</td></tr><tr><td>62</td><td>P1425</td><td>题解:P1425 小鱼的游泳时间（<code>beuv9jew</code>）</td><td>丙</td><td>6 定点 + 290 组 0 不一致</td></tr><tr><td>63</td><td>P1055</td><td>题解 P1055 ISBN 号码（<code>kfg4ugka</code>）</td><td>丙</td><td>7 定点 + 300 组 0 不一致（含 UB 自查）</td></tr><tr><td>64</td><td>P1179</td><td>题解 P1179 数字统计（<code>59x93a43</code>）</td><td>丙</td><td>7 定点（含 [1,100000] 全量）+ 200 组 0 不一致</td></tr><tr><td>65</td><td>P1059</td><td>题解:P1059 明明的随机数（<code>6t0wrb4o</code>）</td><td>丙</td><td>5 定点 + 300 组 0 不一致</td></tr></tbody></table>
+<blockquote>本批主计数 9 篇。P1079、P1980、P2141、P1320、P1089、P1152 其他解法等多篇<strong>未取到 lid 或逐字代码取不全</strong>，按纪律只登记、不纳入计数，见 §6。</blockquote>
+<hr>
+<h2>2. 甲类 · P1152 <code>h7y41tog</code></h2>
+<h3>2.1 代码（逐字取回）</h3>
+<pre class="code"><code>int n, a[1005];
+cin &gt;&gt; n;
+if (n == 1) { cout &lt;&lt; &quot;Jolly&quot;; return 0; }
+for (int i = 1; i &lt;= n; i++) cin &gt;&gt; a[i];
+int dif[1005];
+for (int i = 1; i &lt;= n - 1; i++) dif[i] = abs(a[i + 1] - a[i]);
+sort(dif + 1, dif + n);
+bool vis[10000005] = { 0 };            // ← 10MB 局部数组
+for (int i = 1; i &lt;= n - 1; i++) vis[dif[i]] = 1;   // ← dif 可达 2e8
+for (int i = 1; i &lt;= n - 1; i++) if (!vis[i]) { cout &lt;&lt; &quot;Not jolly&quot; &lt;&lt; endl; return 0; }
+cout &lt;&lt; &quot;Jolly&quot; &lt;&lt; endl;</code></pre>
+<p>题面（<code>1≤n≤1000</code>，<code>−10⁸≤aᵢ≤10⁸</code>，官方题面写「<strong>每组测试数据</strong>」）：相邻差绝对值可达 <strong>2×10⁸</strong>，而 <code>vis</code> 只有 <code>10000005</code> 个 bool。</p>
+<h3>2.2 三层独立缺陷（分层实测）</h3>
+<table class="tb"><thead><tr><th>层</th><th>实测</th><th>结论</th></tr></thead><tbody><tr><td>① 栈溢出</td><td><code>ulimit -s</code> = <strong>8192 KB</strong>，<code>bool[10000005]</code> ≈ 10MB 局部变量 → <strong>任何输入</strong> SIGSEGV，连官方样例 #1、<code>n=1</code> 都崩</td><td>环境相关但题面内合法输入确定性 RE</td></tr><tr><td>② 下标越界</td><td>把 <code>vis</code> 改成 <code>static</code>（挪出栈）后：官方样例 / <code>n=1</code> / <code>diff=1e7</code> / <code>diff=10000005</code> 全部正确；但 <code>diff=2e8</code>、<code>diff=−1e8→1e8</code> 仍 <strong>SIGSEGV</strong></td><td>与栈无关的逻辑必然缺陷</td></tr><tr><td>③ 多组漏读</td><td>static 版喂 <code>4/1 4 2 3</code> + <code>5/1 4 2 -1 6</code> + <code>1/9</code>，只输出 <code>Jolly</code> 一行，缺 <code>Not jolly</code>、<code>Jolly</code></td><td>只读一组，未按题面读到 EOF</td></tr></tbody></table>
+<h3>2.3 反例（全部题面内合法输入）</h3>
+<table class="tb"><thead><tr><th>输入</th><th>正确</th><th>实际（逐字原文版）</th></tr></thead><tbody><tr><td><code>4 / 1 4 2 3</code>（<strong>官方样例 #1</strong>）</td><td><code>Jolly</code></td><td>空输出，rc −11</td></tr><tr><td><code>5 / 1 4 2 -1 6</code>（<strong>官方样例 #2</strong>）</td><td><code>Not jolly</code></td><td>空输出，rc −11</td></tr><tr><td><code>1 / 7</code>（<code>n=1</code> 特判分支）</td><td><code>Jolly</code></td><td>空输出，rc −11</td></tr><tr><td><code>2 / 0 200000000</code></td><td><code>Not jolly</code></td><td>空输出，rc −11（static 版同样崩）</td></tr><tr><td><code>2 / -100000000 100000000</code></td><td><code>Not jolly</code></td><td>空输出，rc −11（static 版同样崩）</td></tr></tbody></table>
+<p><strong>200 组随机（含 ±1e8 量级元素）原版 200 组全挂</strong>，修复版 0 不一致。</p>
+<h3>2.4 划界：为什么归甲</h3>
+<ul><li><strong>不能靠「把数组开大」修</strong>：<code>static bool vis[200000005]</code>（约 200MB）虽然在本沙盒能跑通样例，但题面内存限制 <strong>125MB</strong>，直接 MLE；</li><li><strong>不能靠改一处修</strong>：只挪到静态区 → 大差输入仍崩；只改数组大小 → 爆内存；还要补 <code>while(cin&gt;&gt;n)</code> 多组循环；</li><li>唯一可行修复是<strong>重写核心</strong>：<code>sort</code> 差值后逐一比对 <code>d[i]==i+1</code>（或 <code>set</code>/<code>map</code>），再改输入循环。修复版 200 组随机 + 多组输入全对。</li><li>三层缺陷彼此独立，不是「改一处字符或数字 / 补一条初始化」能修的；也不是主动防抄袭 / 打表 / 展示形态（作者正文正经讲桶标记思路）。</li></ul>
+<p>→ 甲类。</p>
+<blockquote>关于输入组数：洛谷 <code>problemnew/show/1152</code> 题面写「每组测试数据」，部分镜像写单组。为避免依赖这个歧义，<strong>主判据用单组输入即可触发的 ①② 两层</strong>；第 ③ 层按官方题面登记，不计入甲类反例编号。</blockquote>
+<hr>
+<h2>3. 乙类：本批未新开</h2>
+<p>本批有多处<strong>乙类形态</strong>但实测未构成命中，按纪律只登记、不计数：</p>
+<table class="tb"><thead><tr><th>形态</th><th>出处</th><th>处理</th></tr></thead><tbody><tr><td>思路文字把 <code>x</code>（小时）/<code>y</code>（分钟）说反</td><td>P1425 <code>beuv9jew</code> 注释「d-1, c+60-a 算出 y」「d-b 算出 x」</td><td>代码本身正确，290 组随机 0 不一致 → 展示形态，不计命中</td></tr><tr><td>作者并列贴出「我编的程序」与「AC 代码」两块</td><td>P1179 <code>59x93a43</code></td><td>第一块 <code>while(y!=0){y/=10}</code> 会死循环，但作者明确标注第二块才是 AC 代码，按第 8 批 P1028 <code>a1sc0wom</code> 先例不拿非正解块 hack</td></tr><tr><td><code>const int N = 1e6+5</code> 远大于题面 N≤100 / 值≤1000</td><td>P1059 <code>6t0wrb4o</code></td><td>数组偏大，实测无害 → 丙类</td></tr><tr><td>个性化宏/注释、<code>%1d</code> 配 <code>long long*</code></td><td>P1055 <code>kfg4ugka</code></td><td>见 §5①，实测 0 不一致</td></tr></tbody></table>
+<hr>
+<h2>4. 丙类逐篇（8 篇）</h2>
+<h3>4.1 P1200 <code>ictzayja</code>（C++）</h3>
+<p><code>int cnt1=1,cnt2=1</code> 累乘 <code>s[i]-&#x27;A&#x27;+1</code>，最后 <code>cnt1%47 == cnt2%47</code>。题面字符串≤6 位大写，理论最大 <code>26⁶ = 308,915,776 &lt; 2³¹−1</code>，<strong>不逐步取模也不会爆 int</strong>。两个官方样例、<code>ZZZZZZ</code>、<code>AAAAAA</code>、单字母 + 300 组随机 0 不一致（随机中观测最大乘积 56,908,800）。</p>
+<h3>4.2 P1200 <code>vckbob2z</code>（Pascal）</h3>
+<p><code>x:=x*(ord(st1[i])-64) mod 47</code> <strong>每一步都取模</strong>，等价逻辑用 Python 复刻 300 组 0 不一致。与 <code>ictzayja</code> 是同题两种写法，一个不取模一个逐步取模，题面范围内都正确 → 正好凑成一组对照。</p>
+<h3>4.3 P1424 <code>apqvl7bn</code></h3>
+<p><code>for(i=1;i&lt;=k;i++){ if(n!=6&amp;&amp;n!=7) s+=250; if(n==7) n=1; else n++; }</code>。题面 <code>1≤x≤7, 1≤n≤10⁶</code>，<code>s</code> 最大 178,571,500 &lt; INT_MAX。8 个定点含 <code>n=1e6</code> 上限、<code>1 7</code>、<code>1 14</code>、周末起点，200 组随机 0 不一致。</p>
+<h3>4.4 P1425 <code>nobyk23w</code>（C 版 + C++ 版，逐字两块都验）</h3>
+<p><code>w_time = (eh*60+em)-(sh*60+sm)</code> 全转分钟后 <code>uset/60</code>、<code>uset%60</code>。两块代码逻辑一致，仅输入输出语句不同。6 定点含官方样例 <code>12 50 19 10 → 6 20</code>、<code>1 59 2 0</code>、<code>0 59 1 0</code> 借位边界，C 版与 C++ 版各 193 组随机 0 不一致。</p>
+<h3>4.5 P1425 <code>beuv9jew</code></h3>
+<p>借位法：<code>if(d&gt;=b) y=d-b; else { d+=60; y=d-b; c--; } x=c-a;</code>。与上篇全转分钟法互为对照，6 定点 + 290 组随机 0 不一致。注释把 <code>x</code>/<code>y</code> 说反（见 §3），代码正确。</p>
+<h3>4.6 P1055 <code>kfg4ugka</code></h3>
+<p><code>scanf(&quot;%1d-%1d%1d%1d-%1d%1d%1d%1d%1d-%c&quot;, ...)</code> 逐位读入 9 个数字与识别码，<code>k=(a*1+...+i*9)%11</code>，<code>k==10</code> 输出 <code>X</code>。7 定点含官方样例 <code>0-670-82162-4</code>、识别码为 <code>X</code>、故意改错识别码、全 9 / 全 0；300 组随机（一半故意改错）0 不一致。</p>
+<h3>4.7 P1179 <code>59x93a43</code></h3>
+<p>仅验作者标注「<strong>AC 代码应该是这样的</strong>」的第二块：<code>n=y</code> 做替身，<code>while(n!=0)</code> 分离各位统计 <code>2</code>。7 定点含官方样例 <code>2 22 → 6</code>、<code>2 100 → 20</code>、<code>1 100000 → 50000</code>（题面上限全量），200 组随机 0 不一致。</p>
+<h3>4.8 P1059 <code>6t0wrb4o</code></h3>
+<p><code>sort(a+1,a+1+n)</code> 后 <code>if(a[i]!=a[i-1]) b[++j]=a[i]</code>，靠全局 <code>a[0]=0</code> 保证首个元素被收进 <code>b</code>。逐字取回补齐被吞掉的 <code>b[++j]</code> / <code>cout&lt;&lt;j</code> / 输出循环，补最小外壳 <code>int j=0;</code>。5 定点含官方样例、全重复、逆序，300 组随机 0 不一致。</p>
+<hr>
+<h2>5. 本批 5 次「差点误判」自查</h2>
+<table class="tb"><thead><tr><th>#</th><th>我一度以为</th><th>实测结论</th><th>处理</th></tr></thead><tbody><tr><td>①</td><td>P1055 <code>scanf(&quot;%1d&quot;, &amp;a)</code> 的 <code>a</code> 是 <code>long long*</code>，<code>%d</code> 只写 4 字节，<strong>必错</strong></td><td>全局变量零初始化 + 小端，低 4 字节写入 0..9 后高位仍为 0，值恰好正确；7 定点 + 300 随机 <strong>0 不一致</strong></td><td>不是 hack；登记为 UB 风险（依赖全局零初始化与平台字节序），不判缺陷</td></tr><tr><td>②</td><td>P1200 <code>ictzayja</code> 不逐步取模，6 个 <code>Z</code> 连乘必爆 int</td><td><code>26⁶ = 308,915,776 &lt; 2,147,483,647</code>，<code>ZZZZZZ</code> 定点 + 300 随机 0 不一致</td><td>不是 hack，归丙</td></tr><tr><td>③</td><td>P1179 第一块 <code>while(y!=0){y/=10}</code> 改循环变量必死循环 → 该判甲/乙</td><td>作者下一句明确写「<strong>AC 代码应该是这样的</strong>」并给出 <code>n=y</code> 修正版；按第 8 批 P1028 先例，<strong>作者自曝的非正解块不拿来 hack</strong></td><td>归丙，仅登记</td></tr><tr><td>④</td><td>P1425 <code>beuv9jew</code> 注释把小时/分钟说反，代码跟着错</td><td>代码 <code>x=c-a</code>（小时）、<code>y=d-b</code>（分钟）完全正确，290 组随机 0 不一致</td><td>乙类形态登记，不计命中</td></tr><tr><td>⑤</td><td>P1152「<code>vis</code> 越界了，随便一个大差就该崩」</td><td><code>diff=10000005</code> 只越界 1 个 bool，static 版<strong>没崩</strong>且输出正确；<code>diff=2e8</code> 才 SIGSEGV。且必须先分清「10MB 栈溢出」与「下标越界」两层</td><td>延续第 8/10 批「数组越界必须实测到具体规模、分层验证」纪律</td></tr></tbody></table>
+<p>另：本批再次验证「<strong>官方样例也要单独跑</strong>」——<code>h7y41tog</code> 不是靠构造刁钻数据才挂，官方样例 #1/#2 就直接 SIGSEGV；而 P1423（第 9 批）是官方样例全过、只挂构造边界点。两种极端都要覆盖。</p>
+<hr>
+<h2>6. 未取到 lid / 逐字不全、只登记不计数</h2>
+<table class="tb"><thead><tr><th>来源</th><th>形态</th><th>为什么不计</th></tr></thead><tbody><tr><td>P1079 Vigenère 密码（4 篇）</td><td>大小写保持、<code>(m-k+26)%26</code>、逐位减 1 模拟</td><td>均无 lid 且正文被大段吞字符（<code>m[i]-&#x27;A&#x27;-ks[i%j] &gt;</code> 等），无法逐字复核</td></tr><tr><td>P1980 计数问题、P2141 珠心算测验、P1320 压缩技术续集版、P1089 津津的储蓄计划、P1422 电费</td><td>数位分解 / 桶 / 逐段读入 / 阶梯模拟</td><td>无 lid 或代码被渲染吞字符，不拿摘要判</td></tr><tr><td>P1152 另两篇（map 版、排序比对版）</td><td>思路正确</td><td>无 lid</td></tr><tr><td>P1425 另一篇（借位循环版）、P1055 字符串版、P1059 桶排序版、P1179 另一篇</td><td>同题其他写法</td><td>无 lid</td></tr><tr><td>P1200 第三方博客 / 公众号版本</td><td>逐步 mod 47</td><td>非洛谷题解页，不纳入归档范围</td></tr></tbody></table>
+<hr>
+<h2>7. 甲类合法反例清单（23 条）</h2>
+<table class="tb"><thead><tr><th>编号</th><th>题解</th><th>输入</th><th>期望</th><th>实际</th></tr></thead><tbody><tr><td>H-001~003</td><td>P1002 <code>sfifnfaa</code></td><td><code>6 6 3 3</code> / <code>20 20 0 20</code> / <code>20 20 10 10</code></td><td><code>6</code> / <code>137846521561</code> / <code>21388094780</code></td><td>均 <code>0</code></td></tr><tr><td>H-004/005/005b</td><td>P1182 <code>arorhglg</code></td><td><code>100 50</code>+100×<code>3e7</code> / <code>1e5 5e4</code>+<code>2.5e4</code> / +<code>3e4</code></td><td><code>6e7</code> / <code>5e4</code> / <code>6e4</code></td><td><code>3e7</code> / <code>2.5e4</code> / <code>3e4</code></td></tr><tr><td>H-006/007</td><td>P1002 <code>yk90rg78</code></td><td><code>6 6 3 3</code> / <code>20 20 0 20</code></td><td><code>6</code> / <code>137846521561</code></td><td>均 <code>0</code></td></tr><tr><td>H-008/009/010</td><td>P5638 <code>nzmytiez</code></td><td><code>2 100</code>/<code>5</code> · <code>3 5</code>/<code>2 3</code> · <code>4 4</code>/<code>7 1 9</code></td><td>均 <code>0</code></td><td><code>5</code> / <code>5</code> / <code>17</code></td></tr><tr><td>H-011/012/013</td><td>P1421 <code>dk5mkxij</code></td><td><code>7 6</code> / <code>19 0</code> / <code>20 9</code></td><td><code>4</code> / <code>10</code> / <code>11</code></td><td><code>3</code> / <code>9</code> / <code>10</code></td></tr><tr><td>H-014/015/016</td><td>P1098 <code>l9bmtvor</code></td><td><code>2 3 2 / a-d-d</code> · <code>1 2 1 / a</code> · <code>3 2 2 / a-d</code></td><td><code>aCCCBBBd-d</code> / <code>a</code> / <code>a****d</code></td><td><code>a-d-d</code> / <code>aa</code> / <code>a-d</code></td></tr><tr><td>H-017</td><td>P1098 <code>zcy00qo9</code></td><td><code>2 2 2 / 1-5</code></td><td><code>14433225</code></td><td><code>12233445</code></td></tr><tr><td>H-018/019/020</td><td>P1102 <code>dxk2a7a8</code></td><td><code>1 / 0 / 5</code> · <code>2 / 0 / 5 5</code> · <code>3 / 1 / 1 5 3</code></td><td><code>1</code> / <code>4</code> / <code>0</code></td><td><code>0</code> / SIGSEGV / SIGSEGV</td></tr><tr><td><strong>H-021</strong></td><td><strong>P1152 <code>h7y41tog</code></strong></td><td><code>4 / 1 4 2 3</code>（<strong>官方样例 #1</strong>）</td><td><code>Jolly</code></td><td>SIGSEGV（空输出）</td></tr><tr><td><strong>H-022</strong></td><td><strong>P1152 <code>h7y41tog</code></strong></td><td><code>2 / 0 200000000</code></td><td><code>Not jolly</code></td><td>SIGSEGV（static 版同样崩，证明下标越界）</td></tr><tr><td><strong>H-023</strong></td><td><strong>P1152 <code>h7y41tog</code></strong></td><td><code>2 / -100000000 100000000</code></td><td><code>Not jolly</code></td><td>SIGSEGV</td></tr></tbody></table>
+<blockquote><code>h7y41tog</code> 另有：官方样例 #2、<code>n=1</code>、200 组随机全部 SIGSEGV；多组输入（按官方题面「每组测试数据」）static 版漏输出两行，登记但不纳入编号（见 §2.4）。</blockquote>
+<hr>
+<h2>8. 保存站状态</h2>
+<p><code>www.luogu.me/article/&lt;lid&gt;</code>、<code>api.luogu.me/article/query/&lt;lid&gt;</code> 仍只返回站点框架或 403，首页降级公告（AI 自动化请求导致保存 API 队列堵塞）仍在。保存站继续只用于确认归档范围与 8 位 lid 体系；本批正文全部从可直读的 <code>www.luogu.com/article/&lt;lid&gt;</code> 逐字取回，未高频刷接口。</p>
+<hr>
+<h2>9. 下一批方向</h2>
+<ol><li><strong>甲类主攻</strong>：桶/标记数组下标与题面值域不匹配、局部大数组爆栈、多组输入只读一组、参数分支漏判、<code>&gt;</code> / <code>&gt;=</code> 与 <code>==</code> 边界；</li><li><strong>乙类高发</strong>：数组尺寸与题面不符、改一处即修复的下标/比较符/数字、宏替换等个性化展示、思路文字与代码不一致、作者并列贴出的非正解块；</li><li><strong>自查纪律</strong>（累计 7 批有效）：搜索摘要 ≠ 正文；片段先回原文逐字复核；浮点题先对齐标程舍入与 ULP；<strong>数组越界必须实测到具体规模，并分清「栈溢出」与「下标越界」两层</strong>；「以为改一处就修好」必须跑修复版复验；随机对拍全过不等于没问题，边界点与<strong>官方样例</strong>都要单独跑；作者自曝的非正解块不拿来 hack；</li><li>你随手丢来的任意 <code>article/&lt;lid&gt;</code> 或代码段，按同一口径接第 11 批。</li></ol></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>

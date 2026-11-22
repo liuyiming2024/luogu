@@ -1,0 +1,82 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P1563 · xmumv7ok · 题解归档</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">题解 / P1563 / xmumv7ok</span></header>
+<main class="article"><h1>P1563 <span class="lid">xmumv7ok</span></h1>
+<div class="badge 乙">乙·笔误/防抄袭</div>
+<table class="tb meta"><tbody>
+<tr><th>是否题解</th><td>是（题解文章（8 位 article 编号））</td></tr>
+<tr><th>归类</th><td>乙·笔误/防抄袭</td></tr>
+<tr><th>批次</th><td>第6批</td></tr>
+<tr><th>可逐字验证</th><td>是</td></tr>
+<tr><th>判定备注</th><td>x&lt;0 漏 x==0，改一处即全对；作者自述打表</td></tr>
+<tr><th>原文地址</th><td><a href="https://www.luogu.com/article/xmumv7ok" referrerpolicy="no-referrer">https://www.luogu.com/article/xmumv7ok</a><span class="hint">（离线时链接不可达，仅留来源）</span></td></tr>
+</tbody></table>
+<h2>题解代码 · 逐字取回 + 最小外壳（2 份）</h2>
+<p class="hint">代码只是辅助：只补 include / main / 必要声明，缺头文件与页面吞字符不计缺陷，仅验核心逻辑。</p>
+<div class="src"><div class="srcname">build__r6__P1563_xmumv7ok.cpp <span class="hint">· 编号精确匹配</span></div><pre class="code"><code>
+#include &lt;bits/stdc++.h&gt;
+using namespace std;
+char a[100005][15];
+int n,x=1,z=0,m,b[100005],ai,si;
+int main(){
+ scanf(&quot;%d%d&quot;,&amp;n,&amp;m);
+ for(int o=1;o&lt;n+1;o++) cin&gt;&gt;b[o]&gt;&gt;a[o];
+ for(int i=0;i&lt;m;i++){
+  scanf(&quot;%d%d&quot;,&amp;ai,&amp;si);
+  if(ai==0&amp;&amp;b[x]==1) z=si;
+  if(ai==1&amp;&amp;b[x]==0) z=si;
+  if(ai==0&amp;&amp;b[x]==0) z=0-si;
+  if(ai==1&amp;&amp;b[x]==1) z=0-si;
+  if(z&gt;=0){
+   if(z&gt;=n)z=z%n;
+   x=x+z;
+   if(x&gt;n)x=x%n;
+  }else{
+   z=-z;
+   if(z&gt;=n)z=z%n;
+   x=x-z;
+   if(x&lt;0)x=n+x;
+   if(x&gt;n)x=x%n;
+  }
+ }
+ printf(&quot;%s&quot;,a[x]);
+ return 0;
+}
+</code></pre></div>
+<div class="src"><div class="srcname">build__r6__P1563_fix_one_char.cpp <span class="hint">· 按题号关联</span></div><pre class="code"><code>
+#include &lt;bits/stdc++.h&gt;
+using namespace std;
+char a[100005][15];
+int n,x=1,z=0,m,b[100005],ai,si;
+int main(){
+ scanf(&quot;%d%d&quot;,&amp;n,&amp;m);
+ for(int o=1;o&lt;n+1;o++) cin&gt;&gt;b[o]&gt;&gt;a[o];
+ for(int i=0;i&lt;m;i++){
+  scanf(&quot;%d%d&quot;,&amp;ai,&amp;si);
+  if(ai==0&amp;&amp;b[x]==1) z=si;
+  if(ai==1&amp;&amp;b[x]==0) z=si;
+  if(ai==0&amp;&amp;b[x]==0) z=0-si;
+  if(ai==1&amp;&amp;b[x]==1) z=0-si;
+  if(z&gt;=0){
+   if(z&gt;=n)z=z%n;
+   x=x+z;
+   if(x&gt;n)x=x%n;
+  }else{
+   z=-z;
+   if(z&gt;=n)z=z%n;
+   x=x-z;
+   if(x&lt;=0)x=n+x;
+   if(x&gt;n)x=x%n;
+  }
+ }
+ printf(&quot;%s&quot;,a[x]);
+ return 0;
+}
+</code></pre></div>
+<h2>复现</h2><pre class="code"><code>g++ -std=c++17 -O2 -o /tmp/t 04_复现代码/&lt;对应文件&gt;
+echo &quot;&lt;题面内输入&gt;&quot; | /tmp/t</code></pre>
+<h2>相关报告</h2><ul class="links">
+<li><a href="../reports/洛谷题解逐篇hack清单_第6批.md.html">洛谷题解逐篇hack清单_第6批.md</a></li>
+<li><a href="../reports/三类口径与累计统计.md.html">三类口径与自查纪律</a></li>
+</ul></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>

@@ -1,0 +1,47 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P1308 · 03xk59dp · 题解归档</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">题解 / P1308 / 03xk59dp</span></header>
+<main class="article"><h1>P1308 <span class="lid">03xk59dp</span></h1>
+<div class="badge 丙">丙·未 hack</div>
+<table class="tb meta"><tbody>
+<tr><th>是否题解</th><td>是（题解文章（8 位 article 编号））</td></tr>
+<tr><th>归类</th><td>丙·未 hack</td></tr>
+<tr><th>批次</th><td>第11批</td></tr>
+<tr><th>可逐字验证</th><td>是</td></tr>
+<tr><th>判定备注</th><td>getchar+getline，含行首/连续空格</td></tr>
+<tr><th>原文地址</th><td><a href="https://www.luogu.com/article/03xk59dp" referrerpolicy="no-referrer">https://www.luogu.com/article/03xk59dp</a><span class="hint">（离线时链接不可达，仅留来源）</span></td></tr>
+</tbody></table>
+<h2>题解代码 · 逐字取回 + 最小外壳（1 份）</h2>
+<p class="hint">代码只是辅助：只补 include / main / 必要声明，缺头文件与页面吞字符不计缺陷，仅验核心逻辑。</p>
+<div class="src"><div class="srcname">build__r11__s1308.cpp <span class="hint">· 按题号关联</span></div><pre class="code"><code>
+#include&lt;bits/stdc++.h&gt;
+using namespace std;
+string dan,ci,s;
+int cur=-1,ans;
+int main()
+{
+    cin&gt;&gt;ci;
+    for(int i=0;i&lt;ci.size();++i)ci[i]=tolower(ci[i]);
+    getchar();
+    getline(cin,s);
+    s+=&#x27; &#x27;;
+    for(int i=0;i&lt;s.size();++i)s[i]=tolower(s[i]);
+    for(int i=0;i&lt;s.size();++i){
+        if(s[i]==&#x27; &#x27;){
+            if(dan==ci){ ans++; if(cur==-1)cur=i-ci.size(); }
+            dan=&quot;&quot;;
+        }
+        else dan+=s[i];
+    }
+    if(ans==0)printf(&quot;-1&quot;);
+    else printf(&quot;%d %d&quot;,ans,cur);
+    return 0;
+}
+</code></pre></div>
+<h2>复现</h2><pre class="code"><code>g++ -std=c++17 -O2 -o /tmp/t 04_复现代码/&lt;对应文件&gt;
+echo &quot;&lt;题面内输入&gt;&quot; | /tmp/t</code></pre>
+<h2>相关报告</h2><ul class="links">
+<li><a href="../reports/洛谷题解逐篇hack清单_第11批.md.html">洛谷题解逐篇hack清单_第11批.md</a></li>
+<li><a href="../reports/三类口径与累计统计.md.html">三类口径与自查纪律</a></li>
+</ul></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>

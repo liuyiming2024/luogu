@@ -1,0 +1,92 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>洛谷题解逐篇hack清单_第1批.md · 离线归档</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">01_批次清单 / 洛谷题解逐篇hack清单_第1批.md</span></header>
+<main class="doc"><h1>洛谷题解逐篇 hack 清单 · 第 1 批</h1>
+<blockquote>口径：静态找反例。题解源码本地编译 + 独立正确解对拍，<strong>不登录洛谷、不提交任何代码或 hack 数据</strong>。 本批覆盖 6 道题 / 6 篇题解，均来自公开可直读的题解文章页。 验证日期：2026-11-20。</blockquote>
+<h2>一、总表</h2>
+<table class="tb"><thead><tr><th>#</th><th>题号</th><th>题解（文章 id）</th><th>结论</th><th>最小反例</th></tr></thead><tbody><tr><td>1</td><td>P1001</td><td>题解:P1001 A+B Problem（<code>zaohomhi</code>）</td><td>未 hack</td><td>—</td></tr><tr><td>2</td><td>P1002</td><td>P1002 过河卒(题解)（<code>sfifnfaa</code>）</td><td><strong>已 hack</strong></td><td><code>6 6 3 3</code>（官方样例即挂）</td></tr><tr><td>3</td><td>P1048</td><td>题解 P1048【采药】（<code>h4cn628r</code>）</td><td>未 hack</td><td>—</td></tr><tr><td>4</td><td>P1220</td><td>题解 P1220【关路灯】（<code>uezud59i</code>）</td><td>题面约束内未 hack；存在条件性缺陷</td><td>越界数据（不计合法 hack，见 §3.4）</td></tr><tr><td>5</td><td>P3959</td><td>题解 P3959【宝藏】随机化贪心（<code>l6u32sp7</code>）</td><td>未 hack；属无正确性保证的随机化解法</td><td>—</td></tr><tr><td>6</td><td>P5179</td><td>题解 P5179【Fraction】（<code>siyuan.blog.luogu.org/solution-p5179</code>）</td><td>未 hack</td><td>—</td></tr></tbody></table>
+<p><strong>本批命中 1 篇确凿可 hack（P1002），2 篇有明确缺陷但不构成合法 hack（P1220 越界、P3959 无保证）。</strong></p>
+<hr>
+<h2>二、来源与口径说明（影响结论适用范围）</h2>
+<ol><li><strong>不是&quot;某题题解区的全部篇目&quot;</strong>：洛谷题解列表接口未登录返回 401，题解区逐篇列表需要登录态 Cookie；本批只能覆盖搜索引擎已收录、且文章页可公开直读的题解。因此&quot;逐篇&quot;= 逐篇可读取到的文章，不是全站全量。</li><li><strong>两篇代码有省略</strong>：<code>P1220</code> 题解页把 DFS 函数体、全局声明写成批注截断形式；<code>P3959</code> 题解页中间有 <code>……</code> 省略段。我按题解文字描述补全了模板部分（全局数组、结构体、并查集、链式前向星、自定义 <code>rand</code>），核心逻辑逐字保留。结论对&quot;补全后的等价实现&quot;成立。</li><li><strong>独立正确解</strong>：P1002 用坐标平移版 DP，P1048 用标准 01 背包，P1220 用区间 DP + 记忆化暴力双验证，P5179 用最小分母穷举，P3959 用 Prüfer 序列枚举全部生成树（n=5）与随机生成树采样（n=8~10）。</li><li>所有编译用 <code>g++ -std=c++17 -O2</code>，运行均在沙盒本地完成。</li></ol>
+<hr>
+<h2>三、逐篇结论</h2>
+<h3>3.1 P1001 A+B Problem — <code>zaohomhi</code> · 未 hack</h3>
+<pre class="code"><code>#include&lt;iostream&gt;
+using namespace std;
+int main(){ int a,b; cin&gt;&gt;a&gt;&gt;b; cout&lt;&lt;a+b; return 0; }</code></pre>
+<table class="tb"><thead><tr><th>输入</th><th>期望</th><th>实际</th></tr></thead><tbody><tr><td><code>1000000000 1000000000</code></td><td>2000000000</td><td>2000000000</td></tr><tr><td><code>-1000000000 -1000000000</code></td><td>-2000000000</td><td>-2000000000</td></tr><tr><td><code>1 2</code></td><td>3</td><td>3</td></tr></tbody></table>
+<p>题面 <code>|a|,|b| ≤ 10^9</code>，和在 <code>int</code> 范围内，<code>int</code> 不溢出；无多余输出。<strong>无反例</strong>。</p>
+<hr>
+<h3>3.2 P1002 过河卒 — <code>sfifnfaa</code> · <strong>已 hack</strong></h3>
+<p>题解 C++ 核心（逐字）：</p>
+<pre class="code"><code>int countPaths(int n, int m, int horse_x, int horse_y) {
+    vector&lt;vector&lt;int&gt;&gt; dp(n+1, vector&lt;int&gt;(m+1, 0));
+    dp[0][0] = 1;
+    for (int i = 0; i &lt;= n; i++) {
+        for (int j = 0; j &lt;= m; j++) {
+            if ((i-2 == horse_x &amp;&amp; j-1 == horse_y) || (i-1 == horse_x &amp;&amp; j-2 == horse_y)) {
+                dp[i][j] = 0;
+            } else {
+                dp[i][j] = (i &gt; 0 ? dp[i-1][j] : 0) + (j &gt; 0 ? dp[i][j-1] : 0);
+            }
+        }
+    }
+    return dp[n][m];
+}</code></pre>
+<p><strong>反例数据（可直接投喂）</strong></p>
+<pre class="code"><code>6 6 3 3</code></pre>
+<p>期望 <code>6</code>（官方样例），实际 <code>0</code>。</p>
+<pre class="code"><code>20 20 0 20</code></pre>
+<p>期望 <code>137846521561</code>，实际 <code>0</code>。</p>
+<pre class="code"><code>20 20 10 10</code></pre>
+<p>期望 <code>21388094780</code>，实际 <code>0</code>。</p>
+<p><strong>被卡原因（三处叠加，任一处都足以 WA）</strong></p>
+<ol><li><strong>起点被自己抹掉</strong>：<code>dp[0][0]=1</code> 之后，循环第一轮 <code>i=0,j=0</code> 走 <code>else</code>，<code>(i&gt;0?…:0)+(j&gt;0?…:0)=0</code>，直接把起点覆盖成 0，整张表恒为 0。这是&quot;任何输入都输出 0&quot;的直接原因，官方样例都过不了。</li><li><strong>马控制点只判了 2 个</strong>：条件只覆盖 <code>(hx+2,hy+1)</code> 与 <code>(hx+1,hy+2)</code> 两格，漏掉另外 6 个日字点、<strong>马自身所在格</strong>，也没做坐标越界保护。</li><li><strong><code>int</code> 溢出</strong>：<code>vector&lt;vector&lt;int&gt;&gt;</code>，n=m=20 时答案量级 <code>C(40,20)≈1.38×10^11</code>，必须 <code>long long</code>。</li></ol>
+<blockquote>附带发现：题解同页还给了 Python 版，逻辑相同，同样在起点被清零，Python 无溢出但依旧全 0。</blockquote>
+<hr>
+<h3>3.3 P1048 采药 — <code>h4cn628r</code> · 未 hack</h3>
+<pre class="code"><code>int f[1001],n,t,v[101],w[101];
+// for(int j=t;j&gt;=w[i];j--) f[j]=max(f[j-w[i]]+v[i], f[j]);</code></pre>
+<p>测了 33 组：官方边界、<code>t=0</code>、<code>w_i &gt; t</code>（如 <code>70 3 / 71 100 / 69 1 / 1 2</code> → 期望 2）、30 组随机、以及 <code>t=1000, 100 件 (1,1000)</code> 的满容量极限。<strong>全部与独立 01 背包一致</strong>。</p>
+<p>唯一可疑点是 <code>f[1001]</code> 硬编码——但题面 <code>T ≤ 1000</code>、<code>M ≤ 100</code>，下标刚好够用，不构成反例。<code>int</code> 也不溢出（最大价值 100×1000）。<strong>无反例</strong>。</p>
+<hr>
+<h3>3.4 P1220 关路灯 — <code>uezud59i</code> · 约束内未 hack，但有条件性缺陷</h3>
+<p>题解用 DFS + 剪枝，核心：</p>
+<pre class="code"><code>long long n,m,minn,s;
+long long a[100001],b[100001];
+void dfs(int i,int j,int k,int v,int x){
+ if (v&gt;minn) return;
+ if (i==1 &amp;&amp; j==n) { if (v&lt;minn) minn=v; return; }
+ ...
+}
+int main(){ cin&gt;&gt;n&gt;&gt;m; minn=1000000000; ... dfs(m,m,0,0,s); cout&lt;&lt;minn; }</code></pre>
+<ul><li>官方样例 <code>5 3 / 2 10 / 3 20 / 5 20 / 6 30 / 8 10</code> → 期望 <code>270</code>，实际 <code>270</code>。</li><li>12 组随机小数据（n=2~8）与区间 DP、记忆化暴力三方一致，<strong>题面 <code>a_i ≤ 100, b_i ≤ 100, n ≤ 50</code> 约束内未找到反例</strong>。</li></ul>
+<p><strong>条件性缺陷（明确不计为合法 hack）</strong>：<code>minn</code> 硬编码 <code>1e9</code>，DFS 的 <code>v/x</code> 又是 <code>int</code>。若把坐标放大到题面之外，最优解超过 <code>1e9</code> 时会被上界截断：</p>
+<pre class="code"><code>5 3
+0 100
+1000000 100
+2000000 100
+3000000 100
+4000000 100</code></pre>
+<p>独立正确解（区间 DP 与记忆化暴力均为 <code>800000000</code>），题解输出 <code>1000000000</code>。</p>
+<p>该输入刻意突破 <code>a_i ≤ 100</code>，<strong>不能作为洛谷合法 hack 数据</strong>，仅用于说明&quot;题解依赖数据上界而非算法上界&quot;。</p>
+<hr>
+<h3>3.5 P3959 宝藏 — <code>l6u32sp7</code> · 未 hack，但无正确性保证</h3>
+<p>题解自述&quot;普通贪心是错的&quot;，改用固定种子 <code>srand(19260817)</code> + <code>randtime=25000</code> 次随机交换边序跑 Kruskal，取最小。</p>
+<p>验证方式：</p>
+<ul><li>n=5：Prüfer 序列枚举<strong>全部</strong>生成树，对每个根算精确最优，60 组随机连通图未出现差异；</li><li>n=8~10：40 组随机图、每组采样 12000 棵生成树找&quot;比题解输出更小的合法解&quot;，未找到。</li></ul>
+<p><strong>结论</strong>：不能判为已 hack，但这不是正确算法——固定种子使其结果确定，是否存在反例取决于是否恰好覆盖到最优生成树；数据一大（n≤12）没有穷举保证。属于&quot;能 AC 但不该写进题解区当正解&quot;的骗分/随机化解法。若后续要 hack，方向是构造<strong>最优生成树不是 MST、且边权差异大</strong>的图（题解只在 MST 里枚举根）。</p>
+<blockquote>补充：题解代码里 <code>std::swap(kruskalEdge[rand(1,kcnt)], ...)</code> 用的是自定义 <code>rand(l,r)</code> 而非 <code>std::rand</code>，按题解文字描述补全是必要前提。</blockquote>
+<hr>
+<h3>3.6 P5179 Fraction — <code>siyuan</code> · 未 hack</h3>
+<p>类欧几里德递归解，<code>long long</code>。</p>
+<ul><li>161 组合法区间（<code>a/b &lt; c/d</code> 的小数据）与&quot;最小分母穷举&quot;独立解逐字一致；</li><li>4 组 <code>10^9</code> / <code>10^18</code> 大数（含 <code>a/b</code> 与 <code>c/d</code> 极接近的窄区间），输出均验证为<strong>落在开区间内的最简分数</strong>，例如 <code>1 10^9 2 10^9</code> → <code>1/500000001</code>；</li><li>中途曾误把 <code>a/b ≥ c/d</code> 的非法区间也拿去比（此时题目无解，输出什么都没有意义），剔除后 <strong>0 处不一致</strong>。</li></ul>
+<p><strong>无反例</strong>。这是本批质量最高的一篇。</p>
+<hr>
+<h2>四、反例清单（可直接复制）</h2>
+<table class="tb"><thead><tr><th>编号</th><th>针对题解</th><th>输入</th><th>期望输出</th><th>题解实际输出</th><th>判定</th></tr></thead><tbody><tr><td>H-001</td><td>P1002 <code>sfifnfaa</code></td><td><code>6 6 3 3</code></td><td><code>6</code></td><td><code>0</code></td><td><strong>合法 hack</strong></td></tr><tr><td>H-002</td><td>P1002 <code>sfifnfaa</code></td><td><code>20 20 0 20</code></td><td><code>137846521561</code></td><td><code>0</code></td><td><strong>合法 hack</strong>（兼证 int 溢出）</td></tr><tr><td>H-003</td><td>P1002 <code>sfifnfaa</code></td><td><code>20 20 10 10</code></td><td><code>21388094780</code></td><td><code>0</code></td><td><strong>合法 hack</strong></td></tr><tr><td>C-001</td><td>P1220 <code>uezud59i</code></td><td><code>5 3</code> / <code>0 100</code> / <code>1000000 100</code> / <code>2000000 100</code> / <code>3000000 100</code> / <code>4000000 100</code></td><td><code>800000000</code></td><td><code>1000000000</code></td><td>条件性（越界，不计）</td></tr><tr><td>R-001</td><td>P3959 <code>l6u32sp7</code></td><td>—</td><td>—</td><td>—</td><td>未构造出，标记为风险</td></tr></tbody></table>
+<hr>
+<h2>五、下一批怎么继续（不需要账号）</h2>
+<ol><li><strong>继续静态路线</strong>：每轮给我若干 <code>www.luogu.com/article/&lt;id&gt;</code> 链接，或把题解代码直接贴过来，我按同一套流程（取源码 → 本地编译 → 独立正确解对拍 → 出反例）推进，批次编号接 <code>第 2 批 / 第 3 批 …</code>，&quot;慢慢来&quot;就是一轮一批。</li><li><strong>扩大可读取面</strong>：洛谷保存站 <code>luogu.me</code> / 国际站对部分被删或需登录的文章有存档，可作为公开补充来源；仍不需要登录态。</li><li><strong>不建议用账号做的事</strong>：协议直登（当前需图形验证码且有反 bot 拦截）、批量拉题解列表、自动提交 hack——这些正是新号最容易触发风控的动作。若你自己在浏览器里看到值得检验的题解，复制<strong>文章链接</strong>给我即可，账号不必交给我。</li></ol></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>

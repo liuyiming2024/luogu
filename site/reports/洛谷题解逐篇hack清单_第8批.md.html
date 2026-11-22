@@ -1,0 +1,100 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>洛谷题解逐篇hack清单_第8批.md · 离线归档</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">01_批次清单 / 洛谷题解逐篇hack清单_第8批.md</span></header>
+<main class="doc"><h1>洛谷题解逐篇 hack 清单 · 第 8 批</h1>
+<blockquote>验证日期：2026-11-21。口径沿用第 4 批（三类 + 代码只是辅助、不判完整度），<strong>以第 4 批文件为准</strong>。 全程本地编译 <code>g++ -std=c++17 -O2</code> + 独立正确解对拍，<strong>不登录、不提交</strong>。</blockquote>
+<hr>
+<h2>0. 本批结果一句话</h2>
+<p>换到 <strong>NOIP 字符串模拟 + 组合计数</strong> 这一片，<strong>甲类一口气开两篇</strong>，都出在 P1098《字符串的展开》——同一道题、两篇不同题解、两个互不相同的参数分支缺陷。累计甲类 5 → <strong>7 篇</strong>，合法反例 13 → <strong>17 条</strong>。</p>
+<hr>
+<h2>1. 第 8 批总表（6 篇新题解，全部有 8 位 lid）</h2>
+<table class="tb"><thead><tr><th>#</th><th>题号</th><th>题解</th><th>归类</th><th>结论</th></tr></thead><tbody><tr><td>44</td><td>P1098</td><td>题解 P1098 字符串的展开（<code>l9bmtvor</code>）</td><td><strong>甲</strong></td><td>p3=2 整类不展开 + 长度 1 双输出，官方样例 #2 直接挂</td></tr><tr><td>45</td><td>P1098</td><td>题解 P1098 字符串的展开（<code>zcy00qo9</code>）</td><td><strong>甲</strong></td><td>p1=2 + 数字 + p3=2 时漏逆序，确定性 WA</td></tr><tr><td>46</td><td>P1044</td><td>题解 P1044 栈（<code>g17kwzzm</code>）</td><td><strong>丙</strong></td><td>两块代码 n=1..18 全枚举 0 不一致</td></tr><tr><td>47</td><td>P1044</td><td>题解:P1044 栈（<code>rlz2fzsx</code>）</td><td><strong>丙</strong></td><td>记忆化递归 n=1..18 全枚举 0 不一致</td></tr><tr><td>48</td><td>P1067</td><td>题解:P1067 多项式输出（<code>hu58r34f</code>）</td><td><strong>丙</strong></td><td>7 定点 + 300 组随机 0 不一致</td></tr><tr><td>49</td><td>P1028</td><td>题解 P1028 数的计算（<code>a1sc0wom</code>）</td><td><strong>丙</strong></td><td>n=1..1000 全枚举 0 不一致</td></tr></tbody></table>
+<p><strong>累计 49 篇 / 甲 7 / 乙 8 / 丙 34 / 甲类合法反例 17 条。</strong></p>
+<blockquote>本批主计数 6 篇（比前几批少 2 篇）：另有 P1098 <code>88laurj5</code>、P1042、P1010、P1141、P1030 等多篇<strong>未取到 lid 或逐字代码取不全</strong>，按纪律只登记、不纳入计数，见 §6。</blockquote>
+<hr>
+<h2>2. 甲类 · P1098 <code>l9bmtvor</code>（两处独立缺陷）</h2>
+<h3>2.1 代码（逐字取回）</h3>
+<pre class="code"><code>cin&gt;&gt;p1&gt;&gt;p2&gt;&gt;p3; cin&gt;&gt;s; l=s.size();
+cout&lt;&lt;s[0];
+for(int t=1;t&lt;l-1;++t){
+    char a=s[t-1],b=s[t+1];
+    if(p3==2){ x=b-1; y=a; k=-1; }   // 作者写了 p3=2 的逆序变量
+    else     { x=a+1; y=b; k=1;  }
+    if(s[t]==&#x27;-&#x27;&amp;&amp;s[t-1]&lt;s[t+1]&amp;&amp;p3==1){   // ← 但外层把 p3=2 排除了
+        ...  展开 ...
+    }
+    else cout&lt;&lt;s[t];
+}
+cout&lt;&lt;s[l-1];</code></pre>
+<p>作者明明准备了 <code>p3==2</code> 的 <code>x=b-1, y=a, k=-1</code> 和能跑 <code>k=-1</code> 的循环条件，结果外层 <code>&amp;&amp;p3==1</code> 把整条分支锁死：<strong>p3=2 时所有减号一律原样输出</strong>。</p>
+<h3>2.2 反例（题面 <code>1≤p1≤3, 1≤p2≤8, 1≤p3≤2</code>，长度 ≤100）</h3>
+<table class="tb"><thead><tr><th>输入</th><th>正确</th><th>实际</th></tr></thead><tbody><tr><td><code>2 3 2 / a-d-d</code>（<strong>官方样例 #2</strong>）</td><td><code>aCCCBBBd-d</code></td><td><code>a-d-d</code></td></tr><tr><td><code>1 2 2 / d-h</code></td><td><code>dggffeeh</code></td><td><code>d-h</code></td></tr><tr><td><code>3 2 2 / a-d</code></td><td><code>a****d</code></td><td><code>a-d</code></td></tr><tr><td><code>1 2 2 / 1-5</code></td><td><code>14433225</code></td><td><code>1-5</code></td></tr><tr><td><code>1 2 1 / a</code>（长度 1，<strong>第二处独立缺陷</strong>）</td><td><code>a</code></td><td><code>aa</code></td></tr></tbody></table>
+<p>官方样例 #1 <code>1 2 1 / abcs-w1234-9s-4zz</code> 通过，所以是参数分支型缺陷，不是整体逻辑错。<strong>400 组随机 27 组不一致</strong>。</p>
+<h3>2.3 划界：为什么归甲不归乙</h3>
+<ul><li><strong>修复不止一处</strong>。只删 <code>&amp;&amp;p3==1</code>（<code>fix1</code>）后重跑同样 400 组，<strong>仍有 12 组不一致</strong>，全是长度 1 的串（<code>w → ww</code>、<code>9 → 99</code>）——因为 <code>cout&lt;&lt;s[0]</code> 和 <code>cout&lt;&lt;s[l-1]</code> 在 <code>l=1</code> 时是同一个字符；再补 <code>if(l==1) return 0;</code>（<code>fix2</code>）才 <strong>0 不一致</strong>。</li><li>一处是「整个参数分支被跳过」，另一处是「首尾字符输出缺特判」，两个独立缺陷，对应甲类判据里的「补分支」，不是「改一处字符或数字」。</li><li>也不是主动防抄袭 / 乱搞形态（作者正文正经讲思路）。</li></ul>
+<blockquote>若你想严格按「删一个条件就算一处」把它挪进乙，说一句我就改；这里按累计修复代价归甲。</blockquote>
+<hr>
+<h2>3. 甲类 · P1098 <code>zcy00qo9</code>（漏一个子分支）</h2>
+<h3>3.1 代码（逐字取回的展开段，补最小外壳）</h3>
+<pre class="code"><code>if(p1==3)
+    for(j=a[i-1]+1; j&lt;=a[i+1]-1; j++) for(k=1;k&lt;=p2;k++) putchar(&#x27;*&#x27;);
+else if(p1==2){
+    if(a[i-1]&gt;=&#x27;a&#x27;&amp;&amp;a[i+1]&lt;=&#x27;z&#x27;){          // 字母：p3==1 / p3==2 都有
+        if(p3==1) for(...) putchar(j-&#x27;a&#x27;+&#x27;A&#x27;);
+        else if(p3==2) for(...) putchar(j-&#x27;a&#x27;+&#x27;A&#x27;);
+    }
+    else                                    // ← 数字：只有顺序，p3=2 没逆序
+        for(j=a[i-1]+1; j&lt;=a[i+1]-1; j++) for(k=1;k&lt;=p2;k++) putchar(j);
+}
+else if(p1==1){                             // p1=1：数字也做了 p3 判断
+    if(p3==1) for(...) putchar(j);
+    else if(p3==2) for(...) putchar(j);
+}</code></pre>
+<p>题面写明 p1=2 时「这两种情况下<strong>数字子串的填充方式相同</strong>」，但 p3=2 的逆序对所有填充都生效。作者给字母补了 <code>p3==2</code>，给 <code>p1==1</code> 的数字也补了，唯独 <strong><code>p1==2</code> 的数字分支漏了</strong>。</p>
+<h3>3.2 反例</h3>
+<table class="tb"><thead><tr><th>输入</th><th>正确</th><th>实际</th></tr></thead><tbody><tr><td><code>2 2 2 / 1-5</code></td><td><code>14433225</code></td><td><code>12233445</code></td></tr><tr><td><code>2 5 2 / w2-mm9p1-6cuhh5p</code></td><td><code>w2-mm9p1555554444433333222226cuhh5p</code></td><td><code>w2-mm9p1222223333344444555556cuhh5p</code></td></tr></tbody></table>
+<p>对照全通过：官方样例 #1 / #2、<code>1 2 2 / 1-5</code>（p1=1）、<code>2 2 1 / 1-5</code>（p3=1）、<code>2 2 2 / a-d</code>（字母）、<code>3 2 2 / 1-5</code>（p1=3）、后继、连续减号、长度 1。<strong>400 组随机仅 1 组不一致</strong>，说明缺陷面很窄但真实存在。</p>
+<h3>3.3 划界</h3>
+<p>修复要<strong>插入 3 行</strong>（<code>else if(p3==2)</code> + 逆序双重循环 + putchar），不是改一个字符或数字；补完 400 组 0 不一致。按第 4 批「补分支 → 甲」归甲。</p>
+<blockquote>附：该篇大 if 条件里字母分支第 4 项写成了 <code>a[i-1]&lt;=&#x27;z&#x27;</code>（应是 <code>a[i+1]&lt;=&#x27;z&#x27;</code>），属笔误，但前面的混合类型 / 连续减号检查已保证两侧同类，实测无害 → <strong>乙类登记</strong>，不计命中。</blockquote>
+<hr>
+<h2>4. 丙类逐篇（4 篇）</h2>
+<h3>4.1 P1044 <code>g17kwzzm</code>（两块代码都验）</h3>
+<ul><li>块 1 卡特兰卷积：<code>f[0]=1; for(i=1..n) for(j=1..i) f[i]+=f[j-1]*f[i-j];</code></li><li>块 2「智障递推」：<code>dp[1][1]=1</code>，<code>j==0 → dp[i-1][1]</code>，<code>j==min(n,i) → dp[i-1][i-1]</code>，否则 <code>dp[i-1][j-1]+dp[i-1][j+1]</code>，输出 <code>dp[2*n][0]</code>。</li></ul>
+<p>两块在 <strong>n=1..18 全枚举</strong>下都与 <code>C(2n,n)/(n+1)</code> 逐项一致（<code>n=18 → 477638700</code>），<strong>0 不一致</strong>。 我一度认定块 2 的 <code>dp[i-1][i-1]</code> 在 <code>i-1&gt;n</code> 时读到未初始化列必错——实测不成立：那些高 <code>j</code> 状态剩余步数已不足以把栈降到 0，对 <code>dp[2n][0]</code> 贡献恒为 0。<strong>看似 bug 实则无害</strong>，记为自查。</p>
+<h3>4.2 P1044 <code>rlz2fzsx</code></h3>
+<p><code>int a[36][18]</code> 记忆化递归 <code>f(p,s)</code>，<code>p==n*2</code> 时判 <code>s!=0</code>，<code>s&gt;0</code> 可 pop、否则 push，输出 <code>f(0,0)</code>。<strong>n=1..18 全枚举 0 不一致</strong>。 如实记一笔：<code>a</code> 第二维只有 18，而全 push 路径上 <code>s</code> 可到 18，存在越界读写；但把第二维改成 40 后结果<strong>完全相同</strong>，越界落在静态区且那些极端状态方案数为 0，未产生可观测错误。按「题面内确定性 WA/RE」口径<strong>归丙</strong>，仅登记为潜在风险——与第 7 批 P1003 <code>9jadrxl0</code>（同样数组偏小，但 n≥20000 真 SIGSEGV）正好形成对照：<strong>数组开小了不能凭直觉判，必须实测</strong>。</p>
+<h3>4.3 P1067 <code>hu58r34f</code></h3>
+<pre class="code"><code>#define unique2648 return
+#define code 0
+...
+if (x!=0){
+    if (x&gt;0&amp;&amp;i!=n) cout &lt;&lt; &quot;+&quot;;
+    if (abs(x)!=1||i==0) cout &lt;&lt; x;
+    else if(x==-1) cout &lt;&lt; &quot;-&quot;;
+    if (i&gt;=2) cout &lt;&lt; &quot;x^&quot; &lt;&lt; i;
+    else if (i==1) cout &lt;&lt; &quot;x&quot;;
+}
+...
+unique2648 code;        // = return 0;</code></pre>
+<p>两个官方样例、<code>n=0</code> 三种常数、系数 ±1 高次、中间全零，7 定点 + <strong>300 组随机 0 不一致</strong>。宏替换 <code>return 0</code> 是个性化展示形态，逻辑不受影响 → 乙类登记。</p>
+<h3>4.4 P1028 <code>a1sc0wom</code></h3>
+<p><code>f[0]=f[1]=1; for(i=2..n) 偶数 f[i]=f[i-1]+f[i/2]，奇数 f[i]=f[i-1];</code> —— 与题面递推完全等价。<strong>n=1..1000 全枚举（题面上限）0 不一致</strong>。文中另给的暴力递归版是作者明说的「很明显不是正解」，按「代码只是辅助」不拿它 hack。</p>
+<hr>
+<h2>5. 本批 3 次「差点误判」自查</h2>
+<table class="tb"><thead><tr><th>#</th><th>我一度以为</th><th>实测</th><th>处理</th></tr></thead><tbody><tr><td>①</td><td><code>l9bmtvor</code> 删掉 <code>&amp;&amp;p3==1</code> 一处就能修好 → 该归乙</td><td><code>fix1</code> 后 400 组仍有 <strong>12 组</strong>不一致，全是长度 1 串；补 <code>l==1</code> 特判才 0</td><td>两处独立缺陷，归甲；见 §2.3</td></tr><tr><td>②</td><td><code>g17kwzzm</code> 块 2 的 <code>dp[i-1][i-1]</code> 越界读必错</td><td>n=1..18 全枚举 0 不一致，高 <code>j</code> 状态对答案贡献恒 0</td><td>不是 hack，归丙</td></tr><tr><td>③</td><td><code>rlz2fzsx</code> 的 <code>a[36][18]</code> 越界必 RE/WA</td><td>全枚举 0 不一致，改宽后结果相同</td><td>归丙 + 登记潜在风险</td></tr></tbody></table>
+<p>另：P1098 <code>88laurj5</code>、P1042、P1010、P1141、P1030 等多篇搜索摘要里的代码被渲染吞字符（<code>for/register</code>、<code>x = b[i]</code> 之类），<strong>逐字复核仍取不全的一律不判</strong>。这是第 6 批「搜索摘要 ≠ 正文」纪律的延续。</p>
+<hr>
+<h2>6. 未取到 lid / 逐字不全、只登记不计数</h2>
+<table class="tb"><thead><tr><th>来源</th><th>形态</th><th>为什么不计</th></tr></thead><tbody><tr><td>P1098 <code>88laurj5</code></td><td><code>char a[101]</code>、多个「坑点」特判、<code>p1==3&amp;&amp;i!=0</code> 分支</td><td>展开段取回含 <code>...</code>，无法可靠拼装</td></tr><tr><td>P1098 另一篇（solution 版）</td><td><code>bool p(char,char)</code> / <code>P2(char,int)</code> 拆函数</td><td>无 lid 且正文被截断</td></tr><tr><td>P1042 乒乓球 3 篇</td><td><code>char a[250000]</code>、<code>char a[62526]</code>、<code>int a[6000]</code> 等</td><td>无 lid；数组尺寸差异大，不拿摘要判</td></tr><tr><td>P1010、P1017、P1141、P1030、P1478 各篇</td><td>递归 / 并查集 / 建树 / 贪心排序</td><td>无 lid 或代码被大段注释，无法逐字复核</td></tr><tr><td>P1098 <code>zcy00qo9</code> 的字母条件笔误</td><td><code>a[i-1]&lt;=&#x27;z&#x27;</code> 应为 <code>a[i+1]&lt;=&#x27;z&#x27;</code></td><td>实测无害，乙类登记</td></tr></tbody></table>
+<hr>
+<h2>7. 甲类合法反例清单（17 条）</h2>
+<table class="tb"><thead><tr><th>编号</th><th>题解</th><th>输入</th><th>期望</th><th>实际</th></tr></thead><tbody><tr><td>H-001~003</td><td>P1002 <code>sfifnfaa</code></td><td><code>6 6 3 3</code> / <code>20 20 0 20</code> / <code>20 20 10 10</code></td><td><code>6</code> / <code>137846521561</code> / <code>21388094780</code></td><td>均 <code>0</code></td></tr><tr><td>H-004/005/005b</td><td>P1182 <code>arorhglg</code></td><td><code>100 50</code>+100×<code>3e7</code> / <code>1e5 5e4</code>+<code>2.5e4</code> / +<code>3e4</code></td><td><code>6e7</code> / <code>5e4</code> / <code>6e4</code></td><td><code>3e7</code> / <code>2.5e4</code> / <code>3e4</code></td></tr><tr><td>H-006/007</td><td>P1002 <code>yk90rg78</code></td><td><code>6 6 3 3</code> / <code>20 20 0 20</code></td><td><code>6</code> / <code>137846521561</code></td><td>均 <code>0</code></td></tr><tr><td>H-008/009/010</td><td>P5638 <code>nzmytiez</code></td><td><code>2 100</code>/<code>5</code> · <code>3 5</code>/<code>2 3</code> · <code>4 4</code>/<code>7 1 9</code></td><td>均 <code>0</code></td><td><code>5</code> / <code>5</code> / <code>17</code></td></tr><tr><td>H-011/012/013</td><td>P1421 <code>dk5mkxij</code></td><td><code>7 6</code> / <code>19 0</code> / <code>20 9</code></td><td><code>4</code> / <code>10</code> / <code>11</code></td><td><code>3</code> / <code>9</code> / <code>10</code></td></tr><tr><td><strong>H-014</strong></td><td><strong>P1098 <code>l9bmtvor</code></strong></td><td><code>2 3 2 / a-d-d</code>（官方样例 #2）</td><td><code>aCCCBBBd-d</code></td><td><code>a-d-d</code></td></tr><tr><td><strong>H-015</strong></td><td><strong>P1098 <code>l9bmtvor</code></strong></td><td><code>1 2 1 / a</code>（长度 1）</td><td><code>a</code></td><td><code>aa</code></td></tr><tr><td><strong>H-016</strong></td><td><strong>P1098 <code>l9bmtvor</code></strong></td><td><code>3 2 2 / a-d</code></td><td><code>a****d</code></td><td><code>a-d</code></td></tr><tr><td><strong>H-017</strong></td><td><strong>P1098 <code>zcy00qo9</code></strong></td><td><code>2 2 2 / 1-5</code></td><td><code>14433225</code></td><td><code>12233445</code></td></tr></tbody></table>
+<blockquote><code>l9bmtvor</code> 另有 <code>1 2 2 / d-h</code>、<code>1 2 2 / 1-5</code> 等反例，400 组随机共 27 组不一致；<code>zcy00qo9</code> 缺陷面很窄，400 组随机 1 组不一致。此处各列代表条目。</blockquote>
+<hr>
+<h2>8. 保存站状态</h2>
+<p><code>www.luogu.me/article/&lt;lid&gt;</code>、<code>api.luogu.me/article/query/&lt;lid&gt;</code> 仍只返回站点框架或 403，首页降级公告（AI 自动化请求导致保存 API 队列堵塞）仍在。保存站继续只用于确认归档范围与 8 位 lid 体系；本批正文全部从可直读的 <code>www.luogu.com/article/&lt;lid&gt;</code> 逐字取回，未高频刷接口。</p>
+<hr>
+<h2>9. 下一批方向</h2>
+<ol><li><strong>甲类主攻</strong>：参数分支漏判（本批两篇都是这个型）、初始化语句位置、类型选择、clamp 与取模边界；</li><li><strong>乙类高发</strong>：数组尺寸小于题面上限、改一处即修复的下标/比较符、宏替换等个性化展示、拆段与思路回顾块；</li><li><strong>自查纪律</strong>（累计 5 批有效）：搜索摘要 ≠ 正文；片段先回原文逐字复核；浮点题先对齐标程舍入与 ULP；数组越界必须实测到具体规模；<strong>「以为改一处就修好」必须跑修复版复验，别凭眼判</strong>；</li><li>你随手丢来的任意 <code>article/&lt;lid&gt;</code> 或代码段，按同一口径接第 9 批。</li></ol></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>

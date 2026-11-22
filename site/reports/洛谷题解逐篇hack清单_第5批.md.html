@@ -1,0 +1,58 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>洛谷题解逐篇hack清单_第5批.md · 离线归档</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">01_批次清单 / 洛谷题解逐篇hack清单_第5批.md</span></header>
+<main class="doc"><h1>洛谷题解逐篇 hack 清单 · 第 5 批</h1>
+<blockquote>验证日期：2026-11-20。口径沿用第 4 批（三类 + 代码只是辅助、不判完整度），<strong>以第 4 批文件为准</strong>。 全程本地编译 <code>g++ -std=c++17 -O2</code> + 独立正确解对拍，<strong>不登录、不提交</strong>。</blockquote>
+<hr>
+<h2>0. 本批两次自查纠错（重要）</h2>
+<p>按&quot;验核心逻辑对不对、不判全不全&quot;的要求，本批有 <strong>2 次假命中是我自己的问题</strong>，已纠正，不计到题解头上：</p>
+<p><strong>① P2240 <code>bv44vwt6</code> — 舍入规则选错。</strong> 首轮独立解用 <code>ROUND_HALF_UP</code>，出现 3 组不一致（<code>549.13</code> vs <code>549.12</code>）。查精确值全是 <code>xxx.125 / xxx.625</code>，而 C/C++ 的 <code>printf(&quot;%.2lf&quot;)</code> / <code>cout&lt;&lt;setprecision(2)</code> 在默认舍入模式下是 <strong>ROUND_HALF_EVEN</strong>（<code>549.125 → 549.12</code>）。本地编译实测确认后改用 half-even，<strong>300 组 0 不一致</strong>。标程同为 C++ 输出，题解不构成 hack。</p>
+<p><strong>② P1164 <code>ipduooli</code> — 我补外壳时漏抄了题解原有的一行。</strong> 首版补最小外壳时漏掉 <code>for(int i=1;i&lt;=n;++i) dp[i][0]=1;</code>，导致 103 组假 WA。回原文逐字复核后确认该行存在，补回后 <strong>200 组 0 不一致</strong>。这正是&quot;代码只是辅助&quot;最容易踩的坑：片段取不全时，<strong>错在我这边</strong>。</p>
+<p>两次都写入记录，避免以后重复踩。</p>
+<hr>
+<h2>1. 第 5 批总表（8 篇新题解）</h2>
+<table class="tb"><thead><tr><th>#</th><th>题号</th><th>题解</th><th>归类</th><th>结论</th></tr></thead><tbody><tr><td>20</td><td>P1164</td><td>小A点菜-01背包问题（<code>2yru0rav</code>）</td><td><strong>丙</strong></td><td>250 组 + 4 定点全对</td></tr><tr><td>21</td><td>P2240</td><td>P2240 部分背包（<code>bv44vwt6</code>）</td><td><strong>丙</strong></td><td>300 组全对（见 §0①）</td></tr><tr><td>22</td><td>P1060</td><td>题解 P1060 开心的金明（<code>0hps6y5z</code>）</td><td><strong>丙</strong></td><td>250 组全对</td></tr><tr><td>23</td><td>P1616</td><td>题解 P1616 疯狂的采药（<code>lgmnaw1h</code>）</td><td><strong>丙</strong></td><td>最终代码 200 组全对</td></tr><tr><td>24</td><td>P1164</td><td>P1164 小A点菜 题解（<code>ipduooli</code>）</td><td><strong>丙</strong></td><td>200 组全对（见 §0②）</td></tr><tr><td>25</td><td>P1020</td><td>题解 P1020 导弹拦截（<code>n5d7jq0b</code>）</td><td><strong>丙</strong></td><td>250 组 + 6 定点全对</td></tr><tr><td>26</td><td>P1049</td><td>题解 P1049 装箱问题（<code>v3wxayi3</code>）</td><td><strong>乙</strong></td><td>作者自述随机化乱搞；存在确定性 WA 反例，按口径单列</td></tr><tr><td>27</td><td>P1049</td><td>题解 P1049「主要是由于一个BUG」篇</td><td><strong>乙</strong></td><td>作者主动讲解错误示范并附修正版</td></tr></tbody></table>
+<p><strong>本批甲类 0 篇。累计 27 篇 / 甲 4 / 乙 6 / 丙 17 / 甲类合法反例 10 条。</strong></p>
+<hr>
+<h2>2. 丙类逐篇（6 篇）</h2>
+<h3>2.1 P1164 <code>2yru0rav</code></h3>
+<p>三段式 <code>if(j==a[i]) f[i][j]=f[i-1][j]+1; if(j&gt;a[i]) ...+f[i-1][j-a[i]]; if(j&lt;a[i]) f[i][j]=f[i-1][j];</code> 看似漏了 <code>dp[0][0]=1</code>，但 <code>j==a[i]</code> 的 <code>+1</code> 恰好补上&quot;只选这一道菜&quot;的空集项，与标准二维计数 DP 等价。官方样例 <code>4 4 / 1 1 2 2 → 3</code> ✓，<strong>250 组随机 0 不一致</strong>。</p>
+<h3>2.2 P2240 <code>bv44vwt6</code></h3>
+<p><code>x = w/v</code> 用 double 存单价，<code>cmp</code> 返回 <code>a.x&gt;b.x</code>。v,w ≤ 100，最小单价比差约 1e-4，远大于 double 精度，排序不会错；<code>if(weigh)</code> 把容量耗尽后的循环空转挡掉。独立解用 <code>Fraction</code> 精确贪心 + half-even 舍入，<strong>300 组 0 不一致</strong>。</p>
+<h3>2.3 P1060 <code>0hps6y5z</code>（二维版）</h3>
+<pre class="code"><code>for(j=n;j&gt;=1;j--){
+    b[i][j]=b[i-1][j];                       // 复制上一行
+    if(j&gt;=v[i]&amp;&amp;b[i-1][j-v[i]]+v[i]*p[i]&gt;b[i][j]) b[i][j]=b[i-1][j-v[i]]+v[i]*p[i];
+}</code></pre>
+<p>先复制再判断，是完整正确的二维 01 背包。<strong>250 组随机 0 不一致</strong>。 作者注释自述「贪图省事没把 <code>j&gt;=v[i]</code> 改成 <code>j&gt;=1</code>，结果有一个数据点没过，讲道理这里应该算致命错误的」——但<strong>最终贴出的代码下界就是 <code>j&gt;=1</code> 且含复制行</strong>，自述描述的是修改前版本。按&quot;验代码不验文字&quot;，归丙；自述作为乙类条目记一笔（§3）。</p>
+<h3>2.4 P1616 <code>lgmnaw1h</code></h3>
+<p>文章给 <strong>3 个代码块</strong>：前两块（<code>f[101][1001]</code> 二维、<code>f[1001]</code> 倒序一维）是正文明确写的「以下一大段为<strong>思路回顾</strong>，可适当跳过」，讲的其实是 P1048 的 01 背包；<strong>第 3 块才是 P1616 最终代码</strong>：</p>
+<pre class="code"><code>long long t[10001],p[10001],f[10000001];
+for(i=1;i&lt;=M;i++) for(j=t[i];j&lt;=T;j++) f[j]=max(f[j],f[j-t[i]]+p[i]);</code></pre>
+<p>正序（完全背包）+ long long + <code>f[10000001]</code> 对题面 <code>t ≤ 10^7</code> 够用。<strong>200 组随机 0 不一致</strong>。 按&quot;代码只是辅助&quot;，<strong>不能拿思路回顾块去 hack 最终代码</strong>——这条也记进乙类（§3）。</p>
+<h3>2.5 P1164 <code>ipduooli</code></h3>
+<p><code>dp[0][0]=1</code> + <code>for(i=1..n) dp[i][0]=1</code> + 逐行 <code>j&gt;=a[i]</code> 累加，是标准二维计数 DP，<strong>200 组 0 不一致</strong>（见 §0②）。 附带一笔：<code>int dp[10010][10010]</code> ≈ <strong>400 MB BSS</strong>，在常见内存限制下会 MLE。但按第 2 批起的口径「内存限制属资源约束，不计入」，不作为 hack 依据。</p>
+<h3>2.6 P1020 <code>n5d7jq0b</code></h3>
+<p>反向扫描 + <code>upper_bound(d+1,d+1+n,a[i])</code> / <code>lower_bound(c+1,c+1+n,a[j])</code> 双数组，<code>while(d[len]!=d[0])</code> 用 <code>0x3f</code> 哨兵计长。独立解用 O(n²) 求「最长不上升子序列长度」与「最长上升子序列长度（Dilworth）」。官方样例 <code>389 207 155 300 299 170 158 65 → 6 / 2</code> ✓，全相等 / 严格上升 / 严格下降 / 单元素 / 两元素相等 全对，<strong>250 组随机 0 不一致</strong>。</p>
+<hr>
+<h2>3. 乙类新增（单列，不计 hack）</h2>
+<h3>3.1 P1049 <code>v3wxayi3</code> — 作者自述的随机化乱搞（本批重点）</h3>
+<p>作者原文：「<code>rand()%9==0</code> 这句为真的概率为 1/9，即放弃当前最优解的概率为 1/9」「<strong>这样运行一遍得到的方案不一定是最优方案</strong>，因此我们重复运行多次，很有可能某一次就能得到最优方案」，<code>ans=v; for(int i=1;i&lt;=100;i++) ans=min(ans,f());</code>。</p>
+<p><strong>实测</strong>：<code>rand()</code> 未 <code>srand</code>，每次进程种子固定，<strong>输出可复现</strong>（同一输入连跑 5 次结果一致），所以它不是&quot;评测机波动&quot;，而是确定性地可能给不出最优。300 组小规模枚举对拍中命中多组，例如：</p>
+<table class="tb"><thead><tr><th>输入</th><th>期望</th><th>实际</th></tr></thead><tbody><tr><td><code>50 8</code> / <code>18 26 41 24 1 48 37 47</code></td><td><code>0</code></td><td><code>1</code></td></tr><tr><td><code>51 11</code> / <code>8 6 36 49 21 42 48 32 8 19 44</code></td><td><code>0</code></td><td><code>1</code></td></tr><tr><td><code>21 10</code> / <code>37 18 13 45 9 19 43 9 38 11</code></td><td><code>1</code></td><td><code>2</code></td></tr><tr><td><code>60 8</code> / <code>46 24 22 48 37 3 46 18</code></td><td><code>1</code></td><td><code>9</code></td></tr><tr><td><code>55 6</code> / <code>48 16 38 50 50 20</code></td><td><code>1</code></td><td><code>5</code></td></tr></tbody></table>
+<p><strong>但按你指定的口径，「主动防抄袭 / 乱搞形态」单列一类，不计甲类命中</strong>，反例只作为乙类验证数据列出。若以后想按后果归甲，说一句我挪。</p>
+<blockquote>补外壳说明：题解 <code>memcpy(q,a,sizeof(a))</code> 与声明的数组名在页面渲染里不一致，我按题解文字等价补全为逐元素拷贝；<code>q[40]</code> 对题面 <code>n ≤ 30</code> 够用。补全部分不计缺陷。</blockquote>
+<h3>3.2 P1049「主要是由于一个BUG」篇 — 作者主动讲错误示范</h3>
+<p>开篇即写「我写这篇题解，其实<strong>主要是由于一个BUG</strong>……这个<strong>二维专有的 BUG</strong>」，并演示 <code>for(j=m;j&gt;=x;j--)</code> 在 <code>x&gt;m</code> 时循环不执行、<code>f[n][]</code> 全 0、输出 <code>V-0=V</code>，随后给出修正版代码。这是作者主动展示的错误示范 + 修正，不是最终可提交代码里的缺陷 → 乙类。 <strong>本批未取到该篇 8 位 lid</strong>（搜索结果只给正文摘要），如实标注，未编造 ID。</p>
+<h3>3.3 本批其余乙类条目（文本形态记录，不改变主类）</h3>
+<table class="tb"><thead><tr><th>题解</th><th>形态</th><th>处理</th></tr></thead><tbody><tr><td>P1060 <code>0hps6y5z</code></td><td>作者自述「有一个数据点没过」</td><td>最终代码含 <code>b[i][j]=b[i-1][j]</code>，实测全对；自述与代码不一致，记一笔</td></tr><tr><td>P1616 <code>lgmnaw1h</code></td><td>3 个代码块，前两块是 P1048 思路回顾</td><td>只验第 3 块；拆段/回顾不算缺陷</td></tr><tr><td>P1164 <code>ipduooli</code></td><td><code>dp[10010][10010]</code> ≈ 400MB</td><td>资源项，按口径不计</td></tr><tr><td>P2240 <code>bv44vwt6</code></td><td><code>xxx.125</code> 的 half-even 舍入</td><td>与 C++ 标程一致，非缺陷（见 §0①）</td></tr><tr><td>历批累计</td><td>P1018 <code>pmio8se0</code> 的 <code>n-xx-1</code>、P1002 滚动数组 <code>ma[23][23]</code>、P1090 <code>heap(…)</code> 等</td><td>见第 4 批 §3，本批不重复</td></tr></tbody></table>
+<hr>
+<h2>4. 甲类合法反例清单（仍 10 条，无增减）</h2>
+<table class="tb"><thead><tr><th>编号</th><th>题解</th><th>输入</th><th>期望</th><th>实际</th></tr></thead><tbody><tr><td>H-001~003</td><td>P1002 <code>sfifnfaa</code></td><td><code>6 6 3 3</code> / <code>20 20 0 20</code> / <code>20 20 10 10</code></td><td><code>6</code> / <code>137846521561</code> / <code>21388094780</code></td><td>均 <code>0</code></td></tr><tr><td>H-004/005/005b</td><td>P1182 <code>arorhglg</code></td><td><code>100 50</code>+100×<code>3e7</code> / <code>1e5 5e4</code>+<code>2.5e4</code> / +<code>3e4</code></td><td><code>6e7</code> / <code>5e4</code> / <code>6e4</code></td><td><code>3e7</code> / <code>2.5e4</code> / <code>3e4</code></td></tr><tr><td>H-006/007</td><td>P1002 <code>yk90rg78</code></td><td><code>6 6 3 3</code> / <code>20 20 0 20</code></td><td><code>6</code> / <code>137846521561</code></td><td>均 <code>0</code></td></tr><tr><td>H-008/009/010</td><td>P5638 <code>nzmytiez</code></td><td><code>2 100</code>/<code>5</code> · <code>3 5</code>/<code>2 3</code> · <code>4 4</code>/<code>7 1 9</code></td><td>均 <code>0</code></td><td><code>5</code> / <code>5</code> / <code>17</code></td></tr></tbody></table>
+<hr>
+<h2>5. 保存站状态</h2>
+<p><code>www.luogu.me/article/&lt;lid&gt;</code>、<code>api.luogu.me/article/query/&lt;lid&gt;</code> 仍只返回站点框架或 403，首页降级公告（AI 自动化请求导致保存 API 队列堵塞）仍在。保存站继续只用于确认归档范围（163139 篇文章 / 71838 剪贴板）与 8 位 lid 体系；本批正文全部从可直读的 <code>www.luogu.com/article/&lt;lid&gt;</code> 逐字取，未高频刷接口。</p>
+<hr>
+<h2>6. 下一批方向</h2>
+<ol><li><strong>继续三类</strong>：重点仍是初始化语句位置、类型选择、clamp 边界这三类甲类高发；</li><li><strong>乙类高发</strong>：数组尺寸、<code>n-xx-1</code> 型剪枝、<code>()</code> vs <code>[]</code>、作者自述与实际代码不一致、思路回顾块被误当最终代码；</li><li><strong>自查纪律</strong>（本批新增）：片段取不全时先回原文逐字复核、浮点题先对齐标程舍入规则，再下结论；</li><li>你随手丢来的任意 <code>article/&lt;lid&gt;</code> 或代码段，按同一口径接第 6 批。</li></ol></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>

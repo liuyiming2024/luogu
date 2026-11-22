@@ -1,0 +1,91 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>洛谷题解逐篇hack清单_第3批.md · 离线归档</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">01_批次清单 / 洛谷题解逐篇hack清单_第3批.md</span></header>
+<main class="doc"><h1>洛谷题解逐篇 hack 清单 · 第 3 批</h1>
+<blockquote>验证日期：2026-11-20。口径沿用第 2 批，<strong>以第 2 批文件为准</strong>： ① 反例严格落在题面范围内；② 不考虑评测机波动（不主张 TLE / 超时 / 随机抖动）； ③ 存在确定性测试点使题解代码 WA / RE；④ 同一份代码同一份输入输出固定。 全程本地编译（<code>g++ -std=c++17 -O2</code>）+ 独立正确解对拍，<strong>不登录、不提交</strong>。</blockquote>
+<hr>
+<h2>1. 总表</h2>
+<p>本批新增 <strong>4 篇题解，命中 2 篇</strong>。</p>
+<table class="tb"><thead><tr><th>#</th><th>题号</th><th>题解（文章 id）</th><th>结论</th><th>最小合法反例</th></tr></thead><tbody><tr><td>11</td><td>P5638</td><td>题解 P5638 光骓者的荣耀（<code>nzmytiez</code>）</td><td><strong>已 hack</strong></td><td><code>2 100</code> / <code>5</code></td></tr><tr><td>12</td><td>P1803</td><td>题解 P1803 凌乱的yyy（<code>dmza5ifn</code>）</td><td>未 hack</td><td>—</td></tr><tr><td>13</td><td>P1018</td><td>题解:P1018 乘积最大（<code>pmio8se0</code>）</td><td><strong>已 hack</strong></td><td><code>6 1</code> / <code>123456</code></td></tr><tr><td>14</td><td>P1090</td><td>题解 P1090 合并果子（<code>zcxe384l</code>，手打堆）</td><td>未 hack</td><td>—</td></tr></tbody></table>
+<p><strong>累计：14 篇题解 / 5 篇已 hack / 14 条合法反例。</strong></p>
+<hr>
+<h2>2. 逐篇详情</h2>
+<h3>2.1 P5638 <code>nzmytiez</code> · <strong>已 hack</strong>（k ≥ n 时滑动窗口一次不跑）</h3>
+<p>文章把代码拆成 5 段给出（核心代码 / 头文件初始化 / 读入 / 输出 / return），按文章顺序拼成完整程序；逐字保留后的最终版核心：</p>
+<pre class="code"><code>int n, k, a, b;
+long long cxk[1000010], ans, maxx, ans2;
+cin &gt;&gt; n &gt;&gt; k;
+for (int i = 1; i &lt;= n - 1; i++) cin &gt;&gt; cxk[i], ans += cxk[i];
+a = 0, b = a + k;
+for (int i = a; i &lt; b; i++) ans2 += cxk[i];
+for (int i = 1; i &lt;= n - k; i++) {
+    ans2 = ans2 + cxk[b] - cxk[a];
+    maxx = max(maxx, ans2);
+    a++, b++;
+}
+cout &lt;&lt; ans - maxx;</code></pre>
+<p><strong>题面</strong>：<code>n ≥ 2, k ≥ 1, ai &gt; 0</code>；测试点 1~10 <code>n,k ≤ 100, ai ≤ 10^5</code>，测试点 24~25 <code>n,k ≤ 10^6, ai ≤ 10^12</code>。传送器「目标城市编号大于 n 则为 n」——<strong>k ≥ n 完全合法</strong>，此时从城市 1 一次传送直接到城市 n，节省全部道路，答案应为 <code>0</code>。</p>
+<p><strong>被卡原因</strong>：<code>for (int i = 1; i &lt;= n - k; i++)</code> 在 <code>k ≥ n</code> 时上界 <code>n-k ≤ 0</code>，循环一次都不进，<code>maxx</code> 保持初值 0，于是输出 <code>ans</code>（总长度）。题解只枚举了「恰好 k 条连续边」的窗口，没有处理传送目标被 clamp 到 n 的情形。</p>
+<p><strong>反例（题面内、确定性 WA）</strong></p>
+<table class="tb"><thead><tr><th>输入</th><th>期望</th><th>实际</th></tr></thead><tbody><tr><td><code>2 100</code> / <code>5</code></td><td><code>0</code></td><td><code>5</code></td></tr><tr><td><code>3 5</code> / <code>2 3</code></td><td><code>0</code></td><td><code>5</code></td></tr><tr><td><code>4 4</code> / <code>7 1 9</code></td><td><code>0</code></td><td><code>17</code></td></tr></tbody></table>
+<p><strong>对照组（证明是边界而非逻辑错）</strong>：官方样例 1 <code>4 0 / 1 2 3</code> → 6 ✓；样例 2 <code>4 1 / 1 2 3</code> → 3 ✓；<code>k=n-1</code> 的 <code>4 3 / 7 1 9</code> → 0 ✓；<code>5 2 / 10 10 1 1</code> → 2 ✓。</p>
+<p><strong>200 组随机小数据（n=2~25, k=1~35）中 133 组不一致，全部是 <code>k ≥ n</code> 情形；<code>k &lt; n</code> 的组 0 处不一致。</strong></p>
+<blockquote>两点说明： 1. 文章前面还给过一份「朴素两层循环」实现并自己指出「毒瘤数据范围」后给出滑动窗口作为<strong>核心代码</strong>，命中针对的是这份最终优化版。 2. 另一篇 P5638 题解记录了「i 从 1 开始循环会漏掉第 0 个位置、实测 92 分、测试点 6/10 WA」，属于同类边界问题在洛谷真实数据里的旁证；本批不引用它作为反例来源，反例全部本地独立构造。</blockquote>
+<hr>
+<h3>2.2 P1803 <code>dmza5ifn</code> · 未 hack</h3>
+<p>逐字代码要点（原页 <code>main(){</code> 为老式 C 写法，C++17 下补 <code>int</code> 返回类型，其余逐字）：</p>
+<pre class="code"><code>int cmp1(const void *a,const void *b){ return ((int*)a)[0]-((int*)b)[0]; } // 按开始
+int cmp2(const void *a,const void *b){ return ((int*)a)[1]-((int*)b)[1]; } // 按结束
+qsort(time,n,sizeof(int)*2,cmp1);
+qsort(time,n,sizeof(int)*2,cmp2);
+for(i = 1; i &lt; n; i++){
+    flag = 1;
+    if((time[i][0]&gt;=time[pos][0]&amp;&amp;time[i][1]&lt;=time[pos][1]) ||
+       (time[i][1]&gt;time[pos][0]&amp;&amp;time[i][1]&lt;=time[pos][1]) ||
+       (time[i][0]&gt;=time[pos][0]&amp;&amp;time[i][0]&lt;time[pos][1]) ||
+       (time[pos][0]&gt;time[i][0]&amp;&amp;time[pos][1]&lt;time[i][1])) flag = 0;
+    if(flag == 1){ pos = i; count++; }
+}
+printf(&quot;%d&quot;, count);</code></pre>
+<p>题解文字说「按时间差从小到大」，但代码最终用 <code>cmp2</code> 按<strong>结束时间</strong>排序（第一次 cmp1 只影响相同结束时间的相对顺序），实际是标准区间调度贪心；四个 OR 条件在「按结束时间升序、e_i ≥ e_p」的前提下覆盖了全部重叠情形，<code>s_i &gt;= e_p</code> 的完美衔接不会被误判。</p>
+<p>验证：官方样例 <code>3 / 0 2 / 2 4 / 1 3</code> → 2 ✓；短区间错觉反例 <code>0 5 / 5 10 / 4 6</code> → 2 ✓；早开始长区间反例 → 4 ✓；单点衔接链 → 5 ✓；<strong>400 组随机（n=1~12，用枚举所有子集求最大兼容区间数作独立正确解）0 处不一致</strong>。</p>
+<p><strong>结论：未 hack。</strong>（文字描述与代码不一致属于表述问题，按本口径不计。）</p>
+<hr>
+<h3>2.3 P1018 <code>pmio8se0</code> · <strong>已 hack</strong>（DFS 剪枝少算一个乘号间隔）</h3>
+<p>题解用 DFS + 高精度乘法，关键剪枝与入口（逐字）：</p>
+<pre class="code"><code>void dfs(int xx,string u,int v,string ans){
+ if(n-xx-1&lt;v) return;                     // ← 剪枝
+ if(v==0){ string uu=&quot;&quot;; for(int i=xx-1;i&lt;n;i++) uu+=x[i];
+           ans=add(ans,uu);
+           if(ans.size()&gt;ma.size()||ans.size()==ma.size()&amp;&amp;ans&gt;ma) ma=ans;
+           return; }
+ u+=x[xx-1];
+ if(v&gt;0) dfs(xx+1,&quot;&quot;,v-1,add(ans,u));
+ dfs(xx+1,u,v,ans);
+}
+int main(){ cin&gt;&gt;n&gt;&gt;k&gt;&gt;x; dfs(1,&quot;&quot;,k,&quot;1&quot;); cout&lt;&lt;ma; return 0; }</code></pre>
+<p><strong>题面</strong>：<code>6 ≤ N ≤ 40, 1 ≤ K ≤ 6</code>，样例 <code>4 2 / 1231 → 62</code>（用来校验独立正确解，结果一致）。</p>
+<p><strong>被卡原因</strong>：<code>xx</code> 是当前字符的 1-based 序号，从 <code>x[xx-1]</code> 之后到串尾共有 <strong>n-xx</strong> 个可放乘号的间隔，剪枝写成 <code>n-xx-1 &lt; v</code>，<strong>少算最后一个间隔</strong> → 永远无法在最后两位之间放乘号，所有「最后一段仅 1 位」的分法被漏掉；当 <code>k = n-1</code> 时入口处 <code>n-1-1 &lt; n-1</code> 直接 return，<code>ma</code> 保持空串，输出空。</p>
+<p><strong>反例（题面内、确定性 WA）</strong></p>
+<table class="tb"><thead><tr><th>输入</th><th>期望</th><th>实际</th><th>说明</th></tr></thead><tbody><tr><td><code>6 1</code> / <code>123456</code></td><td><code>74070</code></td><td><code>69104</code></td><td>最优 <code>12345×6</code>，题解最好只能 <code>1234×56</code></td></tr><tr><td><code>6 4</code> / <code>123456</code></td><td><code>4320</code></td><td><code>1344</code></td><td>同上</td></tr><tr><td><code>6 5</code> / <code>123456</code></td><td><code>720</code></td><td>（空串）</td><td>k=n-1，入口即被剪掉</td></tr><tr><td><code>7 6</code> / <code>1020304</code></td><td><code>0</code></td><td>（空串）</td><td>k=n-1，含 0</td></tr><tr><td><code>9 6</code> / <code>565508935</code></td><td><code>27900000</code></td><td><code>18900000</code></td><td>常规规模也挂</td></tr></tbody></table>
+<p><strong>独立正确解</strong>：区间 DP <code>dp[i][j] = max_{p&lt;i} dp[p][j-1] × int(s[p:i])</code>（Python 大整数），官方样例回算 62 ✓。<strong>300 组严格合规随机（N=6~40, K=1~min(6,N-1)）中 63 组不一致</strong>，K 越大命中越密集（K=6 时 24/… 组挂），与剪枝缺陷吻合。</p>
+<blockquote>顺带核对过题解的高精度乘法 <code>add()</code>：<code>q[10005]/p[1005]/qp[1005]</code> 在 N≤40 时够用，进位与去前导零正确；WA 的根因就是剪枝，不是精度。</blockquote>
+<hr>
+<h3>2.4 P1090 <code>zcxe384l</code> · 未 hack（附两处不计项）</h3>
+<p>手打小根堆的哈夫曼解。逐字版 <code>pop()</code> 写成</p>
+<pre class="code"><code>void pop() { heap[1]=heap(heap.size()-1); heap.pop_back(); gao(1); }</code></pre>
+<p><code>heap(…)</code> 是对 <code>vector&lt;int&gt;</code> 对象的函数调用，C++ 下 <strong>CE</strong>（<code>no match for call to &#x27;(std::vector&lt;int&gt;) (…)&#x27;</code>）。这属于<strong>与输入无关的展示缺陷</strong>，按本口径（要求存在测试点）<strong>不计为 hack</strong>；把 <code>[]</code> 补回成 <code>heap[heap.size()-1]</code> 后：</p>
+<ul><li>200 组随机（n=1~40, ai≤20000）与 <code>heapq</code> 哈夫曼独立解 <strong>0 处不一致</strong>；</li><li>下沉 <code>gao</code> / 上浮 <code>doit</code> / 哨兵 <code>-1e9</code> 逻辑均正确。</li></ul>
+<p><strong>明确作废的一条</strong>：我构造过 <code>n=10000</code> 全 <code>20000</code> 想卡 <code>int ans</code>，其真实答案 <code>2672320000 &gt; 2^31-1</code>，补正版输出 <code>-1622647296</code>（确实溢出）。<strong>但 P1090 题面写明「输入数据保证这个值小于 2^31」</strong>，该输入违反题面保证，因此<strong>不算合法反例，作废</strong>。</p>
+<p><strong>结论：未 hack。</strong></p>
+<hr>
+<h2>3. 合法反例清单（累计，可直接投喂）</h2>
+<table class="tb"><thead><tr><th>编号</th><th>针对题解</th><th>输入</th><th>期望</th><th>实际</th><th>批次</th></tr></thead><tbody><tr><td>H-001</td><td>P1002 <code>sfifnfaa</code></td><td><code>6 6 3 3</code></td><td><code>6</code></td><td><code>0</code></td><td>1</td></tr><tr><td>H-002</td><td>P1002 <code>sfifnfaa</code></td><td><code>20 20 0 20</code></td><td><code>137846521561</code></td><td><code>0</code></td><td>1</td></tr><tr><td>H-003</td><td>P1002 <code>sfifnfaa</code></td><td><code>20 20 10 10</code></td><td><code>21388094780</code></td><td><code>0</code></td><td>1</td></tr><tr><td>H-004</td><td>P1182 <code>arorhglg</code></td><td><code>100 50</code> + 100×<code>30000000</code></td><td><code>60000000</code></td><td><code>30000000</code></td><td>2</td></tr><tr><td>H-005</td><td>P1182 <code>arorhglg</code></td><td><code>100000 50000</code> + 100000×<code>25000</code></td><td><code>50000</code></td><td><code>25000</code></td><td>2</td></tr><tr><td>H-005b</td><td>P1182 <code>arorhglg</code></td><td><code>100000 50000</code> + 100000×<code>30000</code></td><td><code>60000</code></td><td><code>30000</code></td><td>2</td></tr><tr><td>H-006</td><td>P1002 <code>yk90rg78</code></td><td><code>6 6 3 3</code></td><td><code>6</code></td><td><code>0</code></td><td>2</td></tr><tr><td>H-007</td><td>P1002 <code>yk90rg78</code></td><td><code>20 20 0 20</code></td><td><code>137846521561</code></td><td><code>0</code></td><td>2</td></tr><tr><td>H-008</td><td>P5638 <code>nzmytiez</code></td><td><code>2 100</code> / <code>5</code></td><td><code>0</code></td><td><code>5</code></td><td>3</td></tr><tr><td>H-009</td><td>P5638 <code>nzmytiez</code></td><td><code>3 5</code> / <code>2 3</code></td><td><code>0</code></td><td><code>5</code></td><td>3</td></tr><tr><td>H-010</td><td>P5638 <code>nzmytiez</code></td><td><code>4 4</code> / <code>7 1 9</code></td><td><code>0</code></td><td><code>17</code></td><td>3</td></tr><tr><td>H-011</td><td>P1018 <code>pmio8se0</code></td><td><code>6 1</code> / <code>123456</code></td><td><code>74070</code></td><td><code>69104</code></td><td>3</td></tr><tr><td>H-012</td><td>P1018 <code>pmio8se0</code></td><td><code>6 5</code> / <code>123456</code></td><td><code>720</code></td><td>空串</td><td>3</td></tr><tr><td>H-013</td><td>P1018 <code>pmio8se0</code></td><td><code>7 6</code> / <code>1020304</code></td><td><code>0</code></td><td>空串</td><td>3</td></tr><tr><td>H-014</td><td>P1018 <code>pmio8se0</code></td><td><code>9 6</code> / <code>565508935</code></td><td><code>27900000</code></td><td><code>18900000</code></td><td>3</td></tr></tbody></table>
+<p><strong>已作废 / 不计</strong>：旧 C-001（P1220 越界坐标）、旧 R-001（P3959 仅&quot;无保证&quot;）、P1090 的 <code>n=10000</code> 全 20000（违反题面输出保证）、P1090 逐字版 CE、P1216 <code>ove5v8ck</code> 第二块缺头文件 CE、P5638 朴素版 O(nk) 的 TLE。</p>
+<hr>
+<h2>4. 关于保存站（luogu.me）的状态</h2>
+<p>本轮又低频试了 <code>www.luogu.me/article/h4cn628r</code>、<code>/article/sfifnfaa</code>、<code>/article/arorhglg</code> 及 <code>api.luogu.me/article/query/&lt;id&gt;</code>：页面仍只返回站点框架或 403，<code>api</code> 直连 403，首页仍挂着「AI 自动化请求导致保存 API 队列堵塞」的降级公告。保存站目前只用来确认归档范围（163139 篇文章 / 71838 剪贴板）与 8 位 lid 体系；<strong>题解正文继续从可直读的 <code>www.luogu.com/article/&lt;lid&gt;</code> 与 <code>www.luogu.org/article/&lt;lid&gt;</code> 逐字取回</strong>（本批 <code>zcxe384l</code> 就来自 <code>.org</code> 域名）。没有高频刷接口。</p>
+<hr>
+<h2>5. 下一批方向</h2>
+<ol><li><strong>继续同题多解</strong>：P1002、P1182、P5638 还有多篇，逐篇过；</li><li><strong>边界类</strong>：搜索/DFS 剪枝的 <code>n-xx-1</code> 型 off-by-one、滑动窗口循环上界、clamp 到边界的情形；</li><li><strong>整数类</strong>：<code>int</code> 累加和、比较函数返回值溢出、答案保证值与代码类型不匹配；</li><li>你随手丢来的任意 <code>article/&lt;lid&gt;</code> 或题解代码，按同一口径接第 4 批。</li></ol></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>

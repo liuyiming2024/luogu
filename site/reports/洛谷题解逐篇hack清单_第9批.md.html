@@ -1,0 +1,95 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>洛谷题解逐篇hack清单_第9批.md · 离线归档</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">01_批次清单 / 洛谷题解逐篇hack清单_第9批.md</span></header>
+<main class="doc"><h1>洛谷题解逐篇 hack 清单 · 第 9 批</h1>
+<blockquote>验证日期：2026-11-21。口径沿用第 4 批（三类 + 代码只是辅助、不判完整度），<strong>以第 4 批文件为准</strong>。 全程本地编译 <code>g++ -std=c++17 -O2</code> + 独立正确解对拍，<strong>不登录、不提交</strong>。本批含 1 篇 Python 3 题解，按同一口径用 <code>python3</code> 对拍。</blockquote>
+<hr>
+<h2>0. 本批结果一句话</h2>
+<p>换到 <strong>NOIP 入门模拟 + 哈希计数</strong> 这一片，<strong>甲类再开一篇</strong>：P1102 <code>dxk2a7a8</code> 的双指针在 <code>c=0</code> 与多个 <code>c&gt;0</code> 场景直接 SIGSEGV。另有 P1423 <code>4fj37pww</code> 一个很隐蔽的 <code>&gt;</code> / <code>&gt;=</code> 边界缺陷，<strong>改一处字符即修复</strong>，单列乙类。</p>
+<p>累计 49 → <strong>56 篇</strong>，甲类 7 → <strong>8</strong>，乙类 8 → <strong>9</strong>，丙类 34 → <strong>39</strong>，甲类合法反例 17 → <strong>20 条</strong>。</p>
+<hr>
+<h2>1. 第 9 批总表（7 篇新题解，全部有 8 位 lid）</h2>
+<table class="tb"><thead><tr><th>#</th><th>题号</th><th>题解</th><th>归类</th><th>结论</th></tr></thead><tbody><tr><td>50</td><td>P1102</td><td>题解 P1102 A-B 数对（<code>dxk2a7a8</code>）</td><td><strong>甲</strong></td><td><code>c=0</code> 与多个 <code>c&gt;0</code> 场景确定性 WA / SIGSEGV；300 组随机 64 组挂</td></tr><tr><td>51</td><td>P1423</td><td>题解 P1423 小玉在游泳（<code>4fj37pww</code>）</td><td><strong>乙</strong></td><td><code>dist&gt;target</code> 应为 <code>&gt;=</code>；所有「恰好等于前 k 步累计和」的合规输入少算 1 步，<strong>改一处即修复</strong></td></tr><tr><td>52</td><td>P1328</td><td>题解 P1328 生活大爆炸版石头剪刀布（<code>0z8yhoc0</code>）</td><td><strong>丙</strong></td><td>6 定点（含两个官方样例、n=200）+ 300 组 0 不一致</td></tr><tr><td>53</td><td>P1012</td><td>题解:P1012 拼数（<code>kckry124</code>）</td><td><strong>丙</strong></td><td>5 定点 + 300 组（n≤7 全排列求最大）0 不一致</td></tr><tr><td>54</td><td>P1204</td><td>题解 P1204 挤牛奶（<code>gw5uvykg</code>）</td><td><strong>丙</strong></td><td>300 组随机区间 0 不一致</td></tr><tr><td>55</td><td>P1553</td><td>题解 P1553 数字反转升级版（<code>nxvqnwg8</code>）</td><td><strong>丙</strong></td><td>17 定点（含全部经典边界）+ 300 组 0 不一致</td></tr><tr><td>56</td><td>P1598</td><td>P1598 垂直柱状图题解（<code>biep97vd</code>，Python 3）</td><td><strong>丙</strong></td><td>200 组随机四行输入 0 不一致</td></tr></tbody></table>
+<blockquote>本批主计数 7 篇。P1422、P1914、P1307、P2615、P1426、P1427、P1428、P1149、P1223 等多篇<strong>未取到 lid 或逐字代码取不全</strong>，按纪律只登记、不纳入计数，见 §6。</blockquote>
+<hr>
+<h2>2. 甲类 · P1102 <code>dxk2a7a8</code></h2>
+<h3>2.1 代码（逐字取回）</h3>
+<pre class="code"><code>sort(shu, shu+n, cmp);            // cmp: a &gt; b，降序
+int t=0, w=1;
+long long sum=0;
+while(w&lt;n){
+    if(shu[t]-shu[w]&gt;c) t++;
+    if(shu[t]-shu[w]&lt;c) w++;
+    if(shu[t]-shu[w]==c){
+        tj=wj=0; st=t, sw=w;
+        for(int i=t; shu[i]==shu[st]; i++){ tj++; t++; }
+        if(c==0) wj=1;                       // ← 只置 wj，w 不推进
+        else
+        for(int i=w; shu[i]==shu[sw]; i++){ wj++; w++; }
+        sum += (long long)tj * (long long)wj;
+    }
+}
+printf(&quot;%lld&quot;, sum);</code></pre>
+<h3>2.2 反例（题面 <code>1≤N≤2×10^5</code>，<code>C</code> 与数列元素均为正整数范围）</h3>
+<table class="tb"><thead><tr><th>输入</th><th>正确</th><th>实际</th></tr></thead><tbody><tr><td><code>1 / 0 / 5</code></td><td><code>1</code></td><td><code>0</code>（<code>w=1</code> 不小于 <code>n=1</code>，循环根本不进）</td></tr><tr><td><code>2 / 0 / 5 5</code></td><td><code>4</code></td><td><strong>空输出，rc −11（SIGSEGV）</strong></td></tr><tr><td><code>3 / 0 / 5 5 5</code></td><td><code>9</code></td><td><strong>空输出，rc −11</strong></td></tr><tr><td><code>3 / 1 / 1 5 3</code></td><td><code>0</code></td><td><strong>空输出，rc −11</strong></td></tr></tbody></table>
+<p>题面 <code>A−B=C</code> 的正确口径是 <code>sum(cnt[x+C] for x in arr)</code>；<code>c=0</code> 时应为 <code>Σ cnt[x]²</code>，而题解令 <code>wj=1</code>、<code>sum += tj*1</code>，只数了一次连续段长度，<strong>既漏计数又不推进 <code>w</code></strong>，让 <code>t</code> 一路扫过 <code>shu</code> 的尾部零区，直到越界读崩。</p>
+<p><strong>批量枚举</strong>（n≤5、值域 1..4、c=0..3，共 5456 组）：干净 WA 4 组（全是 <code>n=1,c=0</code>），其余 <strong>2208 组越界</strong>。<strong>300 组随机（n≤60, c=0..10）64 组不一致</strong>，且 <code>c&gt;0</code> 也崩，不只是 <code>c=0</code> 特例。</p>
+<h3>2.3 划界：为什么归甲</h3>
+<ul><li>只补 <code>wj=tj; w=t;</code>（改一处表达式）后重跑 300 组，<strong>仍 53 组挂</strong>；</li><li>换成标准 <code>map</code> 计数 <code>Σ cnt[x]·cnt[x+C]</code>（<strong>重写核心逻辑</strong>）才 0 不一致。</li><li>三个独立 <code>if</code>（非 <code>else if</code>）连锁推进、连续段统计与 <code>w</code> 同步、以及 <code>c=0</code> 的平方计数，是<strong>多处结构性缺陷</strong>，不是「改一处字符或数字 / 补一条初始化」能修的；</li><li>也不是主动防抄袭 / 打表 / 展示形态（作者正文正经讲双指针思路）。</li></ul>
+<p>→ 甲类。</p>
+<hr>
+<h2>3. 乙类 · P1423 <code>4fj37pww</code>（本批最隐蔽的一处）</h2>
+<h3>3.1 代码（逐字取回）</h3>
+<pre class="code"><code>int L, R=INT_MAX, mid;
+double target, dist, per=2;
+while(R&gt;=L){
+    mid=(L+R)/2;
+    for(int i=1;i&lt;=mid;i++){
+        dist += per;
+        per *= 0.98;
+        if(dist&gt;target) break;          // 剪枝
+    }
+    if(dist&gt;target) R=mid-1;           // ← 二分判定
+    else L=mid+1;
+    dist=0; per=2;
+}
+cout&lt;&lt;L;</code></pre>
+<p>题面「游到距离 s」= 累计距离 <strong>达到或超过</strong> s，标准循环解写的是 <code>while(d&lt;s){...}</code>，即 <code>d&gt;=s</code> 停止。题解全程用<strong>严格大于</strong> <code>&gt;</code>，于是二分求的是「最小使累计 <code>&gt; s</code> 的步数」，比正确答案多 1 步——<strong>当且仅当 s 恰好等于前 k 步累计和</strong>。</p>
+<h3>3.2 反例（全部是题面内的合法实数）</h3>
+<table class="tb"><thead><tr><th>输入 s</th><th>正确</th><th>实际</th></tr></thead><tbody><tr><td><code>2</code></td><td><code>1</code></td><td><code>2</code></td></tr><tr><td><code>3.96</code></td><td><code>2</code></td><td><code>3</code></td></tr><tr><td><code>5.8808</code></td><td><code>3</code></td><td><code>4</code></td></tr><tr><td><code>7.763184</code></td><td><code>4</code></td><td><code>5</code></td></tr><tr><td><code>9.60792032</code></td><td><code>5</code></td><td><code>6</code></td></tr><tr><td><code>11.4157619136</code></td><td><code>6</code></td><td><code>7</code></td></tr><tr><td><code>13.187446675328</code></td><td><code>7</code></td><td><code>8</code></td></tr><tr><td><code>14.923697741821439</code></td><td><code>8</code></td><td><code>9</code></td></tr></tbody></table>
+<p>官方样例 <code>4.3 → 3</code>、以及 <code>0.5 / 1 / 1.9 / 2.01 / 10 / 50 / 99 / 99.9</code> 全部通过。<strong>200 组随机（6 位小数）原版 0 不一致</strong>——因为随机实数几乎不可能恰好命中那些部分和；这类缺陷只能靠构造边界点挖出来。这正是历批「定点 + 随机」两套都要跑的理由。</p>
+<h3>3.3 划界：为什么归乙</h3>
+<ul><li><strong>只把外层判定改成 <code>if(dist&gt;=target)</code>（补一个 <code>=</code>）</strong>，8 个定点全部恢复正确，200 组随机 0 不一致；两处都改同样 0 不一致。</li><li>反过来只改内层剪枝会<strong>死循环</strong>（<code>dist==target</code> 时提前 break，外层仍判 <code>&gt;</code> 为假 → <code>L=mid+1</code> 跳过答案，二分永不收敛）——所以最小修复恰恰是改外层那一处。</li><li>与第 6 批 P1563 <code>x&lt;0</code>→<code>x&lt;=0</code>、第 7 批 P1003 <code>10020</code>→<code>100005</code> <strong>完全同型</strong>：改一处字符/数字即逻辑正确。</li></ul>
+<p>→ 乙类单列，反例只作验证数据，不计甲类命中。想按「反例无限多」把它挪进甲，说一句即可。</p>
+<hr>
+<h2>4. 丙类逐篇（5 篇）</h2>
+<h3>4.1 P1328 <code>0z8yhoc0</code></h3>
+<p><code>int w[5][2]={{1,4},{2,4},{0,3},{0,1},{2,3}};</code> 注释写「赢每个的数」，实际语义是 <strong>「能赢 a 的手势」</strong>：<code>if(b[i]==w[a[i]][j]) ansb++</code>、<code>if(a[i]==w[b[i]][j]) ansa++</code>。逐项核对题面胜负表（0 剪刀赢 2 布/3 蜥蜴人、1 石头赢 0 剪刀/3 蜥蜴人、2 布赢 1 石头/4 斯波克、3 蜥蜴人赢 2 布/4 斯波克、4 斯波克赢 0 剪刀/1 石头）后，反查表与代码自洽。两个官方样例 <code>6 2</code> / <code>4 4</code>、n=200 满规模、300 组随机 0 不一致。</p>
+<blockquote>逐字取回里 <code>for(int i(nb+1;i&lt;=n;i++)</code> 是页面渲染吞了 <code>=</code>，按题解文字补成 <code>for(int i=nb+1;i&lt;=n;i++)</code>——补最小外壳，不计缺陷。</blockquote>
+<h3>4.2 P1012 <code>kckry124</code></h3>
+<p><code>bool cmp(string a,string b){ return a+b&gt;b+a; }</code> + <code>sort(a+1,a+n+1,cmp)</code>，<code>string a[21]</code> 对题面 n≤20 刚好。独立解用 <strong>n≤7 全排列取最大拼接串</strong>，5 个经典定点（<code>13 312 343</code>、<code>12 121</code>、<code>9 98 987</code>、<code>1 10 100</code>、<code>321 32 3</code>）+ 300 组随机 0 不一致。</p>
+<h3>4.3 P1204 <code>gw5uvykg</code></h3>
+<p>按 begin 升序排序后合并区间：<code>if(m[i].begin &lt;= end)</code>（相邻区间算连续，符合 <code>[a,b)</code> 半开语义）、断开时 <code>ans2=max(ans2, m[i].begin-end)</code>、末段再补一次 <code>ans1</code>。独立解用<strong>时间轴逐秒标记</strong>扫描最长连续有人段 / 中间空档，300 组随机区间 0 不一致。</p>
+<h3>4.4 P1553 <code>nxvqnwg8</code></h3>
+<p><code>reversef</code>（倒着扫、跳反转后的前导 0、全 0 时补一个 <code>0</code>）处理整数 / 分子 / 分母 / 百分数前；<code>reverseb</code>（先正向找第一个非 0 定位 <code>fro</code>，再倒着输出）处理小数部分，正好对应「小数去原串前导 0、整数去原串后导 0」的不对称规则。 17 个定点含全部经典边界：<code>0→0</code>、<code>1200→21</code>、<code>120.120→21.021</code>、<code>0.0012→0.21</code>、<code>12.0→21.0</code>、<code>120/210→21/12</code>、<code>0/120→0/21</code>、<code>1200%→21%</code>、<code>0%→0%</code>、<code>100.000→1.0</code>、<code>600/006→6/600</code>；再加 300 组随机，0 不一致。</p>
+<h3>4.5 P1598 <code>biep97vd</code>（Python 3）</h3>
+<p><code>staDic</code> 统计 A~Z，<code>ZDic={&#x27;Z&#x27;: staDic.pop(&#x27;Z&#x27;)}</code> 把 Z 单独拿出来处理末尾换行；每层 <code>print(&#x27;*&#x27;, end=&#x27; &#x27;)</code> / <code>print(&#x27; &#x27;, end=&#x27; &#x27;)</code> 输出前 25 列，第 26 列单独 <code>print(&#x27;*&#x27;)</code> / <code>print(&#x27; &#x27;)</code> 换行。独立解用 <code>&#x27; &#x27;.join(cells)</code> 生成同样的 51 字符行，200 组随机四行输入（含小写、数字、标点）0 不一致。</p>
+<blockquote>本批唯一非 C++ 题解；按「代码只是辅助」只验核心输出逻辑，语言不构成缺陷。</blockquote>
+<hr>
+<h2>5. 本批 4 次「差点误判」自查</h2>
+<table class="tb"><thead><tr><th>#</th><th>我一度以为</th><th>实测结论</th><th>处理</th></tr></thead><tbody><tr><td>①</td><td>P1914 那篇「超过 <code>&#x27;z&#x27;</code> 就 <code>a[i]+=n-26</code>」只减一次 26，n 稍大就溢出 → 甲类</td><td>回题面逐字核对：<strong><code>1≤n≤26</code></strong>。26×26=676 组（全部 n × 全部字母）<strong>0 不一致</strong>，减一次恰好够</td><td>不是 hack；且该篇未取到 lid，只登记不计数</td></tr><tr><td>②</td><td>P1328 <code>w[5][2]</code> 注释「赢每个的数」与代码方向相反</td><td>逐项核对胜负表，<code>w[a]</code> 实为「能赢 a 的手势」，<code>ansb</code>/<code>ansa</code> 两个判断自洽，300 组 0 不一致</td><td>不是 hack，归丙</td></tr><tr><td>③</td><td>P1423 <code>mid=(L+R)/2</code> 在 <code>R=INT_MAX</code> 且 <code>L&gt;0</code> 时 int 溢出会死循环</td><td>实测 R 在 L 变大之前已按 <code>R=mid-1</code> 收敛到很小（剪枝让每次模拟几步就 break），从未溢出；真缺陷是 <code>&gt;</code> vs <code>&gt;=</code></td><td>表述收紧，归乙</td></tr><tr><td>④</td><td>我的 P1102 独立解第一次跑出「超时」</td><td>是<strong>我自己的</strong> <code>map</code> 版边遍历边 <code>cnt[kv.first+c]</code> 插入新键导致迭代器失效，与题解无关</td><td>已改成先拷贝 <code>(key,val)</code> 向量再累加；延续第 5 批「假命中先回查自己」的纪律</td></tr></tbody></table>
+<p>另：P1423 只改内层剪枝会死循环、只改外层判定才修好，是跑修复版复验才发现的——再次印证第 8 批写下的「<strong>以为改一处就修好必须跑修复版，别凭眼判</strong>」。</p>
+<hr>
+<h2>6. 未取到 lid / 逐字不全、只登记不计数</h2>
+<table class="tb"><thead><tr><th>来源</th><th>形态</th><th>为什么不计</th></tr></thead><tbody><tr><td>P1422 小玉家的电费（<code>#define int long long</code> + <code>signed main</code>）</td><td>三档阶梯电价，逻辑正确；宏替换是个性化展示</td><td>无 lid，乙类登记</td></tr><tr><td>P1914 「减 26」版、模运算版</td><td><code>n≤26</code> 时减一次 26 正确；<code>(s[i]-&#x27;a&#x27;+n)%26</code> 正确</td><td>无 lid；见 §5①</td></tr><tr><td>P1307 数字反转（字符串 / 最短取模版）</td><td>前导零、负号处理</td><td>无 lid 或正文被截断</td></tr><tr><td>P2615 神奇的幻方（<code>MAXN=40</code> 版、<code>map[ii-1][jj+1]</code> 版）</td><td>条件二 <code>y==n</code> 分支在摘要里缺失，疑为漏分支</td><td>逐字取回仍残缺，<strong>不拿摘要判题</strong></td></tr><tr><td>P1426 小鱼会有危险吗（循环版 / <code>lower_bound</code> 版）、P1427 小鱼的数字游戏（vector / stack 版）</td><td>浮点累加、逆序输出</td><td>无 lid 或代码被大段吞字符</td></tr><tr><td>P1428 <code>2edysvbn</code></td><td>有 lid，但正文只有思路、无 AC 代码</td><td>按「不判完整度」仍无法验核心逻辑，登记</td></tr><tr><td>P1149、P1223、P1102 map 版、P1420、P1553 其他版</td><td>枚举 / pair 排序 / 哈希计数</td><td>无 lid</td></tr></tbody></table>
+<hr>
+<h2>7. 甲类合法反例清单（20 条）</h2>
+<table class="tb"><thead><tr><th>编号</th><th>题解</th><th>输入</th><th>期望</th><th>实际</th></tr></thead><tbody><tr><td>H-001~003</td><td>P1002 <code>sfifnfaa</code></td><td><code>6 6 3 3</code> / <code>20 20 0 20</code> / <code>20 20 10 10</code></td><td><code>6</code> / <code>137846521561</code> / <code>21388094780</code></td><td>均 <code>0</code></td></tr><tr><td>H-004/005/005b</td><td>P1182 <code>arorhglg</code></td><td><code>100 50</code>+100×<code>3e7</code> / <code>1e5 5e4</code>+<code>2.5e4</code> / +<code>3e4</code></td><td><code>6e7</code> / <code>5e4</code> / <code>6e4</code></td><td><code>3e7</code> / <code>2.5e4</code> / <code>3e4</code></td></tr><tr><td>H-006/007</td><td>P1002 <code>yk90rg78</code></td><td><code>6 6 3 3</code> / <code>20 20 0 20</code></td><td><code>6</code> / <code>137846521561</code></td><td>均 <code>0</code></td></tr><tr><td>H-008/009/010</td><td>P5638 <code>nzmytiez</code></td><td><code>2 100</code>/<code>5</code> · <code>3 5</code>/<code>2 3</code> · <code>4 4</code>/<code>7 1 9</code></td><td>均 <code>0</code></td><td><code>5</code> / <code>5</code> / <code>17</code></td></tr><tr><td>H-011/012/013</td><td>P1421 <code>dk5mkxij</code></td><td><code>7 6</code> / <code>19 0</code> / <code>20 9</code></td><td><code>4</code> / <code>10</code> / <code>11</code></td><td><code>3</code> / <code>9</code> / <code>10</code></td></tr><tr><td>H-014/015/016</td><td>P1098 <code>l9bmtvor</code></td><td><code>2 3 2 / a-d-d</code> · <code>1 2 1 / a</code> · <code>3 2 2 / a-d</code></td><td><code>aCCCBBBd-d</code> / <code>a</code> / <code>a****d</code></td><td><code>a-d-d</code> / <code>aa</code> / <code>a-d</code></td></tr><tr><td>H-017</td><td>P1098 <code>zcy00qo9</code></td><td><code>2 2 2 / 1-5</code></td><td><code>14433225</code></td><td><code>12233445</code></td></tr><tr><td><strong>H-018</strong></td><td><strong>P1102 <code>dxk2a7a8</code></strong></td><td><code>1 / 0 / 5</code></td><td><code>1</code></td><td><code>0</code></td></tr><tr><td><strong>H-019</strong></td><td><strong>P1102 <code>dxk2a7a8</code></strong></td><td><code>2 / 0 / 5 5</code></td><td><code>4</code></td><td>SIGSEGV（空输出）</td></tr><tr><td><strong>H-020</strong></td><td><strong>P1102 <code>dxk2a7a8</code></strong></td><td><code>3 / 1 / 1 5 3</code></td><td><code>0</code></td><td>SIGSEGV（空输出）</td></tr></tbody></table>
+<blockquote><code>dxk2a7a8</code> 另有大量崩溃输入：5456 组小规模枚举中 2208 组越界、300 组随机 64 组不一致；此处列 3 条代表（干净 WA / <code>c=0</code> 崩溃 / <code>c&gt;0</code> 崩溃）。</blockquote>
+<hr>
+<h2>8. 保存站状态</h2>
+<p><code>www.luogu.me/article/&lt;lid&gt;</code>、<code>api.luogu.me/article/query/&lt;lid&gt;</code> 仍只返回站点框架或 403，首页降级公告（AI 自动化请求导致保存 API 队列堵塞）仍在。保存站继续只用于确认归档范围与 8 位 lid 体系；本批正文全部从可直读的 <code>www.luogu.com/article/&lt;lid&gt;</code>（含 <code>www.luogu.org/article/&lt;lid&gt;</code>）逐字取回，未高频刷接口。</p>
+<hr>
+<h2>9. 下一批方向</h2>
+<ol><li><strong>甲类主攻</strong>：参数分支漏判、<code>&gt;</code> / <code>&gt;=</code> 与 <code>==</code> 边界、初始化语句位置、类型选择、多指针同步逻辑；</li><li><strong>乙类高发</strong>：数组尺寸小于题面上限、改一处即修复的下标/比较符/数字、宏替换等个性化展示、拆段与思路回顾块；</li><li><strong>自查纪律</strong>（累计 6 批有效）：搜索摘要 ≠ 正文；片段先回原文逐字复核；浮点题先对齐标程舍入与 ULP；数组越界必须实测到具体规模；<strong>「以为改一处就修好」必须跑修复版复验</strong>；<strong>随机对拍全过不等于没问题，边界点要单独构造</strong>（本批 P1423 就是 200 组随机 0 不一致、8 个定点全挂）；</li><li>你随手丢来的任意 <code>article/&lt;lid&gt;</code> 或代码段，按同一口径接第 10 批。</li></ol></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>

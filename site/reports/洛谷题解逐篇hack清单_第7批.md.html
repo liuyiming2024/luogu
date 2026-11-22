@@ -1,0 +1,76 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>洛谷题解逐篇hack清单_第7批.md · 离线归档</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">01_批次清单 / 洛谷题解逐篇hack清单_第7批.md</span></header>
+<main class="doc"><h1>洛谷题解逐篇 hack 清单 · 第 7 批</h1>
+<blockquote>验证日期：2026-11-21。口径沿用第 4 批（三类 + 代码只是辅助、不判完整度），<strong>以第 4 批文件为准</strong>。 全程本地编译 <code>g++ -std=c++17 -O2</code> + 独立正确解对拍，<strong>不登录、不提交</strong>。</blockquote>
+<hr>
+<h2>0. 本批结果一句话</h2>
+<p><strong>甲类终于又开张了</strong>：P1421 <code>dk5mkxij</code> 用 <code>double</code> 累减 1.9 元，题面内 <strong>2031 组</strong>确定性少买一支。累计甲类 4 → <strong>5 篇</strong>，合法反例 10 → <strong>13 条</strong>。</p>
+<hr>
+<h2>1. 第 7 批总表（8 篇新题解，全部有 8 位 lid）</h2>
+<table class="tb"><thead><tr><th>#</th><th>题号</th><th>题解</th><th>归类</th><th>结论</th></tr></thead><tbody><tr><td>36</td><td>P1421</td><td>简单易懂题解（<code>dk5mkxij</code>）</td><td><strong>甲</strong></td><td>全枚举 100010 组，<strong>2031 组 WA</strong></td></tr><tr><td>37</td><td>P1003</td><td>题解 P1003 铺地毯（<code>9jadrxl0</code>）</td><td><strong>乙</strong></td><td>数组 <code>im[10020][4]</code> 小于题面 n≤1e5，大 n 确定性 RE</td></tr><tr><td>38</td><td>P1425</td><td>题解:P1425 游泳时间（<code>beuv9jew</code>）</td><td><strong>丙</strong></td><td>146 组 0 不一致</td></tr><tr><td>39</td><td>P1425</td><td>题解 P1425 游泳时间（<code>nobyk23w</code>）</td><td><strong>丙</strong></td><td>146 组 0 不一致</td></tr><tr><td>40</td><td>P1085</td><td>P1085题解（<code>3hvn4ibz</code>）</td><td><strong>丙</strong></td><td>300 组 0 不一致</td></tr><tr><td>41</td><td>P1075</td><td>题解 P1075 质因数分解（<code>rjjud4hi</code>）</td><td><strong>丙</strong></td><td>300 组 0 不一致</td></tr><tr><td>42</td><td>P1014</td><td>题解 P1014 的几种做法（<code>v6gwt3bu</code>）</td><td><strong>丙</strong></td><td>2500 组（含 N=1e7）0 不一致</td></tr><tr><td>43</td><td>P1046</td><td>淘淘摘苹果 P1046 解析（<code>f8ckkhfz</code>）</td><td><strong>丙</strong></td><td>300 组 0 不一致</td></tr></tbody></table>
+<p><strong>累计 43 篇 / 甲 5 / 乙 8 / 丙 30 / 甲类合法反例 13 条。</strong></p>
+<hr>
+<h2>2. 甲类 · P1421 <code>dk5mkxij</code>（本批唯一命中）</h2>
+<h3>2.1 题解代码（按作者分段提示拼装）</h3>
+<p>文章把代码拆成 6 段给（「中间部分在下面」「循环到没钱」「买一支就扣一次钱」），按提示顺序拼成：</p>
+<pre class="code"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+int main(){
+    double a,b;
+    int sum=0;
+    cin&gt;&gt;a&gt;&gt;b;          // a 元 b 角
+    b=b/10;             // 角换算成元
+    a=a+b;              // 总钱数
+    while(a&gt;=1.9){      // 循环到没钱
+        a=a-1.9;
+        sum++;
+    }
+    cout&lt;&lt;sum&lt;&lt;endl;
+    return 0;
+}</code></pre>
+<p>按「代码只是辅助、不判全不全」，拆段展示本身不是缺陷；<strong>只验拼装后的核心逻辑</strong>。</p>
+<h3>2.2 反例（题面 <code>0≤a≤10^4, 0≤b≤9</code>，完全合规）</h3>
+<table class="tb"><thead><tr><th>输入</th><th>正确</th><th>实际</th><th>说明</th></tr></thead><tbody><tr><td><code>7 6</code></td><td><code>4</code></td><td><code>3</code></td><td>7 元 6 角 = 76 角，76/19 = 4 支</td></tr><tr><td><code>19 0</code></td><td><code>10</code></td><td><code>9</code></td><td>19 元整，190/19 = 10 支</td></tr><tr><td><code>20 9</code></td><td><code>11</code></td><td><code>10</code></td><td>209/19 = 11 支</td></tr></tbody></table>
+<p><strong>独立进程复核</strong>：编译真正拼装版跑上述输入，输出与内部对拍一致。官方样例 <code>10 3 → 5</code>、<code>1 9 → 1</code>、<code>3 8 → 2</code> 都通过，说明不是整体逻辑错，而是<strong>恰好整除时边界比较提前 false</strong>。</p>
+<p><strong>全枚举</strong>：<code>a=0..10000, b=0..9</code> 共 <strong>100010 组，2031 组不一致</strong>。规律很清楚：当 <code>10a+b</code> 是 19 的倍数时，<code>double</code> 累减的舍入误差让最后一次 <code>a&gt;=1.9</code> 判成假，少买一支。独立正确解 <code>(10*a+b)/19</code>（整数除法）。</p>
+<h3>2.3 划界说明（甲乙边界，写清楚免得以后翻案）</h3>
+<ul><li>事实：把比较改成 <code>while(a&gt;=1.9-1e-9)</code> 后，同样 100010 组 <strong>0 不一致</strong>。</li><li><strong>仍归甲</strong>，三条理由：</li><li>根因是 <strong><code>double</code> 表示货币并反复累减</strong>的类型选择错误，根本修复是换成整数角运算 <code>(10a+b)/19</code> —— 正对应甲类判据里的「换类型 / 重写判断」；</li><li>加 eps 不是修正笔误，而是<strong>引入新的容差语义</strong>，且只对本题这个数值范围成立，换个精度/编译器不保证；</li><li>作者正文明确写「把总钱数存到 a 里（<strong>所以用 double</strong>）」——是<strong>有意的设计选择</strong>，不是笔误，也不是防抄袭/乱搞形态，因此不进乙类。</li><li>若你想严格按「改一处表达式即修复」的字面判据把它挪进乙，说一句我就改。</li></ul>
+<blockquote>对照：同题另有多篇用整数 <code>c=a*10+b; printf(&quot;%d&quot;,c/19);</code> 的题解，全枚举/抽样均正确（未取到 lid，仅作内部对照，不纳入计数）。</blockquote>
+<hr>
+<h2>3. 乙类 · P1003 <code>9jadrxl0</code></h2>
+<h3>3.1 代码与题面冲突</h3>
+<pre class="code"><code>int im[10020][4];                       // ← 题面 n ≤ 10^5
+...
+for(int i=n;i&gt;=1;i--)
+    if(im[i][0]+im[i][2]&gt;=x &amp;&amp; im[i][1]+im[i][3]&gt;=y &amp;&amp; im[i][0]&lt;=x &amp;&amp; im[i][1]&lt;=y){
+        ans=i; break;
+    }</code></pre>
+<p>覆盖判断本身（含边界取等、倒序找最上层）<strong>完全正确</strong>；问题只在第一行的数组尺寸。</p>
+<h3>3.2 实测（很值得记的「部分 n 不出错」现象）</h3>
+<table class="tb"><thead><tr><th>n</th><th>期望</th><th>原版</th><th>改成 <code>im[100005][4]</code></th></tr></thead><tbody><tr><td>10021</td><td>10021</td><td><code>10021</code>（rc 0）</td><td><code>10021</code></td></tr><tr><td>10050</td><td>10050</td><td><code>10050</code>（rc 0）</td><td><code>10050</code></td></tr><tr><td><strong>20000</strong></td><td>20000</td><td><strong>空输出，rc −11（SIGSEGV）</strong></td><td><code>20000</code></td></tr><tr><td><strong>100000</strong></td><td>100000</td><td><strong>空输出，rc −11（SIGSEGV）</strong></td><td><code>100000</code></td></tr><tr><td>1 / 5 / 100</td><td>−1</td><td>−1</td><td>−1</td></tr></tbody></table>
+<p><code>im</code> 是全局数组，n 略超 10020 时越界写落在 BSS 空白里，读写同址、结果仍对；n 大到一定程度才踩到不可访问页而 RE。<strong>所以「数组开小了」不能凭直觉判定，必须实测</strong>——这也是历批纪律的又一次应用。</p>
+<h3>3.3 为什么归乙</h3>
+<p>把 <code>10020</code> 改成 <code>100005</code> —— <strong>只改一个数字</strong>，全部用例恢复正确。按第 4 批对 P1002 <code>ma[23][23]</code> 的同一处理，归乙类单列、不计甲类命中；反例只作验证数据。</p>
+<hr>
+<h2>4. 丙类逐篇（6 篇）</h2>
+<table class="tb"><thead><tr><th>题解</th><th>核心</th><th>对拍</th></tr></thead><tbody><tr><td>P1425 <code>beuv9jew</code></td><td><code>if(d&gt;=b) y=d-b; else {d+=60; y=d-b; c--;} x=c-a;</code> 借位减法</td><td>146 组 0 不一致</td></tr><tr><td>P1425 <code>nobyk23w</code></td><td>起止时间全转分钟 <code>endm-startm</code>，再 <code>/60</code>、<code>%60</code></td><td>146 组 0 不一致</td></tr><tr><td>P1085 <code>3hvn4ibz</code></td><td><code>MAX=-30</code>，<code>if(a+b-8&gt;MAX &amp;&amp; a+b-8&gt;0)</code> 严格大于保证取最靠前</td><td>300 组 0 不一致</td></tr><tr><td>P1075 <code>rjjud4hi</code></td><td>文中 4 块代码，取最终推荐的 <code>for(i=2;i&lt;=n;i++) if(n%i==0){cout&lt;&lt;n/i;break;}</code></td><td>300 组（随机两个不同质数之积）0 不一致</td></tr><tr><td>P1014 <code>v6gwt3bu</code></td><td>二分最小 <code>l</code> 使 <code>l(l+1)/2≥n</code>，<code>a=n-l*(l-1)/2</code>，按 <code>l</code> 奇偶输出</td><td>2500 组（含 <code>N=1..2000</code> 全枚举、随机到 1e7、<code>N=1e7</code>）0 不一致</td></tr><tr><td>P1046 <code>f8ckkhfz</code></td><td>先读 10 个苹果高度、再读手长，<code>if(n+30&gt;=a[i]) cnt++</code></td><td>300 组 0 不一致</td></tr></tbody></table>
+<blockquote>P1075 那篇前 3 块是作者明说的「大多数人首先想到的」/ 优化中间版，第 4 块是 while 版；按「代码只是辅助」只验最终推荐版，拆段/思路回顾不算缺陷。</blockquote>
+<hr>
+<h2>5. 本批 3 次「差点误判」自查</h2>
+<table class="tb"><thead><tr><th>#</th><th>我一度以为</th><th>实测</th><th>处理</th></tr></thead><tbody><tr><td>①</td><td>P1014 某篇用 <code>float n; int k=int(sqrt(n*2-1.75)+0.5);</code>，n≤1e7 时 <code>n*2</code> 超过 float 的 2^24 尾数上限，k 会算错 → 甲类</td><td>写 C++ 把 <strong>N=1..10^7 全枚举</strong>，与整数二分正确解逐项比字符串：<strong>bad=0</strong>。误差远小于 0.5，<code>%g</code> 也把整数值原样输出</td><td>不是 hack。且<strong>该篇未取到 8 位 lid</strong>，按纪律只登记、不纳入计数</td></tr><tr><td>②</td><td>P1003 <code>9jadrxl0</code> 数组开小 → 一定 RE</td><td>n=10021/10050 时原版<strong>照常输出正确答案</strong>，只有 n≥20000 才 SIGSEGV</td><td>如实记录「部分 n 不出错」，结论仍成立但表述收紧</td></tr><tr><td>③</td><td>P1421 <code>dk5mkxij</code> 是拆段给的代码，看着像「不完整」</td><td>按作者 6 段提示拼装后编译通过，且<strong>缺陷在拼装后的核心逻辑里</strong></td><td>拆段不算缺陷，命中成立</td></tr></tbody></table>
+<p>另：搜索摘要再次与正文冲突（P1003 另一篇的 <code>if (x &gt;= a[i] &amp;&amp; x = b[i] &amp;&amp; ...)</code> 明显是渲染吞字符；P1421 多篇、P1320 多篇同样）。<strong>未取到 lid 的一律不纳入计数</strong>，见 §7。</p>
+<hr>
+<h2>6. 甲类合法反例清单（13 条）</h2>
+<table class="tb"><thead><tr><th>编号</th><th>题解</th><th>输入</th><th>期望</th><th>实际</th></tr></thead><tbody><tr><td>H-001~003</td><td>P1002 <code>sfifnfaa</code></td><td><code>6 6 3 3</code> / <code>20 20 0 20</code> / <code>20 20 10 10</code></td><td><code>6</code> / <code>137846521561</code> / <code>21388094780</code></td><td>均 <code>0</code></td></tr><tr><td>H-004/005/005b</td><td>P1182 <code>arorhglg</code></td><td><code>100 50</code>+100×<code>3e7</code> / <code>1e5 5e4</code>+<code>2.5e4</code> / +<code>3e4</code></td><td><code>6e7</code> / <code>5e4</code> / <code>6e4</code></td><td><code>3e7</code> / <code>2.5e4</code> / <code>3e4</code></td></tr><tr><td>H-006/007</td><td>P1002 <code>yk90rg78</code></td><td><code>6 6 3 3</code> / <code>20 20 0 20</code></td><td><code>6</code> / <code>137846521561</code></td><td>均 <code>0</code></td></tr><tr><td>H-008/009/010</td><td>P5638 <code>nzmytiez</code></td><td><code>2 100</code>/<code>5</code> · <code>3 5</code>/<code>2 3</code> · <code>4 4</code>/<code>7 1 9</code></td><td>均 <code>0</code></td><td><code>5</code> / <code>5</code> / <code>17</code></td></tr><tr><td><strong>H-011</strong></td><td><strong>P1421 <code>dk5mkxij</code></strong></td><td><code>7 6</code></td><td><code>4</code></td><td><code>3</code></td></tr><tr><td><strong>H-012</strong></td><td><strong>P1421 <code>dk5mkxij</code></strong></td><td><code>19 0</code></td><td><code>10</code></td><td><code>9</code></td></tr><tr><td><strong>H-013</strong></td><td><strong>P1421 <code>dk5mkxij</code></strong></td><td><code>20 9</code></td><td><code>11</code></td><td><code>10</code></td></tr></tbody></table>
+<blockquote>P1421 实际共有 2031 组合规输入不一致，此处列 3 条代表（最小 / 整元边界 / 非整元边界）。</blockquote>
+<hr>
+<h2>7. 未取到 lid、不纳入计数的登记（诚实标注）</h2>
+<table class="tb"><thead><tr><th>来源</th><th>形态</th><th>为什么不计</th></tr></thead><tbody><tr><td>P1014「float 硬算」版</td><td><code>float n</code> + <code>sqrt(n*2-1.75)+0.5</code></td><td>无 lid；且实测 1..1e7 全对，见 §5①</td></tr><tr><td>P1320 续集版（<code>ans[400005]</code> / <code>sqrt(cnt)</code> 版等 3 篇）</td><td><code>cout&lt;&lt;sqrt(cnt)&lt;&lt;&#x27; &#x27;;</code>、拆行拼接</td><td>无 lid，仅登记形态</td></tr><tr><td>P1421 整数版 / <code>double</code> 一步除法版</td><td><code>(a*10+b)/19</code>、<code>int(sum*10)/int(p*10)</code></td><td>无 lid，仅作内部对照</td></tr><tr><td>P1003 <code>KUAI CREATOR</code> 版</td><td><code>const int N=1e4+5</code> 同样小于 n≤1e5；摘要里 <code>x = b[i]</code> 系渲染吞字符</td><td>无 lid，不拿摘要判题</td></tr><tr><td>P1217 两篇、P1055、P1085 上岸熊二版、P1425 另一篇</td><td><code>b=9999999</code> 截断、<code>gets()</code> 类展示问题等</td><td>无 lid 或属 CE/展示缺陷，登记</td></tr></tbody></table>
+<hr>
+<h2>8. 保存站状态</h2>
+<p><code>www.luogu.me/article/&lt;lid&gt;</code>、<code>api.luogu.me/article/query/&lt;lid&gt;</code> 仍只返回站点框架或 403，首页降级公告（AI 自动化请求导致保存 API 队列堵塞）仍在。保存站继续只用于确认归档范围与 8 位 lid 体系；本批正文全部从可直读的 <code>www.luogu.com/article/&lt;lid&gt;</code> 逐字取回，未高频刷接口。</p>
+<hr>
+<h2>9. 下一批方向</h2>
+<ol><li><strong>甲类主攻</strong>：货币/浮点累减这类「类型选择」、初始化语句位置、clamp 与取模边界；</li><li><strong>乙类高发</strong>：数组尺寸小于题面上限、改一处即修复的下标/比较符、打表特判、拆段与思路回顾块；</li><li><strong>自查纪律</strong>（已累计 4 批有效）：搜索摘要 ≠ 正文；片段先回原文逐字复核；浮点题先对齐标程舍入与 ULP；数组越界必须实测到具体 n，不凭直觉；</li><li>你随手丢来的任意 <code>article/&lt;lid&gt;</code> 或代码段，按同一口径接第 8 批。</li></ol></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>
