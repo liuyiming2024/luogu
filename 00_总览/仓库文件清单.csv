@@ -1,6 +1,6 @@
 ﻿路径,字节,SHA256
 00_总览/三类口径与累计统计.md,2461,1d5398c060e815cb
-00_总览/仓库文件清单.csv,13143,b3c7da1d6cc9b263
+00_总览/仓库文件清单.csv,20037,75941b3ca178a320
 00_总览/甲类合法反例_23条.md,2351,a34d8d42355fff64
 01_批次清单/洛谷题解逐篇hack清单_第10批.md,14045,4d4424b5435782fe
 01_批次清单/洛谷题解逐篇hack清单_第11批.md,13602,56a36c4e6616ad9e
@@ -17,6 +17,7 @@
 02_文章编号索引/article_index.csv,12915,7509a09ea3e48e6b
 02_文章编号索引/article_index.json,27028,e04e53189b359e14
 02_文章编号索引/classify_article.py,2246,f654651fe0f82ad4
+02_文章编号索引/ingest_template.py,4054,f0168ff11cef20bd
 02_文章编号索引/判定口径.md,1731,0a1445e11272c265
 02_文章编号索引/所有编号_有序枚举.md,5210,b9c7abded43d4764
 02_文章编号索引/生成索引_本地参考.py,28669,cb7078b29bd69668
@@ -222,7 +223,7 @@
 05_对拍原始数据/r12__results_extra_c.json,762,db73b3ee25e871d9
 06_离线复现说明.md,1868,8d5bbf0b06e4d8db
 README.md,3150,435f4aa266d1259e
-_build_site.py,27593,ab80099c57276e7b
+_build_site.py,24780,9ad1eca0d3a8af1d
 site/README.md,2111,ec6ed86bd7e6c8fc
 site/articles/03xk59dp.html,2539,a3c5e4821d24fe6b
 site/articles/05bplzw1.html,2248,8e85e3599b0f6077
@@ -305,7 +306,7 @@ site/assets/style.css,4724,59a114f1f8b25670
 site/data/articles.csv,13766,8548cec27afc2e25
 site/data/articles.json,37202,f3ecc932e0bfdc60
 site/index.html,37461,87deb3774161b555
-site/ingest.py,3077,4b6ed2fd9a2c8a5d
+site/ingest.py,4054,f0168ff11cef20bd
 site/reports/三类口径与累计统计.md.html,3562,2d1e8b8629c1f906
 site/reports/洛谷题解逐篇hack清单_第10批.md.html,19989,cc9d22fd21e11529
 site/reports/洛谷题解逐篇hack清单_第11批.md.html,19337,1c9906bad89f30ab
