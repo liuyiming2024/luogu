@@ -1,0 +1,76 @@
+{
+  "P1164_2yru0rav": {
+    "compile_error": "",
+    "cases": [
+      {
+        "label": "官方样例",
+        "input": "4 4 / [1, 1, 2, 2]",
+        "expected": 3,
+        "actual": "3",
+        "hacked": false
+      },
+      {
+        "label": "单道菜刚好",
+        "input": "1 5 / [5]",
+        "expected": 1,
+        "actual": "1",
+        "hacked": false
+      },
+      {
+        "label": "单道菜超钱",
+        "input": "1 5 / [6]",
+        "expected": 0,
+        "actual": "0",
+        "hacked": false
+      },
+      {
+        "label": "重复价格",
+        "input": "5 10 / [2, 2, 2, 2, 2]",
+        "expected": 1,
+        "actual": "1",
+        "hacked": false
+      }
+    ],
+    "random_tested": 250,
+    "random_mismatch": 0,
+    "random_examples": []
+  },
+  "P2240_bv44vwt6": {
+    "compile_error": "",
+    "cases": [
+      {
+        "label": "官方样例",
+        "input": "4 50 / 10 60 / 20 100 / 25 100 / 15 45",
+        "expected": "240.00",
+        "actual": "240.00",
+        "hacked": false
+      }
+    ],
+    "random_tested": 300,
+    "random_mismatch": 3,
+    "random_examples": [
+      {
+        "input": "19 300 / 75 65 / 72 85 / 64 76 / 34 97 / 89 80 / 19 5 / 30 20 / 88 28 / 7 15 / 80 95 / 31 56 / 77 23 / 77 88 / 36 79 / 27 99 / 20 26 / 52 64 / 66 59 / 71 87",
+        "expected": "549.13",
+        "actual": "549.12"
+      },
+      {
+        "input": "13 201 / 35 40 / 86 9 / 85 50 / 52 43 / 54 85 / 85 24 / 33 88 / 72 63 / 78 51 / 98 37 / 99 23 / 28 96 / 81 36",
+        "expected": "353.63",
+        "actual": "353.62"
+      },
+      {
+        "input": "16 446 / 6 42 / 9 57 / 71 86 / 87 87 / 17 80 / 2 15 / 98 40 / 30 77 / 14 21 / 51 100 / 61 44 / 36 99 / 39 17 / 80 45 / 46 98 / 14 91",
+        "expected": "898.13",
+        "actual": "898.12"
+      }
+    ]
+  },
+  "P1060_0hps6y5z": {
+    "compile_error": "",
+    "cases": [],
+    "random_tested": 250,
+    "random_mismatch": 0,
+    "random_examples": []
+  }
+}

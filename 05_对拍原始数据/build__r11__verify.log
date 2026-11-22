@@ -1,0 +1,586 @@
+{
+  "P1067_hu58r34f": {
+    "compile_error": "",
+    "cases": [
+      {
+        "label": "官方样例1",
+        "input": "5 / 100 -1 1 -3 0 10",
+        "expected": "100x^5-x^4+x^3-3x^2+10",
+        "actual": "100x^5-x^4+x^3-3x^2+10",
+        "hacked": false
+      },
+      {
+        "label": "官方样例2",
+        "input": "3 / -50 0 0 1",
+        "expected": "-50x^3+1",
+        "actual": "-50x^3+1",
+        "hacked": false
+      },
+      {
+        "label": "n=0 系数1",
+        "input": "0 / 1",
+        "expected": "1",
+        "actual": "1",
+        "hacked": false
+      },
+      {
+        "label": "n=0 系数-1",
+        "input": "0 / -1",
+        "expected": "-1",
+        "actual": "-1",
+        "hacked": false
+      },
+      {
+        "label": "混合",
+        "input": "4 / 5 1 -1 0 3",
+        "expected": "5x^4+x^3-x^2+3",
+        "actual": "5x^4+x^3-x^2+3",
+        "hacked": false
+      },
+      {
+        "label": "中间零",
+        "input": "4 / 1 0 0 0 1",
+        "expected": "x^4+1",
+        "actual": "x^4+1",
+        "hacked": false
+      },
+      {
+        "label": "负首项",
+        "input": "2 / -2 0 -1",
+        "expected": "-2x^2-1",
+        "actual": "-2x^2-1",
+        "hacked": false
+      },
+      {
+        "label": "全±1",
+        "input": "4 / 1 -1 1 -1 1",
+        "expected": "x^4-x^3+x^2-x+1",
+        "actual": "x^4-x^3+x^2-x+1",
+        "hacked": false
+      }
+    ],
+    "leading_zero_coef": {
+      "input": "2 / 0 0 5",
+      "actual": "+5",
+      "note": "题面 a_n!=0 保证首项非零，此输入不合规；仅记录行为，不计缺陷"
+    },
+    "random_tested": 300,
+    "mismatch": 0
+  },
+  "P1100_qle49r7h": {
+    "compile_error": "",
+    "cases": [
+      {
+        "input": 1314520,
+        "expected": "249036820",
+        "actual": "249036820",
+        "hacked": false
+      },
+      {
+        "input": 0,
+        "expected": "0",
+        "actual": "0",
+        "hacked": false
+      },
+      {
+        "input": 1,
+        "expected": "65536",
+        "actual": "65536",
+        "hacked": false
+      },
+      {
+        "input": 65535,
+        "expected": "4294901760",
+        "actual": "4294901760",
+        "hacked": false
+      },
+      {
+        "input": 65536,
+        "expected": "1",
+        "actual": "1",
+        "hacked": false
+      },
+      {
+        "input": 4294967295,
+        "expected": "4294967295",
+        "actual": "4294967295",
+        "hacked": false
+      },
+      {
+        "input": 2147483648,
+        "expected": "32768",
+        "actual": "32768",
+        "hacked": false
+      },
+      {
+        "input": 249036820,
+        "expected": "1314520",
+        "actual": "1314520",
+        "hacked": false
+      },
+      {
+        "input": 4294901760,
+        "expected": "65535",
+        "actual": "65535",
+        "hacked": false
+      },
+      {
+        "input": 305419896,
+        "expected": "1450709556",
+        "actual": "1450709556",
+        "hacked": false
+      }
+    ],
+    "random_tested": 300,
+    "mismatch": 0
+  },
+  "P1308_03xk59dp": {
+    "compile_error": "",
+    "cases": [
+      {
+        "input": "To / to be or not to be is a question",
+        "expected": "2 0",
+        "actual": "2 0",
+        "hacked": false
+      },
+      {
+        "input": "to / Did the Ottoman Empire lose its power at that time",
+        "expected": "-1",
+        "actual": "-1",
+        "hacked": false
+      },
+      {
+        "input": "a / a A a",
+        "expected": "3 0",
+        "actual": "3 0",
+        "hacked": false
+      },
+      {
+        "input": "abc / abc abcd abc",
+        "expected": "2 0",
+        "actual": "2 0",
+        "hacked": false
+      },
+      {
+        "input": "x / x",
+        "expected": "1 0",
+        "actual": "1 0",
+        "hacked": false
+      },
+      {
+        "input": "to /   to   to  ",
+        "expected": "2 2",
+        "actual": "2 2",
+        "hacked": false
+      },
+      {
+        "input": "a / aaa a aA a",
+        "expected": "2 4",
+        "actual": "2 4",
+        "hacked": false
+      },
+      {
+        "input": "to / TO to To tO",
+        "expected": "4 0",
+        "actual": "4 0",
+        "hacked": false
+      },
+      {
+        "input": "q / to be or not",
+        "expected": "-1",
+        "actual": "-1",
+        "hacked": false
+      },
+      {
+        "input": "a / a  a   a",
+        "expected": "3 0",
+        "actual": "3 0",
+        "hacked": false
+      }
+    ],
+    "random_tested": 300,
+    "mismatch": 0,
+    "examples": []
+  },
+  "P1150_aceg4kbr": {
+    "A": {
+      "compile_error": ""
+    },
+    "B": {
+      "compile_error": ""
+    },
+    "cases": [
+      {
+        "input": "4 3",
+        "expected": "5",
+        "A": "5",
+        "A_rc": 0,
+        "B": "5",
+        "B_rc": 0,
+        "hacked": false
+      },
+      {
+        "input": "10 3",
+        "expected": "14",
+        "A": "14",
+        "A_rc": 0,
+        "B": "14",
+        "B_rc": 0,
+        "hacked": false
+      },
+      {
+        "input": "2 2",
+        "expected": "3",
+        "A": "3",
+        "A_rc": 0,
+        "B": "3",
+        "B_rc": 0,
+        "hacked": false
+      },
+      {
+        "input": "100 2",
+        "expected": "199",
+        "A": "199",
+        "A_rc": 0,
+        "B": "199",
+        "B_rc": 0,
+        "hacked": false
+      },
+      {
+        "input": "100000000 2",
+        "expected": "199999999",
+        "A": "199999999",
+        "A_rc": 0,
+        "B": "199999999",
+        "B_rc": 0,
+        "hacked": false
+      },
+      {
+        "input": "100000000 100000000",
+        "expected": "100000001",
+        "A": "100000001",
+        "A_rc": 0,
+        "B": "100000001",
+        "B_rc": 0,
+        "hacked": false
+      },
+      {
+        "input": "3 3",
+        "expected": "4",
+        "A": "4",
+        "A_rc": 0,
+        "B": "4",
+        "B_rc": 0,
+        "hacked": false
+      },
+      {
+        "input": "7 4",
+        "expected": "9",
+        "A": "9",
+        "A_rc": 0,
+        "B": "9",
+        "B_rc": 0,
+        "hacked": false
+      },
+      {
+        "input": "1 2",
+        "expected": "1",
+        "A": "1",
+        "A_rc": 0,
+        "B": "1",
+        "B_rc": 0,
+        "hacked": false
+      }
+    ],
+    "random": {
+      "A": {
+        "tested": 300,
+        "mismatch": 0
+      },
+      "B": {
+        "tested": 300,
+        "mismatch": 0
+      }
+    }
+  },
+  "P1042_m16r8nbd": {
+    "compile_error": "",
+    "cases": [
+      {
+        "label": "len=48",
+        "expected": "11:0\n11:0\n11:1\n11:0\n2:1\n\n21:0\n21:1\n4:1",
+        "actual": "11:0\n11:0\n11:1\n11:0\n2:1\n\n21:0\n21:1\n4:1",
+        "hacked": false
+      },
+      {
+        "label": "len=0",
+        "expected": "0:0\n\n0:0",
+        "actual": "0:0\n\n0:0",
+        "hacked": false
+      },
+      {
+        "label": "len=11",
+        "expected": "11:0\n0:0\n\n11:0",
+        "actual": "11:0\n0:0\n\n11:0",
+        "hacked": false
+      },
+      {
+        "label": "len=21",
+        "expected": "10:11\n\n10:11",
+        "actual": "10:11\n\n10:11",
+        "hacked": false
+      },
+      {
+        "label": "len=60",
+        "expected": "30:30\n\n30:30",
+        "actual": "30:30\n\n30:30",
+        "hacked": false
+      },
+      {
+        "label": "len=28",
+        "expected": "11:0\n11:0\n3:3\n\n21:0\n4:3",
+        "actual": "11:0\n11:0\n3:3\n\n21:0\n4:3",
+        "hacked": false
+      }
+    ],
+    "random_tested": 200,
+    "mismatch": 0
+  },
+  "P1706": {
+    "jm3biw0r": {
+      "compile_error": ""
+    },
+    "wiofo14v": {
+      "compile_error": ""
+    },
+    "cases": [
+      {
+        "n": 1,
+        "jm3biw0r": "MATCH",
+        "wiofo14v": "MATCH"
+      },
+      {
+        "n": 2,
+        "jm3biw0r": "MATCH",
+        "wiofo14v": "MATCH"
+      },
+      {
+        "n": 3,
+        "jm3biw0r": "MATCH",
+        "wiofo14v": "MATCH"
+      },
+      {
+        "n": 4,
+        "jm3biw0r": "MATCH",
+        "wiofo14v": "MATCH"
+      },
+      {
+        "n": 5,
+        "jm3biw0r": "MATCH",
+        "wiofo14v": "MATCH"
+      },
+      {
+        "n": 6,
+        "jm3biw0r": "MATCH",
+        "wiofo14v": "MATCH"
+      },
+      {
+        "n": 9,
+        "jm3biw0r": "MATCH",
+        "wiofo14v": "MATCH"
+      }
+    ]
+  },
+  "P1739_z3dolqp8": {
+    "compile_error": "",
+    "cases": [
+      {
+        "input": "2*(x+y)/(1-x)@",
+        "expected": "YES",
+        "actual": "YES",
+        "hacked": false
+      },
+      {
+        "input": "(25+x)*(a*(a+b+b)@",
+        "expected": "NO",
+        "actual": "NO",
+        "hacked": false
+      },
+      {
+        "input": "(())@",
+        "expected": "YES",
+        "actual": "YES",
+        "hacked": false
+      },
+      {
+        "input": "()()@",
+        "expected": "YES",
+        "actual": "YES",
+        "hacked": false
+      },
+      {
+        "input": "))((@",
+        "expected": "NO",
+        "actual": "NO",
+        "hacked": false
+      },
+      {
+        "input": "(()@",
+        "expected": "NO",
+        "actual": "NO",
+        "hacked": false
+      },
+      {
+        "input": "@",
+        "expected": "YES",
+        "actual": "YES",
+        "hacked": false
+      },
+      {
+        "input": "((a+b)@",
+        "expected": "NO",
+        "actual": "NO",
+        "hacked": false
+      },
+      {
+        "input": "a)b(c@",
+        "expected": "NO",
+        "actual": "NO",
+        "hacked": false
+      }
+    ],
+    "random_tested": 300,
+    "mismatch": 0
+  },
+  "P3397_smtoxvvs": {
+    "compile_error": "/data/workspace/luogu_hack/build/r11/s3397.cpp: In function ‘void WalkerV::Solve()’:\n/data/workspace/luogu_hack/build/r11/s3397.cpp:23:33: error: reference to ‘map’ is ambiguous\n   23 |                                 map[i][j]=map[i][j-1]+map[i-1][j]-map[i-1][j-1]+d[i][j];\n      |                                 ^~~\nIn file included from /usr/include/c++/11/map:61,\n                 from /usr/include/x86_64-linux-gnu/c++/11/bits/stdc++.h:81,\n                 from /data/workspace/luogu_hack/build/r11/s3397.cpp:2:\n/usr/include/c++/11/bits/stl_map.h:100:11: note: candidates are: ‘template<class _Key, class _Tp, class _Compare, class _Alloc> class std::map’\n  100 |     class map\n      |         "
+  },
+  "P1116_vt4bqm6v": {
+    "compile_error": "",
+    "cases": [
+      {
+        "input": "1",
+        "expected": "0",
+        "actual": "0",
+        "hacked": false
+      },
+      {
+        "input": "1 2 3",
+        "expected": "0",
+        "actual": "0",
+        "hacked": false
+      },
+      {
+        "input": "3 2 1",
+        "expected": "3",
+        "actual": "3",
+        "hacked": false
+      },
+      {
+        "input": "4 3 2 1",
+        "expected": "6",
+        "actual": "6",
+        "hacked": false
+      },
+      {
+        "input": "2 1 3",
+        "expected": "1",
+        "actual": "1",
+        "hacked": false
+      },
+      {
+        "input": "5 1 4 2 3",
+        "expected": "6",
+        "actual": "6",
+        "hacked": false
+      },
+      {
+        "input": "1 1 1",
+        "expected": "0",
+        "actual": "0",
+        "hacked": false
+      }
+    ],
+    "random_tested": 200,
+    "mismatch": 0
+  },
+  "P2089_vgwp3k30": {
+    "compile_error": "",
+    "cases": [
+      {
+        "input": 10,
+        "expected_first_line": "1",
+        "actual_first_line": "1",
+        "full_match": true,
+        "hacked": false
+      },
+      {
+        "input": 11,
+        "expected_first_line": "10",
+        "actual_first_line": "10",
+        "full_match": true,
+        "hacked": false
+      },
+      {
+        "input": 12,
+        "expected_first_line": "55",
+        "actual_first_line": "55",
+        "full_match": true,
+        "hacked": false
+      },
+      {
+        "input": 20,
+        "expected_first_line": "8953",
+        "actual_first_line": "8953",
+        "full_match": true,
+        "hacked": false
+      },
+      {
+        "input": 29,
+        "expected_first_line": "10",
+        "actual_first_line": "10",
+        "full_match": true,
+        "hacked": false
+      },
+      {
+        "input": 30,
+        "expected_first_line": "1",
+        "actual_first_line": "1",
+        "full_match": true,
+        "hacked": false
+      },
+      {
+        "input": 9,
+        "expected_first_line": "0",
+        "actual_first_line": "0",
+        "full_match": false,
+        "hacked": true
+      },
+      {
+        "input": 31,
+        "expected_first_line": "0",
+        "actual_first_line": "0",
+        "full_match": false,
+        "hacked": true
+      },
+      {
+        "input": 5000,
+        "expected_first_line": "0",
+        "actual_first_line": "0",
+        "full_match": false,
+        "hacked": true
+      },
+      {
+        "input": 1,
+        "expected_first_line": "0",
+        "actual_first_line": "0",
+        "full_match": false,
+        "hacked": true
+      }
+    ],
+    "max_solutions": {
+      "n=20 方案数": "8953",
+      "zl 行数": 50000
+    }
+  }
+}

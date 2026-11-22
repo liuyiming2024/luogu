@@ -1,0 +1,409 @@
+{
+  "P1001_zaohomhi": {
+    "compile_error": "",
+    "cases": [
+      {
+        "input": "1000000000 1000000000",
+        "expected": 2000000000,
+        "actual": "2000000000",
+        "hacked": false
+      },
+      {
+        "input": "-1000000000 -1000000000",
+        "expected": -2000000000,
+        "actual": "-2000000000",
+        "hacked": false
+      },
+      {
+        "input": "1 2",
+        "expected": 3,
+        "actual": "3",
+        "hacked": false
+      }
+    ]
+  },
+  "P1002_sfifnfaa": {
+    "compile_error": "",
+    "cases": [
+      {
+        "input": "6 6 3 3",
+        "expected": 6,
+        "actual": "0",
+        "hacked": true,
+        "note": "官方样例"
+      },
+      {
+        "input": "20 20 0 20",
+        "expected": 137846521561,
+        "actual": "0",
+        "hacked": true,
+        "note": ""
+      },
+      {
+        "input": "20 20 10 10",
+        "expected": 21388094780,
+        "actual": "0",
+        "hacked": true,
+        "note": ""
+      },
+      {
+        "input": "1 1 0 0",
+        "expected": 0,
+        "actual": "0",
+        "hacked": false,
+        "note": ""
+      }
+    ]
+  },
+  "P1048_h4cn628r": {
+    "compile_error": "",
+    "cases": [
+      {
+        "input": "70 3 …",
+        "expected": 3,
+        "actual": "3",
+        "hacked": false
+      },
+      {
+        "input": "0 1 …",
+        "expected": 0,
+        "actual": "0",
+        "hacked": false
+      },
+      {
+        "input": "332 20 …",
+        "expected": 4145,
+        "actual": "4145",
+        "hacked": false
+      },
+      {
+        "input": "430 19 …",
+        "expected": 1993,
+        "actual": "1993",
+        "hacked": false
+      },
+      {
+        "input": "250 11 …",
+        "expected": 1829,
+        "actual": "1829",
+        "hacked": false
+      },
+      {
+        "input": "986 86 …",
+        "expected": 8471,
+        "actual": "8471",
+        "hacked": false
+      },
+      {
+        "input": "88 19 …",
+        "expected": 3722,
+        "actual": "3722",
+        "hacked": false
+      },
+      {
+        "input": "628 98 …",
+        "expected": 8204,
+        "actual": "8204",
+        "hacked": false
+      },
+      {
+        "input": "479 29 …",
+        "expected": 3940,
+        "actual": "3940",
+        "hacked": false
+      },
+      {
+        "input": "693 34 …",
+        "expected": 5516,
+        "actual": "5516",
+        "hacked": false
+      },
+      {
+        "input": "518 71 …",
+        "expected": 7350,
+        "actual": "7350",
+        "hacked": false
+      },
+      {
+        "input": "747 97 …",
+        "expected": 8015,
+        "actual": "8015",
+        "hacked": false
+      },
+      {
+        "input": "659 21 …",
+        "expected": 2996,
+        "actual": "2996",
+        "hacked": false
+      },
+      {
+        "input": "285 74 …",
+        "expected": 6919,
+        "actual": "6919",
+        "hacked": false
+      },
+      {
+        "input": "403 58 …",
+        "expected": 5020,
+        "actual": "5020",
+        "hacked": false
+      },
+      {
+        "input": "9 95 …",
+        "expected": 4116,
+        "actual": "4116",
+        "hacked": false
+      },
+      {
+        "input": "948 9 …",
+        "expected": 2164,
+        "actual": "2164",
+        "hacked": false
+      },
+      {
+        "input": "623 82 …",
+        "expected": 5818,
+        "actual": "5818",
+        "hacked": false
+      },
+      {
+        "input": "840 67 …",
+        "expected": 5901,
+        "actual": "5901",
+        "hacked": false
+      },
+      {
+        "input": "760 84 …",
+        "expected": 6742,
+        "actual": "6742",
+        "hacked": false
+      },
+      {
+        "input": "848 12 …",
+        "expected": 2304,
+        "actual": "2304",
+        "hacked": false
+      },
+      {
+        "input": "356 66 …",
+        "expected": 4064,
+        "actual": "4064",
+        "hacked": false
+      },
+      {
+        "input": "415 1 …",
+        "expected": 249,
+        "actual": "249",
+        "hacked": false
+      },
+      {
+        "input": "930 56 …",
+        "expected": 4827,
+        "actual": "4827",
+        "hacked": false
+      },
+      {
+        "input": "63 2 …",
+        "expected": 431,
+        "actual": "431",
+        "hacked": false
+      },
+      {
+        "input": "644 90 …",
+        "expected": 6650,
+        "actual": "6650",
+        "hacked": false
+      },
+      {
+        "input": "790 27 …",
+        "expected": 4230,
+        "actual": "4230",
+        "hacked": false
+      },
+      {
+        "input": "513 70 …",
+        "expected": 6811,
+        "actual": "6811",
+        "hacked": false
+      },
+      {
+        "input": "790 30 …",
+        "expected": 3315,
+        "actual": "3315",
+        "hacked": false
+      },
+      {
+        "input": "534 34 …",
+        "expected": 4812,
+        "actual": "4812",
+        "hacked": false
+      },
+      {
+        "input": "123 91 …",
+        "expected": 7609,
+        "actual": "7609",
+        "hacked": false
+      },
+      {
+        "input": "744 38 …",
+        "expected": 4171,
+        "actual": "4171",
+        "hacked": false
+      },
+      {
+        "input": "1000 100 …",
+        "expected": 100000,
+        "actual": "100000",
+        "hacked": false
+      }
+    ]
+  },
+  "P1220_uezud59i": {
+    "compile_error": "",
+    "cases": [
+      {
+        "input": "5 3 …",
+        "expected": 270,
+        "actual": "270",
+        "hacked": false
+      },
+      {
+        "input": "3 3 …",
+        "expected": 5480,
+        "actual": "5480",
+        "hacked": false
+      },
+      {
+        "input": "6 4 …",
+        "expected": 13357,
+        "actual": "13357",
+        "hacked": false
+      },
+      {
+        "input": "3 3 …",
+        "expected": 3304,
+        "actual": "3304",
+        "hacked": false
+      },
+      {
+        "input": "7 3 …",
+        "expected": 4830,
+        "actual": "4830",
+        "hacked": false
+      },
+      {
+        "input": "2 1 …",
+        "expected": 2277,
+        "actual": "2277",
+        "hacked": false
+      },
+      {
+        "input": "6 3 …",
+        "expected": 14389,
+        "actual": "14389",
+        "hacked": false
+      },
+      {
+        "input": "7 6 …",
+        "expected": 8983,
+        "actual": "8983",
+        "hacked": false
+      },
+      {
+        "input": "3 2 …",
+        "expected": 5672,
+        "actual": "5672",
+        "hacked": false
+      },
+      {
+        "input": "3 2 …",
+        "expected": 8688,
+        "actual": "8688",
+        "hacked": false
+      },
+      {
+        "input": "4 4 …",
+        "expected": 2256,
+        "actual": "2256",
+        "hacked": false
+      },
+      {
+        "input": "5 1 …",
+        "expected": 8475,
+        "actual": "8475",
+        "hacked": false
+      },
+      {
+        "input": "8 8 …",
+        "expected": 15735,
+        "actual": "15735",
+        "hacked": false
+      }
+    ]
+  },
+  "P5179_siyuan": {
+    "compile_error": "",
+    "cases": [
+      {
+        "input": "16 4 17 11",
+        "expected": "?",
+        "actual": "5/1"
+      },
+      {
+        "input": "30 21 4 28",
+        "expected": "?",
+        "actual": "1/0"
+      },
+      {
+        "input": "26 19 24 18",
+        "expected": "?",
+        "actual": "-7/-5"
+      },
+      {
+        "input": "14 25 8 19",
+        "expected": "?",
+        "actual": ""
+      },
+      {
+        "input": "2 1 4 20",
+        "expected": "?",
+        "actual": "3/1"
+      },
+      {
+        "input": "28 1 22 27",
+        "expected": "?",
+        "actual": "29/1"
+      },
+      {
+        "input": "10 16 7 22",
+        "expected": "?",
+        "actual": "1/4"
+      },
+      {
+        "input": "12 12 24 26",
+        "expected": "?",
+        "actual": ""
+      },
+      {
+        "input": "14 10 5 10",
+        "expected": "?",
+        "actual": ""
+      },
+      {
+        "input": "16 4 26 14",
+        "expected": "?",
+        "actual": "5/1"
+      }
+    ],
+    "total_tested": 125,
+    "mismatch_count": 57
+  },
+  "P3959_l6u32sp7": {
+    "compile_error": "",
+    "cases": [
+      {
+        "note": "60 组 n=5 随机连通图内未与全局最优产生差异（不代表算法正确）"
+      }
+    ]
+  }
+}

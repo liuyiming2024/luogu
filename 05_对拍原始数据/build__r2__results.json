@@ -1,0 +1,87 @@
+{
+  "P1182_arorhglg": {
+    "compile_error": "",
+    "cases": [
+      {
+        "label": "官方样例",
+        "input_head": "5 3 / Ai=4×5",
+        "sum": 16,
+        "int32_overflow": false,
+        "expected": 6,
+        "actual": "6",
+        "hacked": false
+      },
+      {
+        "label": "未溢出对照组",
+        "input_head": "100 50 / Ai=25000×100",
+        "sum": 2500000,
+        "int32_overflow": false,
+        "expected": 50000,
+        "actual": "50000",
+        "hacked": false
+      },
+      {
+        "label": "H-004 溢出(100×3e7)",
+        "input_head": "100 50 / Ai=30000000×100",
+        "sum": 3000000000,
+        "int32_overflow": true,
+        "expected": 60000000,
+        "actual": "30000000",
+        "hacked": true
+      },
+      {
+        "label": "H-005 溢出(1e5×25000)",
+        "input_head": "100000 50000 / Ai=25000×100000",
+        "sum": 2500000000,
+        "int32_overflow": true,
+        "expected": 50000,
+        "actual": "25000",
+        "hacked": true
+      },
+      {
+        "label": "H-005b 溢出(1e5×30000)",
+        "input_head": "100000 50000 / Ai=30000×100000",
+        "sum": 3000000000,
+        "int32_overflow": true,
+        "expected": 60000,
+        "actual": "30000",
+        "hacked": true
+      }
+    ]
+  },
+  "P1002_yk90rg78": {
+    "compile_error": "",
+    "cases": [
+      {
+        "input": "6 6 3 3",
+        "expected": 6,
+        "actual": "0",
+        "hacked": true
+      },
+      {
+        "input": "20 20 0 20",
+        "expected": 137846521561,
+        "actual": "0",
+        "hacked": true
+      },
+      {
+        "input": "20 20 10 10",
+        "expected": 21388094780,
+        "actual": "0",
+        "hacked": true
+      },
+      {
+        "input": "1 1 0 0",
+        "expected": 0,
+        "actual": "0",
+        "hacked": false
+      }
+    ]
+  },
+  "P1002_vis": {
+    "compile_error": "",
+    "cases": [],
+    "tested": 63,
+    "mismatch": 0
+  }
+}

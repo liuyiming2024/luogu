@@ -1,0 +1,466 @@
+{
+  "P1423_4fj37pww": {
+    "orig": {
+      "compile_error": ""
+    },
+    "fix": {
+      "compile_error": ""
+    },
+    "cases": [
+      {
+        "input": "4.3",
+        "expected": 3,
+        "actual": "3",
+        "orig_rc": 0,
+        "fix_actual": "3",
+        "hacked": false
+      },
+      {
+        "input": "2",
+        "expected": 1,
+        "actual": "2",
+        "orig_rc": 0,
+        "fix_actual": "1",
+        "hacked": true
+      },
+      {
+        "input": "2.0",
+        "expected": 1,
+        "actual": "2",
+        "orig_rc": 0,
+        "fix_actual": "1",
+        "hacked": true
+      },
+      {
+        "input": "3.96",
+        "expected": 2,
+        "actual": "3",
+        "orig_rc": 0,
+        "fix_actual": "2",
+        "hacked": true
+      },
+      {
+        "input": "5.8808",
+        "expected": 3,
+        "actual": "4",
+        "orig_rc": 0,
+        "fix_actual": "3",
+        "hacked": true
+      },
+      {
+        "input": "0.5",
+        "expected": 1,
+        "actual": "1",
+        "orig_rc": 0,
+        "fix_actual": "1",
+        "hacked": false
+      },
+      {
+        "input": "1",
+        "expected": 1,
+        "actual": "1",
+        "orig_rc": 0,
+        "fix_actual": "1",
+        "hacked": false
+      },
+      {
+        "input": "1.9",
+        "expected": 1,
+        "actual": "1",
+        "orig_rc": 0,
+        "fix_actual": "1",
+        "hacked": false
+      },
+      {
+        "input": "1.99",
+        "expected": 1,
+        "actual": "1",
+        "orig_rc": 0,
+        "fix_actual": "1",
+        "hacked": false
+      },
+      {
+        "input": "2.01",
+        "expected": 2,
+        "actual": "2",
+        "orig_rc": 0,
+        "fix_actual": "2",
+        "hacked": false
+      },
+      {
+        "input": "10",
+        "expected": 6,
+        "actual": "6",
+        "orig_rc": 0,
+        "fix_actual": "6",
+        "hacked": false
+      },
+      {
+        "input": "50",
+        "expected": 35,
+        "actual": "35",
+        "orig_rc": 0,
+        "fix_actual": "35",
+        "hacked": false
+      },
+      {
+        "input": "99",
+        "expected": 228,
+        "actual": "228",
+        "orig_rc": 0,
+        "fix_actual": "228",
+        "hacked": false
+      },
+      {
+        "input": "99.9",
+        "expected": 342,
+        "actual": "342",
+        "orig_rc": 0,
+        "fix_actual": "342",
+        "hacked": false
+      },
+      {
+        "input": "2.0",
+        "expected": 1,
+        "actual": "2",
+        "orig_rc": 0,
+        "fix_actual": "1",
+        "hacked": true
+      },
+      {
+        "input": "3.96",
+        "expected": 2,
+        "actual": "3",
+        "orig_rc": 0,
+        "fix_actual": "2",
+        "hacked": true
+      },
+      {
+        "input": "5.8808",
+        "expected": 3,
+        "actual": "4",
+        "orig_rc": 0,
+        "fix_actual": "3",
+        "hacked": true
+      },
+      {
+        "input": "7.763184",
+        "expected": 4,
+        "actual": "5",
+        "orig_rc": 0,
+        "fix_actual": "4",
+        "hacked": true
+      },
+      {
+        "input": "9.60792032",
+        "expected": 5,
+        "actual": "6",
+        "orig_rc": 0,
+        "fix_actual": "5",
+        "hacked": true
+      },
+      {
+        "input": "11.415761913599999",
+        "expected": 6,
+        "actual": "7",
+        "orig_rc": 0,
+        "fix_actual": "6",
+        "hacked": true
+      },
+      {
+        "input": "13.187446675328",
+        "expected": 7,
+        "actual": "8",
+        "orig_rc": 0,
+        "fix_actual": "7",
+        "hacked": true
+      },
+      {
+        "input": "14.923697741821439",
+        "expected": 8,
+        "actual": "9",
+        "orig_rc": 0,
+        "fix_actual": "8",
+        "hacked": true
+      }
+    ],
+    "random": {
+      "orig": {
+        "tested": 200,
+        "mismatch": 0,
+        "examples": []
+      },
+      "fix": {
+        "tested": 200,
+        "mismatch": 0,
+        "examples": []
+      }
+    }
+  },
+  "P1328_0z8yhoc0": {
+    "compile_error": "",
+    "cases": [
+      {
+        "label": "n=10 na=5 nb=6",
+        "expected": "6 2",
+        "actual": "6 2",
+        "hacked": false
+      },
+      {
+        "label": "n=9 na=5 nb=5",
+        "expected": "4 4",
+        "actual": "4 4",
+        "hacked": false
+      },
+      {
+        "label": "n=1 na=1 nb=1",
+        "expected": "0 0",
+        "actual": "0 0",
+        "hacked": false
+      },
+      {
+        "label": "n=1 na=1 nb=1",
+        "expected": "0 1",
+        "actual": "0 1",
+        "hacked": false
+      },
+      {
+        "label": "n=3 na=1 nb=2",
+        "expected": "0 3",
+        "actual": "0 3",
+        "hacked": false
+      },
+      {
+        "label": "n=200 na=200 nb=200",
+        "expected": "94 74",
+        "actual": "94 74",
+        "hacked": false
+      }
+    ],
+    "random_tested": 300,
+    "mismatch": 0,
+    "examples": []
+  },
+  "P1012_kckry124": {
+    "compile_error": "",
+    "cases": [
+      {
+        "input": "13 312 343",
+        "expected": "34331213",
+        "actual": "34331213",
+        "hacked": false
+      },
+      {
+        "input": "12 121",
+        "expected": "12121",
+        "actual": "12121",
+        "hacked": false
+      },
+      {
+        "input": "9 98 987",
+        "expected": "998987",
+        "actual": "998987",
+        "hacked": false
+      },
+      {
+        "input": "1 10 100",
+        "expected": "110100",
+        "actual": "110100",
+        "hacked": false
+      },
+      {
+        "input": "321 32 3",
+        "expected": "332321",
+        "actual": "332321",
+        "hacked": false
+      }
+    ],
+    "random_tested": 300,
+    "mismatch": 0,
+    "examples": []
+  },
+  "P1204_gw5uvykg": {
+    "compile_error": "",
+    "random_tested": 300,
+    "mismatch": 0,
+    "examples": []
+  },
+  "P1553_nxvqnwg8": {
+    "compile_error": "",
+    "cases": [
+      {
+        "input": "0",
+        "expected": "0",
+        "actual": "0",
+        "hacked": false
+      },
+      {
+        "input": "1200",
+        "expected": "21",
+        "actual": "21",
+        "hacked": false
+      },
+      {
+        "input": "120.120",
+        "expected": "21.021",
+        "actual": "21.021",
+        "hacked": false
+      },
+      {
+        "input": "0.0012",
+        "expected": "0.21",
+        "actual": "0.21",
+        "hacked": false
+      },
+      {
+        "input": "12.0",
+        "expected": "21.0",
+        "actual": "21.0",
+        "hacked": false
+      },
+      {
+        "input": "120/210",
+        "expected": "21/12",
+        "actual": "21/12",
+        "hacked": false
+      },
+      {
+        "input": "0/120",
+        "expected": "0/21",
+        "actual": "0/21",
+        "hacked": false
+      },
+      {
+        "input": "1200%",
+        "expected": "21%",
+        "actual": "21%",
+        "hacked": false
+      },
+      {
+        "input": "0%",
+        "expected": "0%",
+        "actual": "0%",
+        "hacked": false
+      },
+      {
+        "input": "123",
+        "expected": "321",
+        "actual": "321",
+        "hacked": false
+      },
+      {
+        "input": "100",
+        "expected": "1",
+        "actual": "1",
+        "hacked": false
+      },
+      {
+        "input": "000",
+        "expected": "0",
+        "actual": "0",
+        "hacked": false
+      },
+      {
+        "input": "100.000",
+        "expected": "1.0",
+        "actual": "1.0",
+        "hacked": false
+      },
+      {
+        "input": "600/006",
+        "expected": "6/600",
+        "actual": "6/600",
+        "hacked": false
+      },
+      {
+        "input": "000%",
+        "expected": "0%",
+        "actual": "0%",
+        "hacked": false
+      },
+      {
+        "input": "3.1415",
+        "expected": "3.5141",
+        "actual": "3.5141",
+        "hacked": false
+      },
+      {
+        "input": "1000/1",
+        "expected": "1/1",
+        "actual": "1/1",
+        "hacked": false
+      }
+    ],
+    "random_tested": 300,
+    "mismatch": 0,
+    "examples": []
+  },
+  "P1102_dxk2a7a8": {
+    "compile_error": "",
+    "cases": [
+      {
+        "input": "1 / 1 1 2 3",
+        "expected": "3",
+        "actual": "3",
+        "hacked": false
+      },
+      {
+        "input": "1 / 1 2 3 4 5",
+        "expected": "4",
+        "actual": "4",
+        "hacked": false
+      },
+      {
+        "input": "0 / 5 5 5",
+        "expected": "9",
+        "actual": "",
+        "hacked": true
+      },
+      {
+        "input": "2 / 1 5 3",
+        "expected": "2",
+        "actual": "2",
+        "hacked": false
+      },
+      {
+        "input": "2 / 2 2 4 4 6",
+        "expected": "6",
+        "actual": "6",
+        "hacked": false
+      }
+    ],
+    "random_tested": 300,
+    "mismatch": 64,
+    "examples": [
+      {
+        "input": "24 0 / 30 12 17 25 28 29 21 14 1 7 7 28 20 6 5 9 20 23 27 20 12 29 12 13",
+        "expected": "42",
+        "actual": "",
+        "rc": -11
+      },
+      {
+        "input": "28 9 / 22 29 15 14 9 17 1 8 20 23 8 29 15 23 17 16 13 16 15 4 28 22 16 19 24 12 26 25",
+        "expected": "20",
+        "actual": "",
+        "rc": -11
+      },
+      {
+        "input": "45 1 / 13 4 15 11 10 28 4 6 10 30 7 9 1 19 13 12 16 26 24 10 11 1 16 30 22 29 18 5 14 25 20 19 23 18 5 17 25 22 22 18 17 16 8 27 16",
+        "expected": "64",
+        "actual": "",
+        "rc": -11
+      },
+      {
+        "input": "42 0 / 29 2 20 8 6 21 20 30 29 24 29 26 15 29 20 19 24 4 16 24 16 20 30 23 26 22 10 22 28 24 10 2 21 9 16 3 25 2 10 23 18 21",
+        "expected": "110",
+        "actual": "",
+        "rc": -11
+      }
+    ]
+  },
+  "P1598_biep97vd": {
+    "random_tested": 200,
+    "mismatch": 0,
+    "examples": []
+  }
+}

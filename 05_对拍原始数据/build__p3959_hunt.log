@@ -1,0 +1,14 @@
+sanity sample1: 4 (expect 4)
+sanity sample2: 5 (expect 5)
+... tried 50 found 0
+... tried 100 found 0
+... tried 150 found 0
+... tried 200 found 0
+... tried 250 found 0
+... tried 300 found 0
+... tried 350 found 0
+... tried 400 found 0
+{
+  "graphs_tried": 400,
+  "found": []
+}

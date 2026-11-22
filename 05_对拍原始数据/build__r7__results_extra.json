@@ -1,0 +1,55 @@
+{
+  "P1421_real": {
+    "compile_error": "",
+    "cases": [
+      {
+        "input": "7 6",
+        "expected": 4,
+        "actual": "3",
+        "hacked": true
+      },
+      {
+        "input": "19 0",
+        "expected": 10,
+        "actual": "9",
+        "hacked": true
+      },
+      {
+        "input": "10 3",
+        "expected": 5,
+        "actual": "5",
+        "hacked": false
+      },
+      {
+        "input": "1 9",
+        "expected": 1,
+        "actual": "1",
+        "hacked": false
+      },
+      {
+        "input": "3 8",
+        "expected": 2,
+        "actual": "2",
+        "hacked": false
+      },
+      {
+        "input": "0 0",
+        "expected": 0,
+        "actual": "0",
+        "hacked": false
+      }
+    ]
+  },
+  "P1014_v6gwt3bu": {
+    "compile_error": "",
+    "tested": 2500,
+    "mismatch": 0,
+    "examples": []
+  },
+  "P1046_f8ckkhfz": {
+    "compile_error": "",
+    "tested": 300,
+    "mismatch": 0,
+    "examples": []
+  }
+}

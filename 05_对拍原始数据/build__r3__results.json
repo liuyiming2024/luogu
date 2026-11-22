@@ -1,0 +1,135 @@
+{
+  "P5638_nzmytiez": {
+    "compile_error": "",
+    "cases": [
+      {
+        "label": "官方样例1 (k=0)",
+        "input": "4 0 / 1 2 3",
+        "expected": 6,
+        "actual": "6",
+        "rc": 0,
+        "hacked": false
+      },
+      {
+        "label": "官方样例2 (k=1)",
+        "input": "4 1 / 1 2 3",
+        "expected": 3,
+        "actual": "3",
+        "rc": 0,
+        "hacked": false
+      },
+      {
+        "label": "H-008 最小反例 k>=n",
+        "input": "2 100 / 5",
+        "expected": 0,
+        "actual": "5",
+        "rc": 0,
+        "hacked": true
+      },
+      {
+        "label": "H-009 k>n (n=3)",
+        "input": "3 5 / 2 3",
+        "expected": 0,
+        "actual": "5",
+        "rc": 0,
+        "hacked": true
+      },
+      {
+        "label": "H-010 k=n (n=4)",
+        "input": "4 4 / 7 1 9",
+        "expected": 0,
+        "actual": "17",
+        "rc": 0,
+        "hacked": true
+      },
+      {
+        "label": "k=n-1 对照组",
+        "input": "4 3 / 7 1 9",
+        "expected": 0,
+        "actual": "0",
+        "rc": 0,
+        "hacked": false
+      },
+      {
+        "label": "k=1 对照组",
+        "input": "5 1 / 10 10 1 1",
+        "expected": 12,
+        "actual": "12",
+        "rc": 0,
+        "hacked": false
+      },
+      {
+        "label": "k=2 对照组",
+        "input": "5 2 / 10 10 1 1",
+        "expected": 2,
+        "actual": "2",
+        "rc": 0,
+        "hacked": false
+      }
+    ],
+    "random_mismatch": 133,
+    "random_tested": 200,
+    "random_examples": [
+      {
+        "input": "16 34 / 50 38 93 28 92 18 54 14 55 18 17 40 28 60 48",
+        "expected": 0,
+        "actual": "653"
+      },
+      {
+        "input": "14 24 / 41 49 89 47 48 2 100 71 76 31 46 30 56",
+        "expected": 0,
+        "actual": "686"
+      },
+      {
+        "input": "2 30 / 5",
+        "expected": 0,
+        "actual": "5"
+      },
+      {
+        "input": "18 20 / 85 14 27 75 22 97 9 20 43 37 93 44 55 17 4 6 100",
+        "expected": 0,
+        "actual": "748"
+      }
+    ]
+  },
+  "P1803_dmza5ifn": {
+    "compile_error": "",
+    "cases": [
+      {
+        "label": "官方样例",
+        "input": "3 / 0 2 / 2 4 / 1 3",
+        "expected": 2,
+        "actual": "2",
+        "rc": 0,
+        "hacked": false
+      },
+      {
+        "label": "短区间错觉反例",
+        "input": "3 / 0 5 / 5 10 / 4 6",
+        "expected": 2,
+        "actual": "2",
+        "rc": 0,
+        "hacked": false
+      },
+      {
+        "label": "早开始长区间",
+        "input": "5 / 0 10 / 3 4 / 5 6 / 7 8 / 9 10",
+        "expected": 4,
+        "actual": "4",
+        "rc": 0,
+        "hacked": false
+      },
+      {
+        "label": "单点衔接链",
+        "input": "5 / 1 2 / 2 4 / 4 6 / 6 8 / 8 10",
+        "expected": 5,
+        "actual": "5",
+        "rc": 0,
+        "hacked": false
+      }
+    ],
+    "random_mismatch": 0,
+    "random_tested": 400,
+    "random_examples": []
+  }
+}

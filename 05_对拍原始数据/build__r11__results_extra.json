@@ -1,0 +1,31 @@
+{
+  "P3397_compile_probe": {
+    "with_using": {
+      "rc": 1,
+      "error_first_line": "/data/workspace/luogu_hack/build/r11/x3397_with_using.cpp: In function ‘void WalkerV::Solve()’:"
+    },
+    "no_using": {
+      "rc": 0,
+      "error_first_line": ""
+    }
+  },
+  "P3397_full_scale": {
+    "n": 1000,
+    "m": 1001,
+    "rc": 0,
+    "lines": 1000,
+    "match": true
+  },
+  "P1042_long_input": {
+    "chars": 62525,
+    "rc": 0,
+    "match": true,
+    "games_11": 3319
+  },
+  "P1150_int_limit": {
+    "input": "100000000 2",
+    "expected": "199999999",
+    "actual": "199999999",
+    "rc": 0
+  }
+}

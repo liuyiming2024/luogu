@@ -1,0 +1,492 @@
+{
+  "P1152_h7y41tog": {
+    "orig": {
+      "compile_error": ""
+    },
+    "fix": {
+      "compile_error": ""
+    },
+    "cases": [
+      {
+        "label": "官方样例1",
+        "input": "4 / 1 4 2 3",
+        "expected": "Jolly",
+        "actual": "",
+        "orig_rc": -11,
+        "fix_actual": "Jolly",
+        "hacked": true
+      },
+      {
+        "label": "官方样例2",
+        "input": "5 / 1 4 2 -1 6",
+        "expected": "Not jolly",
+        "actual": "",
+        "orig_rc": -11,
+        "fix_actual": "Not jolly",
+        "hacked": true
+      },
+      {
+        "label": "n=1",
+        "input": "1 / 7",
+        "expected": "Jolly",
+        "actual": "",
+        "orig_rc": -11,
+        "fix_actual": "Jolly",
+        "hacked": true
+      },
+      {
+        "label": "大差仍在vis内",
+        "input": "2 / 0 10000000",
+        "expected": "Not jolly",
+        "actual": "",
+        "orig_rc": -11,
+        "fix_actual": "Not jolly",
+        "hacked": true
+      },
+      {
+        "label": "diff=10000005 越界",
+        "input": "2 / 0 10000005",
+        "expected": "Not jolly",
+        "actual": "",
+        "orig_rc": -11,
+        "fix_actual": "Not jolly",
+        "hacked": true
+      },
+      {
+        "label": "diff=2e8 越界",
+        "input": "2 / 0 200000000",
+        "expected": "Not jolly",
+        "actual": "",
+        "orig_rc": -11,
+        "fix_actual": "Not jolly",
+        "hacked": true
+      },
+      {
+        "label": "负值大差",
+        "input": "2 / -100000000 100000000",
+        "expected": "Not jolly",
+        "actual": "",
+        "orig_rc": -11,
+        "fix_actual": "Not jolly",
+        "hacked": true
+      },
+      {
+        "label": "Jolly 常规",
+        "input": "5 / 1 2 4 7 11",
+        "expected": "Jolly",
+        "actual": "",
+        "orig_rc": -11,
+        "fix_actual": "Jolly",
+        "hacked": true
+      },
+      {
+        "label": "Not jolly 重复差",
+        "input": "5 / 1 4 2 3 1",
+        "expected": "Not jolly",
+        "actual": "",
+        "orig_rc": -11,
+        "fix_actual": "Not jolly",
+        "hacked": true
+      }
+    ],
+    "random": {
+      "orig": {
+        "tested": 200,
+        "mismatch": 200,
+        "examples": [
+          {
+            "input": "9 / -24590071 -77940048 -4 -2939627 -55921426 -5747691 4 -79128770 -4",
+            "expected": "Not jolly",
+            "actual": "",
+            "rc": -11
+          },
+          {
+            "input": "2 / -2 -99339187",
+            "expected": "Not jolly",
+            "actual": "",
+            "rc": -11
+          },
+          {
+            "input": "9 / 5 -2 -29414463 3268146 77409365 1 -2 90592231 29493137",
+            "expected": "Not jolly",
+            "actual": "",
+            "rc": -11
+          },
+          {
+            "input": "2 / 34140091 -4",
+            "expected": "Not jolly",
+            "actual": "",
+            "rc": -11
+          }
+        ]
+      },
+      "fix": {
+        "tested": 200,
+        "mismatch": 0,
+        "examples": []
+      }
+    },
+    "multi_group": {
+      "input": "4 / 1 4 2 3 / 5 / 1 4 2 -1 6 / 1 / 9",
+      "expected": "Jolly / Not jolly / Jolly",
+      "orig": "",
+      "orig_rc": -11,
+      "fix": "Jolly\nNot jolly\nJolly",
+      "fix_rc": 0
+    }
+  },
+  "P1200_ictzayja": {
+    "compile_error": "",
+    "cases": [
+      {
+        "label": "官方样例1",
+        "input": "COMETQ / HVNGAT",
+        "expected": "GO",
+        "actual": "GO",
+        "hacked": false
+      },
+      {
+        "label": "官方样例2",
+        "input": "ABSTAR / USACO",
+        "expected": "STAY",
+        "actual": "STAY",
+        "hacked": false
+      },
+      {
+        "label": "全Z 6位",
+        "input": "ZZZZZZ / ZZZZZZ",
+        "expected": "GO",
+        "actual": "GO",
+        "hacked": false
+      },
+      {
+        "label": "全A 6位",
+        "input": "AAAAAA / AAAAAA",
+        "expected": "GO",
+        "actual": "GO",
+        "hacked": false
+      },
+      {
+        "label": "单字母",
+        "input": "A / A",
+        "expected": "GO",
+        "actual": "GO",
+        "hacked": false
+      },
+      {
+        "label": "Z vs A",
+        "input": "Z / A",
+        "expected": "STAY",
+        "actual": "STAY",
+        "hacked": false
+      }
+    ],
+    "random_tested": 300,
+    "mismatch": 0,
+    "max_product_seen": 56908800,
+    "int_max": 2147483647,
+    "examples": []
+  },
+  "P1200_vckbob2z": {
+    "note": "Pascal 逐步 mod 47，按等价逻辑复刻验证（非 g++ 编译）",
+    "random_tested": 300,
+    "mismatch": 0
+  },
+  "P1424_apqvl7bn": {
+    "compile_error": "",
+    "cases": [
+      {
+        "input": "3 1",
+        "expected": "250",
+        "actual": "250",
+        "hacked": false
+      },
+      {
+        "input": "6 1",
+        "expected": "0",
+        "actual": "0",
+        "hacked": false
+      },
+      {
+        "input": "7 1",
+        "expected": "0",
+        "actual": "0",
+        "hacked": false
+      },
+      {
+        "input": "1 7",
+        "expected": "1250",
+        "actual": "1250",
+        "hacked": false
+      },
+      {
+        "input": "1 14",
+        "expected": "2500",
+        "actual": "2500",
+        "hacked": false
+      },
+      {
+        "input": "5 30",
+        "expected": "5250",
+        "actual": "5250",
+        "hacked": false
+      },
+      {
+        "input": "1 1000000",
+        "expected": "178571500",
+        "actual": "178571500",
+        "hacked": false
+      },
+      {
+        "input": "7 1000000",
+        "expected": "178571250",
+        "actual": "178571250",
+        "hacked": false
+      }
+    ],
+    "random_tested": 200,
+    "mismatch": 0
+  },
+  "P1425_nobyk23w": {
+    "c": {
+      "compile_error": ""
+    },
+    "cpp": {
+      "compile_error": ""
+    },
+    "cases": [
+      {
+        "input": "12 50 19 10",
+        "expected": "6 20",
+        "c": "6 20",
+        "cpp": "6 20",
+        "hacked": false
+      },
+      {
+        "input": "0 0 23 59",
+        "expected": "23 59",
+        "c": "23 59",
+        "cpp": "23 59",
+        "hacked": false
+      },
+      {
+        "input": "1 0 1 0",
+        "expected": "0 0",
+        "c": "0 0",
+        "cpp": "0 0",
+        "hacked": false
+      },
+      {
+        "input": "1 59 2 0",
+        "expected": "0 1",
+        "c": "0 1",
+        "cpp": "0 1",
+        "hacked": false
+      },
+      {
+        "input": "1 30 3 45",
+        "expected": "2 15",
+        "c": "2 15",
+        "cpp": "2 15",
+        "hacked": false
+      },
+      {
+        "input": "0 59 1 0",
+        "expected": "0 1",
+        "c": "0 1",
+        "cpp": "0 1",
+        "hacked": false
+      }
+    ],
+    "random": {
+      "c": {
+        "tested": 193,
+        "mismatch": 0
+      },
+      "cpp": {
+        "tested": 193,
+        "mismatch": 0
+      }
+    }
+  },
+  "P1425_beuv9jew": {
+    "compile_error": "",
+    "cases": [
+      {
+        "input": "12 50 19 10",
+        "expected": "6 20",
+        "actual": "6 20",
+        "hacked": false
+      },
+      {
+        "input": "0 0 23 59",
+        "expected": "23 59",
+        "actual": "23 59",
+        "hacked": false
+      },
+      {
+        "input": "1 0 1 0",
+        "expected": "0 0",
+        "actual": "0 0",
+        "hacked": false
+      },
+      {
+        "input": "1 59 2 0",
+        "expected": "0 1",
+        "actual": "0 1",
+        "hacked": false
+      },
+      {
+        "input": "1 30 3 45",
+        "expected": "2 15",
+        "actual": "2 15",
+        "hacked": false
+      },
+      {
+        "input": "0 59 1 0",
+        "expected": "0 1",
+        "actual": "0 1",
+        "hacked": false
+      }
+    ],
+    "random_tested": 290,
+    "mismatch": 0
+  },
+  "P1055_kfg4ugka": {
+    "compile_error": "",
+    "cases": [
+      {
+        "input": "0-670-82162-4",
+        "expected": "Right",
+        "actual": "Right",
+        "hacked": false
+      },
+      {
+        "input": "0-670-82162-X",
+        "expected": "0-670-82162-4",
+        "actual": "0-670-82162-4",
+        "hacked": false
+      },
+      {
+        "input": "7-302-03825-4",
+        "expected": "7-302-03825-2",
+        "actual": "7-302-03825-2",
+        "hacked": false
+      },
+      {
+        "input": "4-000-00000-0",
+        "expected": "4-000-00000-4",
+        "actual": "4-000-00000-4",
+        "hacked": false
+      },
+      {
+        "input": "9-999-99999-9",
+        "expected": "Right",
+        "actual": "Right",
+        "hacked": false
+      },
+      {
+        "input": "0-000-00000-0",
+        "expected": "Right",
+        "actual": "Right",
+        "hacked": false
+      },
+      {
+        "input": "1-234-56789-0",
+        "expected": "1-234-56789-X",
+        "actual": "1-234-56789-X",
+        "hacked": false
+      }
+    ],
+    "random_tested": 300,
+    "mismatch": 0,
+    "examples": []
+  },
+  "P1179_59x93a43": {
+    "compile_error": "",
+    "cases": [
+      {
+        "input": "2 22",
+        "expected": "6",
+        "actual": "6",
+        "hacked": false
+      },
+      {
+        "input": "2 100",
+        "expected": "20",
+        "actual": "20",
+        "hacked": false
+      },
+      {
+        "input": "1 1",
+        "expected": "0",
+        "actual": "0",
+        "hacked": false
+      },
+      {
+        "input": "1 100000",
+        "expected": "50000",
+        "actual": "50000",
+        "hacked": false
+      },
+      {
+        "input": "22 22",
+        "expected": "2",
+        "actual": "2",
+        "hacked": false
+      },
+      {
+        "input": "2 2",
+        "expected": "1",
+        "actual": "1",
+        "hacked": false
+      },
+      {
+        "input": "99990 100000",
+        "expected": "1",
+        "actual": "1",
+        "hacked": false
+      }
+    ],
+    "random_tested": 200,
+    "mismatch": 0,
+    "block1_note": "作者标注『我编的程序是——』的第一块用 while(y!=0){y/=10} 改循环变量，会死循环；下一块明确写『AC代码应该是这样的』，按第8批 P1028 先例只验 AC 版"
+  },
+  "P1059_6t0wrb4o": {
+    "compile_error": "",
+    "cases": [
+      {
+        "input": "20 40 32 67 40 20 89 300 400 15",
+        "expected": "8\n15 20 32 40 67 89 300 400",
+        "actual": "8\n15 20 32 40 67 89 300 400",
+        "hacked": false
+      },
+      {
+        "input": "1",
+        "expected": "1\n1",
+        "actual": "1\n1",
+        "hacked": false
+      },
+      {
+        "input": "1 1 1",
+        "expected": "1\n1",
+        "actual": "1\n1",
+        "hacked": false
+      },
+      {
+        "input": "1000 1 1000",
+        "expected": "2\n1 1000",
+        "actual": "2\n1 1000",
+        "hacked": false
+      },
+      {
+        "input": "5 4 3 2 1",
+        "expected": "5\n1 2 3 4 5",
+        "actual": "5\n1 2 3 4 5",
+        "hacked": false
+      }
+    ],
+    "random_tested": 300,
+    "mismatch": 0
+  }
+}

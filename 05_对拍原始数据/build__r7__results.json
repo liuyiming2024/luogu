@@ -1,0 +1,117 @@
+{
+  "P1421_dk5mkxij": {
+    "head": "total=100010|bad=2031",
+    "examples": [
+      "7 6 -> sol=3 ok=4",
+      "9 5 -> sol=4 ok=5",
+      "11 4 -> sol=5 ok=6",
+      "13 3 -> sol=6 ok=7",
+      "15 2 -> sol=7 ok=8",
+      "17 1 -> sol=8 ok=9",
+      "19 0 -> sol=9 ok=10",
+      "20 9 -> sol=10 ok=11",
+      "74 1 -> sol=38 ok=39",
+      "76 0 -> sol=39 ok=40",
+      "77 9 -> sol=40 ok=41",
+      "79 8 -> sol=41 ok=42"
+    ],
+    "after_eps_fix": [
+      "total=100010|bad=0"
+    ]
+  },
+  "P1014_float": {
+    "head": "bad=0",
+    "examples": []
+  },
+  "P1003_9jadrxl0": {
+    "orig": {
+      "compile_error": ""
+    },
+    "wide": {
+      "compile_error": ""
+    },
+    "cases": [
+      {
+        "label": "n=10021 答案=10021",
+        "expected": 10021,
+        "orig": "10021",
+        "orig_rc": 0,
+        "wide": "10021",
+        "wide_rc": 0
+      },
+      {
+        "label": "n=10050 答案=10050",
+        "expected": 10050,
+        "orig": "10050",
+        "orig_rc": 0,
+        "wide": "10050",
+        "wide_rc": 0
+      },
+      {
+        "label": "n=20000 答案=20000",
+        "expected": 20000,
+        "orig": "",
+        "orig_rc": -11,
+        "wide": "20000",
+        "wide_rc": 0
+      },
+      {
+        "label": "n=100000 答案=100000",
+        "expected": 100000,
+        "orig": "",
+        "orig_rc": -11,
+        "wide": "100000",
+        "wide_rc": 0
+      },
+      {
+        "label": "普通 n=1",
+        "expected": -1,
+        "orig": "-1",
+        "orig_rc": 0,
+        "wide": "-1",
+        "wide_rc": 0
+      },
+      {
+        "label": "普通 n=5",
+        "expected": -1,
+        "orig": "-1",
+        "orig_rc": 0,
+        "wide": "-1",
+        "wide_rc": 0
+      },
+      {
+        "label": "普通 n=100",
+        "expected": -1,
+        "orig": "-1",
+        "orig_rc": 0,
+        "wide": "-1",
+        "wide_rc": 0
+      }
+    ]
+  },
+  "P1425_beuv9jew": {
+    "tested": 146,
+    "mismatch": 0,
+    "examples": []
+  },
+  "P1425_nobyk23w": {
+    "tested": 146,
+    "mismatch": 0,
+    "examples": []
+  },
+  "P1085_3hvn4ibz": {
+    "tested": 300,
+    "mismatch": 0,
+    "examples": []
+  },
+  "P1075_rjjud4hi_v3": {
+    "tested": 300,
+    "mismatch": 0,
+    "examples": []
+  },
+  "P1421_int_ref": {
+    "tested": 200,
+    "mismatch": 0,
+    "examples": []
+  }
+}

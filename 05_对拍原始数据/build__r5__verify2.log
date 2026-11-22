@@ -1,0 +1,85 @@
+{
+  "P1020_n5d7jq0b": {
+    "compile_error": "",
+    "cases": [
+      {
+        "label": "官方样例",
+        "input": "389 207 155 300 299 170 158 65",
+        "expected": "6 / 2",
+        "actual": "6 / 2",
+        "hacked": false
+      },
+      {
+        "label": "全相等",
+        "input": "5 5 5 5 5 5",
+        "expected": "6 / 1",
+        "actual": "6 / 1",
+        "hacked": false
+      },
+      {
+        "label": "严格上升",
+        "input": "1 2 3 4 5",
+        "expected": "1 / 5",
+        "actual": "1 / 5",
+        "hacked": false
+      },
+      {
+        "label": "严格下降",
+        "input": "5 4 3 2 1",
+        "expected": "5 / 1",
+        "actual": "5 / 1",
+        "hacked": false
+      },
+      {
+        "label": "单元素",
+        "input": "7",
+        "expected": "1 / 1",
+        "actual": "1 / 1",
+        "hacked": false
+      },
+      {
+        "label": "两元素相等",
+        "input": "3 3",
+        "expected": "2 / 1",
+        "actual": "2 / 1",
+        "hacked": false
+      }
+    ],
+    "random_tested": 250,
+    "random_mismatch": 0,
+    "random_examples": []
+  },
+  "P1616_lgmnaw1h_final": {
+    "compile_error": "",
+    "random_tested": 200,
+    "random_mismatch": 0,
+    "random_examples": []
+  },
+  "P1164_ipduooli": {
+    "compile_error": "",
+    "random_tested": 200,
+    "random_mismatch": 103,
+    "random_examples": [
+      {
+        "input": "8 229 / [229, 189, 139, 173, 276, 21, 229, 200]",
+        "expected": 2,
+        "actual": "1"
+      },
+      {
+        "input": "20 148 / [31, 30, 178, 20, 86, 27, 190, 1]",
+        "expected": 7,
+        "actual": "4"
+      },
+      {
+        "input": "28 255 / [49, 281, 231, 87, 6, 225, 132, 112]",
+        "expected": 27,
+        "actual": "11"
+      },
+      {
+        "input": "16 136 / [166, 69, 3, 44, 179, 31, 165, 128]",
+        "expected": 1,
+        "actual": "0"
+      }
+    ]
+  }
+}

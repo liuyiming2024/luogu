@@ -1,0 +1,96 @@
+{
+  "P1018_pmio8se0": {
+    "compile_error": "",
+    "cases": [
+      {
+        "label": "k=n-1 最小反例 (n=6,k=5)",
+        "input": "6 5 / 123456",
+        "expected": "720",
+        "actual": "",
+        "rc": 0,
+        "hacked": true
+      },
+      {
+        "label": "k=n-1 (n=7,k=6,含0)",
+        "input": "7 6 / 1020304",
+        "expected": "0",
+        "actual": "",
+        "rc": 0,
+        "hacked": true
+      },
+      {
+        "label": "k=n-1 (n=8,k=7)",
+        "input": "8 7 / 11111111",
+        "expected": "1",
+        "actual": "",
+        "rc": 0,
+        "hacked": true
+      },
+      {
+        "label": "k=n-2 对照组",
+        "input": "6 4 / 123456",
+        "expected": "4320",
+        "actual": "1344",
+        "rc": 0,
+        "hacked": true
+      },
+      {
+        "label": "k=1 对照组",
+        "input": "6 1 / 123456",
+        "expected": "74070",
+        "actual": "69104",
+        "rc": 0,
+        "hacked": true
+      },
+      {
+        "label": "k=2 对照组",
+        "input": "6 2 / 123456",
+        "expected": "37020",
+        "actual": "27552",
+        "rc": 0,
+        "hacked": true
+      }
+    ],
+    "random_tested": 150,
+    "random_mismatch": 88,
+    "random_examples": [
+      {
+        "input": "10 9 / 6432616224",
+        "expected": "82944",
+        "actual": ""
+      },
+      {
+        "input": "6 4 / 552984",
+        "expected": "74880",
+        "actual": "37800"
+      },
+      {
+        "input": "4 2 / 0159",
+        "expected": "45",
+        "actual": "0"
+      },
+      {
+        "input": "9 6 / 565508935",
+        "expected": "27900000",
+        "actual": "18900000"
+      }
+    ]
+  },
+  "P1090_zcxe384l": {
+    "compile_error": "/data/workspace/luogu_hack/build/r3/P1090_zcxe384l.cpp: In member function ‘void my_priority::pop()’:\n/data/workspace/luogu_hack/build/r3/P1090_zcxe384l.cpp:21:30: error: no match for call to ‘(std::vector<int>) (std::vector<int>::size_type)’\n   21 |     void pop() { heap[1]=heap(heap.size()-1); heap.pop_back(); gao(1); }\n      |                          ~~~~^~~~~~~~~~~~~~~\n/data/workspace/luogu_hack/build/r3/P1090_zcxe384l.cpp: In function ‘int main()’:\n/data/workspace/luogu_hack/build/r3/P1090_zcxe384l.cpp:28:10: warning: ignoring return value of ‘int scanf(const char*, ...)’ declared with attribute ‘warn_unused_result’ [-Wunused-result]\n   28 |     scanf(\"%d\",&n);\n      |     ~~~~~^~~~~~~",
+    "compile_rc": 1
+  },
+  "P1090_zcxe384l_fixed": {
+    "compile_error": "",
+    "compile_rc": 0,
+    "tested": 201,
+    "mismatch": 0,
+    "examples": [],
+    "max_case": {
+      "n": 10000,
+      "expected": 2672320000,
+      "actual": "-1622647296",
+      "rc": 0
+    }
+  }
+}

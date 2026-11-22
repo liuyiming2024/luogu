@@ -1,0 +1,108 @@
+{
+  "orig": {
+    "compile_error": ""
+  },
+  "fix": {
+    "compile_error": ""
+  },
+  "cases": [
+    {
+      "label": "官方样例1",
+      "input": "1 2 1 / abcs-w1234-9s-4zz",
+      "expected": "abcsttuuvvw1234556677889s-4zz",
+      "actual": "abcsttuuvvw1234556677889s-4zz",
+      "fix_actual": "abcsttuuvvw1234556677889s-4zz",
+      "hacked": false
+    },
+    {
+      "label": "官方样例2",
+      "input": "2 3 2 / a-d-d",
+      "expected": "aCCCBBBd-d",
+      "actual": "aCCCBBBd-d",
+      "fix_actual": "aCCCBBBd-d",
+      "hacked": false
+    },
+    {
+      "label": "p1=1 p3=2 数字",
+      "input": "1 2 2 / 1-5",
+      "expected": "14433225",
+      "actual": "14433225",
+      "fix_actual": "14433225",
+      "hacked": false
+    },
+    {
+      "label": "p1=2 p3=2 数字",
+      "input": "2 2 2 / 1-5",
+      "expected": "14433225",
+      "actual": "12233445",
+      "fix_actual": "14433225",
+      "hacked": true
+    },
+    {
+      "label": "p1=2 p3=1 数字",
+      "input": "2 2 1 / 1-5",
+      "expected": "12233445",
+      "actual": "12233445",
+      "fix_actual": "12233445",
+      "hacked": false
+    },
+    {
+      "label": "p1=2 p3=2 字母",
+      "input": "2 2 2 / a-d",
+      "expected": "aCCBBd",
+      "actual": "aCCBBd",
+      "fix_actual": "aCCBBd",
+      "hacked": false
+    },
+    {
+      "label": "p1=3 p3=2 数字",
+      "input": "3 2 2 / 1-5",
+      "expected": "1******5",
+      "actual": "1******5",
+      "fix_actual": "1******5",
+      "hacked": false
+    },
+    {
+      "label": "后继",
+      "input": "1 2 1 / d-e",
+      "expected": "de",
+      "actual": "de",
+      "fix_actual": "de",
+      "hacked": false
+    },
+    {
+      "label": "连续减号",
+      "input": "1 2 1 / a--d",
+      "expected": "a--d",
+      "actual": "a--d",
+      "fix_actual": "a--d",
+      "hacked": false
+    },
+    {
+      "label": "长度1",
+      "input": "1 2 1 / a",
+      "expected": "a",
+      "actual": "a",
+      "fix_actual": "a",
+      "hacked": false
+    }
+  ],
+  "random": {
+    "orig": {
+      "tested": 400,
+      "mismatch": 1,
+      "examples": [
+        {
+          "input": "2 5 2 / w2-mm9p1-6cuhh5p",
+          "expected": "w2-mm9p1555554444433333222226cuhh5p",
+          "actual": "w2-mm9p1222223333344444555556cuhh5p"
+        }
+      ]
+    },
+    "fix": {
+      "tested": 400,
+      "mismatch": 0,
+      "examples": []
+    }
+  }
+}
