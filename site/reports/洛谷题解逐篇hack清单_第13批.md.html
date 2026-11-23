@@ -1,0 +1,58 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>洛谷题解逐篇hack清单_第13批.md · 离线归档</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">01_批次清单 / 洛谷题解逐篇hack清单_第13批.md</span></header>
+<main class="doc"><h1>洛谷题解逐篇 hack 清单 · 第 13 批（低频补录）</h1>
+<blockquote>路线 2 第二批。本批 5 个新编号，其中 <strong>4 篇题解逐字验证</strong>， <strong>1 个编号判定为「非题解」</strong>——这是索引里第一个 <code>是否题解=否</code> 的样本。 低频：4 次检索（含 1 次题面范围核对）+ 5 次文章正文取回； <strong>0 登录、0 提交、0 刷接口、0 保存站请求。</strong></blockquote>
+<hr>
+<h2>1. 本批结果</h2>
+<table class="tb"><thead><tr><th>#</th><th>题号</th><th>编号</th><th>是否题解</th><th>归类</th><th>结论</th></tr></thead><tbody><tr><td>85</td><td>P1307</td><td><code>88t0yv7r</code></td><td>是</td><td><strong>乙</strong></td><td>作者明写「现增加防抄袭内容」，代码夹不可见 tag characters；剥离后 317 组 0 不一致</td></tr><tr><td>86</td><td>P2615</td><td><code>7p4p6gdm</code></td><td>是</td><td><strong>甲</strong></td><td><code>memset(a,0,...)</code> 被注释误标为「初始化x,y」，x/y 未赋值 → 官方样例即挂</td></tr><tr><td>87</td><td>P2669</td><td><code>79f7f3bn</code></td><td>是</td><td><strong>丙</strong></td><td>数学法 <code>d=k-sum+t+1</code>，k=1..10000 全枚举 0 不一致</td></tr><tr><td>88</td><td>P2615</td><td><code>0dhpwlt6</code></td><td>是</td><td><strong>丙</strong></td><td>仅四条件思路片段，按题解文字补最小外壳后 n=1..39 全奇数 0 不一致</td></tr><tr><td>—</td><td>—</td><td><code>zm6gqovk</code></td><td><strong>否</strong></td><td>非题解</td><td>《如何正确的写一篇优秀题解？》帮助规范文章，不是题目题解</td></tr></tbody></table>
+<p><strong>累计 88 篇 / 甲 14 / 乙 10 / 丙 64 / 甲类合法反例 34 条。</strong> 编号索引 76 → <strong>81</strong> 个（其中 <code>是否题解=是</code> 80 个、<code>否</code> 1 个）。</p>
+<hr>
+<h2>2. 甲 · P2615 <code>7p4p6gdm</code> —— 初始化被注释吃了</h2>
+<p>逐字正文（搜索摘要与逐字取回一致）：</p>
+<pre class="code"><code>int n,a[40][40];
+memset(a,0,sizeof(a));//初始化x,y
+a[x][y]=1;</code></pre>
+<p><code>x, y</code> <strong>既没声明、也没赋值</strong>；唯一那行 <code>memset</code> 清的是数组 <code>a</code>，注释却写着 「初始化x,y」。题面要求「首先将 1 写在第一行的中间」，即 <code>x=1, y=n/2+1</code>。 按最小外壳补 <code>int x, y;</code>（全局零初始化，C++ 标准语义）后，<code>a[0][0]=1</code>， 整个幻方从 (0,0) 起算，输出相对标准答案整体平移一格。</p>
+<table class="tb"><thead><tr><th>输入</th><th>期望</th><th>实际</th></tr></thead><tbody><tr><td><strong><code>1</code></strong></td><td><strong><code>1</code></strong></td><td><strong><code>0</code></strong></td></tr><tr><td><strong><code>3</code>（官方样例）</strong></td><td><code>8 1 6 / 3 5 7 / 4 9 2</code></td><td><code>7 0 5 / 0 4 6 / 3 8 0</code></td></tr><tr><td><code>5</code></td><td><code>17 24 1 8 15 …</code></td><td><code>9 16 23 0 0 …</code></td></tr><tr><td><code>39</code></td><td>标准 39 阶幻方</td><td>平移矩阵</td></tr></tbody></table>
+<p>题面 <code>1≤N≤39 且 N 为奇数</code>，<strong>20/20 个合法 N 全部 WA</strong>。n=1 是最干净的最小反例。</p>
+<p><strong>四条路径对照</strong>（都补最小外壳，只差 x/y 初值）：</p>
+<table class="tb"><thead><tr><th>版本</th><th>x/y 处理</th><th>20 个 N 结果</th></tr></thead><tbody><tr><td>逐字 + <code>int x,y;</code> 全局</td><td>默认 0</td><td><strong>20 组全挂</strong></td></tr><tr><td><strong>修复版</strong> <code>cin&gt;&gt;n; x=1; y=n/2+1;</code></td><td>按题面</td><td><strong>0 不一致</strong></td></tr><tr><td>照抄作者文字 <code>x=n/2+1; y=1;</code></td><td>行列写反</td><td>19 组挂（n=1 恰好蒙对）</td></tr><tr><td><code>int x,y;</code> 局部未初始化</td><td>UB</td><td>同样全挂</td></tr></tbody></table>
+<p>划界：补<strong>一行</strong>初值就能修好，代价接近乙；但根因是「初始化语句缺失 + 注释误导」， 与第 1 批 P1002 <code>sfifnfaa</code>（<code>dp[0][0]=1</code> 被循环覆盖）同型，且逐字代码确有 题面内确定性 WA → <strong>归甲</strong>。想按修复代价挪乙，说一声。</p>
+<blockquote>有意思的是作者文字写「先初始化 x=n/2+1,y=1; 即1的位置」—— <strong>行列本身写反了</strong>（代码分支里 x 是行、y 是列）。照抄文字反而 19 组挂。 所以修复必须以题面/分支语义为准，不能以思路文字为准。</blockquote>
+<hr>
+<h2>3. 乙 · P1307 <code>88t0yv7r</code> —— 主动防抄袭（本批最典型的乙形态）</h2>
+<p>作者在正文末尾明写：<strong>「AC 记录 原来已经通过,现增加防抄袭内容,求通过。」</strong> 页面代码里夹了大量不可见 U+E00xx tag characters（<code>󠄲󠅩󠄐󠄽…</code>）。</p>
+<ul><li><strong>逐字版编译</strong>：<code>error: ‘󠁐󠁉󠁣󠁔int’ does not name a type</code> → CE。</li></ul>
+<p>按你的口径（代码只是辅助、缺头文件/展示形态不计缺陷）<strong>不算 hack</strong>， 且这正是乙类「主动防抄袭」的判定依据，单列。</p>
+<ul><li><strong>剥离不可见字符后的等价版</strong>：<code>m = n%10 + m*10</code> 标准整数反转，</li></ul>
+<p>负数先 <code>cout&lt;&lt;&quot;-&quot;</code> 再取绝对值。题面 <code>−10⁹ ≤ N ≤ 10⁹</code>， 317 组（16 个定点含 <code>0</code>/<code>±10⁹</code>/<code>-380</code>/<code>100</code> + 300 随机 + 边界）<strong>0 不一致</strong>。</p>
+<p>同类佐证：洛谷规范文章 <code>zm6gqovk</code> 明确写着 <strong>「不应在代码中加入防抄袭内容，如全角符号」</strong>，审核标准也写 「不要通过修改代码达到所谓『防抄袭』目的」。所以乙类是真实存在的形态， 但我只按文本归类，不指认谁故意埋坑。</p>
+<hr>
+<h2>4. 丙 · 2 篇</h2>
+<ul><li><strong>P2669 <code>79f7f3bn</code></strong>：把天数按 <code>1,2,3,…</code> 分组，先累加整组 <code>i²</code>，</li></ul>
+<p>超了就用 <code>t=i-1</code>、<code>d=k-sum+t+1</code>、<code>ans+=d*(t+1)</code> 补零头。 题面 <code>1≤k≤10000</code>，<strong>k=1..10000 全枚举 0 不一致</strong>； 定点 <code>6→14</code>、<code>1000→29820</code>、<code>10000→942820</code> 全对，int 未溢出。</p>
+<ul><li><strong>P2615 <code>0dhpwlt6</code></strong>：页面只有「四个条件语句」的思路片段，没有 <code>main</code>、</li></ul>
+<p>没有输出循环。按用户口径「不判完整度」，按题解文字补最小外壳 （声明 <code>x,y,xx,yy,a</code> + <code>x=1;y=n/2+1;</code> + 把 <code>xx/yy</code> 赋回 + 输出循环）， 与第 1 批 P1220 同例：结论对补全后的等价实现成立。 n=1..39 全奇数 <strong>0 不一致</strong>。</p>
+<hr>
+<h2>5. 非题解样本 · <code>zm6gqovk</code></h2>
+<p>《如何正确的写一篇优秀题解？》是<strong>帮助中心 / 题解撰写规范</strong>文章， 不是任何题目的题解。它是 8 位 <code>article</code> 编号，但 <code>是否题解=否</code>。</p>
+<p>这条纠正了一个隐含假设：前 76 个编号全部判「是」，容易让人以为 「凡 8 位 article 编号即题解」。现在索引里有了反例， <code>classify_article.py</code> 已改为读 <code>是否题解</code> 字段而非硬编码「是题解」。</p>
+<hr>
+<h2>6. 差点误判 / 自查（本批 4 次）</h2>
+<ol><li><strong>我漏抄了 <code>cin&gt;&gt;n;</code></strong>（最悬的一次）：第一版 <code>7p4p6gdm</code> 源码没有读入 n，</li></ol>
+<p>局部 n 未初始化，输出循环 <code>i&lt;=n</code> 直接不进 → <strong>四个 P2615 版本全部空输出、 20 组假 WA</strong>，连修复版都挂。手动 <code>echo 3 | ./exe</code> 才看出来， 回原文/题面复核补回读入语句，结果与第 5 批 P1164（漏抄 <code>dp[i][0]=1</code>）同型。</p>
+<ol><li><strong>修复版初值顺序</strong>：<code>x=1; y=n/2+1;</code> 必须在 <code>cin&gt;&gt;n</code> <strong>之后</strong>，</li></ol>
+<p>放在之前等于用未初始化的 n 算列号。第一版就是这么错的。</p>
+<ol><li><strong>行尾空格</strong>：逐字版输出 <code>cout&lt;&lt;a[i][j]&lt;&lt;&quot; &quot;</code> 每行末尾带空格，</li></ol>
+<p>题面只要求「相邻两个整数之间用单空格隔开」。按第 9 批 P1598 口径 逐行 <code>rstrip</code> 后比较，不把格式差异当 WA。</p>
+<ol><li><strong>不可见字符</strong>：tag characters 逐字编译 CE，但按口径不计缺陷；</li></ol>
+<p>剥离后核心逻辑正确 → 乙，不是甲。</p>
+<p>纪律再补一条：<strong>补外壳时「读入语句」和「依赖读入的初值」必须一起复核顺序</strong>。</p>
+<hr>
+<h2>7. 补录进离线站</h2>
+<p>5 个新编号写回 <code>02_文章编号索引/article_index.csv</code>（有序主表）， <code>_build_site.py</code> 从主表重生成 <code>site/</code>：<code>articles/&lt;lid&gt;.html</code>、 <code>reports/</code> 报告页、<code>data/articles.json</code> 机读主表。 <code>zm6gqovk</code> 作为首个 <code>是否题解=否</code> 条目，在站里标「非题解·规范文章」。</p>
+<h2>8. 低频声明</h2>
+<table class="tb"><thead><tr><th>动作</th><th>次数</th></tr></thead><tbody><tr><td>检索（找新编号 3 轮 + 核对题面 1 轮）</td><td>4</td></tr><tr><td>文章正文逐字取回</td><td>5（4 篇题解 + 1 篇规范文章）</td></tr><tr><td>题面页直取</td><td>2（均被拒，改用检索结果核对范围）</td></tr><tr><td>洛谷登录 / 提交 / 保存站接口</td><td><strong>0</strong></td></tr><tr><td>GitHub API（归档查询与推送）</td><td>少量</td></tr></tbody></table>
+<p>「枚举」始终指<strong>对已发现编号做有序编目</strong>，不对 36⁸ 编号空间或全站做遍历。</p></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>

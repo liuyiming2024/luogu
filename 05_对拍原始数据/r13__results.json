@@ -1,0 +1,232 @@
+{
+ "P1307_88t0yv7r": {
+  "compile_rc": 0,
+  "compile_err": "",
+  "cases": [],
+  "tested": 317,
+  "mismatch": 0,
+  "examples": [],
+  "raw_tag_compile": {
+   "rc": 1,
+   "err": "/data/workspace/luogu_hack/build/r13/P1307_88t0yv7r_rawtags.cpp:4:1: error: ‘󠁐󠁉󠁣󠁔int’ does not name a type\n    4 | 󠁐󠁉󠁣󠁔int main()\n      | ^~~\n",
+   "note": "逐字含不可见 tag characters 时编译失败；按口径属主动防抄袭，不计缺陷"
+  }
+ },
+ "P2615_7p4p6gdm": {
+  "compile_rc": 0,
+  "compile_err": "",
+  "cases": [],
+  "tested": 20,
+  "mismatch": 20,
+  "examples": [
+   {
+    "n": 1,
+    "rc": 0,
+    "expected_head": "1",
+    "actual_head": "0"
+   },
+   {
+    "n": 3,
+    "rc": 0,
+    "expected_head": "8 1 6",
+    "actual_head": "7 0 5 "
+   },
+   {
+    "n": 5,
+    "rc": 0,
+    "expected_head": "17 24 1 8 15",
+    "actual_head": "9 16 23 0 0 "
+   },
+   {
+    "n": 7,
+    "rc": 0,
+    "expected_head": "30 39 48 1 10 19 28",
+    "actual_head": "11 20 29 38 47 0 0 "
+   },
+   {
+    "n": 9,
+    "rc": 0,
+    "expected_head": "47 58 69 80 1 12 23 34 45",
+    "actual_head": "13 24 35 46 57 68 79 0 0 "
+   },
+   {
+    "n": 11,
+    "rc": 0,
+    "expected_head": "68 81 94 107 120 1 14 27 40 53 66",
+    "actual_head": "15 28 41 54 67 80 93 106 119 0 13 "
+   }
+  ],
+  "sample_3": {
+   "rc": 0,
+   "output": "7 0 5 \n0 4 6 \n3 8 0",
+   "expected": "8 1 6\n3 5 7\n4 9 2"
+  }
+ },
+ "P2615_7p4p6gdm_fix": {
+  "compile_rc": 0,
+  "compile_err": "",
+  "cases": [],
+  "tested": 20,
+  "mismatch": 0,
+  "examples": [],
+  "sample_3": {
+   "rc": 0,
+   "output": "8 1 6 \n3 5 7 \n4 9 2",
+   "expected": "8 1 6\n3 5 7\n4 9 2"
+  }
+ },
+ "P2615_7p4p6gdm_by_text": {
+  "compile_rc": 0,
+  "compile_err": "",
+  "cases": [],
+  "tested": 20,
+  "mismatch": 19,
+  "examples": [
+   {
+    "n": 3,
+    "rc": 0,
+    "expected_head": "8 1 6",
+    "actual_head": "9 2 7 "
+   },
+   {
+    "n": 5,
+    "rc": 0,
+    "expected_head": "17 24 1 8 15",
+    "actual_head": "19 0 3 10 17 "
+   },
+   {
+    "n": 7,
+    "rc": 0,
+    "expected_head": "30 39 48 1 10 19 28",
+    "actual_head": "33 42 0 4 13 22 31 "
+   },
+   {
+    "n": 9,
+    "rc": 0,
+    "expected_head": "47 58 69 80 1 12 23 34 45",
+    "actual_head": "51 62 73 0 5 16 27 38 49 "
+   },
+   {
+    "n": 11,
+    "rc": 0,
+    "expected_head": "68 81 94 107 120 1 14 27 40 53 66",
+    "actual_head": "73 86 99 112 0 6 19 32 45 58 71 "
+   },
+   {
+    "n": 13,
+    "rc": 0,
+    "expected_head": "93 108 123 138 153 168 1 16 31 46 61 76 91",
+    "actual_head": "99 114 129 144 159 0 7 22 37 52 67 82 97 "
+   }
+  ]
+ },
+ "P2615_7p4p6gdm_local": {
+  "compile_rc": 0,
+  "compile_err": "",
+  "cases": [],
+  "tested": 20,
+  "mismatch": 20,
+  "examples": [
+   {
+    "n": 1,
+    "rc": 0,
+    "expected_head": "1",
+    "actual_head": "0"
+   },
+   {
+    "n": 3,
+    "rc": 0,
+    "expected_head": "8 1 6",
+    "actual_head": "7 0 5 "
+   },
+   {
+    "n": 5,
+    "rc": 0,
+    "expected_head": "17 24 1 8 15",
+    "actual_head": "9 16 23 0 0 "
+   },
+   {
+    "n": 7,
+    "rc": 0,
+    "expected_head": "30 39 48 1 10 19 28",
+    "actual_head": "11 20 29 38 47 0 9 "
+   },
+   {
+    "n": 9,
+    "rc": 0,
+    "expected_head": "47 58 69 80 1 12 23 34 45",
+    "actual_head": "13 24 35 46 57 68 79 0 11 "
+   },
+   {
+    "n": 11,
+    "rc": 0,
+    "expected_head": "68 81 94 107 120 1 14 27 40 53 66",
+    "actual_head": "15 28 41 54 67 80 93 106 119 0 13 "
+   }
+  ]
+ },
+ "P2669_79f7f3bn": {
+  "compile_rc": 0,
+  "compile_err": "",
+  "cases": [
+   {
+    "k": 1,
+    "expected": "1",
+    "actual": "1",
+    "rc": 0
+   },
+   {
+    "k": 2,
+    "expected": "3",
+    "actual": "3",
+    "rc": 0
+   },
+   {
+    "k": 3,
+    "expected": "5",
+    "actual": "5",
+    "rc": 0
+   },
+   {
+    "k": 6,
+    "expected": "14",
+    "actual": "14",
+    "rc": 0
+   },
+   {
+    "k": 10,
+    "expected": "30",
+    "actual": "30",
+    "rc": 0
+   },
+   {
+    "k": 1000,
+    "expected": "29820",
+    "actual": "29820",
+    "rc": 0
+   },
+   {
+    "k": 10000,
+    "expected": "942820",
+    "actual": "942820",
+    "rc": 0
+   }
+  ],
+  "tested": 10000,
+  "mismatch": 0,
+  "examples": []
+ },
+ "P2615_0dhpwlt6": {
+  "compile_rc": 0,
+  "compile_err": "",
+  "cases": [],
+  "tested": 20,
+  "mismatch": 0,
+  "examples": [],
+  "sample_3": {
+   "rc": 0,
+   "output": "8 1 6 \n3 5 7 \n4 9 2",
+   "expected": "8 1 6\n3 5 7\n4 9 2"
+  }
+ }
+}

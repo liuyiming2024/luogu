@@ -33,6 +33,10 @@ return 0;
 <div class="src"><div class="srcname">r12__p1469_o1.cpp <span class="hint">· 按题号关联</span></div><pre class="code"><code>#include&lt;cstdio&gt;
 int main(){int n,s=0,x; scanf(&quot;%d&quot;,&amp;n); for(int i=1;i&lt;=n;i++){scanf(&quot;%d&quot;,&amp;x); s^=x;} printf(&quot;%d&quot;,s); return 0;}
 </code></pre></div>
+<h2>甲类合法反例（题面内 · 确定性 WA/RE）</h2>
+<table class="tb"><thead><tr><th>编号</th><th>题解</th><th>代表输入</th><th>期望 → 实际</th></tr></thead><tbody>
+<tr><td>H-031</td><td>P1469 <code>iv10492z</code></td><td>n=3000001，<strong>8 Mb 限制</strong></td><td><code>2</code> → SIGABRT；同限制静态 O(1) 对照版输出 <code>2</code></td></tr>
+</tbody></table>
 <h2>复现</h2><pre class="code"><code>g++ -std=c++17 -O2 -o /tmp/t 04_复现代码/&lt;对应文件&gt;
 echo &quot;&lt;题面内输入&gt;&quot; | /tmp/t</code></pre>
 <h2>相关报告</h2><ul class="links">

@@ -1,6 +1,6 @@
 {
  "说明": "已发现的全部 8 位文章编号，按题号升序、同题按编号字典序有序编目；逐条判定是否题解",
- "收录总数": 76,
+ "收录总数": 81,
  "全站规模说明": "洛谷全站题解约 16 万篇；本表为当前已发现并登记的全部编号，非全站遍历结果。新增编号用 ingest.py 低频补录。",
  "articles": [
   {
@@ -761,6 +761,24 @@
    "has_code": true
   },
   {
+   "lid": "88t0yv7r",
+   "problem": "P1307",
+   "title": "P1307 题解 · 88t0yv7r",
+   "is_article": "是",
+   "article_type": "题解文章（8 位 article 编号）",
+   "class": "乙·笔误/防抄袭",
+   "batch": "第13批",
+   "verifiable": "是",
+   "note": "作者明写「现增加防抄袭内容」；逐字含不可见 tag characters 编译 CE 不计缺陷，剥离后 317 组 0 不一致",
+   "url": "https://www.luogu.com/article/88t0yv7r",
+   "page": "articles/88t0yv7r.html",
+   "code_files": [
+    "r13__P1307_88t0yv7r.cpp",
+    "r13__P1307_88t0yv7r_rawtags.cpp"
+   ],
+   "has_code": true
+  },
+  {
    "lid": "03xk59dp",
    "problem": "P1308",
    "title": "P1308 题解 · 03xk59dp",
@@ -1204,6 +1222,60 @@
    "has_code": true
   },
   {
+   "lid": "0dhpwlt6",
+   "problem": "P2615",
+   "title": "P2615 题解 · 0dhpwlt6",
+   "is_article": "是",
+   "article_type": "题解文章（仅四条件思路片段）",
+   "class": "丙·未 hack",
+   "batch": "第13批",
+   "verifiable": "是",
+   "note": "页面仅思路片段，按题解文字补最小外壳后 n=1..39 全奇数 0 不一致（同第1批 P1220 例）",
+   "url": "https://www.luogu.com/article/0dhpwlt6",
+   "page": "articles/0dhpwlt6.html",
+   "code_files": [
+    "r13__P2615_0dhpwlt6.cpp"
+   ],
+   "has_code": true
+  },
+  {
+   "lid": "7p4p6gdm",
+   "problem": "P2615",
+   "title": "P2615 题解 · 7p4p6gdm",
+   "is_article": "是",
+   "article_type": "题解文章（8 位 article 编号）",
+   "class": "甲·已 hack",
+   "batch": "第13批",
+   "verifiable": "是",
+   "note": "memset 误标「初始化x,y」，x/y 未赋值；n=1 期望 1 实际 0，官方样例 n=3 即挂；补 x=1;y=n/2+1 后 20 组全对",
+   "url": "https://www.luogu.com/article/7p4p6gdm",
+   "page": "articles/7p4p6gdm.html",
+   "code_files": [
+    "r13__P2615_7p4p6gdm.cpp",
+    "r13__P2615_7p4p6gdm_by_text.cpp",
+    "r13__P2615_7p4p6gdm_fix.cpp",
+    "r13__P2615_7p4p6gdm_local.cpp"
+   ],
+   "has_code": true
+  },
+  {
+   "lid": "79f7f3bn",
+   "problem": "P2669",
+   "title": "P2669 题解 · 79f7f3bn",
+   "is_article": "是",
+   "article_type": "题解文章（8 位 article 编号）",
+   "class": "丙·未 hack",
+   "batch": "第13批",
+   "verifiable": "是",
+   "note": "数学分组法 d=k-sum+t+1；k=1..10000 全枚举 0 不一致，10000→942820",
+   "url": "https://www.luogu.com/article/79f7f3bn",
+   "page": "articles/79f7f3bn.html",
+   "code_files": [
+    "r13__P2669_79f7f3bn.cpp"
+   ],
+   "has_code": true
+  },
+  {
    "lid": "smtoxvvs",
    "problem": "P3397",
    "title": "P3397 题解 · smtoxvvs",
@@ -1290,6 +1362,21 @@
     "build__r3__P5638_nzmytiez.cpp"
    ],
    "has_code": true
+  },
+  {
+   "lid": "zm6gqovk",
+   "problem": "—",
+   "title": "— 题解 · zm6gqovk",
+   "is_article": "否",
+   "article_type": "帮助中心·题解撰写规范（非题解）",
+   "class": "非题解·规范文章",
+   "batch": "第13批",
+   "verifiable": "不适用",
+   "note": "《如何正确的写一篇优秀题解？》；正文含「不应在代码中加入防抄袭内容」；首个 是否题解=否 样本",
+   "url": "https://www.luogu.com/article/zm6gqovk",
+   "page": "articles/zm6gqovk.html",
+   "code_files": [],
+   "has_code": false
   }
  ]
 }

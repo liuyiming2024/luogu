@@ -95,6 +95,10 @@ bool finish (int i, int j, int k) {
     return ret;
 }
 </code></pre></div>
+<h2>甲类合法反例（题面内 · 确定性 WA/RE）</h2>
+<table class="tb"><thead><tr><th>编号</th><th>题解</th><th>代表输入</th><th>期望 → 实际</th></tr></thead><tbody>
+<tr><td>H-024/025</td><td>P1618 <code>ehkpairy</code></td><td><code>0 1 2</code> / <code>0 2 3</code></td><td><code>No!!!</code> → SIGFPE</td></tr>
+</tbody></table>
 <h2>复现</h2><pre class="code"><code>g++ -std=c++17 -O2 -o /tmp/t 04_复现代码/&lt;对应文件&gt;
 echo &quot;&lt;题面内输入&gt;&quot; | /tmp/t</code></pre>
 <h2>相关报告</h2><ul class="links">

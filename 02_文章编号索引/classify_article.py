@@ -12,7 +12,8 @@ def load():
 def classify(x, idx):
     if x in idx:
         r = idx[x]
-        return f"[索引命中] {x}: 是题解 | {r['题号']} | {r['归类']} | {r['批次']} | {r['URL']}"
+        return (f"[索引命中] {x}: 是否题解={r['是否题解']} | {r['题号']} | "
+                f"{r['归类']} | {r['批次']} | {r['URL']}")
     if x.startswith("http"):
         u = x
         if re.search(r"luogu\.(?:com|org)/article/[a-z0-9]{8}", u):

@@ -44,6 +44,7 @@ gw5uvykg,P1204,P1204 题解 · gw5uvykg,是,丙·未 hack,第9批,是,未 hack,h
 ove5v8ck,P1216,P1216 题解 · ove5v8ck,是,丙·未 hack,第2批,是,两段代码 120+ 组全对,https://www.luogu.com/article/ove5v8ck,articles/ove5v8ck.html,True
 tneoku44,P1216,P1216 题解 · tneoku44,是,丙·未 hack,第4批,是,未 hack,https://www.luogu.com/article/tneoku44,articles/tneoku44.html,True
 uezud59i,P1220,P1220 题解 · uezud59i,是,丙·未 hack,第1批,是,越界数据作废后归未 hack（第2批重判）,https://www.luogu.com/article/uezud59i,articles/uezud59i.html,True
+88t0yv7r,P1307,P1307 题解 · 88t0yv7r,是,乙·笔误/防抄袭,第13批,是,作者明写「现增加防抄袭内容」；逐字含不可见 tag characters 编译 CE 不计缺陷，剥离后 317 组 0 不一致,https://www.luogu.com/article/88t0yv7r,articles/88t0yv7r.html,True
 03xk59dp,P1308,P1308 题解 · 03xk59dp,是,丙·未 hack,第11批,是,getchar+getline，含行首/连续空格,https://www.luogu.com/article/03xk59dp,articles/03xk59dp.html,True
 0z8yhoc0,P1328,P1328 题解 · 0z8yhoc0,是,丙·未 hack,第9批,是,w[a] 注释写反但代码自洽,https://www.luogu.com/article/0z8yhoc0,articles/0z8yhoc0.html,False
 dk5mkxij,P1421,P1421 题解 · dk5mkxij,是,甲·已 hack,第7批,是,double 累减边界，全枚举 2031 组 WA,https://www.luogu.com/article/dk5mkxij,articles/dk5mkxij.html,True
@@ -70,8 +71,12 @@ xgwn9tfg,P1914,P1914 题解 · xgwn9tfg,是,丙·未 hack,第12批,是,n=1..26×
 vgwp3k30,P2089,P2089 题解 · vgwp3k30,是,丙·未 hack,第11批,是,10 层枚举，峰值方案数 8953,https://www.luogu.com/article/vgwp3k30,articles/vgwp3k30.html,True
 b7py0ojt,P2141,P2141 题解 · b7py0ojt,是,丙·未 hack,第6批,是,未 hack,https://www.luogu.com/article/b7py0ojt,articles/b7py0ojt.html,True
 bv44vwt6,P2240,P2240 题解 · bv44vwt6,是,丙·未 hack,第5批,是,浮点舍入自查：printf 为银行家舍入,https://www.luogu.com/article/bv44vwt6,articles/bv44vwt6.html,True
+0dhpwlt6,P2615,P2615 题解 · 0dhpwlt6,是,丙·未 hack,第13批,是,页面仅思路片段，按题解文字补最小外壳后 n=1..39 全奇数 0 不一致（同第1批 P1220 例）,https://www.luogu.com/article/0dhpwlt6,articles/0dhpwlt6.html,True
+7p4p6gdm,P2615,P2615 题解 · 7p4p6gdm,是,甲·已 hack,第13批,是,"memset 误标「初始化x,y」，x/y 未赋值；n=1 期望 1 实际 0，官方样例 n=3 即挂；补 x=1;y=n/2+1 后 20 组全对",https://www.luogu.com/article/7p4p6gdm,articles/7p4p6gdm.html,True
+79f7f3bn,P2669,P2669 题解 · 79f7f3bn,是,丙·未 hack,第13批,是,数学分组法 d=k-sum+t+1；k=1..10000 全枚举 0 不一致，10000→942820,https://www.luogu.com/article/79f7f3bn,articles/79f7f3bn.html,True
 smtoxvvs,P3397,P3397 题解 · smtoxvvs,是,丙·未 hack,第11批,是,原文无 using 行；自查外壳引入 map 歧义,https://www.luogu.com/article/smtoxvvs,articles/smtoxvvs.html,True
 l6u32sp7,P3959,P3959 题解 · l6u32sp7,是,丙·未 hack,第1批,是,Prüfer 全枚举未找到更优解（第2批重判）,https://www.luogu.com/article/l6u32sp7,articles/l6u32sp7.html,True
 up402yw6,P4995,P4995 题解 · up402yw6,是,丙·未 hack,第4批,是,状压 DP 独立解 120 组全对,https://www.luogu.com/article/up402yw6,articles/up402yw6.html,True
 qajlal91,P5015,P5015 题解 · qajlal91,是,丙·未 hack,第12批,是,getline 逐字符判空格，307 组含空串/全空格/连续空格 0 不一致,https://www.luogu.com/article/qajlal91,articles/qajlal91.html,True
 nzmytiez,P5638,P5638 题解 · nzmytiez,是,甲·已 hack,第3批,是,k>=n 时窗口循环不进，输出总长度,https://www.luogu.com/article/nzmytiez,articles/nzmytiez.html,True
+zm6gqovk,—,— 题解 · zm6gqovk,否,非题解·规范文章,第13批,不适用,《如何正确的写一篇优秀题解？》；正文含「不应在代码中加入防抄袭内容」；首个 是否题解=否 样本,https://www.luogu.com/article/zm6gqovk,articles/zm6gqovk.html,False
