@@ -26,7 +26,7 @@ rjjud4hi,P1075,P1075 题解 · rjjud4hi,是,丙·未 hack,第7批,是,未 hack,h
 1ndosdfs,P1089,P1089 题解 · 1ndosdfs,是,丙·未 hack,第6批,是,mom*=1.2 浮点枚举 0 处不一致,https://www.luogu.com/article/1ndosdfs,articles/1ndosdfs.html,True
 zcxe384l,P1090,P1090 题解 · zcxe384l,是,丙·未 hack,第3批,是,逐字版 pop() 缺 [] 属展示缺陷，不计,https://www.luogu.com/article/zcxe384l,articles/zcxe384l.html,True
 tehqdnw3,P1093,P1093 题解 · tehqdnw3,是,丙·未 hack,第6批,是,未 hack,https://www.luogu.com/article/tehqdnw3,articles/tehqdnw3.html,True
-88laurj5,P1098,P1098 题解 · 88laurj5,是,登记·不计数,第8批,否,有 lid，逐字代码取不全，登记不计数,https://www.luogu.com/article/88laurj5,articles/88laurj5.html,False
+88laurj5,P1098,P1098 题解 · 88laurj5,是,乙·笔误/防抄袭,第14批,是,原第8批「代码取不全」登记条目，本轮逐字取回全文；p1=2 数字顺序展开 j+30 应为 j+32，2 2 1 / 1-5 期望 12233445 实际 10011225；改一个数字后 415 组 0 不一致,https://www.luogu.com/article/88laurj5,articles/88laurj5.html,True
 l9bmtvor,P1098,P1098 题解 · l9bmtvor,是,甲·已 hack,第8批,是,&&p3==1 锁死展开分支 + l==1 双缺陷,https://www.luogu.com/article/l9bmtvor,articles/l9bmtvor.html,False
 zcy00qo9,P1098,P1098 题解 · zcy00qo9,是,甲·已 hack,第8批,是,p1==2 数字分支缺逆序,https://www.luogu.com/article/zcy00qo9,articles/zcy00qo9.html,False
 qle49r7h,P1100,P1100 题解 · qle49r7h,是,丙·未 hack,第11批,是,转 32 位二进制串交换，0/2^32-1 边界全对,https://www.luogu.com/article/qle49r7h,articles/qle49r7h.html,True
@@ -52,7 +52,7 @@ dk5mkxij,P1421,P1421 题解 · dk5mkxij,是,甲·已 hack,第7批,是,double 累
 apqvl7bn,P1424,P1424 题解 · apqvl7bn,是,丙·未 hack,第6批,是,含 n=1e5 边界,https://www.luogu.com/article/apqvl7bn,articles/apqvl7bn.html,True
 beuv9jew,P1425,P1425 题解 · beuv9jew,是,丙·未 hack,第7批,是,全转分钟法；注释说反但代码自洽,https://www.luogu.com/article/beuv9jew,articles/beuv9jew.html,True
 nobyk23w,P1425,P1425 题解 · nobyk23w,是,丙·未 hack,第7批,是,借位减法；第10批重复登记,https://www.luogu.com/article/nobyk23w,articles/nobyk23w.html,True
-2edysvbn,P1428,P1428 题解 · 2edysvbn,是,登记·不计数,第9批,否,有 lid，正文只有思路无 AC 代码，登记,https://www.luogu.com/article/2edysvbn,articles/2edysvbn.html,False
+2edysvbn,P1428,P1428 题解 · 2edysvbn,是,丙·未 hack,第14批,是,原第9批「只有思路无 AC 代码」登记条目，本轮逐字取回完整代码；O(n²) 数左边比自己小，304 组 0 不一致,https://www.luogu.com/article/2edysvbn,articles/2edysvbn.html,True
 3aph5o1d,P1469,P1469 题解 · 3aph5o1d,是,丙·未 hack,第12批,是,Pascal 两块；异或版 61 组全对，快排块为作者非主推铺垫，数组偏小实测未崩,https://www.luogu.com/article/3aph5o1d,articles/3aph5o1d.html,True
 iv10492z,P1469,P1469 题解 · iv10492z,是,甲·已 hack,第12批,是,O(n) vector 在题面 8Mb 下 SIGABRT；静态 O(1) 对照版同限制正常,https://www.luogu.com/article/iv10492z,articles/iv10492z.html,True
 utz61eus,P1469,P1469 题解 · utz61eus,是,甲·已 hack,第12批,是,桶下标越界+末尾只扫到1e7；3/2 2 10000001 期望 10000001 实际空输出,https://www.luogu.com/article/utz61eus,articles/utz61eus.html,True
@@ -77,6 +77,7 @@ bv44vwt6,P2240,P2240 题解 · bv44vwt6,是,丙·未 hack,第5批,是,浮点舍�
 smtoxvvs,P3397,P3397 题解 · smtoxvvs,是,丙·未 hack,第11批,是,原文无 using 行；自查外壳引入 map 歧义,https://www.luogu.com/article/smtoxvvs,articles/smtoxvvs.html,True
 l6u32sp7,P3959,P3959 题解 · l6u32sp7,是,丙·未 hack,第1批,是,Prüfer 全枚举未找到更优解（第2批重判）,https://www.luogu.com/article/l6u32sp7,articles/l6u32sp7.html,True
 up402yw6,P4995,P4995 题解 · up402yw6,是,丙·未 hack,第4批,是,状压 DP 独立解 120 组全对,https://www.luogu.com/article/up402yw6,articles/up402yw6.html,True
+g8gclrnk,P5015,P5015 题解 · g8gclrnk,是,丙·未 hack,第14批,是,getline + for(char c:s) 判 c!=' '&&c!='\n'；307 组含空串/全空格 0 不一致（同题 qajlal91 对照）,https://www.luogu.com/article/g8gclrnk,articles/g8gclrnk.html,True
 qajlal91,P5015,P5015 题解 · qajlal91,是,丙·未 hack,第12批,是,getline 逐字符判空格，307 组含空串/全空格/连续空格 0 不一致,https://www.luogu.com/article/qajlal91,articles/qajlal91.html,True
 nzmytiez,P5638,P5638 题解 · nzmytiez,是,甲·已 hack,第3批,是,k>=n 时窗口循环不进，输出总长度,https://www.luogu.com/article/nzmytiez,articles/nzmytiez.html,True
 zm6gqovk,—,— 题解 · zm6gqovk,否,非题解·规范文章,第13批,不适用,《如何正确的写一篇优秀题解？》；正文含「不应在代码中加入防抄袭内容」；首个 是否题解=否 样本,https://www.luogu.com/article/zm6gqovk,articles/zm6gqovk.html,False

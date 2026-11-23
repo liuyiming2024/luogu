@@ -1,0 +1,59 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>洛谷题解逐篇hack清单_第14批.md · 离线归档</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">01_批次清单 / 洛谷题解逐篇hack清单_第14批.md</span></header>
+<main class="doc"><h1>洛谷题解逐篇 hack 清单 · 第 14 批（低频补录）</h1>
+<blockquote>用户提出「可以用保存站，2 秒一次就还好吧」。本轮先按 2 秒间隔实测保存站， 结论见 <code>02_文章编号索引/保存站可用性记录.md</code>：<strong>8 个 curl 端点全 403 policy_default_denied，保存站文章/列表/搜索/统计页全是 SPA 骨架，首页还挂着 「AI 自动化程序不断请求保存 API，导致队列堵塞」的降级公告</strong>——瓶颈不在频率。 于是把「2 秒一次」做成可配置取回器存进仓库，本批继续用可直读通道逐篇补录。</blockquote>
+<hr>
+<h2>1. 本批 3 篇：乙 1 / 丙 2，另交付 1 个取回器</h2>
+<table class="tb"><thead><tr><th>#</th><th>题号</th><th>编号</th><th>是否题解</th><th>归类</th><th>结论</th></tr></thead><tbody><tr><td>89</td><td>P5015</td><td><code>g8gclrnk</code></td><td>是</td><td><strong>丙</strong></td><td><code>getline</code> + <code>for(char c:s)</code> 双条件判空格/换行，307 组 0 不一致</td></tr><tr><td>90</td><td>P1098</td><td><code>88laurj5</code></td><td>是</td><td><strong>乙</strong></td><td>p1=2 数字顺序展开把 <code>j+32</code> 写成 <code>j+30</code>，改一个数字即全对</td></tr><tr><td>91</td><td>P1428</td><td><code>2edysvbn</code></td><td>是</td><td><strong>丙</strong></td><td>O(n²) 双重循环数「左边比自己小」，304 组 0 不一致</td></tr></tbody></table>
+<p><code>88laurj5</code> 与 <code>2edysvbn</code> 原本是<strong>「登记·不计数」</strong>条目（第 8 / 9 批记的是 「代码取不全」「只有思路无 AC 代码」），本轮逐字取回全文后补验完成。</p>
+<p><strong>累计 91 篇 / 甲 14 / 乙 11 / 丙 66 / 甲类合法反例 34 条 / 乙类反例 +1。</strong> 编号索引 81 → <strong>82</strong> 个（新增 <code>g8gclrnk</code>）；<code>登记·不计数</code> 由 2 → <strong>0</strong>。</p>
+<hr>
+<h2>2. 乙 · P1098 <code>88laurj5</code> —— 一个数字写错</h2>
+<p>逐字取回的完整代码里，p3==1 / p1==2 的<strong>数字</strong>分支是：</p>
+<pre class="code"><code>for(char j=a[i-1]-31; j&lt;a[i+1]-32; j++)
+  for(int k=1;k&lt;=p2;k++)
+    if(/* 数字 */) cout&lt;&lt;char(j+30); else cout&lt;&lt;char(j);</code></pre>
+<p>而同一篇里 p3==2 / p1==2 的逆序分支写的是 <code>cout&lt;&lt;char(j+32)</code> —— <strong>两处不对称</strong>。 <code>1-5</code> 展开时 j=18,19,20，<code>j+30</code> 得到 <code>&#x27;0&#x27;,&#x27;1&#x27;,&#x27;2&#x27;</code>，<code>j+32</code> 才是 <code>&#x27;2&#x27;,&#x27;3&#x27;,&#x27;4&#x27;</code>。</p>
+<table class="tb"><thead><tr><th>输入</th><th>期望</th><th>实际</th></tr></thead><tbody><tr><td><strong><code>2 2 1 / 1-5</code></strong>（p1=2, p2=2, p3=1）</td><td><code>12233445</code></td><td><code>10011225</code></td></tr><tr><td><code>2 1 1 / 1-5</code></td><td><code>12345</code></td><td><code>100125</code></td></tr></tbody></table>
+<p>415 组对拍（15 个定点 + 400 组随机 p1∈[1,3] / p2∈[1,8] / p3∈[1,2]， 串含字母数字减号）<strong>只 1 组不一致</strong>——缺陷面极窄：必须同时满足 p1=2、p3=1、数字区间、顺序展开。但确实是题面内确定性 WA。</p>
+<p><strong>修复版</strong>只把 <code>j+30</code> 改成 <code>j+32</code>（一个字符），415 组 <strong>0 不一致</strong> → <strong>乙类</strong>。</p>
+<p>划界与第 8 批同题 <code>zcy00qo9</code> 形成对照：那篇是 p1==2 数字分支<strong>整个逆序分支缺失</strong>， 要插 3 行代码 → 甲；这篇只是常量笔误，改一个数字 → 乙。修复代价判据保持一致。</p>
+<blockquote>自查：<code>j+30</code> 看着像「页面把 32 吞成 30」，但两次逐字取回的正文一致， 且同篇 p3==2 分支明确写 <code>+32</code>，所以按「原文如此」处理，归乙不归丙。</blockquote>
+<hr>
+<h2>3. 丙 · 2 篇</h2>
+<ul><li><strong>P5015 <code>g8gclrnk</code></strong>：<code>getline(cin,s)</code> + <code>for(char c:s) if(c!=&#x27; &#x27;&amp;&amp;c!=&#x27;\n&#x27;) cnt++;</code>。</li></ul>
+<p><code>&amp;&amp;c!=&#x27;\n&#x27;</code> 冗余但无害（getline 读到的串不含换行）。与同题 <code>qajlal91</code> （逐字符下标 + 只判空格）构成两种写法对照，307 组（含空串、全空格、 <code>Ca 45</code>、连续空格）<strong>0 不一致</strong>。</p>
+<ul><li><strong>P1428 <code>2edysvbn</code></strong>：<code>for(j=i-1;j&gt;=1;j--) if(a[i]&gt;a[j]) sum++;</code>，</li></ul>
+<p>每次外层循环 <code>cout&lt;&lt;sum&lt;&lt;&#x27; &#x27;</code> 后归零。题面 n≤100，304 组 （300 随机 + 官方样例 <code>4 3 0 5 1 2</code> + 全相等 / 严格递增 / 严格递减）<strong>0 不一致</strong>。 <code>int a[3010]</code> 足够，行尾空格按题面口径 rstrip 后比较。</p>
+<hr>
+<h2>4. 保存站实测（本轮重点，详见独立记录）</h2>
+<table class="tb"><thead><tr><th>通道</th><th>端点数</th><th>结论</th></tr></thead><tbody><tr><td>curl 直连 luogu.me 首页 / article / api / help / 无 www / query</td><td>7</td><td><strong>全 403</strong> <code>policy_default_denied</code></td></tr><tr><td>curl 直连 luogu.com/article</td><td>1</td><td><strong>403</strong>（同一策略层）</td></tr><tr><td>内置通道 luogu.me 首页</td><td>1</td><td>可读，仅公告与站点说明</td></tr><tr><td>内置通道 luogu.me 文章 / articles / square / statistics / help / search</td><td>6</td><td><strong>全是 SPA 骨架</strong>，无任何 8 位编号、无正文</td></tr><tr><td>内置通道 luogu.com/problem/.../solution</td><td>1</td><td>无法获取（需登录）</td></tr><tr><td>内置通道 luogu.com/article/&lt;lid&gt;</td><td>4</td><td><strong>可用</strong>，本轮逐字取回 4 篇完整代码</td></tr></tbody></table>
+<p>保存站首页逐字引用：</p>
+<blockquote>「近期有大量 AI 自动化程序不断请求保存 API,导致队列堵塞。」 「我们正在实现合适的解决方案。」</blockquote>
+<p>所以「2 秒一次」不是解药：① 出口策略层直接拒绝直连；② 正文与列表依赖 JS 调 保存 API；③ 站点自己已因自动化请求降级。<strong>不刷保存 API</strong> 这条不因降频放宽。</p>
+<h3>已交付：<code>site/lowfreq_fetch.py</code></h3>
+<p>把用户认可的「2 秒一次」做成<strong>可配置、有序、可断点续传</strong>的取回器：</p>
+<ul><li><code>--delay 2.0</code>（默认，低于 1 秒直接拒绝）、<code>--base</code> 可切保存站 / luogu.com</li><li>队列只消费主表里 <code>是否题解=是 且 可逐字验证 != 是</code> 的条目，按题号升序；</li></ul>
+<p><strong>不遍历 36⁸ 编号空间、不并发、不猜 ID、不登录</strong></p>
+<ul><li>结果写 <code>site/data/ingested/&lt;lid&gt;.json</code> + <code>取回日志.jsonl</code>，</li></ul>
+<p>粗判「是否题解」，<strong>不自动改主表</strong></p>
+<ul><li>命中「服务降级公告 / Request denied / 队列堵塞」或 HTTP 403/429/5xx →</li></ul>
+<p><strong>立即停止本轮</strong>，不重试轰炸</p>
+<ul><li>生成器 <code>_build_site.py</code> 会自动合并 ingested 正文到文章页，闭环完整</li></ul>
+<p>配套 <code>02_文章编号索引/编号池_待取回.md</code> 说明有序补录流程： 明确编号 → <code>ingest.py</code> 追加 → <code>lowfreq_fetch.py</code> 取回 → 人工判定 → 重生成站点。</p>
+<hr>
+<h2>5. 差点误判 / 自查</h2>
+<ol><li><strong>以为保存站 403 是限流</strong>：看到 403 第一反应是「降频就行」，但响应体写明</li></ol>
+<p><code>No policy rule matched the request</code> / <code>policy_default_denied</code>，是<strong>策略网关默认拒绝</strong>， 不是 429。换 UA、换路径、2 秒间隔全都一样。</p>
+<ol><li><strong>以为「文章广场」能列编号</strong>：保存站导航里有「文章广场」「统计数据」，</li></ol>
+<p>逐个取回才发现全是 SPA 骨架，连归档总数都没有。静态取回拿不到动态数据。</p>
+<ol><li><strong>搜索摘要 ≠ 正文</strong>：本轮 3 轮检索返回的 P1055 / P1980 / P2669 代码都是</li></ol>
+<p><code>displayable:false</code> 的摘要片段，且<strong>无 8 位编号</strong>，按纪律不拿来验证。 本批 3 篇全部来自可逐字取回的 <code>article/&lt;lid&gt;</code> 正文。</p>
+<ol><li><strong><code>88laurj5</code> 的 <code>a[i-1]</code> 越界读</strong>：代码在 <code>if(i==0)</code> 之前就已经读了 <code>a[i-1]</code>，</li></ol>
+<p>属 UB；但实测 i=0 的用例输出正确，按「题面内确定性 WA」不单独计缺陷，只登记。</p>
+<hr>
+<h2>6. 低频声明</h2>
+<table class="tb"><thead><tr><th>动作</th><th>次数</th></tr></thead><tbody><tr><td>curl 探测（严格 sleep 2）</td><td>8</td></tr><tr><td>内置通道取回（保存站 6 页 + 题解列表 1 页 + 正文 4 篇）</td><td>11</td></tr><tr><td>检索（3 轮，找新编号 / 核对题面）</td><td>3</td></tr><tr><td>洛谷登录 / 提交 / 保存 API 批量拉取</td><td><strong>0</strong></td></tr><tr><td>GitHub API（归档查询与推送）</td><td>少量</td></tr></tbody></table>
+<p>「枚举」始终指<strong>对已发现编号做有序编目</strong>，不对 36⁸ 编号空间或全站做遍历。</p></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>

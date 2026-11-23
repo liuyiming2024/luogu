@@ -26,7 +26,7 @@
 25,1ndosdfs,P1089,是,题解文章（8 位 article 编号）,是,丙·未 hack,第6批,mom*=1.2 浮点枚举 0 处不一致,https://www.luogu.com/article/1ndosdfs
 26,zcxe384l,P1090,是,题解文章（8 位 article 编号）,是,丙·未 hack,第3批,逐字版 pop() 缺 [] 属展示缺陷，不计,https://www.luogu.com/article/zcxe384l
 27,tehqdnw3,P1093,是,题解文章（8 位 article 编号）,是,丙·未 hack,第6批,未 hack,https://www.luogu.com/article/tehqdnw3
-28,88laurj5,P1098,是,题解文章（8 位 article 编号）,否,登记·不计数,第8批,有 lid，逐字代码取不全，登记不计数,https://www.luogu.com/article/88laurj5
+28,88laurj5,P1098,是,题解文章（8 位 article 编号）,是,乙·笔误/防抄袭,第14批,原第8批「代码取不全」登记条目，本轮逐字取回全文；p1=2 数字顺序展开 j+30 应为 j+32，2 2 1 / 1-5 期望 12233445 实际 10011225；改一个数字后 415 组 0 不一致,https://www.luogu.com/article/88laurj5
 29,l9bmtvor,P1098,是,题解文章（8 位 article 编号）,是,甲·已 hack,第8批,&&p3==1 锁死展开分支 + l==1 双缺陷,https://www.luogu.com/article/l9bmtvor
 30,zcy00qo9,P1098,是,题解文章（8 位 article 编号）,是,甲·已 hack,第8批,p1==2 数字分支缺逆序,https://www.luogu.com/article/zcy00qo9
 31,qle49r7h,P1100,是,题解文章（8 位 article 编号）,是,丙·未 hack,第11批,转 32 位二进制串交换，0/2^32-1 边界全对,https://www.luogu.com/article/qle49r7h
@@ -52,7 +52,7 @@
 51,apqvl7bn,P1424,是,题解文章（8 位 article 编号）,是,丙·未 hack,第6批,含 n=1e5 边界,https://www.luogu.com/article/apqvl7bn
 52,beuv9jew,P1425,是,题解文章（8 位 article 编号）,是,丙·未 hack,第7批,全转分钟法；注释说反但代码自洽,https://www.luogu.com/article/beuv9jew
 53,nobyk23w,P1425,是,题解文章（8 位 article 编号）,是,丙·未 hack,第7批,借位减法；第10批重复登记,https://www.luogu.com/article/nobyk23w
-54,2edysvbn,P1428,是,题解文章（8 位 article 编号）,否,登记·不计数,第9批,有 lid，正文只有思路无 AC 代码，登记,https://www.luogu.com/article/2edysvbn
+54,2edysvbn,P1428,是,题解文章（8 位 article 编号）,是,丙·未 hack,第14批,原第9批「只有思路无 AC 代码」登记条目，本轮逐字取回完整代码；O(n²) 数左边比自己小，304 组 0 不一致,https://www.luogu.com/article/2edysvbn
 55,3aph5o1d,P1469,是,题解文章（8 位 article 编号）,是,丙·未 hack,第12批,Pascal 两块；异或版 61 组全对，快排块为作者非主推铺垫，数组偏小实测未崩,https://www.luogu.com/article/3aph5o1d
 56,iv10492z,P1469,是,题解文章（8 位 article 编号）,是,甲·已 hack,第12批,O(n) vector 在题面 8Mb 下 SIGABRT；静态 O(1) 对照版同限制正常,https://www.luogu.com/article/iv10492z
 57,utz61eus,P1469,是,题解文章（8 位 article 编号）,是,甲·已 hack,第12批,桶下标越界+末尾只扫到1e7；3/2 2 10000001 期望 10000001 实际空输出,https://www.luogu.com/article/utz61eus
@@ -77,6 +77,7 @@
 76,smtoxvvs,P3397,是,题解文章（8 位 article 编号）,是,丙·未 hack,第11批,原文无 using 行；自查外壳引入 map 歧义,https://www.luogu.com/article/smtoxvvs
 77,l6u32sp7,P3959,是,题解文章（8 位 article 编号）,是,丙·未 hack,第1批,Prüfer 全枚举未找到更优解（第2批重判）,https://www.luogu.com/article/l6u32sp7
 78,up402yw6,P4995,是,题解文章（8 位 article 编号）,是,丙·未 hack,第4批,状压 DP 独立解 120 组全对,https://www.luogu.com/article/up402yw6
-79,qajlal91,P5015,是,题解文章（8 位 article 编号）,是,丙·未 hack,第12批,getline 逐字符判空格，307 组含空串/全空格/连续空格 0 不一致,https://www.luogu.com/article/qajlal91
-80,nzmytiez,P5638,是,题解文章（8 位 article 编号）,是,甲·已 hack,第3批,k>=n 时窗口循环不进，输出总长度,https://www.luogu.com/article/nzmytiez
-81,zm6gqovk,—,否,帮助中心·题解撰写规范（非题解）,不适用,非题解·规范文章,第13批,《如何正确的写一篇优秀题解？》；正文含「不应在代码中加入防抄袭内容」；首个 是否题解=否 样本,https://www.luogu.com/article/zm6gqovk
+79,g8gclrnk,P5015,是,题解文章（8 位 article 编号）,是,丙·未 hack,第14批,getline + for(char c:s) 判 c!=' '&&c!='\n'；307 组含空串/全空格 0 不一致（同题 qajlal91 对照）,https://www.luogu.com/article/g8gclrnk
+80,qajlal91,P5015,是,题解文章（8 位 article 编号）,是,丙·未 hack,第12批,getline 逐字符判空格，307 组含空串/全空格/连续空格 0 不一致,https://www.luogu.com/article/qajlal91
+81,nzmytiez,P5638,是,题解文章（8 位 article 编号）,是,甲·已 hack,第3批,k>=n 时窗口循环不进，输出总长度,https://www.luogu.com/article/nzmytiez
+82,zm6gqovk,—,否,帮助中心·题解撰写规范（非题解）,不适用,非题解·规范文章,第13批,《如何正确的写一篇优秀题解？》；正文含「不应在代码中加入防抄袭内容」；首个 是否题解=否 样本,https://www.luogu.com/article/zm6gqovk

@@ -10,11 +10,23 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = _HERE if os.path.isdir(os.path.join(_HERE, "02_文章编号索引")) else "/data/workspace/luogu_repo"
 SITE = os.path.join(REPO, "site")
 DATA = os.path.join(SITE, "data")
-if os.path.exists(SITE):
-    shutil.rmtree(SITE)
-for d in [SITE, DATA, os.path.join(SITE, "articles"),
-          os.path.join(SITE, "reports"), os.path.join(SITE, "assets")]:
-    os.makedirs(d, exist_ok=True)
+# 选择性清理：只重建生成器产出的目录；**绝不删除** site/ 下的常驻资产
+# （ingest.py / lowfreq_fetch.py / data/ingested/ / 取回日志），否则离线补录成果会被抹掉。
+os.makedirs(SITE, exist_ok=True)
+os.makedirs(DATA, exist_ok=True)
+for sub in ["articles", "reports", "assets"]:
+    _p = os.path.join(SITE, sub)
+    if os.path.exists(_p):
+        shutil.rmtree(_p)
+    os.makedirs(_p)
+for _f in ["index.html", "README.md"]:
+    _p = os.path.join(SITE, _f)
+    if os.path.exists(_p):
+        os.remove(_p)
+for _f in ["articles.json", "articles.csv"]:
+    _p = os.path.join(DATA, _f)
+    if os.path.exists(_p):
+        os.remove(_p)
 
 def esc(s):
     return html.escape(str(s), quote=True)
@@ -294,7 +306,11 @@ index = f"""<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
 </ul>
 <h2>关于「所有文章」</h2>
 <p>本离线站当前收录 <b>{len(articles)}</b> 篇——即项目开始以来<b>已发现并登记的全部</b>题解文章（含正文/代码待补录的条目，一篇不漏）。
-洛谷全站题解约 16 万篇；全量镜像需要归档数据源或极长时间的低频逐篇取回，且会与「不刷接口、不登录、别把号封了」的约束冲突。
+洛谷全站题解约 16 万篇；全量镜像需要归档数据源或极长时间的低频逐篇取回。
+保存站实测（第 14 批）：直连全 403、文章/列表/搜索页均为 SPA 骨架、首页挂着
+「AI 自动化程序不断请求保存 API，导致队列堵塞」降级公告，详见
+`02_文章编号索引/保存站可用性记录.md`。配套 `site/lowfreq_fetch.py` 默认 2 秒/次、
+有序队列、降级即停，可在能访问保存站的网络里低频补录。
 架构已按全量设计：<code>data/articles.json</code> 是有序主表，<code>ingest.py</code> 可持续灌入新文章并重生成页面，不需要改结构。</p>
 </main><footer><div class="wrap">纯离线静态页 · 无 CDN · 无外部资源 · 不发起任何网络请求 · 仓库内无账号与凭据</div></footer>
 <script src="assets/app.js"></script></body></html>"""
@@ -373,12 +389,16 @@ open(os.path.join(SITE, "assets/app.js"), "w", encoding="utf-8").write("""
 })();
 """)
 
-# ------------------------------------------------------------ ingest 补录器（常驻资产，不覆盖）
-# 补录脚本属于可维护资产：重生成站点时**不覆盖**；仅当缺失时从仓库模板恢复。
-_ing = os.path.join(SITE, "ingest.py")
-_tpl = os.path.join(REPO, "02_文章编号索引", "ingest_template.py")
-if not os.path.exists(_ing) and os.path.exists(_tpl):
-    shutil.copyfile(_tpl, _ing)
+# ------------------------------------------------------------ 常驻脚本（不覆盖，缺失时从模板恢复）
+# ingest.py = 低频补录入口；lowfreq_fetch.py = 2 秒一次的有序取回器。
+# 两者都是可维护资产，重生成站点时绝不删除或覆盖；data/ingested/ 同理保留。
+for _name, _tplname in [("ingest.py", "ingest_template.py"),
+                        ("lowfreq_fetch.py", "lowfreq_fetch_template.py")]:
+    _dst = os.path.join(SITE, _name)
+    _tpl = os.path.join(REPO, "02_文章编号索引", _tplname)
+    if not os.path.exists(_dst) and os.path.exists(_tpl):
+        shutil.copyfile(_tpl, _dst)
+os.makedirs(os.path.join(DATA, "ingested"), exist_ok=True)
 
 # ------------------------------------------------------------ 站点说明
 open(os.path.join(SITE, "README.md"), "w", encoding="utf-8").write(f"""# 离线保存站 · 使用说明
@@ -390,18 +410,23 @@ open(os.path.join(SITE, "README.md"), "w", encoding="utf-8").write(f"""# 离线�
 
 - `index.html` —— 按题号分组的全部文章卡片，支持本地搜索与「甲/乙/丙/待补录」筛选
 - `articles/<编号>.html` —— 每篇一页：是否题解判定、归类、批次、原文地址、逐字取回的题解代码、甲类反例、复现命令
-- `reports/` —— 11 份批次报告 + 总览文档，全部渲染成 HTML
+- `reports/` —— {len(REPORT_FILES)} 份批次报告 + 总览文档，全部渲染成 HTML
 - `data/articles.json` / `.csv` —— 有序主表，{len(articles)} 条，机读
-- `ingest.py` —— 低频补录入口
+- `ingest.py` —— 低频补录入口（写 CSV 主表）
+- `lowfreq_fetch.py` —— 有序取回器，默认 2 秒/次，可切保存站 / luogu.com
 
 ## 「所有文章」的口径
 
 本站收录 **{len(articles)} 个 8 位编号 = 项目开始以来已发现并登记的全部文章**，
-含「登记不计数」的条目与 1 个**非题解**规范文章（`zm6gqovk`），一篇不漏。
-另有 8 篇无 8 位编号的题解（vis 版、辅助示意版等）只在批次报告中验证，
-故「逐篇验证 88 篇」与「编号 81 个」口径不同。
-洛谷全站题解约 16 万篇；全量镜像必须有归档数据源或极长时间的低频逐篇取回，
-与「不刷接口、不登录、不把号封了」的约束冲突，所以不假装已经拿到全站。
+含 1 个**非题解**规范文章（`zm6gqovk`），一篇不漏；`登记·不计数` 已全部补全验证。
+另有 9 篇无 8 位编号的题解（vis 版、辅助示意版等）只在批次报告中验证，
+故「逐篇验证 91 篇」与「编号 82 个」口径不同。
+洛谷全站题解约 16 万篇；全量镜像必须有归档数据源或极长时间的低频逐篇取回。
+保存站实测（第 14 批）：直连全 403 `policy_default_denied`，文章 / 列表 / 搜索 /
+统计页均为 SPA 骨架，首页挂着「AI 自动化程序不断请求保存 API，导致队列堵塞」
+降级公告——瓶颈不在频率。所以**不刷保存 API**；`lowfreq_fetch.py` 默认 2 秒/次、
+有序队列、降级即停，留给能正常访问保存站的网络环境用。详见
+`02_文章编号索引/保存站可用性记录.md`。
 
 架构按全量设计：主表有序、补录器可无限追加、页面由脚本重生成，不需要改结构。
 

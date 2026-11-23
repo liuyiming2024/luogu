@@ -1,0 +1,50 @@
+{
+ "P5015_g8gclrnk": {
+  "compile_rc": 0,
+  "compile_err": "",
+  "tested": 307,
+  "mismatch": 0,
+  "examples": []
+ },
+ "P1098_88laurj5": {
+  "compile_rc": 0,
+  "compile_err": "",
+  "tested": 415,
+  "mismatch": 1,
+  "examples": [
+   {
+    "label": "p1=2 数字顺序",
+    "input": "2 2 1 / 1-5",
+    "expected": "12233445",
+    "actual": "10011225",
+    "rc": 0
+   }
+  ],
+  "sample_p1_2_digits": {
+   "input": "2 1 1 / 1-5",
+   "expected": "12345",
+   "actual": "10125",
+   "rc": 0
+  }
+ },
+ "P1098_88laurj5_fix": {
+  "compile_rc": 0,
+  "compile_err": "",
+  "tested": 415,
+  "mismatch": 0,
+  "examples": [],
+  "sample_p1_2_digits": {
+   "input": "2 1 1 / 1-5",
+   "expected": "12345",
+   "actual": "12345",
+   "rc": 0
+  }
+ },
+ "P1428_2edysvbn": {
+  "compile_rc": 0,
+  "compile_err": "",
+  "tested": 304,
+  "mismatch": 0,
+  "examples": []
+ }
+}

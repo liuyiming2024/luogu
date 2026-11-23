@@ -1,6 +1,6 @@
 {
  "说明": "已发现的全部 8 位文章编号，按题号升序、同题按编号字典序有序编目；逐条判定是否题解",
- "收录总数": 81,
+ "收录总数": 82,
  "全站规模说明": "洛谷全站题解约 16 万篇；本表为当前已发现并登记的全部编号，非全站遍历结果。新增编号用 ingest.py 低频补录。",
  "articles": [
   {
@@ -472,14 +472,17 @@
    "title": "P1098 题解 · 88laurj5",
    "is_article": "是",
    "article_type": "题解文章（8 位 article 编号）",
-   "class": "登记·不计数",
-   "batch": "第8批",
-   "verifiable": "否",
-   "note": "有 lid，逐字代码取不全，登记不计数",
+   "class": "乙·笔误/防抄袭",
+   "batch": "第14批",
+   "verifiable": "是",
+   "note": "原第8批「代码取不全」登记条目，本轮逐字取回全文；p1=2 数字顺序展开 j+30 应为 j+32，2 2 1 / 1-5 期望 12233445 实际 10011225；改一个数字后 415 组 0 不一致",
    "url": "https://www.luogu.com/article/88laurj5",
    "page": "articles/88laurj5.html",
-   "code_files": [],
-   "has_code": false
+   "code_files": [
+    "r14__P1098_88laurj5.cpp",
+    "r14__P1098_88laurj5_fix.cpp"
+   ],
+   "has_code": true
   },
   {
    "lid": "l9bmtvor",
@@ -902,14 +905,16 @@
    "title": "P1428 题解 · 2edysvbn",
    "is_article": "是",
    "article_type": "题解文章（8 位 article 编号）",
-   "class": "登记·不计数",
-   "batch": "第9批",
-   "verifiable": "否",
-   "note": "有 lid，正文只有思路无 AC 代码，登记",
+   "class": "丙·未 hack",
+   "batch": "第14批",
+   "verifiable": "是",
+   "note": "原第9批「只有思路无 AC 代码」登记条目，本轮逐字取回完整代码；O(n²) 数左边比自己小，304 组 0 不一致",
    "url": "https://www.luogu.com/article/2edysvbn",
    "page": "articles/2edysvbn.html",
-   "code_files": [],
-   "has_code": false
+   "code_files": [
+    "r14__P1428_2edysvbn.cpp"
+   ],
+   "has_code": true
   },
   {
    "lid": "3aph5o1d",
@@ -1326,6 +1331,23 @@
    "page": "articles/up402yw6.html",
    "code_files": [
     "build__r4__p4995_up402yw6.cpp"
+   ],
+   "has_code": true
+  },
+  {
+   "lid": "g8gclrnk",
+   "problem": "P5015",
+   "title": "P5015 题解 · g8gclrnk",
+   "is_article": "是",
+   "article_type": "题解文章（8 位 article 编号）",
+   "class": "丙·未 hack",
+   "batch": "第14批",
+   "verifiable": "是",
+   "note": "getline + for(char c:s) 判 c!=' '&&c!='\\n'；307 组含空串/全空格 0 不一致（同题 qajlal91 对照）",
+   "url": "https://www.luogu.com/article/g8gclrnk",
+   "page": "articles/g8gclrnk.html",
+   "code_files": [
+    "r14__P5015_g8gclrnk.cpp"
    ],
    "has_code": true
   },
