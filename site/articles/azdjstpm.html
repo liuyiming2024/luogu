@@ -1,0 +1,50 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P1008 · azdjstpm · 题解归档</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">题解 / P1008 / azdjstpm</span></header>
+<main class="article"><h1>P1008 <span class="lid">azdjstpm</span></h1>
+<div class="badge 丙">丙·未 hack</div>
+<table class="tb meta"><tbody>
+<tr><th>是否题解</th><td>是（题解文章（8 位 article 编号））</td></tr>
+<tr><th>归类</th><td>丙·未 hack</td></tr>
+<tr><th>批次</th><td>第15批</td></tr>
+<tr><th>可逐字验证</th><td>是</td></tr>
+<tr><th>判定备注</th><td>Actions 出口取回正文(HTTP200)；bok[9] 越界写为UB，但 -O0/-O1/-O2/-O3/-Os 五档均输出4行正确解，题面内确定性输出正确→归丙(UB登记)，不计缺陷</td></tr>
+<tr><th>原文地址</th><td><a href="https://www.luogu.com/article/azdjstpm" referrerpolicy="no-referrer">https://www.luogu.com/article/azdjstpm</a><span class="hint">（离线时链接不可达，仅留来源）</span></td></tr>
+</tbody></table>
+<h2>题解代码 · 逐字取回 + 最小外壳（1 份）</h2>
+<p class="hint">代码只是辅助：只补 include / main / 必要声明，缺头文件与页面吞字符不计缺陷，仅验核心逻辑。</p>
+<div class="src"><div class="srcname">r15__azdjstpm_P1008_逐字.cpp <span class="hint">· 编号精确匹配</span></div><pre class="code"><code>#include&lt;iostream&gt;
+using namespace std;
+int st[9], bok[9] = {0};
+void dfs(int step) {
+    if (step == 9) {
+        int a = 100*st[0] + 10*st[1] + st[2];//第一个三位数
+        int b = 100*st[3] + 10*st[4] + st[5];//第二个三位数
+        int c = 100*st[6] + 10*st[7] + st[8];//第三个三位数
+        //下面是判断三位数是否成1：2：3的比例
+        if (3*a == c &amp;&amp; 2*a == b) {
+            cout &lt;&lt; st[0] &lt;&lt; st[1] &lt;&lt; st[2] &lt;&lt; &#x27; &#x27;
+                 &lt;&lt; st[3] &lt;&lt; st[4] &lt;&lt; st[5] &lt;&lt; &#x27; &#x27;
+                 &lt;&lt; st[6] &lt;&lt; st[7] &lt;&lt; st[8] &lt;&lt; &#x27;\n&#x27;;
+        }   
+    }
+    //下面是生成全排列
+    for (int i = 1; i &lt;= 9; i++) {
+        if (bok[i]) continue;
+        bok[i] = true;
+        st[step] = i;
+        dfs(step+1);
+        bok[i] = false;
+    }
+}
+int main(){
+    dfs(0);
+    return 0;
+}</code></pre></div>
+<h2>复现</h2><pre class="code"><code>g++ -std=c++17 -O2 -o /tmp/t 04_复现代码/&lt;对应文件&gt;
+echo &quot;&lt;题面内输入&gt;&quot; | /tmp/t</code></pre>
+<h2>相关报告</h2><ul class="links">
+<li><a href="../reports/洛谷题解逐篇hack清单_第15批.md.html">洛谷题解逐篇hack清单_第15批.md</a></li>
+<li><a href="../reports/三类口径与累计统计.md.html">三类口径与自查纪律</a></li>
+</ul></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>

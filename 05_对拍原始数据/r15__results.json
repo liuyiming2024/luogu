@@ -1,0 +1,298 @@
+{
+ "P1424_ju6tr560": {
+  "compile_rc": 0,
+  "compile_err": "",
+  "tested": 312,
+  "mismatch": 0,
+  "examples": [],
+  "sample_3_10": {
+   "expected": "2000",
+   "actual": "2000"
+  }
+ },
+ "P1424_ju6tr560_mut": {
+  "compile_rc": 0,
+  "compile_err": "",
+  "tested": 312,
+  "mismatch": 8,
+  "examples": [
+   {
+    "input": "3 10",
+    "expected": "2000",
+    "actual": "1750",
+    "rc": 0
+   },
+   {
+    "input": "7 7",
+    "expected": "1250",
+    "actual": "1000",
+    "rc": 0
+   },
+   {
+    "input": "1 7",
+    "expected": "1250",
+    "actual": "1000",
+    "rc": 0
+   },
+   {
+    "input": "6 14",
+    "expected": "2500",
+    "actual": "2000",
+    "rc": 0
+   },
+   {
+    "input": "3 1000",
+    "expected": "178500",
+    "actual": "143000",
+    "rc": 0
+   },
+   {
+    "input": "1 1000000",
+    "expected": "178571500",
+    "actual": "142857250",
+    "rc": 0
+   },
+   {
+    "input": "7 1000000",
+    "expected": "178571250",
+    "actual": "142857000",
+    "rc": 0
+   },
+   {
+    "input": "3 999999",
+    "expected": "178571250",
+    "actual": "142857000",
+    "rc": 0
+   }
+  ]
+ },
+ "P1909_v5aspqez": {
+  "compile_rc": 0,
+  "compile_err": "",
+  "tested": 506,
+  "mismatch": 0,
+  "examples": [],
+  "official_samples": [
+   {
+    "input": "57 / [(2, 2), (50, 30), (30, 27)]",
+    "expected": "54",
+    "actual": "54"
+   },
+   {
+    "input": "9998 / [(128, 233), (128, 2333), (128, 666)]",
+    "expected": "18407",
+    "actual": "18407"
+   },
+   {
+    "input": "9999 / [(101, 1111), (1, 9999), (1111, 9999)]",
+    "expected": "89991",
+    "actual": "89991"
+   }
+  ]
+ },
+ "P1909_v5aspqez_mut": {
+  "compile_rc": 0,
+  "compile_err": "",
+  "tested": 506,
+  "mismatch": 8,
+  "examples": [
+   {
+    "input": "57 / 2 2 / 50 30 / 30 27",
+    "expected": "54",
+    "actual": "27",
+    "rc": 0
+   },
+   {
+    "input": "9998 / 128 233 / 128 2333 / 128 666",
+    "expected": "18407",
+    "actual": "18174",
+    "rc": 0
+   },
+   {
+    "input": "1 / 1 10000 / 1 1 / 10000 10000",
+    "expected": "1",
+    "actual": "0",
+    "rc": 0
+   },
+   {
+    "input": "2152 / 3778 8738 / 1230 5734 / 8512 2467",
+    "expected": "2467",
+    "actual": "0",
+    "rc": 0
+   },
+   {
+    "input": "4489 / 9986 602 / 1385 7093 / 3023 3666",
+    "expected": "602",
+    "actual": "0",
+    "rc": 0
+   },
+   {
+    "input": "471 / 1047 4694 / 4459 2316 / 1112 4419",
+    "expected": "2316",
+    "actual": "0",
+    "rc": 0
+   },
+   {
+    "input": "8615 / 4026 6250 / 9909 2835 / 9155 3195",
+    "expected": "2835",
+    "actual": "0",
+    "rc": 0
+   },
+   {
+    "input": "2268 / 3800 1278 / 7938 5647 / 4041 7766",
+    "expected": "1278",
+    "actual": "0",
+    "rc": 0
+   }
+  ]
+ },
+ "P1012_ngy7hblx": {
+  "compile_rc": 0,
+  "compile_err": "",
+  "tested_bruteforce": 210,
+  "mismatch_bruteforce": 0,
+  "examples_bruteforce": [],
+  "tested_insert": 6,
+  "mismatch_insert": 0,
+  "examples_insert": []
+ },
+ "P1012_ngy7hblx_mut": {
+  "compile_rc": 0,
+  "compile_err": "",
+  "tested_bruteforce": 210,
+  "mismatch_bruteforce": 5,
+  "examples_bruteforce": [
+   {
+    "input": "2 / 321 32",
+    "expected": "32321",
+    "actual": "32132",
+    "rc": 0
+   },
+   {
+    "input": "2 / 12 121",
+    "expected": "12121",
+    "actual": "12112",
+    "rc": 0
+   },
+   {
+    "input": "2 / 1 10",
+    "expected": "110",
+    "actual": "101",
+    "rc": 0
+   },
+   {
+    "input": "2 / 9 91",
+    "expected": "991",
+    "actual": "919",
+    "rc": 0
+   },
+   {
+    "input": "6 / 32 321 407 135 13 217",
+    "expected": "4073232121713513",
+    "actual": "4073213221713513",
+    "rc": 0
+   }
+  ],
+  "tested_insert": 6,
+  "mismatch_insert": 1,
+  "examples_insert": [
+   {
+    "input": "6 / 321 32 407 135 13 217",
+    "expected": "4073232121713513",
+    "actual": "4073213221713513",
+    "rc": 0
+   }
+  ]
+ },
+ "P1328_a8f6uiq9": {
+  "compile_rc": 0,
+  "compile_err": "",
+  "tested": 402,
+  "mismatch": 0,
+  "examples": [],
+  "official_samples": [
+   {
+    "input": "10 5 6",
+    "expected": "6 2",
+    "actual": "6 2"
+   },
+   {
+    "input": "9 5 5",
+    "expected": "4 4",
+    "actual": "4 4"
+   }
+  ]
+ },
+ "P1328_a8f6uiq9_mut": {
+  "compile_rc": 0,
+  "compile_err": "",
+  "tested": 402,
+  "mismatch": 8,
+  "examples": [
+   {
+    "n": 9,
+    "na": 5,
+    "nb": 5,
+    "expected": "4 4",
+    "actual": "6 2",
+    "rc": 0
+   },
+   {
+    "n": 157,
+    "na": 103,
+    "nb": 10,
+    "expected": "59 68",
+    "actual": "67 60",
+    "rc": 0
+   },
+   {
+    "n": 44,
+    "na": 64,
+    "nb": 68,
+    "expected": "13 29",
+    "actual": "15 27",
+    "rc": 0
+   },
+   {
+    "n": 55,
+    "na": 172,
+    "nb": 138,
+    "expected": "19 24",
+    "actual": "20 23",
+    "rc": 0
+   },
+   {
+    "n": 25,
+    "na": 139,
+    "nb": 14,
+    "expected": "5 15",
+    "actual": "8 12",
+    "rc": 0
+   },
+   {
+    "n": 131,
+    "na": 141,
+    "nb": 56,
+    "expected": "50 59",
+    "actual": "57 52",
+    "rc": 0
+   },
+   {
+    "n": 43,
+    "na": 35,
+    "nb": 59,
+    "expected": "16 17",
+    "actual": "17 16",
+    "rc": 0
+   },
+   {
+    "n": 127,
+    "na": 73,
+    "nb": 169,
+    "expected": "52 49",
+    "actual": "61 40",
+    "rc": 0
+   }
+  ]
+ }
+}

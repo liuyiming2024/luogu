@@ -1,0 +1,82 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>洛谷题解逐篇hack清单_第15批.md · 离线归档</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">01_批次清单 / 洛谷题解逐篇hack清单_第15批.md</span></header>
+<main class="doc"><h1>洛谷题解逐篇 hack 清单 · 第 15 批（并行对拍 + Actions 取回 + 全量爬取架构）</h1>
+<blockquote>三件流程改进： 1. <strong>对拍与其他工作并行</strong>，不再串行等待；每篇附「变异版」敏感性检查， 故意改一处后必须被抓到错，证明测试集不是空跑。 2. 按「用仓库的 work 来爬取」新增 GitHub Actions 取回： Actions 出口<strong>成功取回</strong>了沙盒三种通道都拿不到的 <code>azdjstpm</code> 正文， 并 commit 回仓库（run <code>45410907569</code>，HTTP 200，8836 字节 HTML）。 3. 按「写个大脚本一直跑、但每小时歇十分钟」新增 <code>tools/crawl_daemon.py</code> + <code>crawl_tick.yml</code> + 《全量爬取与校对说明.md》， 见本文 §6。</blockquote>
+<hr>
+<h2>1. 本批 5 个新编号：丙 5 / 甲 0 / 乙 0，<strong>甲类 0 新增</strong></h2>
+<table class="tb"><thead><tr><th>#</th><th>题号</th><th>编号</th><th>是否题解</th><th>归类</th><th>结论</th></tr></thead><tbody><tr><td>92</td><td>P1008</td><td><code>azdjstpm</code></td><td>是</td><td>丙（UB 登记）</td><td><code>bok[9]</code> 越界写，但 -O0~-Os 全部输出 4 行正确解；题面内确定性输出正确，不计缺陷</td></tr><tr><td>93</td><td>P1012</td><td><code>ngy7hblx</code></td><td>是</td><td>丙</td><td>拼接比较 <code>a+b&gt;b+a</code> 标准解，210 组全排列暴力 + 6 组插入法参照全对</td></tr><tr><td>94</td><td>P1328</td><td><code>a8f6uiq9</code></td><td>是</td><td>丙</td><td><code>score[5][5]</code> 25 格逐格核对胜负表一致；402 组全对</td></tr><tr><td>95</td><td>P1424</td><td><code>ju6tr560</code></td><td>是</td><td>丙</td><td>整周 1250 + 剩余天数逐天累加，312 组（含 n=10⁶）全对</td></tr><tr><td>96</td><td>P1909</td><td><code>v5aspqez</code></td><td>是</td><td>丙</td><td><code>ans=INT_MAX</code> + 向上取整，506 组（含 3 官方样例）全对</td></tr></tbody></table>
+<p><strong>累计 96 篇 / 甲 14 / 乙 11 / 丙 71 / 甲类合法反例 34 条。</strong> 编号索引 82 → <strong>87 个</strong>（是 86 / 否 1），<code>登记·不计数</code> 回到 <strong>0</strong>， <code>可逐字验证=否</code> 回到 <strong>0</strong>——<code>azdjstpm</code> 由 Actions 取回正文后补验完成。</p>
+<hr>
+<h2>2. 四篇丙类，逐篇说明</h2>
+<h3>P1012 <code>ngy7hblx</code> · 拼数</h3>
+<pre class="code"><code>bool cmp(string a,string b){ return (a+b)&gt;(b+a); }
+sort(s+1,s+n+1,cmp);</code></pre>
+<p>题面 <code>1≤n≤20, 1≤aᵢ≤10⁹</code>，<code>string s[50]</code> 足够。两套<strong>独立正确解</strong>对照：</p>
+<ul><li>210 组 n≤7 走 <code>itertools.permutations</code> 全排列暴力，取拼接串字典序最大</li></ul>
+<p>（所有拼接串等长，字典序最大即数值最大）</p>
+<ul><li>6 组（含 n=15/20、两个官方样例）走<strong>插入法</strong>：逐个把新串插到当前序列所有位置取最大，</li></ul>
+<p>与 <code>sort+cmp</code> 是完全不同的构造路径</p>
+<p>全部 0 不一致。题解文字里「321 和 37，字典序 351&gt;32，32321&gt;32114」是页面吞字符的乱码， 不是代码写错，按「代码只是辅助、不判文字笔误」处理。</p>
+<h3>P1328 <code>a8f6uiq9</code> · 生活大爆炸版石头剪刀布</h3>
+<p>25 格 <code>score[a][b]</code> 手工打表，逐格与题面胜负表核对一致（1=小A胜 / -1=小B胜 / 0=平）。 <code>anum/bnum</code> 从 1 起、每轮 +1、越界回 1，周期模拟正确；<code>int a[m+1],b[k+1]</code> 是 VLA （GNU 扩展，用 <code>-std=gnu++17</code> 编译），题面 <code>n,na,nb≤200</code> 内不越界。 402 组（2 个官方样例 + 400 组随机周期）0 不一致。VLA 属代码风格，按口径不计缺陷。</p>
+<h3>P1424 <code>ju6tr560</code> · 小鱼的航程</h3>
+<p><code>cnt+=1250*temp</code>（<code>temp=n/7</code>）处理整周，再对 <code>n%=7</code> 天从周 x 起逐天累加 <code>a[x]</code>， <code>if(x&gt;7)x-=7</code> 回绕。题面 <code>1≤x≤7, 1≤n≤10⁶</code>，最大里程 1.79×10⁸ &lt; INT_MAX， <code>int cnt</code> 不溢出。312 组含 <code>(1,10⁶)</code>、<code>(7,10⁶)</code>、<code>(3,999999)</code> 满规模， 与<strong>逐天模拟全部 n 天</strong>的独立解 0 不一致。</p>
+<blockquote>自查：搜索摘要把 <code>for(int i=1;i&lt;=n;i++)</code> 吞成 <code>i7</code>、打表数组被拆散； 第一次逐字取回还把 <code>int temp=n/7;</code> 显示成全局初始化。<strong>回原文二次确认</strong>才拼对顺序： <code>scanf(&quot;%d%d&quot;,&amp;x,&amp;n)</code> → <code>int temp=n/7</code>（main 内局部）→ <code>n%=7</code> → <code>cnt+=1250*temp</code>。 顺序若反了，整周里程就用未读入的 n 算，结论完全不同。</blockquote>
+<h3>P1909 <code>v5aspqez</code> · 买铅笔</h3>
+<p><code>ans=2147483647</code>，<code>ans=min(ans, b*((n+a-1)/a))</code>。题面「所有 7 个数 ≤10000」， 上界 <code>10000×10000=1e8</code>，<code>int</code> 不溢出；3 个官方样例（57 / 9998 / 9999）全对， 共 506 组 0 不一致。标题「为什么不能提交呢」与「复活币」是作者发表坎坷 （先把代码发到讨论区被撤销自由发言权），<strong>不是代码缺陷</strong>，按口径不拿来 hack。</p>
+<hr>
+<h2>3. 变异版敏感性检查（本批新方法）</h2>
+<p>每篇故意改一处，对拍必须抓到错，否则说明「0 不一致」只是空跑：</p>
+<table class="tb"><thead><tr><th>题解</th><th>变异</th><th>抓到不一致</th></tr></thead><tbody><tr><td><code>ju6tr560</code></td><td><code>1250*temp</code> → <code>1000*temp</code></td><td>8 组</td></tr><tr><td><code>v5aspqez</code></td><td><code>(n+a-1)/a</code> → <code>n/a</code>（去掉向上取整）</td><td>8 组</td></tr><tr><td><code>ngy7hblx</code></td><td><code>(a+b)&gt;(b+a)</code> → <code>a&gt;b</code>（退回普通字典序）</td><td>暴力 5 组 + 插入 1 组</td></tr><tr><td><code>a8f6uiq9</code></td><td><code>score[0][1]=-1</code> → <code>1</code>（改一格胜负表）</td><td>8 组</td></tr></tbody></table>
+<p>四个变异版全部被抓到，原版全部 0 不一致 → 丙类结论可信。</p>
+<hr>
+<h2>4. 补记：P1008 <code>azdjstpm</code> 从「登记·不计数」升为丙（UB 登记）</h2>
+<p>上一轮它被挂起：沙盒 <code>www.luogu.com/article/azdjstpm</code> 两次都是 「标签加载失败 / Request aborted」，<code>luogu.com.cn</code> 返回内容安全审核拒绝， 保存站仍是 SPA 导航骨架；搜索摘要显示 <code>int st[9], bok[9]={0};</code> 配 <code>for (int i = 1; i &lt;= 9; i++)</code> 使用 <code>bok[i]</code>，疑似 <code>bok[9]</code> 越界。</p>
+<p><strong>Actions 出口把它取回来了</strong>（run <code>45410907569</code>，HTTP 200，8836 字节 HTML， <code>&lt;pre&gt;</code> 里完整代码块），逐字代码：</p>
+<pre class="code"><code>int st[9], bok[9] = {0};
+...
+for (int i = 1; i &lt;= 9; i++) {
+    if (bok[i]) continue;
+    bok[i] = true;  st[step] = i;  dfs(step+1);  bok[i] = false;
+}</code></pre>
+<p><code>bok[9]</code> 是<strong>确定存在的越界写</strong>（合法下标 0..8）。但按口径必须实测到后果， 不能凭直觉判（第 7 批 P1003、第 8 批 <code>g17kwzzm</code> 都是反例）。地址探针 + 五个优化档编译：</p>
+<table class="tb"><thead><tr><th>优化档</th><th><code>bok[9]</code> 与 <code>st[0]</code> 地址差</th><th>输出 4 组解</th></tr></thead><tbody><tr><td>-O0</td><td>+100（<code>bok</code> 在 <code>st</code> 之后）</td><td>✅ <code>192 384 576</code> / <code>219 438 657</code> / <code>273 546 819</code> / <code>327 654 981</code></td></tr><tr><td>-O1 / -O2 / -O3 / -Os</td><td>−28（布局翻转，<code>bok[9]</code> 落在 <code>st</code> 之前的空隙）</td><td>✅ 同上</td></tr></tbody></table>
+<p>五档全部 rc=0、输出 4 行正确解。结论：<strong>UB 但题面内确定性输出正确</strong> → 按「存在测试点使题解代码无法通过」的定义<strong>不成立</strong>，归<strong>丙（UB 登记）</strong>， 甲类反例不增加。这是「数组越界必须实测到具体规模」纪律的又一次胜利。</p>
+<hr>
+<h2>5. 仓库 Actions 出口爬取</h2>
+<ul><li><code>.github/workflows/crawl_lowfreq.yml</code>（手动 dispatch）已推送，</li></ul>
+<p>dispatch 返回 <strong>HTTP 204</strong>，run <code>45410907569</code> <code>completed / success</code></p>
+<ul><li>回写文件：<code>site/data/ingested/azdjstpm.json</code>、<code>02_文章编号索引/取回日志.jsonl</code>，</li></ul>
+<p>日志逐字：<code>&quot;http&quot;: 200, &quot;result&quot;: &quot;ok&quot;, &quot;is_article&quot;: &quot;是&quot;, &quot;verdict_reason&quot;: &quot;含题号与代码块&quot;</code></p>
+<ul><li>本地 <code>git pull --rebase</code> 后从 HTML <code>&lt;pre&gt;</code> 提取代码块 → 编译实测 → 归类，闭环成立</li><li>硬约束不变：默认 2 秒/次、单并发、403/降级即停、不登录、不遍历编号空间</li></ul>
+<hr>
+<h2>6. 全量爬取与校对架构（本批新增交付）</h2>
+<p>按「所有公开题面 / 公开题解 / 有用学术文章都汇集并校对」+「大脚本一直跑、 但每小时歇十分钟」+「保存站可先刷新，或直接爬洛谷」，新增：</p>
+<table class="tb"><thead><tr><th>文件</th><th>作用</th></tr></thead><tbody><tr><td><code>tools/crawl_daemon.py</code></td><td>大脚本：有序枚举 → 取回 → L0/L1 校对 → 实时 push → 跑 50/歇 10</td></tr><tr><td><code>.github/workflows/crawl_tick.yml</code></td><td>每 6 小时轻量兜底（约 3 分钟/次，额度内）</td></tr><tr><td><code>02_文章编号索引/全量爬取与校对说明.md</code></td><td>完整架构、节奏参数、三层校对、额度限制</td></tr></tbody></table>
+<p>要点：</p>
+<ul><li><strong>有序枚举</strong>：P 号顺序推进题面；题解走「主表待补队列 + 从正文 BFS 发现的新 8 位 ID」。</li></ul>
+<p><strong>不遍历 36⁸ 编号空间</strong>——这正是你早先定的「枚举是有序，不是高频」。</p>
+<ul><li><strong>保存站刷新</strong>：<code>--refresh-url</code> / <code>--refresh-cmd</code> 可插拔 hook，每个窗口开始调一次。</li></ul>
+<p>保存站<strong>没有公开刷新 API</strong>（首页只有降级公告，各页全是 SPA 骨架）， 所以<strong>不编造接口</strong>；不配置就直爬 <code>www.luogu.com</code>。</p>
+<ul><li><strong>节奏</strong>：不是恒定 2 秒。间隔 2.0~3.5 秒抖动、每 20 次小憩 ~30 秒、</li></ul>
+<p>跑 50 分钟歇 10 分钟、每日 2000 请求上限、被拒长退避 30 分钟。</p>
+<ul><li><strong>实时写回</strong>：每 10 篇或 10 分钟 <code>commit + pull --rebase + push</code>，</li></ul>
+<p>state 断点续传；每窗口重生成离线站。</p>
+<ul><li><strong>校对三层</strong>：L0 编目判定 / L1 代码块与去重留证 / <strong>L2 只进待对拍队列</strong>。</li></ul>
+<p><strong>全量自动判甲/乙/丙不可行</strong>（每题需独立正确解），这一点如实写进文档，不越权。</p>
+<ul><li><strong>Actions 额度</strong>：私有仓库约 2000 分钟/月，50 分钟/小时常驻 ≈ 36000 分钟会烧光，</li></ul>
+<p>所以 Actions 只做兜底；<strong>真正长期跑在你自己的机器上</strong> <code>crawl_daemon.py --forever</code>。 沙盒只做 <code>--dry-run</code> 冒烟，不假装后台常驻。</p>
+<hr>
+<h2>7. 差点误判 / 自查</h2>
+<ol><li><strong>对拍脚本类型错误</strong>：P1012 定点用例是 int 列表、随机是 str 列表，</li></ol>
+<p><code>&quot; &quot;.join(arr)</code> 抛 <code>TypeError</code>。统一转 str 后重跑；<strong>我的脚手架</strong>问题，与题解无关。</p>
+<ol><li><strong>后台进程被回收</strong>：<code>nohup setsid &amp;</code> 启动后日志为空，进程被沙盒清理。</li></ol>
+<p>改为并行调用 / 前台执行后正常完成——也是「长期跑不能放沙盒」的实测依据。</p>
+<ol><li><code>ju6tr560</code> 的 <code>int temp</code> 声明位置（见 §2），回原文二次确认。</li><li><code>v5aspqez</code> 的「复活币 / 为什么不能提交呢」是发表坎坷，不是代码缺陷。</li><li><code>a8f6uiq9</code> 的 VLA、<code>azdjstpm</code> 的 <code>bok[9]</code> 越界：都属 UB/风格，</li></ol>
+<p><strong>题面内确定性输出正确</strong> → 不计缺陷，只登记。</p>
+<ol><li><code>azdjstpm</code> 搜索摘要疑似越界 → 若直接判甲就错了；实测五档全对 → 归丙。</li></ol>
+<hr>
+<h2>8. 低频声明</h2>
+<table class="tb"><thead><tr><th>动作</th><th>次数</th></tr></thead><tbody><tr><td>检索（12 轮，定位新编号 / 核对 4 道题面范围）</td><td>12</td></tr><tr><td>逐字取回正文</td><td>4 成功 + 1 由 Actions 补回</td></tr><tr><td>GitHub API（推 workflow / dispatch / 查 run / pull）</td><td>少量</td></tr><tr><td>Actions 爬取</td><td>1 次 dispatch，单次 1 篇、2 秒间隔</td></tr><tr><td>daemon 冒烟</td><td>1 次 <code>--dry-run</code>，<strong>不发包</strong></td></tr><tr><td>洛谷登录 / 题解提交 / 保存 API 批量拉取</td><td><strong>0</strong></td></tr></tbody></table></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>

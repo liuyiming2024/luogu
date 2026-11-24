@@ -1,0 +1,2 @@
+﻿编号,类型,判定,来源,L0,L1_代码块数,L1_去重,L1_编译预检,sha256,证据,L2,时间
+azdjstpm,article,题解,https://www.luogu.com/article/azdjstpm,通过,1,唯一,通过(-O0~-Os 五档),8f3c,site/data/ingested/azdjstpm.json,第15批已补验归丙(UB登记),2026-11-24

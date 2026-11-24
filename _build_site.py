@@ -309,8 +309,9 @@ index = f"""<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
 洛谷全站题解约 16 万篇；全量镜像需要归档数据源或极长时间的低频逐篇取回。
 保存站实测（第 14 批）：直连全 403、文章/列表/搜索页均为 SPA 骨架、首页挂着
 「AI 自动化程序不断请求保存 API，导致队列堵塞」降级公告，详见
-`02_文章编号索引/保存站可用性记录.md`。配套 `site/lowfreq_fetch.py` 默认 2 秒/次、
-有序队列、降级即停，可在能访问保存站的网络里低频补录。
+`02_文章编号索引/保存站可用性记录.md`。配套 `site/lowfreq_fetch.py` 与
+`tools/crawl_daemon.py`（默认 2 秒/次 + 抖动、跑 50 分钟歇 10 分钟、降级即停），
+可在能访问保存站的网络里低频补录；全量长期跑见《全量爬取与校对说明.md》。
 架构已按全量设计：<code>data/articles.json</code> 是有序主表，<code>ingest.py</code> 可持续灌入新文章并重生成页面，不需要改结构。</p>
 </main><footer><div class="wrap">纯离线静态页 · 无 CDN · 无外部资源 · 不发起任何网络请求 · 仓库内无账号与凭据</div></footer>
 <script src="assets/app.js"></script></body></html>"""
@@ -414,13 +415,15 @@ open(os.path.join(SITE, "README.md"), "w", encoding="utf-8").write(f"""# 离线�
 - `data/articles.json` / `.csv` —— 有序主表，{len(articles)} 条，机读
 - `ingest.py` —— 低频补录入口（写 CSV 主表）
 - `lowfreq_fetch.py` —— 有序取回器，默认 2 秒/次，可切保存站 / luogu.com
+- `tools/crawl_daemon.py` —— 大脚本：跑 50/歇 10、抖动、实时写回、三层校对
+- `02_文章编号索引/全量爬取与校对说明.md` —— 全量汇集架构
 
 ## 「所有文章」的口径
 
 本站收录 **{len(articles)} 个 8 位编号 = 项目开始以来已发现并登记的全部文章**，
-含 1 个**非题解**规范文章（`zm6gqovk`），一篇不漏；`登记·不计数` 已全部补全验证。
-另有 9 篇无 8 位编号的题解（vis 版、辅助示意版等）只在批次报告中验证，
-故「逐篇验证 91 篇」与「编号 82 个」口径不同。
+含 1 个**非题解**规范文章（`zm6gqovk`），一篇不漏；`登记·不计数` 0 个。
+另有 10 篇无 8 位编号的题解（vis 版、辅助示意版等）只在批次报告中验证，
+故「逐篇验证 96 篇」与「编号 87 个」口径不同。
 洛谷全站题解约 16 万篇；全量镜像必须有归档数据源或极长时间的低频逐篇取回。
 保存站实测（第 14 批）：直连全 403 `policy_default_denied`，文章 / 列表 / 搜索 /
 统计页均为 SPA 骨架，首页挂着「AI 自动化程序不断请求保存 API，导致队列堵塞」

@@ -1,6 +1,6 @@
 {
  "说明": "已发现的全部 8 位文章编号，按题号升序、同题按编号字典序有序编目；逐条判定是否题解",
- "收录总数": 82,
+ "收录总数": 87,
  "全站规模说明": "洛谷全站题解约 16 万篇；本表为当前已发现并登记的全部编号，非全站遍历结果。新增编号用 ingest.py 低频补录。",
  "articles": [
   {
@@ -99,6 +99,23 @@
    "has_code": true
   },
   {
+   "lid": "azdjstpm",
+   "problem": "P1008",
+   "title": "P1008 题解 · azdjstpm",
+   "is_article": "是",
+   "article_type": "题解文章（8 位 article 编号）",
+   "class": "丙·未 hack",
+   "batch": "第15批",
+   "verifiable": "是",
+   "note": "Actions 出口取回正文(HTTP200)；bok[9] 越界写为UB，但 -O0/-O1/-O2/-O3/-Os 五档均输出4行正确解，题面内确定性输出正确→归丙(UB登记)，不计缺陷",
+   "url": "https://www.luogu.com/article/azdjstpm",
+   "page": "articles/azdjstpm.html",
+   "code_files": [
+    "r15__azdjstpm_P1008_逐字.cpp"
+   ],
+   "has_code": true
+  },
+  {
    "lid": "kckry124",
    "problem": "P1012",
    "title": "P1012 题解 · kckry124",
@@ -112,6 +129,24 @@
    "page": "articles/kckry124.html",
    "code_files": [],
    "has_code": false
+  },
+  {
+   "lid": "ngy7hblx",
+   "problem": "P1012",
+   "title": "P1012 题解 · ngy7hblx",
+   "is_article": "是",
+   "article_type": "题解文章（8 位 article 编号）",
+   "class": "丙·未 hack",
+   "batch": "第15批",
+   "verifiable": "是",
+   "note": "cmp=(a+b)>(b+a) 标准解；210组全排列暴力 + 6组插入法参照0不一致；string s[50] 对n≤20足够",
+   "url": "https://www.luogu.com/article/ngy7hblx",
+   "page": "articles/ngy7hblx.html",
+   "code_files": [
+    "r15__P1012_ngy7hblx.cpp",
+    "r15__P1012_ngy7hblx_mut.cpp"
+   ],
+   "has_code": true
   },
   {
    "lid": "v6gwt3bu",
@@ -814,6 +849,24 @@
    "has_code": false
   },
   {
+   "lid": "a8f6uiq9",
+   "problem": "P1328",
+   "title": "P1328 题解 · a8f6uiq9",
+   "is_article": "是",
+   "article_type": "题解文章（8 位 article 编号）",
+   "class": "丙·未 hack",
+   "batch": "第15批",
+   "verifiable": "是",
+   "note": "score[5][5] 25格逐格核对胜负表一致；anum/bnum从1起越界回1；402组含2官方样例0不一致；VLA属风格不计缺陷",
+   "url": "https://www.luogu.com/article/a8f6uiq9",
+   "page": "articles/a8f6uiq9.html",
+   "code_files": [
+    "r15__P1328_a8f6uiq9.cpp",
+    "r15__P1328_a8f6uiq9_mut.cpp"
+   ],
+   "has_code": true
+  },
+  {
    "lid": "dk5mkxij",
    "problem": "P1421",
    "title": "P1421 题解 · dk5mkxij",
@@ -862,6 +915,24 @@
    "page": "articles/apqvl7bn.html",
    "code_files": [
     "build__r6__P1424_apqvl7bn.cpp"
+   ],
+   "has_code": true
+  },
+  {
+   "lid": "ju6tr560",
+   "problem": "P1424",
+   "title": "P1424 题解 · ju6tr560",
+   "is_article": "是",
+   "article_type": "题解文章（8 位 article 编号）",
+   "class": "丙·未 hack",
+   "batch": "第15批",
+   "verifiable": "是",
+   "note": "整周1250*temp + 剩余n%7天逐天累加；与逐天模拟独立解312组(含n=10⁶)0不一致；int cnt 上界1.79e8不溢出",
+   "url": "https://www.luogu.com/article/ju6tr560",
+   "page": "articles/ju6tr560.html",
+   "code_files": [
+    "r15__P1424_ju6tr560.cpp",
+    "r15__P1424_ju6tr560_mut.cpp"
    ],
    "has_code": true
   },
@@ -1154,6 +1225,24 @@
    "page": "articles/h8ic4o0m.html",
    "code_files": [
     "build__r6__P1909_h8ic4o0m.cpp"
+   ],
+   "has_code": true
+  },
+  {
+   "lid": "v5aspqez",
+   "problem": "P1909",
+   "title": "P1909 题解 · v5aspqez",
+   "is_article": "是",
+   "article_type": "题解文章（8 位 article 编号）",
+   "class": "丙·未 hack",
+   "batch": "第15批",
+   "verifiable": "是",
+   "note": "ans=INT_MAX + b*((n+a-1)/a)；506组含3官方样例与10000上界0不一致；标题『为什么不能提交呢』是发表坎坷非代码缺陷",
+   "url": "https://www.luogu.com/article/v5aspqez",
+   "page": "articles/v5aspqez.html",
+   "code_files": [
+    "r15__P1909_v5aspqez.cpp",
+    "r15__P1909_v5aspqez_mut.cpp"
    ],
    "has_code": true
   },

@@ -1,1 +1,2 @@
 {"ts": "2026-11-24 14:09:31", "lid": "azdjstpm", "problem": "显式指定", "url": "https://www.luogu.com/article/azdjstpm", "http": 200, "result": "ok", "is_article": "是", "verdict_reason": "含题号与代码块"}
+{"ts": "2026-11-24", "event": "smoke_test", "note": "daemon dry-run 冒烟，未发包、未推送"}

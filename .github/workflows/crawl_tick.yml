@@ -1,0 +1,89 @@
+name: 全量爬取 · 轻量兜底 tick
+
+# 只做「无人值守兜底」：每 6 小时跑约 3 分钟 / 最多 30 个请求。
+# 为什么不是「一直跑」：私有仓库 GitHub Actions 免费额度约 2000 分钟/月，
+# 若按 50 分钟/小时常驻 = 约 36000 分钟/月，会立刻烧光。
+# 长期全量交给本地 / 常驻服务器上的 tools/crawl_daemon.py --forever。
+# 本 tick 每月约 4×30×3 = 360 分钟，在额度内。
+on:
+  schedule:
+    - cron: '23 */6 * * *'   # 错峰，避开整点
+  workflow_dispatch:
+    inputs:
+      max_requests:
+        description: '本轮最多请求数'
+        required: true
+        default: '30'
+        type: string
+      seed_problems:
+        description: 'P 号顺序范围（如 1000:1010），留空则用主表待补队列'
+        required: false
+        default: ''
+        type: string
+      refresh_url:
+        description: '保存站刷新入口（可选；留空则直爬洛谷）'
+        required: false
+        default: ''
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: luogu-crawl
+  cancel-in-progress: false
+
+jobs:
+  tick:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+
+      - name: 准备 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 低频 tick（跑 ~3 分钟，单次不休息）
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MAX_REQ: ${{ inputs.max_requests || '30' }}
+          SEED: ${{ inputs.seed_problems }}
+          REFRESH: ${{ inputs.refresh_url }}
+        run: |
+          set -u
+          args=(--max-requests "$MAX_REQ" --run-minutes 3 --rest-minutes 0
+                --push-every 30 --delay 2.0 --jitter 1.5 --micro-batch 20
+                --micro-rest 20 --max-depth 2)
+          [ -n "$SEED" ] && args+=(--seed-problems "$SEED")
+          [ -n "$REFRESH" ] && args+=(--refresh-url "$REFRESH")
+          echo "执行: python3 tools/crawl_daemon.py ${args[*]}"
+          python3 tools/crawl_daemon.py "${args[@]}" || echo "daemon 返回非零（多为被拒长退避），日志已保留"
+
+      - name: 重生成离线站并提交站点产物
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "luogu-crawler[bot]"
+          git config user.email "luogu-crawler[bot]@users.noreply.github.com"
+          python3 _build_site.py
+          git add -- site/ 02_文章编号索引/
+          if git diff --cached --quiet; then
+            echo "无新产物，跳过提交"
+          else
+            git commit -m "crawl tick: 重生成离线站 $(date -u +%Y-%m-%dT%H:%MZ) run ${{ github.run_number }}"
+            git pull --rebase origin main || true
+            git push
+          fi
+
+      - name: 上传取回日志
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: crawl-tick-log-${{ github.run_number }}
+          path: |
+            02_文章编号索引/取回日志.jsonl
+            02_文章编号索引/爬取进度.md
+          if-no-files-found: ignore
