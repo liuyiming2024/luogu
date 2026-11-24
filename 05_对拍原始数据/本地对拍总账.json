@@ -1,0 +1,242 @@
+{
+ "生成时间": "2026-11-24 22:41:18",
+ "执行位置": "本地（非 GitHub Actions）",
+ "结果文件数": 29,
+ "文件": [
+  {
+   "file": "build__final.json",
+   "mismatch字段": 0,
+   "原版0不一致": 0,
+   "变异版被抓到": 0
+  },
+  {
+   "file": "build__p3959_hunt.json",
+   "mismatch字段": 0,
+   "原版0不一致": 0,
+   "变异版被抓到": 0
+  },
+  {
+   "file": "build__r10__results.json",
+   "mismatch字段": 11,
+   "原版0不一致": 10,
+   "变异版被抓到": 0
+  },
+  {
+   "file": "build__r10__results_extra.json",
+   "mismatch字段": 1,
+   "原版0不一致": 1,
+   "变异版被抓到": 0
+  },
+  {
+   "file": "build__r11__results.json",
+   "mismatch字段": 9,
+   "原版0不一致": 9,
+   "变异版被抓到": 0
+  },
+  {
+   "file": "build__r11__results_extra.json",
+   "mismatch字段": 0,
+   "原版0不一致": 0,
+   "变异版被抓到": 0
+  },
+  {
+   "file": "build__r2__results.json",
+   "mismatch字段": 1,
+   "原版0不一致": 1,
+   "变异版被抓到": 0
+  },
+  {
+   "file": "build__r3__p1018_compliant.json",
+   "mismatch字段": 1,
+   "原版0不一致": 0,
+   "变异版被抓到": 0
+  },
+  {
+   "file": "build__r3__results.json",
+   "mismatch字段": 0,
+   "原版0不一致": 0,
+   "变异版被抓到": 0
+  },
+  {
+   "file": "build__r3__results2.json",
+   "mismatch字段": 1,
+   "原版0不一致": 1,
+   "变异版被抓到": 0
+  },
+  {
+   "file": "build__r4__results.json",
+   "mismatch字段": 0,
+   "原版0不一致": 0,
+   "变异版被抓到": 0
+  },
+  {
+   "file": "build__r5__results.json",
+   "mismatch字段": 0,
+   "原版0不一致": 0,
+   "变异版被抓到": 0
+  },
+  {
+   "file": "build__r5__results2.json",
+   "mismatch字段": 0,
+   "原版0不一致": 0,
+   "变异版被抓到": 0
+  },
+  {
+   "file": "build__r6__results.json",
+   "mismatch字段": 0,
+   "原版0不一致": 0,
+   "变异版被抓到": 0
+  },
+  {
+   "file": "build__r7__results.json",
+   "mismatch字段": 5,
+   "原版0不一致": 5,
+   "变异版被抓到": 0
+  },
+  {
+   "file": "build__r7__results_extra.json",
+   "mismatch字段": 2,
+   "原版0不一致": 2,
+   "变异版被抓到": 0
+  },
+  {
+   "file": "build__r8__results.json",
+   "mismatch字段": 8,
+   "原版0不一致": 6,
+   "变异版被抓到": 0
+  },
+  {
+   "file": "build__r8__results_extra.json",
+   "mismatch字段": 2,
+   "原版0不一致": 1,
+   "变异版被抓到": 0
+  },
+  {
+   "file": "build__r9__results.json",
+   "mismatch字段": 8,
+   "原版0不一致": 7,
+   "变异版被抓到": 0
+  },
+  {
+   "file": "build__r9__results_extra.json",
+   "mismatch字段": 4,
+   "原版0不一致": 2,
+   "变异版被抓到": 0
+  },
+  {
+   "file": "build__results.json",
+   "mismatch字段": 0,
+   "原版0不一致": 0,
+   "变异版被抓到": 0
+  },
+  {
+   "file": "build__results2.json",
+   "mismatch字段": 0,
+   "原版0不一致": 0,
+   "变异版被抓到": 0
+  },
+  {
+   "file": "build__results3.json",
+   "mismatch字段": 0,
+   "原版0不一致": 0,
+   "变异版被抓到": 0
+  },
+  {
+   "file": "r12__results.json",
+   "mismatch字段": 9,
+   "原版0不一致": 6,
+   "变异版被抓到": 0
+  },
+  {
+   "file": "r12__results_extra.json",
+   "mismatch字段": 2,
+   "原版0不一致": 1,
+   "变异版被抓到": 0
+  },
+  {
+   "file": "r12__results_extra_c.json",
+   "mismatch字段": 1,
+   "原版0不一致": 1,
+   "变异版被抓到": 0
+  },
+  {
+   "file": "r13__results.json",
+   "mismatch字段": 7,
+   "原版0不一致": 4,
+   "变异版被抓到": 0
+  },
+  {
+   "file": "r14__results.json",
+   "mismatch字段": 4,
+   "原版0不一致": 3,
+   "变异版被抓到": 0
+  },
+  {
+   "file": "r15__results.json",
+   "mismatch字段": 10,
+   "原版0不一致": 5,
+   "变异版被抓到": 5
+  }
+ ],
+ "原版0不一致": 65,
+ "变异版被抓到": 5,
+ "异常": [],
+ "验证脚本数": 22,
+ "待对拍队列": 0,
+ "有正文可提取": 0,
+ "编译预检": {
+  "总数": 150,
+  "本次检查": 12,
+  "明细": [
+   {
+    "file": "build__P1001_zaohomhi.cpp",
+    "result": "通过"
+   },
+   {
+    "file": "build__r10__f_1425_beu.cpp",
+    "result": "通过"
+   },
+   {
+    "file": "build__r11__s1150_A.cpp",
+    "result": "通过"
+   },
+   {
+    "file": "build__r2__P1002_vis.cpp",
+    "result": "通过"
+   },
+   {
+    "file": "build__r4__p1002_rolling.cpp",
+    "result": "通过"
+   },
+   {
+    "file": "build__r5__P2240_longdouble.cpp",
+    "result": "通过"
+   },
+   {
+    "file": "build__r6__P2141_b7py0ojt.cpp",
+    "result": "通过"
+   },
+   {
+    "file": "build__r7__p1014_v6gwt3bu.cpp",
+    "result": "通过"
+   },
+   {
+    "file": "build__r8__f_zcy_fix.cpp",
+    "result": "通过"
+   },
+   {
+    "file": "build__r9__x_1102_fix2.cpp",
+    "result": "通过"
+   },
+   {
+    "file": "r12__P1618_ehkpairy.cpp",
+    "result": "通过"
+   },
+   {
+    "file": "r13__P2615_7p4p6gdm.cpp",
+    "result": "通过"
+   }
+  ]
+ },
+ "说明": "编译预检的 CE 只登记，不计缺陷；三类判定需独立正确解 + 对拍 + 变异版敏感性检查，由本地逐批执行后写回 article_index.csv。"
+}

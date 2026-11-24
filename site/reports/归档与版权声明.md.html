@@ -1,0 +1,31 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>归档与版权声明.md · 离线归档</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">00_总览 / 归档与版权声明.md</span></header>
+<main class="doc"><h1>归档与版权声明</h1>
+<blockquote>本仓库已按归档者意见设为<strong>公开</strong>，并上线 GitHub Pages 归档库网页。 本文说明收录边界、署名规则、完整性签名与移除入口。</blockquote>
+<h2>1. 收录边界</h2>
+<p>本仓库为<strong>个人学习 / 学术研究</strong>目的，对洛谷（www.luogu.com）上<strong>公开可访问</strong>的 题面、题解文章与少量规范/学术类文章做离线归档与校对留痕：</p>
+<ul><li>只收录<strong>无需登录即可公开访问</strong>的页面内容</li><li>不收录用户私有数据、不收录账号凭据、不收录需授权才能看到的后台内容</li><li>不做商业用途、不用于再分发牟利、不宣称对第三方内容拥有权利</li><li>「校对」指完整性、代码块可提取性、题面合规性与三类缺陷对拍，<strong>不是</strong>对原文 correctness 的背书</li></ul>
+<p>洛谷全站题解约 16 万篇；本库是<strong>已发现并登记的全部编号</strong>，并非全站镜像。 新增条目由低频取回逐篇补录，进度见 <code>02_文章编号索引/爬取进度.md</code>。</p>
+<h2>2. 每条都带原文引用与「签名」</h2>
+<p>「引用原文、要有签名」在本库落地为四项可核对字段，由 <code>tools/provenance.py</code> 生成 <code>site/data/provenance.json</code>， 并渲染进每篇文章页的「引用与署名」块：</p>
+<table class="tb"><thead><tr><th>字段</th><th>含义</th></tr></thead><tbody><tr><td><code>original_url</code></td><td><strong>原文链接</strong>，指向 <code>www.luogu.com/article/&lt;8位编号&gt;</code> 或题面页，页面可点击</td></tr><tr><td><code>author</code></td><td><strong>作者署名</strong>：从页面 meta 尽力提取；抓不到就写「见原文页面署名」，<strong>不编造</strong></td></tr><tr><td><code>fetched_at</code></td><td>取回时间，说明内容对应哪个时点的原文</td></tr><tr><td><code>content_sha256</code> + <code>signature</code></td><td><strong>内容完整性签名</strong>：sha256 绑定「编号 / 原文 URL / 内容哈希 / 取回时间」，供离线核对正文是否被改动</td></tr></tbody></table>
+<p><code>signature</code> 是<strong>内容完整性校验值</strong>（sha256 派生），不是加密学意义上的数字签名， 也不代表原作者授权；它只回答「归档副本与取回时是否一致」。</p>
+<p>页面底部提供一段<strong>可直接复制的引用格式</strong>：</p>
+<pre class="code"><code>作者. 《标题》. 洛谷, 原文: https://www.luogu.com/article/xxxxxxx
+（本仓库归档于 时间，内容 sha256: 前16位，完整性签名: 前32位）.
+版权归原作者所有，仅作学术归档引用。</code></pre>
+<p>无正文的条目也生成「仅索引签名」，明确标注「正文待补录」，不假装已引用全文。</p>
+<h2>3. 权利归属</h2>
+<ul><li><strong>题解、题面、专栏正文的版权归原作者及洛谷所有</strong>；本仓库不对其授予任何许可，</li></ul>
+<p>也不以开源许可证覆盖第三方内容</p>
+<ul><li>仓库自身的脚本、生成器、报告与归档结构仅为整理者的工作产物</li><li>站内保留原文链接与作者署名；离线副本仅作引用与校对留痕</li><li>若权利人、原作者或平台不希望某条内容被收录，<strong>可提交 issue 或联系仓库维护者</strong>，</li></ul>
+<p>我们会删除对应正文、<code>ingested/</code> 副本、索引条目与页面，并在日志里登记移除</p>
+<h2>4. 三角架构（谁在哪跑）</h2>
+<table class="tb"><thead><tr><th>环节</th><th>位置</th><th>说明</th></tr></thead><tbody><tr><td><strong>爬取</strong></td><td>GitHub Actions（那边）</td><td><code>crawl_tick.yml</code> 每天 4 次错峰 tick，随机起步、2~3.5s 抖动、降级即停；结果 commit 回仓库</td></tr><tr><td><strong>对拍 / 三类判定</strong></td><td>本地（这边）</td><td><code>tools/verify_pipeline.py</code> 消费待对拍队列，需独立正确解，不放在 Actions 自动下结论</td></tr><tr><td><strong>网页归档库</strong></td><td>GitHub Pages（那边）</td><td><code>pages.yml</code> 把 <code>site/</code> 发布成公开静态站，每条带 §2 的引用与签名</td></tr></tbody></table>
+<p>对拍结果由本地 push 回仓库后，Pages 自动重生成，网页始终与仓库一致。</p>
+<h2>5. 隐私与安全</h2>
+<ul><li>仓库内<strong>无账号、无密码、无令牌</strong>；token 仅经环境变量 / Actions secrets 传递</li><li>改公开前已扫描工作树与<strong>全部 git 历史</strong>，确认无凭据残留</li><li>站内静态页无 CDN、无第三方脚本、无统计像素、不发起网络请求（原文链接为用户主动点击才跳转）</li></ul>
+<hr>
+<p>整理日期：2026-11-24</p></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>

@@ -1,0 +1,70 @@
+name: 归档库网页 · GitHub Pages
+
+# 「那边也上线个网页，就是一个归档库之类的」
+# 把 site/ 发布成公开静态归档库；每次内容变化自动重生成（含引用署名）并部署。
+# 相对链接全部在 site/ 内，部署到 /luogu/ 子路径同样可达。
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'site/**'
+      - '_build_site.py'
+      - 'tools/provenance.py'
+      - '02_文章编号索引/article_index.csv'
+      - '00_总览/归档与版权声明.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+
+      - name: 准备 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 生成来源署名与完整性签名
+        run: python3 tools/provenance.py
+
+      - name: 重生成离线归档站
+        run: python3 _build_site.py
+
+      - name: 校验每条都有原文链接与签名
+        run: |
+          python3 - <<'PY'
+          import json
+          p = json.load(open("site/data/provenance.json", encoding="utf-8"))
+          a = json.load(open("site/data/articles.json", encoding="utf-8"))
+          bad = [e["lid"] for e in p["entries"].values()
+                 if not e["original_url"].startswith("http") or not e["citation"]]
+          print("署名条目:", p["条目数"], "| 收录:", a["收录总数"], "| 缺项:", bad[:5])
+          assert not bad, "存在缺原文链接/引用的条目"
+          assert p["条目数"] == a["收录总数"], "署名与收录数不一致"
+          PY
+
+      - name: 配置 Pages
+        uses: actions/configure-pages@v5
+
+      - name: 上传站点产物
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./site
+
+      - name: 部署
+        id: deployment
+        uses: actions/deploy-pages@v4

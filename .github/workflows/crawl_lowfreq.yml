@@ -67,11 +67,14 @@ jobs:
           echo "--- 取回日志尾部 ---"
           tail -20 "02_文章编号索引/取回日志.jsonl" 2>/dev/null || echo "（无日志）"
 
+      - name: 重生成来源署名（每条带原文链接与完整性签名）
+        run: python3 tools/provenance.py
+
       - name: 提交取回结果
         run: |
           git config user.name "luogu-crawler[bot]"
           git config user.email "luogu-crawler[bot]@users.noreply.github.com"
-          git add -- "site/data/ingested" "02_文章编号索引/取回日志.jsonl"
+          git add -- "site/data/ingested" "site/data/provenance.json" "02_文章编号索引/取回日志.jsonl"
           if git diff --cached --quiet; then
             echo "本轮无新正文，跳过提交"
           else

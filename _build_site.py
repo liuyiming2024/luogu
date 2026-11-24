@@ -28,6 +28,27 @@ for _f in ["articles.json", "articles.csv"]:
     if os.path.exists(_p):
         os.remove(_p)
 
+# ------------------------------------------------------------ 来源署名 / 完整性签名
+RIGHTS_SHORT = ("版权归原作者及洛谷所有；本库仅作个人学习 / 学术研究的离线归档与校对留痕，"
+                "不用于商业用途。每篇保留原文链接与作者署名；权利人可申请移除，"
+                "详见《归档与版权声明》。")
+PROV_PATH = os.path.join(DATA, "provenance.json")
+PROV = {}
+if os.path.exists(PROV_PATH):
+    try:
+        PROV = json.load(open(PROV_PATH, encoding="utf-8")).get("entries", {})
+    except Exception:
+        PROV = {}
+RIGHTS_PAGE = "归档与版权声明.md.html"
+
+def prov_of(lid, url, prob):
+    return PROV.get(lid, {
+        "original_url": url, "author": "见原文页面署名（正文待补录）",
+        "title": f"{prob} 题解 · {lid}", "fetched_at": "待补录",
+        "content_sha256": "", "signature": "", "scope": "仅索引（正文待补录）",
+        "citation": f"《{prob} 题解 · {lid}》. 洛谷, 原文: {url}. 版权归原作者所有，仅作学术归档引用。",
+    })
+
 def esc(s):
     return html.escape(str(s), quote=True)
 
@@ -144,6 +165,9 @@ for sub in ["01_批次清单", "00_总览"]:
     for fn in sorted(os.listdir(d)):
         if fn.endswith(".md"):
             REPORT_FILES.append((sub, fn, os.path.join(d, fn)))
+_prog = os.path.join(REPO, "02_文章编号索引", "爬取进度.md")
+if os.path.exists(_prog):
+    REPORT_FILES.append(("02_文章编号索引", "爬取进度.md", _prog))
 for sub, fn, p in REPORT_FILES:
     md = open(p, encoding="utf-8").read()
     body = md2html(md)
@@ -164,6 +188,7 @@ CSS_COMMON = "../assets/style.css"
 articles = []
 for r in ROWS:
     lid, prob, cls = r["编号"], r["题号"], r["归类"]
+    pr = prov_of(lid, r["URL"], prob)
     codes = list(code_by_lid.get(lid, [])) + list(code_by_prob.get(prob, []))
     # merge low-frequency ingested body/code (site/data/ingested/<lid>.json)
     ing = os.path.join(DATA, "ingested", lid + ".json")
@@ -195,8 +220,15 @@ for r in ROWS:
 <tr><th>批次</th><td>{esc(r['批次'])}</td></tr>
 <tr><th>可逐字验证</th><td>{esc(r['可逐字验证'])}</td></tr>
 <tr><th>判定备注</th><td>{esc(r['备注'])}</td></tr>
-<tr><th>原文地址</th><td><a href="{esc(r['URL'])}" referrerpolicy="no-referrer">{esc(r['URL'])}</a><span class="hint">（离线时链接不可达，仅留来源）</span></td></tr>
+<tr><th>原文地址</th><td><a href="{esc(pr['original_url'])}" referrerpolicy="no-referrer" rel="noopener">{esc(pr['original_url'])}</a> <span class="hint">（原文链接 · 点击跳转；离线时仅留来源）</span></td></tr>
+<tr><th>原文作者</th><td>{esc(pr['author'])}</td></tr>
+<tr><th>归档 / 取回时间</th><td>{esc(pr['fetched_at'])} · {esc(pr['scope'])}</td></tr>
+<tr><th>内容完整性签名</th><td><code>{esc(pr['signature'] or '待补录')}</code><span class="hint"> · sha256 内容校验值（非加密签名）</span></td></tr>
 </tbody></table>"""]
+
+    parts.append(f'''<h2>引用与署名</h2>
+<div class="src" style="border-left:3px solid var(--acc)"><p>{esc(pr['citation'])}</p>
+<p class="hint">{esc(RIGHTS_SHORT)} <a href="../reports/{RIGHTS_PAGE}">《归档与版权声明》</a></p></div>''')
 
     if extra_body:
         parts.append('<h2>题解正文 · 低频补录</h2>')
@@ -228,7 +260,8 @@ for r in ROWS:
     for fn in sorted(rel_reports)[:6]:
         parts.append(f'<li><a href="../{report_map[fn]}">{esc(fn)}</a></li>')
     parts.append(f'<li><a href="../{report_map.get("三类口径与累计统计.md","")}">三类口径与自查纪律</a></li>')
-    parts.append('</ul></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>')
+    parts.append('</ul></main><footer><div class="wrap">纯离线静态页 · 无外部资源 · 无网络请求 · 原文版权归作者所有 · '
+                 + esc(RIGHTS_SHORT[:38]) + ' … <a href="../reports/' + RIGHTS_PAGE + '">声明</a></div></footer></body></html>')
 
     outp = os.path.join(SITE, "articles", lid + ".html")
     open(outp, "w", encoding="utf-8").write("\n".join(parts))
@@ -240,6 +273,10 @@ for r in ROWS:
         "page": f"articles/{lid}.html",
         "code_files": [c["file"] for c in codes],
         "has_code": bool(codes),
+        "original_url": pr["original_url"], "author": pr["author"],
+        "fetched_at": pr["fetched_at"], "content_sha256": pr["content_sha256"],
+        "signature": pr["signature"], "scope": pr["scope"],
+        "citation": pr["citation"], "rights": RIGHTS_SHORT,
     })
 
 # ------------------------------------------------------------ 数据文件
@@ -248,11 +285,14 @@ with open(os.path.join(DATA, "articles.json"), "w", encoding="utf-8") as f:
         "说明": "已发现的全部 8 位文章编号，按题号升序、同题按编号字典序有序编目；逐条判定是否题解",
         "收录总数": len(articles),
         "全站规模说明": "洛谷全站题解约 16 万篇；本表为当前已发现并登记的全部编号，非全站遍历结果。新增编号用 ingest.py 低频补录。",
+        "引用规范": "每条含原文链接 original_url、作者署名 author、取回时间 fetched_at、content_sha256 与完整性签名 signature；见 site/data/provenance.json",
+        "版权声明": RIGHTS_SHORT,
         "articles": articles,
     }, f, ensure_ascii=False, indent=1)
 with open(os.path.join(DATA, "articles.csv"), "w", encoding="utf-8-sig", newline="") as f:
     wr = csv.DictWriter(f, fieldnames=["lid", "problem", "title", "is_article", "class",
-                                       "batch", "verifiable", "note", "url", "page", "has_code"])
+                                       "batch", "verifiable", "note", "url", "page", "has_code",
+                                       "original_url", "author", "fetched_at", "signature"])
     wr.writeheader()
     for a in articles:
         wr.writerow({k: a[k] for k in wr.fieldnames})
@@ -296,6 +336,7 @@ index = f"""<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
 <div class="filters"><button class="on" data-f="all">全部</button><button data-f="甲">甲 已 hack</button><button data-f="乙">乙 笔误/防抄袭</button><button data-f="丙">丙 未 hack</button><button data-f="待补录">待补录</button></div>
 </div>
 <p class="hint">「枚举」= 对已发现的全部 8 位编号按题号升序、同题按编号字典序有序编目并逐条判定是否题解；<b>不对编号空间或全站做高频遍历</b>。新增编号用 <code>ingest.py</code> 低频补录。</p>
+<p class="hint">📌 <b>引用与署名</b>：每篇均保留<a href="reports/{RIGHTS_PAGE}">原文链接、作者署名、取回时间与内容完整性签名</a>；版权归原作者及洛谷所有，本库仅作学术归档留痕，权利人可申请移除。</p>
 </div></header>
 <main class="wrap"><div id="groups">{''.join(cards)}</div>
 <p id="none" class="empty" hidden>没有匹配的文章。</p>
@@ -303,6 +344,9 @@ index = f"""<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
 {''.join(f'<li><a href="{report_map[fn]}">{esc(fn)}</a></li>' for _, fn, _ in REPORT_FILES)}
 <li><a href="data/articles.json">机读索引 articles.json</a></li>
 <li><a href="data/articles.csv">机读索引 articles.csv</a></li>
+<li><a href="data/provenance.json">来源署名与完整性签名 provenance.json</a></li>
+<li><a href="reports/{RIGHTS_PAGE}">归档与版权声明（原文引用 / 移除入口）</a></li>
+<li><a href="reports/爬取进度.md.html">爬取进度</a></li>
 </ul>
 <h2>关于「所有文章」</h2>
 <p>本离线站当前收录 <b>{len(articles)}</b> 篇——即项目开始以来<b>已发现并登记的全部</b>题解文章（含正文/代码待补录的条目，一篇不漏）。
@@ -313,7 +357,7 @@ index = f"""<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
 `tools/crawl_daemon.py`（默认 2 秒/次 + 抖动、跑 50 分钟歇 10 分钟、降级即停），
 可在能访问保存站的网络里低频补录；全量长期跑见《全量爬取与校对说明.md》。
 架构已按全量设计：<code>data/articles.json</code> 是有序主表，<code>ingest.py</code> 可持续灌入新文章并重生成页面，不需要改结构。</p>
-</main><footer><div class="wrap">纯离线静态页 · 无 CDN · 无外部资源 · 不发起任何网络请求 · 仓库内无账号与凭据</div></footer>
+</main><footer><div class="wrap">纯离线静态页 · 无 CDN · 无外部资源 · 不发起任何网络请求 · 仓库内无账号与凭据<br>{esc(RIGHTS_SHORT[:60])} … <a href="reports/{RIGHTS_PAGE}">《归档与版权声明》</a></div></footer>
 <script src="assets/app.js"></script></body></html>"""
 open(os.path.join(SITE, "index.html"), "w", encoding="utf-8").write(index)
 
@@ -410,7 +454,7 @@ open(os.path.join(SITE, "README.md"), "w", encoding="utf-8").write(f"""# 离线�
 ## 有什么
 
 - `index.html` —— 按题号分组的全部文章卡片，支持本地搜索与「甲/乙/丙/待补录」筛选
-- `articles/<编号>.html` —— 每篇一页：是否题解判定、归类、批次、原文地址、逐字取回的题解代码、甲类反例、复现命令
+- `articles/<编号>.html` —— 每篇一页：判定、归类、批次、**原文地址/作者/取回时间/完整性签名/可复制引用**、代码、反例、复现命令
 - `reports/` —— {len(REPORT_FILES)} 份批次报告 + 总览文档，全部渲染成 HTML
 - `data/articles.json` / `.csv` —— 有序主表，{len(articles)} 条，机读
 - `ingest.py` —— 低频补录入口（写 CSV 主表）
@@ -449,7 +493,7 @@ python3 site/ingest.py new.json
 
 ## 隐私
 
-仓库已设为 **private**。站点内不含账号、密码、令牌；原文链接仅作来源留痕，离线时不可达。
+仓库已设为**公开**并由 GitHub Pages 上线归档库网页。站点内不含账号、密码、令牌；每篇保留原文链接、作者署名与内容完整性签名，离线时链接仅留来源。
 """)
 
 # 生成器本身已位于仓库根目录，clone 后可直接重跑

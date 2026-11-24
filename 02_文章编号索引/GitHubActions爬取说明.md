@@ -58,6 +58,13 @@ dispatch → runner 低频取回 → commit 回仓库
 `_build_site.py` 已改成选择性清理，**重生成不会删除** `site/data/ingested/`
 与两个常驻脚本，所以 crawl 成果不会被抹掉。
 
+## 公开与署名（2026-11-24 追加）
+
+仓库已改为**公开**并由 `pages.yml` 部署 GitHub Pages 归档库网页。
+取回结果提交前会先跑 `tools/provenance.py`，保证每条新正文都带**原文链接 /
+作者署名 / 取回时间 / 内容完整性签名**；网页每篇都有「引用与署名」块与移除入口。
+版权归原作者及洛谷所有，仅作学术归档留痕。
+
 ## 首次实测
 
 - dispatch 返回 **HTTP 204**，run `45410907569` 进入 `queued`
