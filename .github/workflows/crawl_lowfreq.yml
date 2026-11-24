@@ -1,0 +1,88 @@
+name: 低频取回 · luogu article
+
+# 用 GitHub Actions 的网络出口做「有序、低频」逐篇取回，结果直接 commit 回本仓库。
+# 设计约束（与 site/lowfreq_fetch.py 一致）：
+#   - 默认 2 秒/次，低于 1 秒脚本直接拒绝
+#   - 只处理明确给出的 8 位编号 / 主表有序队列，绝不遍历 36^8 编号空间
+#   - 命中「服务降级公告 / Request denied / 队列堵塞」或 403/429/5xx 立即停止本轮
+#   - 不登录、不提交题解、不并发、不刷保存 API
+#   - 单次默认 5 篇，避免无人值守时堆积大正文
+# 暂不启用 schedule：由人手动 dispatch，避免无人看管时持续发包。
+on:
+  workflow_dispatch:
+    inputs:
+      base:
+        description: 'URL 模板，{lid} 会被替换'
+        required: true
+        default: 'https://www.luogu.com/article/{lid}'
+        type: string
+      lids:
+        description: '显式 8 位编号，逗号分隔；留空则按主表有序队列（需先标待补录）'
+        required: false
+        default: 'azdjstpm'
+        type: string
+      limit:
+        description: '本轮最多取回几篇'
+        required: true
+        default: '5'
+        type: string
+      delay:
+        description: '每次请求间隔秒数（不得低于 1）'
+        required: true
+        default: '2.0'
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: luogu-lowfreq-crawl
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+
+      - name: 准备 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 低频逐篇取回
+        env:
+          BASE: ${{ inputs.base }}
+          LIDS: ${{ inputs.lids }}
+          LIMIT: ${{ inputs.limit }}
+          DELAY: ${{ inputs.delay }}
+        run: |
+          set -u
+          args=(--base "$BASE" --delay "$DELAY" --limit "$LIMIT")
+          if [ -n "$LIDS" ]; then args+=(--lids "$LIDS"); fi
+          echo "执行: python3 site/lowfreq_fetch.py ${args[*]}"
+          python3 site/lowfreq_fetch.py "${args[@]}" || echo "取回器返回非零（多为 403/降级即停），已保留日志"
+          echo "--- 取回日志尾部 ---"
+          tail -20 "02_文章编号索引/取回日志.jsonl" 2>/dev/null || echo "（无日志）"
+
+      - name: 提交取回结果
+        run: |
+          git config user.name "luogu-crawler[bot]"
+          git config user.email "luogu-crawler[bot]@users.noreply.github.com"
+          git add -- "site/data/ingested" "02_文章编号索引/取回日志.jsonl"
+          if git diff --cached --quiet; then
+            echo "本轮无新正文，跳过提交"
+          else
+            git commit -m "crawl: 低频取回 $(date -u +%Y-%m-%dT%H:%MZ) run ${{ github.run_number }}"
+            git push
+          fi
+
+      - name: 上传取回日志
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: crawl-log-${{ github.run_number }}
+          path: 02_文章编号索引/取回日志.jsonl
+          if-no-files-found: ignore
