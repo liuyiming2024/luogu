@@ -1,61 +1,56 @@
 {
  "version": 1,
- "seen": {},
- "queue": [
-  {
+ "seen": {
+  "P1000": {
+   "ts": "2026-11-25 03:03:42",
    "kind": "problem",
-   "id": "P1000",
-   "url": "https://www.luogu.com/problem/P1000",
-   "problem": "P1000",
-   "depth": 0,
+   "verdict": "未知",
+   "sha": "25505e2dd80814f8",
    "src": "P号顺序"
   },
-  {
+  "P1001": {
+   "ts": "2026-11-25 03:03:46",
    "kind": "problem",
-   "id": "P1001",
-   "url": "https://www.luogu.com/problem/P1001",
-   "problem": "P1001",
-   "depth": 0,
+   "verdict": "未知",
+   "sha": "fecf52f438bca13d",
    "src": "P号顺序"
   },
-  {
+  "P1002": {
+   "ts": "2026-11-25 03:03:49",
    "kind": "problem",
-   "id": "P1002",
-   "url": "https://www.luogu.com/problem/P1002",
-   "problem": "P1002",
-   "depth": 0,
+   "verdict": "未知",
+   "sha": "ec1ea3d25693ed23",
    "src": "P号顺序"
   },
-  {
+  "P1003": {
+   "ts": "2026-11-25 03:03:52",
    "kind": "problem",
-   "id": "P1003",
-   "url": "https://www.luogu.com/problem/P1003",
-   "problem": "P1003",
-   "depth": 0,
+   "verdict": "未知",
+   "sha": "12cc7018b44f07b5",
    "src": "P号顺序"
   },
-  {
+  "P1004": {
+   "ts": "2026-11-25 03:03:55",
    "kind": "problem",
-   "id": "P1004",
-   "url": "https://www.luogu.com/problem/P1004",
-   "problem": "P1004",
-   "depth": 0,
+   "verdict": "未知",
+   "sha": "5243c06b72516719",
    "src": "P号顺序"
   }
- ],
+ },
+ "queue": [],
  "failed": {},
- "problems_cursor": 1000,
+ "problems_cursor": 1005,
  "stats": {
-  "requests": 0,
+  "requests": 5,
   "articles": 0,
-  "problems": 0,
+  "problems": 5,
   "academic": 0,
   "rest_windows": 0,
-  "pushes": 0
+  "pushes": 1
  },
  "daily": {
-  "date": "",
-  "count": 0
+  "date": "2026-11-25",
+  "count": 5
  },
- "last_push": ""
+ "last_push": "2026-11-25 03:03:57"
 }

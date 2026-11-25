@@ -1,2 +1,7 @@
 ﻿编号,类型,判定,来源,L0,L1_代码块数,L1_去重,L1_编译预检,sha256,证据,L2,时间
 azdjstpm,article,题解,https://www.luogu.com/article/azdjstpm,通过,1,唯一,通过(-O0~-Os 五档),8f3c,site/data/ingested/azdjstpm.json,第15批已补验归丙(UB登记),2026-11-24
+P1000,problem,未知,https://www.luogu.com/problem/P1000,待复核,0,唯一,未启用,25505e2dd80814f8,site/data/ingested/P1000.json,不适用,2026-11-25 03:03:42
+P1001,problem,未知,https://www.luogu.com/problem/P1001,待复核,0,唯一,未启用,fecf52f438bca13d,site/data/ingested/P1001.json,不适用,2026-11-25 03:03:46
+P1002,problem,未知,https://www.luogu.com/problem/P1002,待复核,0,唯一,未启用,ec1ea3d25693ed23,site/data/ingested/P1002.json,不适用,2026-11-25 03:03:49
+P1003,problem,未知,https://www.luogu.com/problem/P1003,待复核,0,唯一,未启用,12cc7018b44f07b5,site/data/ingested/P1003.json,不适用,2026-11-25 03:03:52
+P1004,problem,未知,https://www.luogu.com/problem/P1004,待复核,0,唯一,未启用,5243c06b72516719,site/data/ingested/P1004.json,不适用,2026-11-25 03:03:55
