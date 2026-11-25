@@ -107,6 +107,48 @@ def seed_from_csv(st, only_pending=False):
         n += 1
     return n
 
+def has_article_body(lid):
+    """是否已存档可判定的题解正文（不是 SPA 骨架）。"""
+    fp = os.path.join(INGEST, lid + ".json")
+    if not os.path.exists(fp): return False
+    try:
+        d = json.load(open(fp, encoding="utf-8"))
+        b = d.get("body", "") or ""
+        return bool(b) and ("#include" in b or "int main" in b or len(b) > 3000)
+    except Exception:
+        return False
+
+def replenish(st, args):
+    """队列自续（防止 tick 跑完初始队列后空转）。
+    题解：主表里「是题解但无正文副本」按题号升序补齐——有序枚举。
+    题面：从 problems_cursor 续一小批；若连续拿到 SPA 骨架，降为每轮 1 个探测，
+          不把请求预算浪费在注定无正文的页面上。
+    """
+    added_a = added_p = 0
+    if not args.no_article_replenish and os.path.exists(CSV_P):
+        rows = list(csv.DictReader(open(CSV_P, encoding="utf-8-sig")))
+        def k(r):
+            m = re.fullmatch(r"P(\d{4})", r["题号"])
+            return (int(m.group(1)) if m else 99999, r["编号"])
+        rows.sort(key=k)
+        for r in rows:
+            lid = r["编号"]
+            if r["是否题解"] != "是" or has_article_body(lid): continue
+            if added_a >= args.replenish_batch: break
+            if enqueue(st, "article", lid, args.base.format(lid=lid),
+                       r["题号"], 0, "主表补正文"):
+                added_a += 1
+    if not args.no_auto_problems:
+        streak = int(st.get("problem_skeleton_streak", 0))
+        lim = 1 if streak >= 2 else args.problem_batch
+        cur = max(1000, int(st.get("problems_cursor", 1000)))
+        for pnum in range(cur, cur + lim):
+            key = "P%d" % pnum
+            if enqueue(st, "problem", key, args.problem_base.format(pid=key),
+                       key, 0, "P号顺序·自续"):
+                added_p += 1
+    return added_a, added_p
+
 def seed_problems(st, spec):
     """P 号顺序枚举题面：这是有序，不是遍历编号空间。"""
     m = re.fullmatch(r"(\d+):(\d+)", spec or "")
@@ -206,7 +248,7 @@ def verify_l1(body, url, ident, kind, verdict, args):
            "L0": "通过" if verdict != "未知" else "待复核",
            "L1_代码块数": len(codes), "L1_去重": "—", "sha256": sha(body),
            "证据": "", "时间": now()}
-    if body:
+    if body and verdict != "未知":
         fp = os.path.join(INGEST, ident + ".json")
         atomic_write(fp, json.dumps({
             "id": ident, "kind": kind, "verdict": verdict, "source": url,
@@ -215,6 +257,8 @@ def verify_l1(body, url, ident, kind, verdict, args):
             "code_blocks": codes, "sha256": sha(body), "body": body,
             "fetched_at": now()}, ensure_ascii=False, indent=1))
         row["证据"] = os.path.relpath(fp, REPO)
+    elif verdict == "未知":
+        row["证据"] = "（SPA 骨架 / 不可判定，未存档）"
     # 去重：同 sha 不同 ID → 标记，供人工复核
     row["L1_去重"] = "唯一"
     if codes and args.compile_precheck:
@@ -325,6 +369,12 @@ def main():
     ap.add_argument("--refresh-url", default="", help="保存站刷新入口（若有）")
     ap.add_argument("--refresh-cmd", default="", help="保存站刷新命令（若有）")
     ap.add_argument("--timeout", type=float, default=18.0)
+    ap.add_argument("--replenish-batch", type=int, default=60,
+                    help="每轮最多补入多少个「无正文」题解编号")
+    ap.add_argument("--problem-batch", type=int, default=3,
+                    help="每轮自动续多少个 P 号题面（连续骨架时降为 1）")
+    ap.add_argument("--no-article-replenish", action="store_true")
+    ap.add_argument("--no-auto-problems", action="store_true")
     ap.add_argument("--compile-precheck", action="store_true")
     ap.add_argument("--dry-run", action="store_true", help="不发包、不推送，验证状态机")
     ap.add_argument("--no-push", action="store_true")
@@ -344,8 +394,9 @@ def main():
     for lid in [x.strip() for x in args.lids.split(",") if x.strip()]:
         if ARTICLE_ID.fullmatch(lid):
             enqueue(st, "article", lid, args.base.format(lid=lid), "待判定", 0, "显式")
+    a0, p0 = replenish(st, args)
     save_state(st)
-    print(f"[{now()}] 队列就绪：主表待补 {n_csv}｜P号顺序 {n_prob}｜合计 {len(st['queue'])}")
+    print(f"[{now()}] 队列就绪：主表待补 {n_csv}｜P号顺序 {n_prob}｜自续 题解{a0}/题面{p0}｜合计 {len(st['queue'])}")
 
     start_all = time.time()
     window = 0
@@ -363,7 +414,15 @@ def main():
               f"{datetime.fromtimestamp(win_end).strftime('%H:%M:%S')} ===")
 
         since_micro = 0
-        while time.time() < win_end and st["queue"]:
+        while time.time() < win_end:
+            if len(st["queue"]) < 3:
+                ra, rp = replenish(st, args)
+                if ra + rp:
+                    save_state(st)
+                    print(f"[{now()}] 队列自续：题解 {ra}｜题面 {rp}｜合计 {len(st['queue'])}")
+            if not st["queue"]:
+                print(f"[{now()}] 队列为空且无可补条目，本窗口结束")
+                break
             today = datetime.now().strftime("%Y-%m-%d")
             if st["daily"].get("date") != today:
                 st["daily"] = {"date": today, "count": 0}
@@ -435,6 +494,10 @@ def main():
             added = discover_from_body(st, body, item.get("depth", 0), args.max_depth) \
                 if not args.dry_run else 0
             rec["discovered"] = added
+            if kind == "problem" and verdict == "未知":
+                st["problem_skeleton_streak"] = int(st.get("problem_skeleton_streak", 0)) + 1
+            elif kind == "problem":
+                st["problem_skeleton_streak"] = 0
             log(rec)
             if total % 10 == 0 or added:
                 print(f"[{now()}] {ident} {verdict}｜累计 {total}｜队列 {len(st['queue'])}"
