@@ -97,14 +97,10 @@ def build_entry(lid, problem, url, ingested, reproduced=None):
         scope_kind = "逐字复现代码（原文链接留痕，正文未单独存档）"
     fetched = (ingested or {}).get("fetched_at") or ""
     if not fetched and reproduced and not body:
-        # 无正文副本时，用逐字复现代码的实际落库时间作归档基准，不拿当前时间冒充取回时间
-        try:
-            import datetime as _dt
-            mts = [os.path.getmtime(os.path.join(REPO, "04_复现代码", fn))
-                   for fn, _ in reproduced]
-            fetched = _dt.datetime.fromtimestamp(max(mts)).strftime("%Y-%m-%d %H:%M:%S")
-        except Exception:
-            fetched = ""
+        # 无正文副本：用「逐字复现（见批次报告）」作稳定归档基准。
+        # 不能取文件 mtime —— Actions checkout 会重置 mtime，导致每次重生成
+        # 签名全变、上百个页面产生无意义 diff。
+        fetched = "逐字复现（见 01_批次清单/对应批次报告）"
     if not fetched:
         fetched = now()
     cs = sha(content) if content else ""
@@ -160,7 +156,7 @@ def main():
             e["citation"] = old[lid]["citation"]
         prov[lid] = e
     payload = {
-        "说明": "每条收录内容的原文链接、作者署名、归档/取回时间与 sha256 内容完整性签名；无正文副本者以逐字复现代码落库时间为归档基准",
+        "说明": "每条收录内容的原文链接、作者署名、归档/取回时间与 sha256 内容完整性签名；无正文副本者以「逐字复现（见批次报告）」为稳定归档基准，避免 mtime 漂移",
         "生成时间": now(),
         "条目数": len(prov),
         "版权声明": RIGHTS,
