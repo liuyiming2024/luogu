@@ -1,0 +1,38 @@
+name: 定时工作流保活 · 防 60 天自动禁用
+
+# GitHub 会在「公开仓库 60 天无仓库活动」时自动禁用 schedule 工作流，
+# 而且定时 run 自身不算活动。爬虫通常自己会 commit，但队列全部补完后
+# 可能长期没有新提交，届时 schedule 会被静默关掉。
+# 这个每周一次的极小提交只刷新活动时钟：不爬取、不碰洛谷、不改归档内容。
+on:
+  schedule:
+    - cron: '37 4 * * 2'      # 每周二 UTC 04:37（北京 12:37），错峰
+  workflow_dispatch:
+
+permissions:
+  contents: write
+concurrency:
+  group: luogu-keepalive
+  cancel-in-progress: false
+
+jobs:
+  heartbeat:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: 写心跳（刷新仓库活动时钟）
+        run: |
+          mkdir -p 02_文章编号索引
+          printf '# 定时工作流保活心跳\n\n最近一次：%s\n\n> 仅刷新「仓库活动」时钟，不爬取、不触碰洛谷、不改动任何归档内容。\n> 依据：公开仓库 60 天无活动会自动禁用 schedule 工作流，且 cron 自身运行不算活动。\n' \
+            "$(date -u +%Y-%m-%dT%H:%M:%SZ)" > 02_文章编号索引/_heartbeat.md
+          git config user.name "luogu-crawler[bot]"
+          git config user.email "luogu-crawler[bot]@users.noreply.github.com"
+          git add -- 02_文章编号索引/_heartbeat.md
+          if git diff --cached --quiet; then
+            echo "心跳无变化"
+          else
+            git commit -m "chore(keepalive): 刷新仓库活动时钟，防止 60 天后 schedule 被自动禁用"
+            git pull --rebase origin main || true
+            git push
+          fi
