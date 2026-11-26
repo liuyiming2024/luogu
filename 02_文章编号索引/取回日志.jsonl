@@ -107,3 +107,4 @@
 {"ts": "2026-11-26 14:17:11", "id": "P1019", "kind": "problem", "url": "https://www.luogu.com/problem/P1019", "window": 1, "src": "P号顺序·自续", "http": 200, "result": "ok", "verdict": "未知", "reason": "题面页无正文（SPA 骨架或需登录）", "bytes": 2885, "discovered": 0}
 {"ts": "2026-11-26 14:17:14", "id": "P1020", "kind": "problem", "url": "https://www.luogu.com/problem/P1020", "window": 1, "src": "P号顺序·自续", "http": 200, "result": "ok", "verdict": "未知", "reason": "题面页无正文（SPA 骨架或需登录）", "bytes": 2885, "discovered": 0}
 {"ts": "2026-11-26 14:17:18", "id": "P1021", "kind": "problem", "url": "https://www.luogu.com/problem/P1021", "window": 1, "src": "P号顺序·自续", "http": 200, "result": "ok", "verdict": "未知", "reason": "题面页无正文（SPA 骨架或需登录）", "bytes": 2885, "discovered": 0}
+{"ts": "2026-11-26 23:56:35", "id": "P1022", "kind": "problem", "url": "https://www.luogu.com/problem/P1022", "window": 1, "src": "P号顺序·自续", "http": 200, "result": "stop", "reason": "HTTP 200 / 503 - 洛谷日爆"}

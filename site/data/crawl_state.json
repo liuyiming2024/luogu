@@ -756,17 +756,13 @@
    "src": "P号顺序·自续"
   }
  },
- "queue": [
-  {
-   "kind": "problem",
-   "id": "P1022",
-   "url": "https://www.luogu.com/problem/P1022",
-   "problem": "P1022",
-   "depth": 0,
-   "src": "P号顺序·自续"
+ "queue": [],
+ "failed": {
+  "P1022": {
+   "n": 1,
+   "next_ts": 1795739196.1005945
   }
- ],
- "failed": {},
+ },
  "problems_cursor": 1022,
  "stats": {
   "requests": 107,
@@ -774,14 +770,14 @@
   "problems": 10,
   "academic": 5,
   "rest_windows": 0,
-  "pushes": 8,
+  "pushes": 9,
   "skeleton": 12
  },
  "daily": {
   "date": "2026-11-26",
   "count": 42
  },
- "last_push": "2026-11-26 14:17:21",
+ "last_push": "2026-11-26 23:56:36",
  "problem_skeleton_streak": 17,
  "audit_baseline": {
   "ts": "2026-11-26",
