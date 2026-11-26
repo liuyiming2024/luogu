@@ -299,7 +299,8 @@ def write_progress(st, args, window, rest_until):
     s = st["stats"]
     lines = ["# 爬取进度（自动生成）", "", f"更新时间：{now()}", "",
              f"- 当前窗口：第 {window} 轮", f"- 休息至：{rest_until or '运行中'}",
-             f"- 累计请求：{s['requests']}｜题解正文：{s['articles']}｜题面：{s['problems']}｜学术/规范：{s['academic']}",
+             f"- 累计请求：{s['requests']}｜题解正文：{s['articles']}｜题面：{s['problems']}｜学术/规范：{s['academic']}｜SPA 骨架：{s.get('skeleton', 0)}",
+             f"- **有效正文（题解+题面+学术）：{s['articles'] + s['problems'] + s['academic']}**｜连续题面骨架：{st.get('problem_skeleton_streak', 0)}",
              f"- 队列剩余：{len(st['queue'])}｜已见：{len(st['seen'])}｜失败退避：{len(st['failed'])}",
              f"- 回写次数：{s['pushes']}｜休息窗口：{s['rest_windows']}", "",
              "节奏：跑 %d 分钟 / 歇 %d 分钟，间隔 %.1fs±抖动，每 %d 次小憩，每日上限 %d。"
@@ -478,7 +479,10 @@ def main():
             st["stats"]["requests"] += 1
             st["daily"]["count"] += 1
             total += 1
-            if kind == "problem": st["stats"]["problems"] += 1
+            if verdict == "未知":
+                # SPA 骨架 / 不可判定：不计入有效产出，避免「5 个请求全骨架却显示题面 5」
+                st["stats"]["skeleton"] = st["stats"].get("skeleton", 0) + 1
+            elif kind == "problem": st["stats"]["problems"] += 1
             elif verdict in ("学术/规范文章", "学术/题解文字"): st["stats"]["academic"] += 1
             else: st["stats"]["articles"] += 1
             if kind == "problem":
