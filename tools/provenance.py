@@ -31,16 +31,35 @@ RIGHTS = ("版权归原作者及洛谷所有；本仓库仅作个人学习 / 学
 def now(): return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 def sha(s): return hashlib.sha256(s.encode("utf-8", "ignore")).hexdigest()
 
+def article_meta(body):
+    """洛谷文章页内嵌 `data.article` JSON（含 author.name / title / solutionFor.pid）。
+    这是**原文页面自己的署名**，比 <title> 或猜测可靠得多；逐字解析，不编造。"""
+    if not body: return {}
+    m = re.search(r'"article"\s*:\s*\{', body)
+    if not m: return {}
+    seg = body[m.start():m.start() + 6000]
+    def js(key):
+        mm = re.search(r'"%s"\s*:\s*"((?:\\u[0-9a-fA-F]{4}|\\.|[^"\\])*)"' % key, seg)
+        if not mm: return None
+        try: return json.loads('"' + mm.group(1) + '"')
+        except Exception: return None
+    out = {"author": js("name"), "title": js("title"), "lid": js("lid")}
+    pm = re.search(r'"solutionFor"\s*:\s*\{[^}]*?"pid"\s*:\s*"([A-Z]\d+)"', seg)
+    if pm: out["pid"] = pm.group(1)
+    return out
+
 def guess_author(body):
     """只从页面里真实出现的字段提取；提取不到绝不编造。"""
     if not body: return "见原文页面署名（页面未给出可解析作者字段）"
+    meta = article_meta(body)
+    if meta.get("author"):
+        v = html.unescape(meta["author"]).strip()
+        if v and not re.search(r"^洛谷$|Luogu|^admin$|^system$", v, re.I):
+            return v
     pats = [
         r'<meta[^>]+name=["\']author["\'][^>]+content=["\']([^"\']{1,60})["\']',
-        r'<meta[^>]+content=["\']([^"\']{1,60})["\'][^>]+name=["\']author["\']',
-        r'"author"\s*:\s*\{[^}]*?"name"\s*:\s*"([^"]{1,60})"',
         r'"userName"\s*:\s*"([^"]{1,60})"',
         r'作者[：:]\s*([^\s<，,]{1,40})',
-        r'by\s+([A-Za-z0-9_\-]{2,40})\s*</',
     ]
     for p in pats:
         m = re.search(p, body, re.I | re.S)
@@ -51,6 +70,10 @@ def guess_author(body):
     return "见原文页面署名（页面未给出可解析作者字段）"
 
 def guess_title(body, lid, problem):
+    meta = article_meta(body)
+    if meta.get("title"):
+        t = html.unescape(meta["title"]).strip()
+        if t and len(t) < 160: return t
     m = re.search(r"<title>(.*?)</title>", body or "", re.S | re.I)
     if m:
         t = html.unescape(re.sub(r"<[^>]+>", "", m.group(1))).strip()
@@ -116,6 +139,7 @@ def build_entry(lid, problem, url, ingested, reproduced=None):
         "lid": lid, "problem": problem,
         "original_url": url,
         "author": author,
+        "author_source": "原文页面内嵌 data.article.author.name" if (body and (article_meta(body).get("author"))) else "页面未给出可解析作者字段",
         "title": title,
         "publisher": "洛谷（www.luogu.com）",
         "fetched_at": fetched,
@@ -156,7 +180,7 @@ def main():
             e["citation"] = old[lid]["citation"]
         prov[lid] = e
     payload = {
-        "说明": "每条收录内容的原文链接、作者署名、归档/取回时间与 sha256 内容完整性签名；无正文副本者以「逐字复现（见批次报告）」为稳定归档基准，避免 mtime 漂移",
+        "说明": "每条收录内容的原文链接、作者署名（优先取原文页面内嵌 author.name）、归档/取回时间与 sha256 内容完整性签名；无正文副本者以「逐字复现（见批次报告）」为稳定归档基准",
         "生成时间": now(),
         "条目数": len(prov),
         "版权声明": RIGHTS,

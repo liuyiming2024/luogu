@@ -2,7 +2,7 @@
 1,zaohomhi,P1001,是,题解文章（8 位 article 编号）,是,丙·未 hack,第1批,A+B，未 hack,https://www.luogu.com/article/zaohomhi
 2,qsh0tcmu,P1002,是,题解文章（8 位 article 编号）,是,丙·未 hack,第4批,未 hack,https://www.luogu.com/article/qsh0tcmu
 3,sfifnfaa,P1002,是,题解文章（8 位 article 编号）,是,甲·已 hack,第1批,过河卒 dp[0][0] 被自身覆盖，整表恒零,https://www.luogu.com/article/sfifnfaa
-4,yk90rg78,P1002,是,题解文章（8 位 article 编号）,是,甲·已 hack,第2批,f[0][0] 赋值在 DP 循环之后，输出恒 0,https://www.luogu.com/article/yk90rg78
+4,yk90rg78,P1002,是,题解文章（8 位 article 编号）,是,丙·未 hack,第2批→第17批原文复核下调,第17批原文级复核纠正：转录版把 f[0][0]=1-ctrl[0][0] 错置到 DP 循环之后；原文该语句在 j 循环体内，首轮即置起点。P1002 全范围 2025 组枚举 0 不一致，官方样例全对,https://www.luogu.com/article/yk90rg78
 5,9jadrxl0,P1003,是,题解文章（8 位 article 编号）,是,乙·笔误/防抄袭,第7批,im[10020][4] 改一个数字即全对,https://www.luogu.com/article/9jadrxl0
 6,azdjstpm,P1008,是,题解文章（8 位 article 编号）,是,丙·未 hack,第15批,Actions 出口取回正文(HTTP200)；bok[9] 越界写为UB，但 -O0/-O1/-O2/-O3/-Os 五档均输出4行正确解，题面内确定性输出正确→归丙(UB登记)，不计缺陷,https://www.luogu.com/article/azdjstpm
 7,kckry124,P1012,是,题解文章（8 位 article 编号）,是,丙·未 hack,第9批,未 hack,https://www.luogu.com/article/kckry124

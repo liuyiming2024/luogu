@@ -92,10 +92,10 @@
    "title": "P1002 题解 · yk90rg78",
    "is_article": "是",
    "article_type": "题解文章（8 位 article 编号）",
-   "class": "甲·已 hack",
-   "batch": "第2批",
+   "class": "丙·未 hack",
+   "batch": "第2批→第17批原文复核下调",
    "verifiable": "是",
-   "note": "f[0][0] 赋值在 DP 循环之后，输出恒 0",
+   "note": "第17批原文级复核纠正：转录版把 f[0][0]=1-ctrl[0][0] 错置到 DP 循环之后；原文该语句在 j 循环体内，首轮即置起点。P1002 全范围 2025 组枚举 0 不一致，官方样例全对",
    "url": "https://www.luogu.com/article/yk90rg78",
    "page": "articles/yk90rg78.html",
    "code_files": [
@@ -157,12 +157,12 @@
    ],
    "has_code": true,
    "original_url": "https://www.luogu.com/article/azdjstpm",
-   "author": "\\u4e91\\u96c0\\u9171",
+   "author": "云雀酱",
    "fetched_at": "2026-11-24 14:09:31",
    "content_sha256": "0ef9fe693a43e4fdb72d05e111eca1d6c2b758cdea93e4982722277d7f849c14",
    "signature": "ce83aa377109a880972404614e183879",
    "scope": "正文+代码块",
-   "citation": "\\u4e91\\u96c0\\u9171. 《题解 P1008 【三连击】》. 洛谷, 原文: https://www.luogu.com/article/azdjstpm（本仓库归档于 2026-11-24 14:09:31，内容 sha256: 0ef9fe693a43e4fd，完整性签名: ce83aa377109a880972404614e183879）. 版权归原作者所有，仅作学术归档引用。",
+   "citation": "云雀酱. 《题解 P1008 【三连击】》. 洛谷, 原文: https://www.luogu.com/article/azdjstpm（本仓库归档于 2026-11-24 14:09:31，内容 sha256: 0ef9fe693a43e4fd，完整性签名: ce83aa377109a880972404614e183879）. 版权归原作者所有，仅作学术归档引用。",
    "rights": "版权归原作者及洛谷所有；本库仅作个人学习 / 学术研究的离线归档与校对留痕，不用于商业用途。每篇保留原文链接与作者署名；权利人可申请移除，详见《归档与版权声明》。"
   },
   {
@@ -232,12 +232,12 @@
    ],
    "has_code": true,
    "original_url": "https://www.luogu.com/article/v6gwt3bu",
-   "author": "\\u300c\\u5df2\\u6ce8\\u9500\\u300d",
+   "author": "「已注销」",
    "fetched_at": "2026-11-25 07:51:26",
    "content_sha256": "2c73e0b3c240d102c73771be474afae9fc7ef818d4420aee7119aac9f1fb4207",
    "signature": "0f1fec67c93496073772d6182ca21624",
    "scope": "正文+代码块",
-   "citation": "\\u300c\\u5df2\\u6ce8\\u9500\\u300d. 《题解 P1014 【Cantor表】的几种做法》. 洛谷, 原文: https://www.luogu.com/article/v6gwt3bu（本仓库归档于 2026-11-25 07:51:26，内容 sha256: 2c73e0b3c240d102，完整性签名: 0f1fec67c93496073772d6182ca21624）. 版权归原作者所有，仅作学术归档引用。",
+   "citation": "「已注销」. 《题解 P1014 【Cantor表】的几种做法》. 洛谷, 原文: https://www.luogu.com/article/v6gwt3bu（本仓库归档于 2026-11-25 07:51:26，内容 sha256: 2c73e0b3c240d102，完整性签名: 0f1fec67c93496073772d6182ca21624）. 版权归原作者所有，仅作学术归档引用。",
    "rights": "版权归原作者及洛谷所有；本库仅作个人学习 / 学术研究的离线归档与校对留痕，不用于商业用途。每篇保留原文链接与作者署名；权利人可申请移除，详见《归档与版权声明》。"
   },
   {
@@ -355,12 +355,12 @@
    "code_files": [],
    "has_code": false,
    "original_url": "https://www.luogu.com/article/g17kwzzm",
-   "author": "\\u5218\\u5907",
+   "author": "刘备",
    "fetched_at": "2026-11-25 07:51:40",
    "content_sha256": "cfe700255379b15e0962de0a72d2b460eb5fc58c17ebb97f46d09c779fb235f1",
    "signature": "5651f33d376eb6912473db43500c87a8",
    "scope": "正文+代码块",
-   "citation": "\\u5218\\u5907. 《题解 P1044 【栈】》. 洛谷, 原文: https://www.luogu.com/article/g17kwzzm（本仓库归档于 2026-11-25 07:51:40，内容 sha256: cfe700255379b15e，完整性签名: 5651f33d376eb6912473db43500c87a8）. 版权归原作者所有，仅作学术归档引用。",
+   "citation": "刘备. 《题解 P1044 【栈】》. 洛谷, 原文: https://www.luogu.com/article/g17kwzzm（本仓库归档于 2026-11-25 07:51:40，内容 sha256: cfe700255379b15e，完整性签名: 5651f33d376eb6912473db43500c87a8）. 版权归原作者所有，仅作学术归档引用。",
    "rights": "版权归原作者及洛谷所有；本库仅作个人学习 / 学术研究的离线归档与校对留痕，不用于商业用途。每篇保留原文链接与作者署名；权利人可申请移除，详见《归档与版权声明》。"
   },
   {
@@ -753,12 +753,12 @@
    ],
    "has_code": true,
    "original_url": "https://www.luogu.com/article/88laurj5",
-   "author": "\\u6211\\u7684\\u7236\\u4eb2",
+   "author": "我的父亲",
    "fetched_at": "2026-11-25 07:52:56",
    "content_sha256": "f4b3728350083b1724a024c1f3ea2db783a5819e7c556f38a6bf8fdd8fb32318",
    "signature": "59eaba70bec47483cd349c4547fd7c9c",
    "scope": "正文+代码块",
-   "citation": "\\u6211\\u7684\\u7236\\u4eb2. 《题解 P1098 【字符串的展开】》. 洛谷, 原文: https://www.luogu.com/article/88laurj5（本仓库归档于 2026-11-25 07:52:56，内容 sha256: f4b3728350083b17，完整性签名: 59eaba70bec47483cd349c4547fd7c9c）. 版权归原作者所有，仅作学术归档引用。",
+   "citation": "我的父亲. 《题解 P1098 【字符串的展开】》. 洛谷, 原文: https://www.luogu.com/article/88laurj5（本仓库归档于 2026-11-25 07:52:56，内容 sha256: f4b3728350083b17，完整性签名: 59eaba70bec47483cd349c4547fd7c9c）. 版权归原作者所有，仅作学术归档引用。",
    "rights": "版权归原作者及洛谷所有；本库仅作个人学习 / 学术研究的离线归档与校对留痕，不用于商业用途。每篇保留原文链接与作者署名；权利人可申请移除，详见《归档与版权声明》。"
   },
   {
@@ -1088,12 +1088,12 @@
    "code_files": [],
    "has_code": false,
    "original_url": "https://www.luogu.com/article/gw5uvykg",
-   "author": "\\u5b66\\u800c\\u601d\\u674e\\u8001\\u5e08",
+   "author": "学而思李老师",
    "fetched_at": "2026-11-25 17:59:11",
    "content_sha256": "5d5629dbb202ca3301e03286d899f79f95c12830c7379455e518ce5171d5f3a3",
    "signature": "b30b5b22ae74e303ad2a690849493fe7",
    "scope": "正文+代码块",
-   "citation": "\\u5b66\\u800c\\u601d\\u674e\\u8001\\u5e08. 《P1204 [USACO1.2]挤牛奶Mixing Cows》. 洛谷, 原文: https://www.luogu.com/article/gw5uvykg（本仓库归档于 2026-11-25 17:59:11，内容 sha256: 5d5629dbb202ca33，完整性签名: b30b5b22ae74e303ad2a690849493fe7）. 版权归原作者所有，仅作学术归档引用。",
+   "citation": "学而思李老师. 《P1204 [USACO1.2]挤牛奶Mixing Cows》. 洛谷, 原文: https://www.luogu.com/article/gw5uvykg（本仓库归档于 2026-11-25 17:59:11，内容 sha256: 5d5629dbb202ca33，完整性签名: b30b5b22ae74e303ad2a690849493fe7）. 版权归原作者所有，仅作学术归档引用。",
    "rights": "版权归原作者及洛谷所有；本库仅作个人学习 / 学术研究的离线归档与校对留痕，不用于商业用途。每篇保留原文链接与作者署名；权利人可申请移除，详见《归档与版权声明》。"
   },
   {
@@ -1168,12 +1168,12 @@
    ],
    "has_code": true,
    "original_url": "https://www.luogu.com/article/uezud59i",
-   "author": "\\u6768\\u5955\\u8f89",
+   "author": "杨奕辉",
    "fetched_at": "2026-11-25 17:59:21",
    "content_sha256": "4efcf3c9271f43269f6ee182ec9ca1871beff04ebcf1a492b165b9242bbfa375",
    "signature": "39b5d5847dfe01beb9f4bf63c8c62625",
    "scope": "正文+代码块",
-   "citation": "\\u6768\\u5955\\u8f89. 《题解 P1220 【关路灯 】》. 洛谷, 原文: https://www.luogu.com/article/uezud59i（本仓库归档于 2026-11-25 17:59:21，内容 sha256: 4efcf3c9271f4326，完整性签名: 39b5d5847dfe01beb9f4bf63c8c62625）. 版权归原作者所有，仅作学术归档引用。",
+   "citation": "杨奕辉. 《题解 P1220 【关路灯 】》. 洛谷, 原文: https://www.luogu.com/article/uezud59i（本仓库归档于 2026-11-25 17:59:21，内容 sha256: 4efcf3c9271f4326，完整性签名: 39b5d5847dfe01beb9f4bf63c8c62625）. 版权归原作者所有，仅作学术归档引用。",
    "rights": "版权归原作者及洛谷所有；本库仅作个人学习 / 学术研究的离线归档与校对留痕，不用于商业用途。每篇保留原文链接与作者署名；权利人可申请移除，详见《归档与版权声明》。"
   },
   {
@@ -1242,12 +1242,12 @@
    "code_files": [],
    "has_code": false,
    "original_url": "https://www.luogu.com/article/0z8yhoc0",
-   "author": "\\u5927\\u9b54\\u9b3c\\u707f\\u707f",
+   "author": "大魔鬼灿灿",
    "fetched_at": "2026-11-25 17:59:29",
    "content_sha256": "22470dbe0ca335e59e620a5a5a9ac7fd199bb9daf0c7a1d428014e7a2490b14a",
    "signature": "4d0d2e02b8a6e296aa8a61b11b3c1fc2",
    "scope": "正文+代码块",
-   "citation": "\\u5927\\u9b54\\u9b3c\\u707f\\u707f. 《题解 P1328 【生活大爆炸版石头剪刀布】》. 洛谷, 原文: https://www.luogu.com/article/0z8yhoc0（本仓库归档于 2026-11-25 17:59:29，内容 sha256: 22470dbe0ca335e5，完整性签名: 4d0d2e02b8a6e296aa8a61b11b3c1fc2）. 版权归原作者所有，仅作学术归档引用。",
+   "citation": "大魔鬼灿灿. 《题解 P1328 【生活大爆炸版石头剪刀布】》. 洛谷, 原文: https://www.luogu.com/article/0z8yhoc0（本仓库归档于 2026-11-25 17:59:29，内容 sha256: 22470dbe0ca335e5，完整性签名: 4d0d2e02b8a6e296aa8a61b11b3c1fc2）. 版权归原作者所有，仅作学术归档引用。",
    "rights": "版权归原作者及洛谷所有；本库仅作个人学习 / 学术研究的离线归档与校对留痕，不用于商业用途。每篇保留原文链接与作者署名；权利人可申请移除，详见《归档与版权声明》。"
   },
   {
@@ -1472,12 +1472,12 @@
    ],
    "has_code": true,
    "original_url": "https://www.luogu.com/article/3aph5o1d",
-   "author": "\\u672a\\u6765miss",
+   "author": "未来miss",
    "fetched_at": "2026-11-25 18:00:15",
    "content_sha256": "15ac6ad5095636ee699a72ee2347e69a3f3da499a6e8eefbe33f17e38c8cd626",
    "signature": "85bb849ed10d1b243b51b6499e8f561f",
    "scope": "正文+代码块",
-   "citation": "\\u672a\\u6765miss. 《题解 P1469 【找筷子】》. 洛谷, 原文: https://www.luogu.com/article/3aph5o1d（本仓库归档于 2026-11-25 18:00:15，内容 sha256: 15ac6ad5095636ee，完整性签名: 85bb849ed10d1b243b51b6499e8f561f）. 版权归原作者所有，仅作学术归档引用。",
+   "citation": "未来miss. 《题解 P1469 【找筷子】》. 洛谷, 原文: https://www.luogu.com/article/3aph5o1d（本仓库归档于 2026-11-25 18:00:15，内容 sha256: 15ac6ad5095636ee，完整性签名: 85bb849ed10d1b243b51b6499e8f561f）. 版权归原作者所有，仅作学术归档引用。",
    "rights": "版权归原作者及洛谷所有；本库仅作个人学习 / 学术研究的离线归档与校对留痕，不用于商业用途。每篇保留原文链接与作者署名；权利人可申请移除，详见《归档与版权声明》。"
   },
   {
@@ -1524,12 +1524,12 @@
    ],
    "has_code": true,
    "original_url": "https://www.luogu.com/article/utz61eus",
-   "author": "\\u7f16\\u7a0b\\u840c\\u65b0or\\u5927\\u795e",
+   "author": "编程萌新or大神",
    "fetched_at": "2026-11-25 18:00:20",
    "content_sha256": "2c2ce36132135fb8c414019922da220a01d3e882f580761c1ff8b3ec8beec59b",
    "signature": "ee6f3fc76cfdd613b3deec84defe5157",
    "scope": "正文+代码块",
-   "citation": "\\u7f16\\u7a0b\\u840c\\u65b0or\\u5927\\u795e. 《题解 P1469 【找筷子】》. 洛谷, 原文: https://www.luogu.com/article/utz61eus（本仓库归档于 2026-11-25 18:00:20，内容 sha256: 2c2ce36132135fb8，完整性签名: ee6f3fc76cfdd613b3deec84defe5157）. 版权归原作者所有，仅作学术归档引用。",
+   "citation": "编程萌新or大神. 《题解 P1469 【找筷子】》. 洛谷, 原文: https://www.luogu.com/article/utz61eus（本仓库归档于 2026-11-25 18:00:20，内容 sha256: 2c2ce36132135fb8，完整性签名: ee6f3fc76cfdd613b3deec84defe5157）. 版权归原作者所有，仅作学术归档引用。",
    "rights": "版权归原作者及洛谷所有；本库仅作个人学习 / 学术研究的离线归档与校对留痕，不用于商业用途。每篇保留原文链接与作者署名；权利人可申请移除，详见《归档与版权声明》。"
   },
   {
@@ -1573,12 +1573,12 @@
    ],
    "has_code": true,
    "original_url": "https://www.luogu.com/article/xmumv7ok",
-   "author": "\\u4ed9\\u98ce\\u9053\\u9aa8",
+   "author": "仙风道骨",
    "fetched_at": "2026-11-26 02:13:27",
    "content_sha256": "3f2240ea29b55f66c4da33942c38b48c7bc15ffa6563f96296ff4d1d60b696e1",
    "signature": "d70b028a85da2bfe18880e0c91b4c144",
    "scope": "正文+代码块",
-   "citation": "\\u4ed9\\u98ce\\u9053\\u9aa8. 《题解 P1563 【玩具谜题】》. 洛谷, 原文: https://www.luogu.com/article/xmumv7ok（本仓库归档于 2026-11-26 02:13:27，内容 sha256: 3f2240ea29b55f66，完整性签名: d70b028a85da2bfe18880e0c91b4c144）. 版权归原作者所有，仅作学术归档引用。",
+   "citation": "仙风道骨. 《题解 P1563 【玩具谜题】》. 洛谷, 原文: https://www.luogu.com/article/xmumv7ok（本仓库归档于 2026-11-26 02:13:27，内容 sha256: 3f2240ea29b55f66，完整性签名: d70b028a85da2bfe18880e0c91b4c144）. 版权归原作者所有，仅作学术归档引用。",
    "rights": "版权归原作者及洛谷所有；本库仅作个人学习 / 学术研究的离线归档与校对留痕，不用于商业用途。每篇保留原文链接与作者署名；权利人可申请移除，详见《归档与版权声明》。"
   },
   {
@@ -1748,12 +1748,12 @@
    ],
    "has_code": true,
    "original_url": "https://www.luogu.com/article/z3dolqp8",
-   "author": "\\u95eb\\u7acb",
+   "author": "闫立",
    "fetched_at": "2026-11-26 02:13:48",
    "content_sha256": "9cb25ac77b214d5152aa48eb5cfe74905efbe971b687947fcb1d5c81389941e3",
    "signature": "a547a43a05bb7007ad3945d7aa0327e1",
    "scope": "正文+代码块",
-   "citation": "\\u95eb\\u7acb. 《题解 P1739 【表达式括号匹配】》. 洛谷, 原文: https://www.luogu.com/article/z3dolqp8（本仓库归档于 2026-11-26 02:13:48，内容 sha256: 9cb25ac77b214d51，完整性签名: a547a43a05bb7007ad3945d7aa0327e1）. 版权归原作者所有，仅作学术归档引用。",
+   "citation": "闫立. 《题解 P1739 【表达式括号匹配】》. 洛谷, 原文: https://www.luogu.com/article/z3dolqp8（本仓库归档于 2026-11-26 02:13:48，内容 sha256: 9cb25ac77b214d51，完整性签名: a547a43a05bb7007ad3945d7aa0327e1）. 版权归原作者所有，仅作学术归档引用。",
    "rights": "版权归原作者及洛谷所有；本库仅作个人学习 / 学术研究的离线归档与校对留痕，不用于商业用途。每篇保留原文链接与作者署名；权利人可申请移除，详见《归档与版权声明》。"
   },
   {
@@ -1773,12 +1773,12 @@
    ],
    "has_code": true,
    "original_url": "https://www.luogu.com/article/dmza5ifn",
-   "author": "\\u5317\\u5317\\u5317\\u5317",
+   "author": "北北北北",
    "fetched_at": "2026-11-26 02:13:52",
    "content_sha256": "1ff7ba2c816d1f074fb6e181e7b22f1950184ce1659af5e2772b3b7619d766c7",
    "signature": "acdff9a2e649f9c9c083fdc71e1ce5cf",
    "scope": "正文+代码块",
-   "citation": "\\u5317\\u5317\\u5317\\u5317. 《题解 P1803 【凌乱的yyy / 线段覆盖】》. 洛谷, 原文: https://www.luogu.com/article/dmza5ifn（本仓库归档于 2026-11-26 02:13:52，内容 sha256: 1ff7ba2c816d1f07，完整性签名: acdff9a2e649f9c9c083fdc71e1ce5cf）. 版权归原作者所有，仅作学术归档引用。",
+   "citation": "北北北北. 《题解 P1803 【凌乱的yyy / 线段覆盖】》. 洛谷, 原文: https://www.luogu.com/article/dmza5ifn（本仓库归档于 2026-11-26 02:13:52，内容 sha256: 1ff7ba2c816d1f07，完整性签名: acdff9a2e649f9c9c083fdc71e1ce5cf）. 版权归原作者所有，仅作学术归档引用。",
    "rights": "版权归原作者及洛谷所有；本库仅作个人学习 / 学术研究的离线归档与校对留痕，不用于商业用途。每篇保留原文链接与作者署名；权利人可申请移除，详见《归档与版权声明》。"
   },
   {
@@ -1798,12 +1798,12 @@
    ],
    "has_code": true,
    "original_url": "https://www.luogu.com/article/h8ic4o0m",
-   "author": "\\u51b0\\u5cf0",
+   "author": "冰峰",
    "fetched_at": "2026-11-26 02:13:54",
    "content_sha256": "fb7b17a6235e74fefc4700421c3d6026a78e134d70bd1dccb827a061d75c1c4d",
    "signature": "da3dbdfcac3760b121c828760391ebb3",
    "scope": "正文+代码块",
-   "citation": "\\u51b0\\u5cf0. 《题解 P1909 【买铅笔】》. 洛谷, 原文: https://www.luogu.com/article/h8ic4o0m（本仓库归档于 2026-11-26 02:13:54，内容 sha256: fb7b17a6235e74fe，完整性签名: da3dbdfcac3760b121c828760391ebb3）. 版权归原作者所有，仅作学术归档引用。",
+   "citation": "冰峰. 《题解 P1909 【买铅笔】》. 洛谷, 原文: https://www.luogu.com/article/h8ic4o0m（本仓库归档于 2026-11-26 02:13:54，内容 sha256: fb7b17a6235e74fe，完整性签名: da3dbdfcac3760b121c828760391ebb3）. 版权归原作者所有，仅作学术归档引用。",
    "rights": "版权归原作者及洛谷所有；本库仅作个人学习 / 学术研究的离线归档与校对留痕，不用于商业用途。每篇保留原文链接与作者署名；权利人可申请移除，详见《归档与版权声明》。"
   },
   {
@@ -2180,11 +2180,11 @@
    "has_code": false,
    "original_url": "https://www.luogu.com/article/zm6gqovk",
    "author": "见原文页面署名（页面未给出可解析作者字段）",
-   "fetched_at": "2026-11-26 22:24:34",
+   "fetched_at": "2026-11-26 23:14:54",
    "content_sha256": "",
    "signature": "",
    "scope": "仅索引（正文待补录）",
-   "citation": "见原文页面署名（页面未给出可解析作者字段）. 《— 题解 · zm6gqovk》. 洛谷, 原文: https://www.luogu.com/article/zm6gqovk（本仓库归档于 2026-11-26 22:24:34，内容 sha256: 待补录，完整性签名: 待补录）. 版权归原作者所有，仅作学术归档引用。",
+   "citation": "见原文页面署名（页面未给出可解析作者字段）. 《— 题解 · zm6gqovk》. 洛谷, 原文: https://www.luogu.com/article/zm6gqovk（本仓库归档于 2026-11-26 23:14:54，内容 sha256: 待补录，完整性签名: 待补录）. 版权归原作者所有，仅作学术归档引用。",
    "rights": "版权归原作者及洛谷所有；本库仅作个人学习 / 学术研究的离线归档与校对留痕，不用于商业用途。每篇保留原文链接与作者署名；权利人可申请移除，详见《归档与版权声明》。"
   }
  ]

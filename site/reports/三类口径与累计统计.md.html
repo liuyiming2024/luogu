@@ -14,8 +14,8 @@
 <p>读入语句）再编译；缺头文件、页面吞字符、不可见防抄袭字符一律不计缺陷，只验核心逻辑。</p>
 <ol><li><strong>题面内</strong>——违反题面保证的输入（越界坐标、超值域、超长度）一律作废，不计 hack。</li></ol>
 <h2>累计（截至第 15 批）</h2>
-<table class="tb"><thead><tr><th>项</th><th>数</th></tr></thead><tbody><tr><td>逐篇验证题解</td><td><strong>96 篇</strong></td></tr><tr><td>甲 · 已 hack</td><td><strong>14 篇</strong></td></tr><tr><td>乙 · 笔误/防抄袭</td><td><strong>11 篇</strong></td></tr><tr><td>丙 · 未 hack</td><td><strong>71 篇</strong></td></tr><tr><td>甲类合法反例</td><td><strong>34 条</strong></td></tr><tr><td>乙类反例</td><td><strong>≥ 2 条</strong>（P1049 随机化、P1098 <code>88laurj5</code> 常量笔误）</td></tr><tr><td>已登记 8 位 article 编号</td><td><strong>87 个</strong></td></tr><tr><td>其中 <code>是否题解=是</code></td><td><strong>86 个</strong></td></tr><tr><td>其中 <code>是否题解=否</code></td><td><strong>1 个</strong>（<code>zm6gqovk</code> 帮助规范文章）</td></tr><tr><td><code>登记·不计数</code> 剩余</td><td><strong>0</strong>（<code>azdjstpm</code> 第 15 批补验归丙）</td></tr></tbody></table>
-<blockquote>编号数 ≠ 验证篇数：另有无 8 位编号的题解（vis 版、辅助示意版、演示版等）， 见 <code>非题解页与待补录登记.md</code> B 节；非题解编号不计入「逐篇验证」。 索引归类计数为 甲 14 / 乙 7 / 丙 65 / 登记 0 / 非题解 1 = 87， 与逐篇验证累计（甲 14 / 乙 11 / 丙 71）的差额 10 篇来自无 8 位编号的题解与示意版。</blockquote>
+<table class="tb"><thead><tr><th>项</th><th>数</th></tr></thead><tbody><tr><td>逐篇验证题解</td><td><strong>96 篇</strong></td></tr><tr><td>甲 · 已 hack</td><td><strong>14 篇</strong></td></tr><tr><td>乙 · 笔误/防抄袭</td><td><strong>11 篇</strong></td></tr><tr><td>丙 · 未 hack</td><td><strong>71 篇</strong></td></tr><tr><td>甲类合法反例</td><td><strong>32 条</strong></td></tr><tr><td>乙类反例</td><td><strong>≥ 2 条</strong>（P1049 随机化、P1098 <code>88laurj5</code> 常量笔误）</td></tr><tr><td>已登记 8 位 article 编号</td><td><strong>87 个</strong></td></tr><tr><td>其中 <code>是否题解=是</code></td><td><strong>86 个</strong></td></tr><tr><td>其中 <code>是否题解=否</code></td><td><strong>1 个</strong>（<code>zm6gqovk</code> 帮助规范文章）</td></tr><tr><td><code>登记·不计数</code> 剩余</td><td><strong>0</strong>（<code>azdjstpm</code> 第 15 批补验归丙）</td></tr></tbody></table>
+<blockquote>编号数 ≠ 验证篇数：另有无 8 位编号的题解（vis 版、辅助示意版、演示版等）， 见 <code>非题解页与待补录登记.md</code> B 节；非题解编号不计入「逐篇验证」。 索引归类计数为 甲 13 / 乙 7 / 丙 65 / 登记 0 / 非题解 1 = 87， 与逐篇验证累计（甲 13 / 乙 11 / 丙 72）的差额 10 篇来自无 8 位编号的题解与示意版。</blockquote>
 <h2>自查纪律（逐批累加）</h2>
 <ol><li>搜索摘要 ≠ 文章正文，冲突时以逐字取回为准</li><li>片段先回原文逐字复核；补最小外壳<strong>不能改变语义</strong>（第 11 批 P3397 教训）</li><li>编译报错先分清是原文、还是自己补的外壳 / 自己写的独立解</li><li><strong>修复版本身也要复验</strong>（第 12 批 a==0 特判位置教训）</li><li><strong>补外壳时「读入语句」与「依赖读入的初值」必须一起复核顺序</strong>（第 13 批 <code>cin&gt;&gt;n</code> 教训）</li><li>浮点题先对齐标程舍入与 ULP；随机对拍全过不等于没问题，边界点与官方样例单独跑</li><li>数组越界必须实测到具体规模，分清「栈溢出」与「下标越界」两层</li><li>「以为改一处就修好」必须跑修复版复验，再决定甲/乙</li><li><strong>资源类结论必须有同限制下的正确解对照</strong>（第 12 批 RLIMIT_AS 实验）</li><li>行尾空格按题面口径逐行 rstrip 后比较，不把格式差异当 WA</li><li>作者自曝的非正解块、思路回顾块、辅助示意版不拿来 hack</li><li>不登录、不提交、不刷接口；保存站只作编号体系旁证</li><li><strong>8 位 article 编号 ≠ 一定是题解</strong>（第 13 批 <code>zm6gqovk</code>）</li><li><strong>403 先看响应体</strong>：<code>policy_default_denied</code> 是策略网关默认拒绝，</li></ol>
 <p>降频/换 UA/换路径都无用（第 14 批保存站实测）</p>
@@ -41,4 +41,8 @@
 <ol><li><strong>公开归档取回即清洗匿名页面令牌</strong>；判定不能只认 C++，</li></ol>
 <p>Python / Pascal / 伪代码题解同样是题解。</p>
 <ol><li><strong>基础设施也要类对拍</strong>：<code>tools/verify_infra.py</code> 每个检查点配变异实现，</li></ol>
-<p>变异没被抓到即判空跑；<code>--check</code> 接进 Pages 部署前自检。</p></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>
+<p>变异没被抓到即判空跑；<code>--check</code> 接进 Pages 部署前自检。</p>
+<ol><li><strong>原文级复核能翻案</strong>：<code>yk90rg78</code> 第 2 批判甲，第 17 批从原文 <code>&lt;pre&gt;</code> 逐字重建后</li></ol>
+<p>发现转录版把 <code>f[0][0]=1-ctrl[0][0];</code> 错置到 DP 循环<strong>之后</strong>；原文在 j 循环体内， 2025 组全枚举 0 不一致。甲类 14→13、反例 34→32。<strong>转录位置也是语义</strong>， 凡甲类结论都应回原文核对语句所在层级。</p>
+<ol><li><strong>引用署名优先取原文内嵌 <code>data.article.author.name</code></strong>，不用 <code>&lt;title&gt;</code> 猜；</li></ol>
+<p>86/87 篇已升级为真实作者名 + 原文标题，签名随引用内容轮换一次后稳定。</p></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>

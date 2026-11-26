@@ -1,0 +1,56 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>洛谷题解逐篇hack清单_第17批.md · 离线归档</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">01_批次清单 / 洛谷题解逐篇hack清单_第17批.md</span></header>
+<main class="doc"><h1>洛谷题解逐篇 hack 清单 · 第 17 批</h1>
+<blockquote><strong>性质：原文级复核</strong>（不是新题解扩面）。Actions 把 86 份题解正文取回后， 第一次有机会把前 16 批基于 <code>04_复现代码/</code> 转录版的结论，回到<strong>原文 <code>&lt;pre&gt;</code> 逐字代码</strong>上重验。 结论：<strong>翻案 1 篇，甲类 14→13，反例 34→32</strong>；其余结论全部站得住。</blockquote>
+<h2>一、翻案：<code>yk90rg78</code>（P1002 过河卒）第 2 批判甲是误判</h2>
+<h3>错在哪</h3>
+<p>第 2 批的描述是「<code>f[0][0]=1-ctrl[0][0]</code> 写在 DP 双重循环<strong>之后</strong>，整张表以 0 起算完 才改起点，输出恒 0；<code>6 6 3 3</code> 期望 6、实际 0」。</p>
+<p>原文逐字代码（<code>&lt;pre&gt;</code> 块 1，1392 字节）：</p>
+<pre class="code"><code>for(int i=0;i&lt;=n;i++)
+    for(int j=0;j&lt;=m;j++){
+        if(ctrl[i][j])continue;
+        if(i!=0)f[i][j]+=f[i-1][j];
+        if(j!=0)f[i][j]+=f[i][j-1];
+    f[0][0]=1-ctrl[0][0];
+    }
+    cout&lt;&lt;f[n][m];</code></pre>
+<p><code>f[0][0]=1-ctrl[0][0];</code> <strong>在 j 循环体内</strong>，且位于两条状态转移之后。 i=0、j=0 的第一轮：两条 <code>if</code> 都跳过，随后把起点置 1； 之后每轮重设为同一值（无害，f[0][0] 不再被累加）。马控制起点时 <code>if(ctrl[0][0])continue;</code> 跳过该行，f[0][0] 保持 0 —— 也正确。</p>
+<p><strong>是转录版把这一行挪到了循环之外</strong>，才造出「输出恒 0」的假 WA。 这是第 5 批「漏抄 <code>dp[i][0]=1</code> 造出 103 组假 WA」的同型错误， 只是这次错的是<strong>语句层级</strong>而不是漏行：转录位置也是语义。</p>
+<h3>复核证据</h3>
+<table class="tb"><thead><tr><th>项</th><th>结果</th></tr></thead><tbody><tr><td>原文版 vs 独立正确解，n/m∈[0,8] 全枚举</td><td><strong>2025 组，0 不一致</strong></td></tr><tr><td><code>6 6 3 3</code></td><td>原文 <code>6</code> / 标准 <code>6</code></td></tr><tr><td><code>20 20 0 20</code></td><td>原文 <code>137846521561</code> / 标准 <code>137846521561</code></td></tr><tr><td><code>20 20 10 10</code></td><td>原文 <code>21388094780</code> / 标准 <code>21388094780</code></td></tr></tbody></table>
+<p>独立正确解按题面标记 9 个马控制点、<code>f[0][0]=ctrl[0][0]?0:1</code>、标准二维 DP。 复现：<code>python3 03_验证脚本/verify_batch17.py</code>（内置 A3 段）。</p>
+<h3>处理</h3>
+<ul><li>归类 <strong>甲·已 hack → 丙·未 hack</strong>，批次标注「第2批→第17批原文复核下调」</li><li>反例 <strong>H-006 / H-007 作废</strong>，清单 34 → <strong>32</strong> 条</li><li>累计：逐篇验证 96 篇 / <strong>甲 13 / 乙 11 / 丙 72</strong>；索引 87 条 / 甲 13 / 乙 7 / 丙 66 / 非题解 1</li></ul>
+<h2>二、21 篇逐字证据核对（14 甲 + 7 乙）</h2>
+<p>对每篇，把判定所依赖的<strong>关键缺陷语句</strong>回原文逐字搜（代码块 + 正文文字）：</p>
+<ul><li>通过 <strong>21 / 21</strong>，缺项 0</li><li>额外查「作者自曝错误示范 / 以下代码是错的 / 请勿使用」等标记：<strong>0 篇命中</strong>，</li></ul>
+<p>确认没有把作者自己贴的非正解块拿来 hack（延续 P1616、P1179 的纪律）</p>
+<ul><li><code>arorhglg</code> 正文里的「AC代码：」反而确认被 hack 的是作者给出的最终代码</li></ul>
+<p>关键词本身也做了修正：<code>ehkpairy</code> 原文写 <code>100 % a</code>（带空格）、 <code>88t0yv7r</code> 的「现增加防抄袭内容」在正文文字而非代码块里 —— 这两条一开始 被脚手架误报缺项，改搜全文后通过。</p>
+<h2>三、6 篇可直编译原文块的运行时重放</h2>
+<p>从原文 <code>&lt;pre&gt;</code> 直接重建（只补 <code>#include</code> / <code>using</code> 等最小外壳，逐条登记）， 喂代表反例：</p>
+<table class="tb"><thead><tr><th>题解</th><th>原文版输出</th><th>判定</th></tr></thead><tbody><tr><td><code>sfifnfaa</code> P1002</td><td><code>0</code>（期望 <code>6</code>）</td><td>仍被 hack</td></tr><tr><td><code>h7y41tog</code> P1152</td><td>SIGSEGV（爆栈 10MB 局部 <code>vis</code>）</td><td>仍被 hack</td></tr><tr><td><code>dxk2a7a8</code> P1102</td><td><code>0</code>（期望 <code>1</code>）</td><td>仍被 hack</td></tr><tr><td><code>arorhglg</code> P1182</td><td><code>30000000</code>（期望 <code>60000000</code>，<code>int r</code> 溢出）</td><td>仍被 hack</td></tr><tr><td><code>utz61eus</code> P1469</td><td>空输出（期望 <code>10000001</code>）</td><td>仍被 hack</td></tr><tr><td><code>zcy00qo9</code> P1098</td><td><code>12233445</code>（期望 <code>14433225</code>）</td><td>仍被 hack</td></tr></tbody></table>
+<p><strong>6 / 6 仍被 hack</strong>。</p>
+<h3>变异版敏感性（防「0 不一致」是空跑）</h3>
+<p>3 篇配了「把关键缺陷修好」的变异实现，同一反例必须不再触发：</p>
+<table class="tb"><thead><tr><th>题解</th><th>修复</th><th>结果</th></tr></thead><tbody><tr><td><code>sfifnfaa</code></td><td>循环起点 <code>continue</code> 跳过覆盖</td><td>输出 <code>6</code> ✓</td></tr><tr><td><code>h7y41tog</code></td><td><code>bool vis[]</code> → <code>static</code></td><td>输出 <code>Jolly</code> ✓</td></tr><tr><td><code>arorhglg</code></td><td><code>int l,r,m</code> → <code>long long</code></td><td>输出 <code>60000000</code> ✓</td></tr></tbody></table>
+<p><strong>3 / 3 抓到</strong>，测试集有分辨力。</p>
+<h2>四、7 篇片段型只做逐字证据，不强行重放</h2>
+<p><code>l9bmtvor</code> / <code>iv10492z</code> / <code>ehkpairy</code> / <code>j4zpxmp6</code> / <code>7p4p6gdm</code> / <code>nzmytiez</code> / <code>dk5mkxij</code> 的原文把代码<strong>拆成多块展示</strong>（<code>dk5mkxij</code> 6 段、用「中间部分在下面」衔接； <code>nzmytiez</code> 甚至并列贴了 O(nk) 与滑动窗口两种写法；<code>7p4p6gdm</code> 缺 <code>cin&gt;&gt;n</code> 与 x/y 声明）。</p>
+<p>按第 11 批教训「<strong>补最小外壳不能改变语义</strong>」，本批不强行拼合重放， 只做逐字证据核对；运行时结论沿用 <code>04_复现代码/</code> 里已复验的转录版。 如实标注，不假装做了原文级重放。</p>
+<blockquote>顺带确认：<code>7p4p6gdm</code> 作者文字写「先初始化 x=n/2+1,y=1」，代码里既没声明也没赋值， 连 <code>cin&gt;&gt;n</code> 都没有。按「代码只是辅助、不判全不全」，这些是展示省略； 但「漏了关键初值」要补两处赋值而非改一处字符，甲类判定成立。</blockquote>
+<h2>五、引用署名升级（对「要引用原文、要有签名」的补强）</h2>
+<p>发现洛谷文章页内嵌 <code>data.article</code> JSON，含<strong>真实作者名与原文标题</strong>： <code>&quot;author&quot;:{&quot;name&quot;:&quot;Konnyaku&quot;}</code>、<code>&quot;title&quot;:&quot;题解 P2615 【神奇的幻方】&quot;</code>。</p>
+<p><code>tools/provenance.py</code> 改为优先逐字解析该字段，不再靠 <code>&lt;title&gt;</code> 猜：</p>
+<ul><li><strong>86 / 87 篇</strong>拿到真实作者名（剩 1 篇无正文副本，标「仅索引签名」）</li><li>页面「引用与署名」块与 <code>citation</code> 现在带真实署名，例如</li></ul>
+<p><code>Konnyaku. 《题解 P2615【神奇的幻方】》. 洛谷, 原文: … 内容 sha256: … 完整性签名: …</code></p>
+<ul><li>签名随引用内容<strong>轮换一次</strong>，之后稳定（<code>fetched_at</code> 用稳定基准，不受 Actions checkout 重置 mtime 影响）</li></ul>
+<h2>六、自查纪律新增两条</h2>
+<ol><li><strong>转录位置也是语义</strong>：语句在循环内 / 循环后、在读 n 前 / 读 n 后，</li></ol>
+<p>错置会造出整批假 WA。甲类结论必须回原文核对语句所在层级。</p>
+<ol><li><strong>原文分块展示不强行拼合</strong>：作者拆段、并列多解、省略读入时，</li></ol>
+<p>只做逐字证据核对，避免补外壳把「片段」补成「我自己的实现」。</p>
+<hr>
+<p>脚本：<code>03_验证脚本/verify_batch17.py</code> 机器可读：<code>05_对拍原始数据/r17__results.json</code> 总体：<strong>PASS</strong>（A 21/21 · A2 0 命中 · A3 2025 组 0 不一致 · B 6/6 · C 3/3）</p></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>
