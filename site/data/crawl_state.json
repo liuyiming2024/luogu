@@ -455,247 +455,242 @@
    "verdict": "题解",
    "sha": "bfae5d89b444aaec",
    "src": "主表补正文"
+  },
+  "P1005": {
+   "ts": "2026-11-26 02:13:14",
+   "kind": "problem",
+   "verdict": "未知",
+   "sha": "784de48b5fe0875d",
+   "src": "P号顺序·自续"
+  },
+  "P1006": {
+   "ts": "2026-11-26 02:13:18",
+   "kind": "problem",
+   "verdict": "未知",
+   "sha": "b0ecc22b00d8eed1",
+   "src": "P号顺序·自续"
+  },
+  "P1007": {
+   "ts": "2026-11-26 02:13:21",
+   "kind": "problem",
+   "verdict": "未知",
+   "sha": "9d0bdc2711c59225",
+   "src": "P号顺序·自续"
+  },
+  "nxvqnwg8": {
+   "ts": "2026-11-26 02:13:24",
+   "kind": "article",
+   "verdict": "题解",
+   "sha": "aac4f0664286af75",
+   "src": "主表补正文"
+  },
+  "xmumv7ok": {
+   "ts": "2026-11-26 02:13:27",
+   "kind": "article",
+   "verdict": "题解",
+   "sha": "bcb5480858451d35",
+   "src": "主表补正文"
+  },
+  "biep97vd": {
+   "ts": "2026-11-26 02:13:29",
+   "kind": "article",
+   "verdict": "学术/题解文字",
+   "sha": "81e5d22d0d2cc6fa",
+   "src": "主表补正文"
+  },
+  "lgmnaw1h": {
+   "ts": "2026-11-26 02:13:33",
+   "kind": "article",
+   "verdict": "题解",
+   "sha": "5ed1e29cca8c7d4c",
+   "src": "主表补正文"
+  },
+  "ehkpairy": {
+   "ts": "2026-11-26 02:13:36",
+   "kind": "article",
+   "verdict": "题解",
+   "sha": "d3d84a50fde67beb",
+   "src": "主表补正文"
+  },
+  "j4zpxmp6": {
+   "ts": "2026-11-26 02:13:39",
+   "kind": "article",
+   "verdict": "学术/题解文字",
+   "sha": "08f6bda62f9591fe",
+   "src": "主表补正文"
+  },
+  "jm3biw0r": {
+   "ts": "2026-11-26 02:13:42",
+   "kind": "article",
+   "verdict": "题解",
+   "sha": "f5041186db52e281",
+   "src": "主表补正文"
+  },
+  "wiofo14v": {
+   "ts": "2026-11-26 02:13:45",
+   "kind": "article",
+   "verdict": "题解",
+   "sha": "b765f2d62edd67f7",
+   "src": "主表补正文"
+  },
+  "z3dolqp8": {
+   "ts": "2026-11-26 02:13:48",
+   "kind": "article",
+   "verdict": "题解",
+   "sha": "7370d33fa6409a02",
+   "src": "主表补正文"
+  },
+  "dmza5ifn": {
+   "ts": "2026-11-26 02:13:52",
+   "kind": "article",
+   "verdict": "题解",
+   "sha": "010b9e93631cd25e",
+   "src": "主表补正文"
+  },
+  "h8ic4o0m": {
+   "ts": "2026-11-26 02:13:54",
+   "kind": "article",
+   "verdict": "题解",
+   "sha": "06212b2ff557edb6",
+   "src": "主表补正文"
+  },
+  "v5aspqez": {
+   "ts": "2026-11-26 02:13:57",
+   "kind": "article",
+   "verdict": "题解",
+   "sha": "a2ff3444aa16632f",
+   "src": "主表补正文"
+  },
+  "xgwn9tfg": {
+   "ts": "2026-11-26 02:14:01",
+   "kind": "article",
+   "verdict": "题解",
+   "sha": "d82dae4e7abde6b9",
+   "src": "主表补正文"
+  },
+  "vgwp3k30": {
+   "ts": "2026-11-26 02:14:03",
+   "kind": "article",
+   "verdict": "题解",
+   "sha": "503edb3db7680073",
+   "src": "主表补正文"
+  },
+  "b7py0ojt": {
+   "ts": "2026-11-26 02:14:07",
+   "kind": "article",
+   "verdict": "题解",
+   "sha": "e217d6a40a9c595b",
+   "src": "主表补正文"
+  },
+  "bv44vwt6": {
+   "ts": "2026-11-26 02:14:10",
+   "kind": "article",
+   "verdict": "题解",
+   "sha": "3c388adafb6d81bb",
+   "src": "主表补正文"
+  },
+  "0dhpwlt6": {
+   "ts": "2026-11-26 02:14:13",
+   "kind": "article",
+   "verdict": "学术/题解文字",
+   "sha": "cfa900327c366ff7",
+   "src": "主表补正文"
+  },
+  "7p4p6gdm": {
+   "ts": "2026-11-26 02:14:34",
+   "kind": "article",
+   "verdict": "题解",
+   "sha": "cbc7907588354470",
+   "src": "主表补正文"
+  },
+  "79f7f3bn": {
+   "ts": "2026-11-26 02:14:37",
+   "kind": "article",
+   "verdict": "题解",
+   "sha": "625a0abc4bc908ba",
+   "src": "主表补正文"
+  },
+  "smtoxvvs": {
+   "ts": "2026-11-26 02:14:40",
+   "kind": "article",
+   "verdict": "题解",
+   "sha": "55b0f8175e92875e",
+   "src": "主表补正文"
+  },
+  "l6u32sp7": {
+   "ts": "2026-11-26 02:14:43",
+   "kind": "article",
+   "verdict": "题解",
+   "sha": "01d06b19c0770bcd",
+   "src": "主表补正文"
+  },
+  "up402yw6": {
+   "ts": "2026-11-26 02:14:47",
+   "kind": "article",
+   "verdict": "题解",
+   "sha": "0080b55763b4728d",
+   "src": "主表补正文"
+  },
+  "g8gclrnk": {
+   "ts": "2026-11-26 02:14:50",
+   "kind": "article",
+   "verdict": "题解",
+   "sha": "81ba5d7e9b701922",
+   "src": "主表补正文"
+  },
+  "qajlal91": {
+   "ts": "2026-11-26 02:14:53",
+   "kind": "article",
+   "verdict": "题解",
+   "sha": "1b90c8caf4ed0b88",
+   "src": "主表补正文"
+  },
+  "nzmytiez": {
+   "ts": "2026-11-26 02:14:57",
+   "kind": "article",
+   "verdict": "题解",
+   "sha": "3431d27b8d21675a",
+   "src": "主表补正文"
+  },
+  "P1008": {
+   "ts": "2026-11-26 02:15:00",
+   "kind": "problem",
+   "verdict": "未知",
+   "sha": "90343562532ea110",
+   "src": "P号顺序·自续"
+  },
+  "P1009": {
+   "ts": "2026-11-26 02:15:03",
+   "kind": "problem",
+   "verdict": "未知",
+   "sha": "6e0f100428241fdf",
+   "src": "P号顺序·自续"
   }
  },
  "queue": [
   {
    "kind": "problem",
-   "id": "P1005",
-   "url": "https://www.luogu.com/problem/P1005",
-   "problem": "P1005",
+   "id": "P1010",
+   "url": "https://www.luogu.com/problem/P1010",
+   "problem": "P1010",
    "depth": 0,
    "src": "P号顺序·自续"
-  },
-  {
-   "kind": "problem",
-   "id": "P1006",
-   "url": "https://www.luogu.com/problem/P1006",
-   "problem": "P1006",
-   "depth": 0,
-   "src": "P号顺序·自续"
-  },
-  {
-   "kind": "problem",
-   "id": "P1007",
-   "url": "https://www.luogu.com/problem/P1007",
-   "problem": "P1007",
-   "depth": 0,
-   "src": "P号顺序·自续"
-  },
-  {
-   "kind": "article",
-   "id": "nxvqnwg8",
-   "url": "https://www.luogu.com/article/nxvqnwg8",
-   "problem": "P1553",
-   "depth": 0,
-   "src": "主表补正文"
-  },
-  {
-   "kind": "article",
-   "id": "xmumv7ok",
-   "url": "https://www.luogu.com/article/xmumv7ok",
-   "problem": "P1563",
-   "depth": 0,
-   "src": "主表补正文"
-  },
-  {
-   "kind": "article",
-   "id": "biep97vd",
-   "url": "https://www.luogu.com/article/biep97vd",
-   "problem": "P1598",
-   "depth": 0,
-   "src": "主表补正文"
-  },
-  {
-   "kind": "article",
-   "id": "lgmnaw1h",
-   "url": "https://www.luogu.com/article/lgmnaw1h",
-   "problem": "P1616",
-   "depth": 0,
-   "src": "主表补正文"
-  },
-  {
-   "kind": "article",
-   "id": "ehkpairy",
-   "url": "https://www.luogu.com/article/ehkpairy",
-   "problem": "P1618",
-   "depth": 0,
-   "src": "主表补正文"
-  },
-  {
-   "kind": "article",
-   "id": "j4zpxmp6",
-   "url": "https://www.luogu.com/article/j4zpxmp6",
-   "problem": "P1618",
-   "depth": 0,
-   "src": "主表补正文"
-  },
-  {
-   "kind": "article",
-   "id": "jm3biw0r",
-   "url": "https://www.luogu.com/article/jm3biw0r",
-   "problem": "P1706",
-   "depth": 0,
-   "src": "主表补正文"
-  },
-  {
-   "kind": "article",
-   "id": "wiofo14v",
-   "url": "https://www.luogu.com/article/wiofo14v",
-   "problem": "P1706",
-   "depth": 0,
-   "src": "主表补正文"
-  },
-  {
-   "kind": "article",
-   "id": "z3dolqp8",
-   "url": "https://www.luogu.com/article/z3dolqp8",
-   "problem": "P1739",
-   "depth": 0,
-   "src": "主表补正文"
-  },
-  {
-   "kind": "article",
-   "id": "dmza5ifn",
-   "url": "https://www.luogu.com/article/dmza5ifn",
-   "problem": "P1803",
-   "depth": 0,
-   "src": "主表补正文"
-  },
-  {
-   "kind": "article",
-   "id": "h8ic4o0m",
-   "url": "https://www.luogu.com/article/h8ic4o0m",
-   "problem": "P1909",
-   "depth": 0,
-   "src": "主表补正文"
-  },
-  {
-   "kind": "article",
-   "id": "v5aspqez",
-   "url": "https://www.luogu.com/article/v5aspqez",
-   "problem": "P1909",
-   "depth": 0,
-   "src": "主表补正文"
-  },
-  {
-   "kind": "article",
-   "id": "xgwn9tfg",
-   "url": "https://www.luogu.com/article/xgwn9tfg",
-   "problem": "P1914",
-   "depth": 0,
-   "src": "主表补正文"
-  },
-  {
-   "kind": "article",
-   "id": "vgwp3k30",
-   "url": "https://www.luogu.com/article/vgwp3k30",
-   "problem": "P2089",
-   "depth": 0,
-   "src": "主表补正文"
-  },
-  {
-   "kind": "article",
-   "id": "b7py0ojt",
-   "url": "https://www.luogu.com/article/b7py0ojt",
-   "problem": "P2141",
-   "depth": 0,
-   "src": "主表补正文"
-  },
-  {
-   "kind": "article",
-   "id": "bv44vwt6",
-   "url": "https://www.luogu.com/article/bv44vwt6",
-   "problem": "P2240",
-   "depth": 0,
-   "src": "主表补正文"
-  },
-  {
-   "kind": "article",
-   "id": "0dhpwlt6",
-   "url": "https://www.luogu.com/article/0dhpwlt6",
-   "problem": "P2615",
-   "depth": 0,
-   "src": "主表补正文"
-  },
-  {
-   "kind": "article",
-   "id": "7p4p6gdm",
-   "url": "https://www.luogu.com/article/7p4p6gdm",
-   "problem": "P2615",
-   "depth": 0,
-   "src": "主表补正文"
-  },
-  {
-   "kind": "article",
-   "id": "79f7f3bn",
-   "url": "https://www.luogu.com/article/79f7f3bn",
-   "problem": "P2669",
-   "depth": 0,
-   "src": "主表补正文"
-  },
-  {
-   "kind": "article",
-   "id": "smtoxvvs",
-   "url": "https://www.luogu.com/article/smtoxvvs",
-   "problem": "P3397",
-   "depth": 0,
-   "src": "主表补正文"
-  },
-  {
-   "kind": "article",
-   "id": "l6u32sp7",
-   "url": "https://www.luogu.com/article/l6u32sp7",
-   "problem": "P3959",
-   "depth": 0,
-   "src": "主表补正文"
-  },
-  {
-   "kind": "article",
-   "id": "up402yw6",
-   "url": "https://www.luogu.com/article/up402yw6",
-   "problem": "P4995",
-   "depth": 0,
-   "src": "主表补正文"
-  },
-  {
-   "kind": "article",
-   "id": "g8gclrnk",
-   "url": "https://www.luogu.com/article/g8gclrnk",
-   "problem": "P5015",
-   "depth": 0,
-   "src": "主表补正文"
-  },
-  {
-   "kind": "article",
-   "id": "qajlal91",
-   "url": "https://www.luogu.com/article/qajlal91",
-   "problem": "P5015",
-   "depth": 0,
-   "src": "主表补正文"
-  },
-  {
-   "kind": "article",
-   "id": "nzmytiez",
-   "url": "https://www.luogu.com/article/nzmytiez",
-   "problem": "P5638",
-   "depth": 0,
-   "src": "主表补正文"
   }
  ],
  "failed": {},
- "problems_cursor": 1005,
+ "problems_cursor": 1010,
  "stats": {
-  "requests": 65,
-  "articles": 58,
-  "problems": 5,
-  "academic": 2,
+  "requests": 95,
+  "articles": 80,
+  "problems": 10,
+  "academic": 5,
   "rest_windows": 0,
-  "pushes": 5
+  "pushes": 7
  },
  "daily": {
-  "date": "2026-11-25",
-  "count": 65
+  "date": "2026-11-26",
+  "count": 30
  },
- "last_push": "2026-11-25 18:00:23"
+ "last_push": "2026-11-26 02:15:06",
+ "problem_skeleton_streak": 5
 }
