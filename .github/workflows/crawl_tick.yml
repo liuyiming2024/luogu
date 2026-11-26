@@ -1,21 +1,32 @@
-name: 全量爬取 · Actions 错峰 tick
+name: 全量爬取 · 自主错峰窗口
 
-# 「爬取放在那边」：爬取的主路径就在 GitHub Actions，正文直接 commit 回仓库。
-# 对拍不放这里（tools/verify_pipeline.py 在本地跑），网页由 pages.yml 发布。
+# 「没人弄也能自己爬」：这个 workflow 由 GitHub 自己的调度器触发，
+# 不看任何对话、不需要人工 dispatch、不依赖 AI 被唤醒。
+# 只要文件在默认分支 main 上且 workflow 未被禁用，它就会一直按 UTC 时钟自己跑。
 #
-# 节奏：每天 4 次错峰（UTC 1/7/13/19 点的第 17 分，避开整点），
-# 每次随机起步延迟 0~150s，单次约 3 分钟 / 最多 30 个请求，
-# 请求间隔 2.0~3.5s 抖动 + 每 20 次小憩；403/429/降级公告即长退避。
-# 不是「恒定 2 秒一直爬」。每月约 4×30×3 = 360 分钟，在私有/公开仓库额度内。
+# 为什么现在可以放大：仓库已公开，标准 GitHub 托管 runner 免费、不计分钟，
+# 私有仓库那 2000 分钟/月的额度不再适用。
+#
+# 节奏（沿用归档者定的「跑一段、歇一段、不要匀速」）：
+#   每 2 小时一个错峰窗口（UTC 奇数小时第 23 分，避开整点高峰）
+#   → 随机起步 0~150s → 单次窗口 45 分钟 → 窗口之间天然留 15 分钟静默
+#   窗口内 2.0~3.5s 抖动 + 每 20 次小憩 ~30s + 每日 2000 请求上限
+#   + 403/429/降级公告长退避 30 分钟并提前收工
+#   单窗口最多 200 个请求；state 断点续传，丢一次 run 也不丢进度。
 on:
   schedule:
-    - cron: '17 1,7,13,19 * * *'
+    - cron: '23 1,3,5,7,9,11,13,15,17,19,21,23 * * *'
   workflow_dispatch:
     inputs:
       max_requests:
-        description: '本轮最多请求数（手动可加大）'
+        description: '本轮最多请求数'
         required: true
-        default: '30'
+        default: '200'
+        type: string
+      run_minutes:
+        description: '本轮窗口时长（分钟）'
+        required: true
+        default: '45'
         type: string
       seed_problems:
         description: 'P 号顺序范围（如 1000:1010），留空则用主表待补队列'
@@ -31,6 +42,7 @@ on:
 permissions:
   contents: write
 
+# 同一时刻只允许一个爬取 job；cancel-in-progress=false 保证不打断正在写回的进程
 concurrency:
   group: luogu-crawl
   cancel-in-progress: false
@@ -38,7 +50,7 @@ concurrency:
 jobs:
   tick:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 60          # 45 分钟窗口 + 起步延迟 + 重生成 + 提交 + 上传
     steps:
       - name: 检出仓库
         uses: actions/checkout@v4
@@ -51,21 +63,47 @@ jobs:
       - name: 随机起步延迟（不固定准点）
         run: python3 -c "import time,random; t=random.uniform(0,150); print('sleep',round(t,1),'s'); time.sleep(t)"
 
-      - name: 低频 tick
+      - name: 低频有序爬取（自续队列 · 实时写回）
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MAX_REQ: ${{ inputs.max_requests || '30' }}
+          MAX_REQ: ${{ inputs.max_requests || '200' }}
+          RUN_MIN: ${{ inputs.run_minutes || '45' }}
           SEED: ${{ inputs.seed_problems }}
           REFRESH: ${{ inputs.refresh_url }}
         run: |
           set -u
-          args=(--max-requests "$MAX_REQ" --run-minutes 3 --rest-minutes 0
-                --push-every 30 --delay 2.0 --jitter 1.5 --micro-batch 20
-                --micro-rest 20 --max-depth 2)
+          args=(--max-requests "$MAX_REQ" --run-minutes "$RUN_MIN" --rest-minutes 0
+                --push-every 50 --delay 2.0 --jitter 1.5 --micro-batch 20
+                --micro-rest 30 --max-depth 2 --replenish-batch 60 --problem-batch 3)
           [ -n "$SEED" ] && args+=(--seed-problems "$SEED")
           [ -n "$REFRESH" ] && args+=(--refresh-url "$REFRESH")
           echo "执行: python3 tools/crawl_daemon.py ${args[*]}"
           python3 tools/crawl_daemon.py "${args[@]}" || echo "daemon 返回非零（多为被拒长退避），日志已保留"
+
+      - name: 有效产出校验（防「job 全绿但只拿到 SPA 骨架」的静默空转）
+        run: |
+          python3 - <<'PY'
+          import json, os
+          p = "02_文章编号索引/取回日志.jsonl"
+          recs = []
+          if os.path.exists(p):
+              for line in open(p, encoding="utf-8"):
+                  line = line.strip()
+                  if not line: continue
+                  try: recs.append(json.loads(line))
+                  except Exception: pass
+          tail = [r for r in recs if r.get("result") == "ok"][-200:]
+          useful = [r for r in tail if r.get("verdict") not in (None, "未知")]
+          skel = len(tail) - len(useful)
+          msg = f"本轮取回 {len(tail)} 条，有效正文 {len(useful)} 条，SPA 骨架/不可判定 {skel} 条"
+          print(msg)
+          with open("02_文章编号索引/爬取进度.md", "a", encoding="utf-8") as f:
+              f.write("\n> 有效产出校验：" + msg + "（" +
+                      __import__("datetime").datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC") +
+                      "）\n")
+          if tail and not useful:
+              print("::warning::本轮全部为 SPA 骨架，未取回任何有效正文；请检查数据源与队列")
+          PY
 
       - name: 重生成来源署名与归档站
         run: |
