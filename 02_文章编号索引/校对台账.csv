@@ -1,10 +1,10 @@
 ﻿编号,类型,判定,来源,L0,L1_代码块数,L1_去重,L1_编译预检,sha256,证据,L2,时间
 azdjstpm,article,题解,https://www.luogu.com/article/azdjstpm,通过,1,唯一,通过(-O0~-Os 五档),8f3c,site/data/ingested/azdjstpm.json,第15批已补验归丙(UB登记),2026-11-24
-P1000,problem,未知,https://www.luogu.com/problem/P1000,待复核,0,唯一,未启用,25505e2dd80814f8,site/data/ingested/P1000.json,不适用,2026-11-25 03:03:42
-P1001,problem,未知,https://www.luogu.com/problem/P1001,待复核,0,唯一,未启用,fecf52f438bca13d,site/data/ingested/P1001.json,不适用,2026-11-25 03:03:46
-P1002,problem,未知,https://www.luogu.com/problem/P1002,待复核,0,唯一,未启用,ec1ea3d25693ed23,site/data/ingested/P1002.json,不适用,2026-11-25 03:03:49
-P1003,problem,未知,https://www.luogu.com/problem/P1003,待复核,0,唯一,未启用,12cc7018b44f07b5,site/data/ingested/P1003.json,不适用,2026-11-25 03:03:52
-P1004,problem,未知,https://www.luogu.com/problem/P1004,待复核,0,唯一,未启用,5243c06b72516719,site/data/ingested/P1004.json,不适用,2026-11-25 03:03:55
+P1000,problem,未知(503错误页),https://www.luogu.com/problem/P1000,已复核·错误页不存档,0,唯一,未启用,25505e2dd80814f8,（HTTP 200 但为 503 错误页，已清理未存档）,不适用,2026-11-25 03:03:42
+P1001,problem,未知(503错误页),https://www.luogu.com/problem/P1001,已复核·错误页不存档,0,唯一,未启用,fecf52f438bca13d,（HTTP 200 但为 503 错误页，已清理未存档）,不适用,2026-11-25 03:03:46
+P1002,problem,未知(503错误页),https://www.luogu.com/problem/P1002,已复核·错误页不存档,0,唯一,未启用,ec1ea3d25693ed23,（HTTP 200 但为 503 错误页，已清理未存档）,不适用,2026-11-25 03:03:49
+P1003,problem,未知(503错误页),https://www.luogu.com/problem/P1003,已复核·错误页不存档,0,唯一,未启用,12cc7018b44f07b5,（HTTP 200 但为 503 错误页，已清理未存档）,不适用,2026-11-25 03:03:52
+P1004,problem,未知(503错误页),https://www.luogu.com/problem/P1004,已复核·错误页不存档,0,唯一,未启用,5243c06b72516719,（HTTP 200 但为 503 错误页，已清理未存档）,不适用,2026-11-25 03:03:55
 zaohomhi,article,题解,https://www.luogu.com/article/zaohomhi,通过,3,唯一,未启用,a66e223c51d88e21,site/data/ingested/zaohomhi.json,已进入待对拍队列,2026-11-25 07:51:04
 qsh0tcmu,article,题解,https://www.luogu.com/article/qsh0tcmu,通过,0,唯一,未启用,cbd6503c74bb957b,site/data/ingested/qsh0tcmu.json,不适用,2026-11-25 07:51:07
 sfifnfaa,article,题解,https://www.luogu.com/article/sfifnfaa,通过,1,唯一,未启用,d617433edb552ee4,site/data/ingested/sfifnfaa.json,已进入待对拍队列,2026-11-25 07:51:11
@@ -107,3 +107,4 @@ P1018,problem,未知,https://www.luogu.com/problem/P1018,待复核,0,唯一,未�
 P1019,problem,未知,https://www.luogu.com/problem/P1019,待复核,0,唯一,未启用,2ee6fc5047838451,（SPA 骨架 / 不可判定，未存档）,不适用,2026-11-26 14:17:11
 P1020,problem,未知,https://www.luogu.com/problem/P1020,待复核,0,唯一,未启用,808da96649fe4f2a,（SPA 骨架 / 不可判定，未存档）,不适用,2026-11-26 14:17:14
 P1021,problem,未知,https://www.luogu.com/problem/P1021,待复核,0,唯一,未启用,7d452e8e01fd08a6,（SPA 骨架 / 不可判定，未存档）,不适用,2026-11-26 14:17:18
+AUDIT-2026-11-26,audit,清洗/改判/清理,tools/verify_infra.py,通过,,,未启用,,02_文章编号索引/基础设施审查与验证报告.md,85篇csrf已移除 / 5份HTTP200的503错误页已删 / 6篇元数据改判(含5篇多语言题解) / 判定与代码块回填,2026-11-26

@@ -11,6 +11,8 @@ on:
       - '_build_site.py'
       - 'tools/provenance.py'
       - '02_文章编号索引/article_index.csv'
+      - 'tools/verify_infra.py'
+      - 'tools/crawl_daemon.py'
       - '00_总览/归档与版权声明.md'
   workflow_dispatch:
 
@@ -56,6 +58,9 @@ jobs:
           assert not bad, "存在缺原文链接/引用的条目"
           assert p["条目数"] == a["收录总数"], "署名与收录数不一致"
           PY
+
+      - name: 基础设施审查与类对拍验证（防回归 · 不发网络请求）
+        run: python3 tools/verify_infra.py --check
 
       - name: 配置 Pages
         uses: actions/configure-pages@v5

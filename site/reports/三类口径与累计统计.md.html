@@ -35,4 +35,10 @@
 <ol><li><strong>公开仓库必须留引用与签名</strong>：每条收录内容都要有原文链接、作者署名、</li></ol>
 <p>取回时间与 sha256 内容完整性签名（<code>tools/provenance.py</code>）， 改公开前扫描工作树与全部 git 历史确认无凭据残留。</p>
 <ol><li><strong>三角分工</strong>：爬取在 Actions（错峰 tick）、对拍在本地（<code>verify_pipeline.py</code>）、</li></ol>
-<p>网页在 Pages（<code>pages.yml</code>）；对拍结果由本地 push 后网页自动同步。</p></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>
+<p>网页在 Pages（<code>pages.yml</code>）；对拍结果由本地 push 后网页自动同步。</p>
+<ol><li><strong>HTTP 200 ≠ 正文</strong>：洛谷限流/维护时返回 200 + 503 错误页，</li></ol>
+<p>必须按响应体判定（503 特征进 <code>STOP_MARKERS</code>），否则错误页会被当题面归档。</p>
+<ol><li><strong>公开归档取回即清洗匿名页面令牌</strong>；判定不能只认 C++，</li></ol>
+<p>Python / Pascal / 伪代码题解同样是题解。</p>
+<ol><li><strong>基础设施也要类对拍</strong>：<code>tools/verify_infra.py</code> 每个检查点配变异实现，</li></ol>
+<p>变异没被抓到即判空跑；<code>--check</code> 接进 Pages 部署前自检。</p></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>

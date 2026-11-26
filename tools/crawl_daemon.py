@@ -53,9 +53,14 @@ os.makedirs(INGEST, exist_ok=True)
 
 UA = ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/120.0 Safari/537.36")
+# 注意：洛谷在限流/维护时会返回 **HTTP 200 + 503 错误页**（标题「503 - 洛谷日爆」）。
+# 只看状态码会把错误页当正文存档（第 16 批审查发现 P1000~P1004 五份），
+# 所以这些标记必须按「响应体」判断，命中即长退避。
 STOP_MARKERS = ["服务降级公告", "Request denied", "policy_default_denied",
                 "队列堵塞", "访问过于频繁", "rate limit", "Too Many Requests",
-                "No policy rule matched the request"]
+                "No policy rule matched the request",
+                "503 - 洛谷日爆", "503 Service Unavailable", "<title>503",
+                "服务器暂时不可用", "系统维护中"]
 ARTICLE_ID = re.compile(r"[a-z0-9]{8}")
 ID_LINK = re.compile(
     r"(?:https?://(?:www\.)?luogu\.(?:com|me|org))?/article/([a-z0-9]{8})\b")
@@ -196,6 +201,21 @@ def fetch(url, timeout):
         raw = r.read(2_000_000)
         return raw.decode("utf-8", errors="ignore"), r.status
 
+# ---------------------------------------------------------------- 公开归档清洗
+# 洛谷匿名页面会带一次性 csrf-token meta。它不是账号凭据，但公开仓库不该保留
+# 任何页面令牌；取回即剥掉，避免像第 1 批那样只在单篇上手工清一次。
+_TOKEN_META = re.compile(
+    r'<meta[^>]+name=["\'](?:csrf-token|_token|csrfmiddlewaretoken|x-csrf-token)["\'][^>]*>',
+    re.I)
+_TOKEN_JSON = re.compile(r'"(csrfToken|csrf_token|_token)"\s*:\s*"[^"]*"')
+
+def sanitize_body(body):
+    """清洗匿名页面令牌；正文与 <pre> 代码块保持逐字不动。"""
+    if not body: return body
+    t = _TOKEN_META.sub("<!-- 匿名页面令牌已移除（公开归档不保留） -->", body)
+    t = _TOKEN_JSON.sub(lambda m: '"%s":"<removed>"' % m.group(1), t)
+    return t
+
 def refresh(args):
     """爬之前刷新保存站（可插拔）。没有公开接口就不编造，失败也不阻塞主流程。"""
     if args.refresh_cmd:
@@ -218,17 +238,35 @@ def refresh(args):
         time.sleep(args.delay)
 
 # ---------------------------------------------------------------- 校对 L0 / L1 / L2
+# 多语言代码特征。旧版只认 C++，导致 Python / Pascal / 伪代码题解被误判成
+# 「学术/题解文字」（第 16 批审查发现 5 篇）。判定先落在 <pre> 块上，避免
+# 把页面自身的 JS 误当成题解代码。
+_CODE_PATTERNS = [
+    r"#include", r"\bint\s+main\b", r"\bprintf\s*\(", r"\bcout\s*<",
+    r"\bscanf\s*\(", r"\bdef\s+\w+\s*\(", r"\bprint\s*\(",
+    r"\bimport\s+\w+", r"\busing\s+namespace\b",
+    r"\bpublic\s+static\s+void\s+main", r"\bprogram\s+\w+\s*;",
+    r"\bbegin\b[\s\S]{0,600}\bend\s*\.", r"\breadln\s*\(",
+    r"\bwriteln\s*\(", r"\bvar\s+\w+\s*:", r":=",
+    r"\bfor\s*\(\s*int\b", r"\belse\s+if\s*\(", r"\bstd::",
+]
+
+def _looks_like_code(t):
+    return any(re.search(p, t, re.I) for p in _CODE_PATTERNS)
+
+def pre_texts(body):
+    return [html.unescape(re.sub(r"<[^>]+>", "", pr)).strip()
+            for pr in PRE_BLOCK.findall(body or "")]
+
 def extract_code(body):
-    out = []
-    for pr in PRE_BLOCK.findall(body or ""):
-        t = html.unescape(re.sub(r"<[^>]+>", "", pr)).strip()
-        if "#include" in t or "int main" in t: out.append(t)
-    return out
+    return [t for t in pre_texts(body) if _looks_like_code(t)]
 
 def classify(kind, body, url):
     """L0：是否题解 / 题面 / 学术文章 / 骨架不可判定。纯文本判据，不编造。"""
     t = body or ""
-    has_code = bool(re.search(r"#include|int\s+main|printf\(|cout\s*<|scanf\(", t))
+    codes = extract_code(t)
+    has_code = bool(codes) or bool(re.search(
+        r"#include|int\s+main|printf\(|cout\s*<|scanf\(", t))
     has_prob = bool(re.search(r"\bP\d{4}\b|题解|思路|算法|题目描述|输入格式", t))
     is_help = bool(re.search(r"帮助中心|撰写规范|审核标准|服务降级|隐私协议", t))
     if kind == "problem":
@@ -458,6 +496,7 @@ def main():
                 except Exception as e:
                     status, body = -1, type(e).__name__
 
+            body = sanitize_body(body)      # 公开归档：取回即剥掉匿名页面令牌
             rec["http"] = status
             hit = [m for m in STOP_MARKERS if m in (body or "")]
             if status != 200 or hit:

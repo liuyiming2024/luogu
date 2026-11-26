@@ -4,456 +4,461 @@
   "P1000": {
    "ts": "2026-11-25 03:03:42",
    "kind": "problem",
-   "verdict": "未知",
+   "verdict": "未知(503错误页)",
    "sha": "25505e2dd80814f8",
-   "src": "P号顺序"
+   "src": "P号顺序",
+   "note": "HTTP 200 + 503 洛谷日爆，已清理未存档；503 特征已进 STOP_MARKERS"
   },
   "P1001": {
    "ts": "2026-11-25 03:03:46",
    "kind": "problem",
-   "verdict": "未知",
+   "verdict": "未知(503错误页)",
    "sha": "fecf52f438bca13d",
-   "src": "P号顺序"
+   "src": "P号顺序",
+   "note": "HTTP 200 + 503 洛谷日爆，已清理未存档；503 特征已进 STOP_MARKERS"
   },
   "P1002": {
    "ts": "2026-11-25 03:03:49",
    "kind": "problem",
-   "verdict": "未知",
+   "verdict": "未知(503错误页)",
    "sha": "ec1ea3d25693ed23",
-   "src": "P号顺序"
+   "src": "P号顺序",
+   "note": "HTTP 200 + 503 洛谷日爆，已清理未存档；503 特征已进 STOP_MARKERS"
   },
   "P1003": {
    "ts": "2026-11-25 03:03:52",
    "kind": "problem",
-   "verdict": "未知",
+   "verdict": "未知(503错误页)",
    "sha": "12cc7018b44f07b5",
-   "src": "P号顺序"
+   "src": "P号顺序",
+   "note": "HTTP 200 + 503 洛谷日爆，已清理未存档；503 特征已进 STOP_MARKERS"
   },
   "P1004": {
    "ts": "2026-11-25 03:03:55",
    "kind": "problem",
-   "verdict": "未知",
+   "verdict": "未知(503错误页)",
    "sha": "5243c06b72516719",
-   "src": "P号顺序"
+   "src": "P号顺序",
+   "note": "HTTP 200 + 503 洛谷日爆，已清理未存档；503 特征已进 STOP_MARKERS"
   },
   "zaohomhi": {
    "ts": "2026-11-25 07:51:04",
    "kind": "article",
    "verdict": "题解",
-   "sha": "a66e223c51d88e21",
+   "sha": "b1bf86e34f7f1082",
    "src": "主表补正文"
   },
   "qsh0tcmu": {
    "ts": "2026-11-25 07:51:07",
    "kind": "article",
    "verdict": "题解",
-   "sha": "cbd6503c74bb957b",
+   "sha": "02a554fed5201e79",
    "src": "主表补正文"
   },
   "sfifnfaa": {
    "ts": "2026-11-25 07:51:11",
    "kind": "article",
    "verdict": "题解",
-   "sha": "d617433edb552ee4",
+   "sha": "fb9fc5e4846e32d7",
    "src": "主表补正文"
   },
   "yk90rg78": {
    "ts": "2026-11-25 07:51:14",
    "kind": "article",
    "verdict": "题解",
-   "sha": "1f1d1f7a85a5a1bc",
+   "sha": "105798ac0ddd9525",
    "src": "主表补正文"
   },
   "9jadrxl0": {
    "ts": "2026-11-25 07:51:17",
    "kind": "article",
    "verdict": "题解",
-   "sha": "c2460a72dabce726",
+   "sha": "ed9702109033770e",
    "src": "主表补正文"
   },
   "kckry124": {
    "ts": "2026-11-25 07:51:20",
    "kind": "article",
    "verdict": "题解",
-   "sha": "f1260eb61d8b38f5",
+   "sha": "9352324e131bd65f",
    "src": "主表补正文"
   },
   "ngy7hblx": {
    "ts": "2026-11-25 07:51:24",
    "kind": "article",
    "verdict": "题解",
-   "sha": "e65f114583c415ba",
+   "sha": "a7c81c31abfc3a29",
    "src": "主表补正文"
   },
   "v6gwt3bu": {
    "ts": "2026-11-25 07:51:26",
    "kind": "article",
    "verdict": "题解",
-   "sha": "677803ecce52664b",
+   "sha": "2c73e0b3c240d102",
    "src": "主表补正文"
   },
   "pmio8se0": {
    "ts": "2026-11-25 07:51:28",
    "kind": "article",
    "verdict": "题解",
-   "sha": "78f2af6c40abe006",
+   "sha": "7868adbb4edc6c5e",
    "src": "主表补正文"
   },
   "n5d7jq0b": {
    "ts": "2026-11-25 07:51:31",
    "kind": "article",
    "verdict": "题解",
-   "sha": "2756738306b9854e",
+   "sha": "f213f4a2465b59ab",
    "src": "主表补正文"
   },
   "a1sc0wom": {
    "ts": "2026-11-25 07:51:34",
    "kind": "article",
    "verdict": "题解",
-   "sha": "d3e931b7a5d5f0f2",
+   "sha": "9b3d436d71c71b7d",
    "src": "主表补正文"
   },
   "m16r8nbd": {
    "ts": "2026-11-25 07:51:37",
    "kind": "article",
    "verdict": "题解",
-   "sha": "60e0e275fa675c24",
+   "sha": "0196342cd6be2aef",
    "src": "主表补正文"
   },
   "g17kwzzm": {
    "ts": "2026-11-25 07:51:40",
    "kind": "article",
    "verdict": "题解",
-   "sha": "819460add8a15327",
+   "sha": "cfe700255379b15e",
    "src": "主表补正文"
   },
   "rlz2fzsx": {
    "ts": "2026-11-25 07:51:43",
    "kind": "article",
    "verdict": "题解",
-   "sha": "25ecc2ad42d1e045",
+   "sha": "57f82bf43cb2a2d2",
    "src": "主表补正文"
   },
   "d8583wuv": {
    "ts": "2026-11-25 07:51:47",
    "kind": "article",
    "verdict": "题解",
-   "sha": "df22a63ecba72d3a",
+   "sha": "fa09bdd68a46e5c4",
    "src": "主表补正文"
   },
   "f8ckkhfz": {
    "ts": "2026-11-25 07:51:51",
    "kind": "article",
    "verdict": "题解",
-   "sha": "e53086d44718f197",
+   "sha": "99c27d28231b719b",
    "src": "主表补正文"
   },
   "h4cn628r": {
    "ts": "2026-11-25 07:51:54",
    "kind": "article",
    "verdict": "题解",
-   "sha": "3af8657705957dda",
+   "sha": "662a660ac8d5156b",
    "src": "主表补正文"
   },
   "v3wxayi3": {
    "ts": "2026-11-25 07:51:57",
    "kind": "article",
    "verdict": "题解",
-   "sha": "5bdf889bba34d7b7",
+   "sha": "79688f3ca90531c6",
    "src": "主表补正文"
   },
   "kfg4ugka": {
    "ts": "2026-11-25 07:52:01",
    "kind": "article",
    "verdict": "题解",
-   "sha": "513ea0b59c81efe6",
+   "sha": "39cd3f6192cde46e",
    "src": "主表补正文"
   },
   "05bplzw1": {
    "ts": "2026-11-25 07:52:03",
    "kind": "article",
    "verdict": "题解",
-   "sha": "f152a3ac0a4dd2dd",
+   "sha": "5b99dab061676a88",
    "src": "主表补正文"
   },
   "6t0wrb4o": {
    "ts": "2026-11-25 07:52:31",
    "kind": "article",
    "verdict": "题解",
-   "sha": "1d70726eafa04cca",
+   "sha": "44d150e79ccf6702",
    "src": "主表补正文"
   },
   "0hps6y5z": {
    "ts": "2026-11-25 07:52:34",
    "kind": "article",
    "verdict": "题解",
-   "sha": "87495643f99aaee8",
+   "sha": "6decc172c4e38e64",
    "src": "主表补正文"
   },
   "hu58r34f": {
    "ts": "2026-11-25 07:52:38",
    "kind": "article",
    "verdict": "题解",
-   "sha": "3ce619278a24f70e",
+   "sha": "2fe988827ab5b026",
    "src": "主表补正文"
   },
   "rjjud4hi": {
    "ts": "2026-11-25 07:52:41",
    "kind": "article",
    "verdict": "题解",
-   "sha": "1a4a0443761b3749",
+   "sha": "6b40d3a3f03da49d",
    "src": "主表补正文"
   },
   "3hvn4ibz": {
    "ts": "2026-11-25 07:52:45",
    "kind": "article",
    "verdict": "题解",
-   "sha": "ed37894beec9533d",
+   "sha": "abb77a7e4163efbd",
    "src": "主表补正文"
   },
   "1ndosdfs": {
    "ts": "2026-11-25 07:52:47",
    "kind": "article",
    "verdict": "题解",
-   "sha": "8fffe03bf1663166",
+   "sha": "c11ceeb4c5e490b7",
    "src": "主表补正文"
   },
   "zcxe384l": {
    "ts": "2026-11-25 07:52:50",
    "kind": "article",
    "verdict": "题解",
-   "sha": "a92dafabbc8dc778",
+   "sha": "b5f2a8a5d7b40946",
    "src": "主表补正文"
   },
   "tehqdnw3": {
    "ts": "2026-11-25 07:52:54",
    "kind": "article",
    "verdict": "题解",
-   "sha": "95914bbf65063243",
+   "sha": "bb40132a8ba1f0d5",
    "src": "主表补正文"
   },
   "88laurj5": {
    "ts": "2026-11-25 07:52:56",
    "kind": "article",
    "verdict": "题解",
-   "sha": "062a6668a0b28a3d",
+   "sha": "f4b3728350083b17",
    "src": "主表补正文"
   },
   "l9bmtvor": {
    "ts": "2026-11-25 07:52:59",
    "kind": "article",
    "verdict": "题解",
-   "sha": "2f1ce1c737ba63c1",
+   "sha": "a75af134eaff8afe",
    "src": "主表补正文"
   },
   "zcy00qo9": {
    "ts": "2026-11-25 17:58:31",
    "kind": "article",
    "verdict": "题解",
-   "sha": "2938b5aeda45de85",
+   "sha": "18531d28342a261b",
    "src": "主表补正文"
   },
   "qle49r7h": {
    "ts": "2026-11-25 17:58:34",
    "kind": "article",
    "verdict": "题解",
-   "sha": "13bcad05ba954978",
+   "sha": "014d1b0e43887e52",
    "src": "主表补正文"
   },
   "dxk2a7a8": {
    "ts": "2026-11-25 17:58:38",
    "kind": "article",
    "verdict": "题解",
-   "sha": "c885f557c2d154b9",
+   "sha": "6a6196b2728734f8",
    "src": "主表补正文"
   },
   "vt4bqm6v": {
    "ts": "2026-11-25 17:58:41",
    "kind": "article",
    "verdict": "题解",
-   "sha": "f1385ec1fc0187fe",
+   "sha": "d7551fd0f140355c",
    "src": "主表补正文"
   },
   "aceg4kbr": {
    "ts": "2026-11-25 17:58:44",
    "kind": "article",
    "verdict": "题解",
-   "sha": "821fe9a462e8e0da",
+   "sha": "a7252d65e36eba6f",
    "src": "主表补正文"
   },
   "h7y41tog": {
    "ts": "2026-11-25 17:58:47",
    "kind": "article",
    "verdict": "题解",
-   "sha": "c1031190a9169f61",
+   "sha": "cd5950a20f2296be",
    "src": "主表补正文"
   },
   "2yru0rav": {
    "ts": "2026-11-25 17:58:51",
    "kind": "article",
    "verdict": "题解",
-   "sha": "09827b92fa78726b",
+   "sha": "5f555d0d90afca94",
    "src": "主表补正文"
   },
   "ipduooli": {
    "ts": "2026-11-25 17:58:54",
    "kind": "article",
    "verdict": "题解",
-   "sha": "1c9af3fe1250c300",
+   "sha": "b49e8eb53d79e65a",
    "src": "主表补正文"
   },
   "59x93a43": {
    "ts": "2026-11-25 17:58:58",
    "kind": "article",
    "verdict": "题解",
-   "sha": "213f5d5c48cfcc2a",
+   "sha": "b8500358e6f3a35c",
    "src": "主表补正文"
   },
   "arorhglg": {
    "ts": "2026-11-25 17:59:01",
    "kind": "article",
    "verdict": "题解",
-   "sha": "9ebb85947dd690cf",
+   "sha": "c2865e9b9828f13f",
    "src": "主表补正文"
   },
   "ictzayja": {
    "ts": "2026-11-25 17:59:04",
    "kind": "article",
    "verdict": "题解",
-   "sha": "854d4ef13ab8009e",
+   "sha": "4b4205cd6f739670",
    "src": "主表补正文"
   },
   "vckbob2z": {
    "ts": "2026-11-25 17:59:07",
    "kind": "article",
    "verdict": "学术/题解文字",
-   "sha": "219d360321a29843",
+   "sha": "ef4c08a25b4cd651",
    "src": "主表补正文"
   },
   "gw5uvykg": {
    "ts": "2026-11-25 17:59:11",
    "kind": "article",
    "verdict": "题解",
-   "sha": "30d4247eae39f172",
+   "sha": "5d5629dbb202ca33",
    "src": "主表补正文"
   },
   "ove5v8ck": {
    "ts": "2026-11-25 17:59:14",
    "kind": "article",
    "verdict": "题解",
-   "sha": "a03ba264c2dea0dd",
+   "sha": "b327c9fe7f31fd4c",
    "src": "主表补正文"
   },
   "tneoku44": {
    "ts": "2026-11-25 17:59:18",
    "kind": "article",
    "verdict": "题解",
-   "sha": "1ff1473d3d651e41",
+   "sha": "85876a445898e7bf",
    "src": "主表补正文"
   },
   "uezud59i": {
    "ts": "2026-11-25 17:59:21",
    "kind": "article",
    "verdict": "题解",
-   "sha": "1be63b368ed48301",
+   "sha": "4efcf3c9271f4326",
    "src": "主表补正文"
   },
   "88t0yv7r": {
    "ts": "2026-11-25 17:59:24",
    "kind": "article",
    "verdict": "题解",
-   "sha": "385543526dc061d0",
+   "sha": "bcaac467e2c1bf70",
    "src": "主表补正文"
   },
   "03xk59dp": {
    "ts": "2026-11-25 17:59:26",
    "kind": "article",
    "verdict": "题解",
-   "sha": "241c1ae127106079",
+   "sha": "8249d8fc7fa0e639",
    "src": "主表补正文"
   },
   "0z8yhoc0": {
    "ts": "2026-11-25 17:59:29",
    "kind": "article",
    "verdict": "题解",
-   "sha": "3f738e8893accc63",
+   "sha": "22470dbe0ca335e5",
    "src": "主表补正文"
   },
   "a8f6uiq9": {
    "ts": "2026-11-25 17:59:32",
    "kind": "article",
    "verdict": "题解",
-   "sha": "b078a3fc3d4e635b",
+   "sha": "188e4ccc7d5dadf7",
    "src": "主表补正文"
   },
   "dk5mkxij": {
    "ts": "2026-11-25 17:59:52",
    "kind": "article",
    "verdict": "题解",
-   "sha": "6bd7da78b84d880c",
+   "sha": "b517169daa4ac7ac",
    "src": "主表补正文"
   },
   "4fj37pww": {
    "ts": "2026-11-25 17:59:56",
    "kind": "article",
    "verdict": "题解",
-   "sha": "e2b3fa76182458bf",
+   "sha": "7509e9a21a66ebb9",
    "src": "主表补正文"
   },
   "apqvl7bn": {
    "ts": "2026-11-25 17:59:58",
    "kind": "article",
    "verdict": "题解",
-   "sha": "d93e223bc617ed49",
+   "sha": "259d4607e56afe13",
    "src": "主表补正文"
   },
   "ju6tr560": {
    "ts": "2026-11-25 18:00:01",
    "kind": "article",
    "verdict": "题解",
-   "sha": "cd33e862891fe9c4",
+   "sha": "eda47a748a2a310b",
    "src": "主表补正文"
   },
   "beuv9jew": {
    "ts": "2026-11-25 18:00:05",
    "kind": "article",
    "verdict": "题解",
-   "sha": "1402477cf77f737d",
+   "sha": "ff1fdd905f107c79",
    "src": "主表补正文"
   },
   "nobyk23w": {
    "ts": "2026-11-25 18:00:09",
    "kind": "article",
    "verdict": "题解",
-   "sha": "35bab9e872db9dce",
+   "sha": "512b489afc0345cd",
    "src": "主表补正文"
   },
   "2edysvbn": {
    "ts": "2026-11-25 18:00:12",
    "kind": "article",
    "verdict": "题解",
-   "sha": "5153009c3adc69e2",
+   "sha": "9edd27b048a0bf1c",
    "src": "主表补正文"
   },
   "3aph5o1d": {
    "ts": "2026-11-25 18:00:15",
    "kind": "article",
    "verdict": "学术/题解文字",
-   "sha": "13f668c32be3b1d6",
+   "sha": "15ac6ad5095636ee",
    "src": "主表补正文"
   },
   "iv10492z": {
    "ts": "2026-11-25 18:00:18",
    "kind": "article",
    "verdict": "题解",
-   "sha": "65cb836e0c530622",
+   "sha": "6b02b1b2d9a80ceb",
    "src": "主表补正文"
   },
   "utz61eus": {
    "ts": "2026-11-25 18:00:20",
    "kind": "article",
    "verdict": "题解",
-   "sha": "bfae5d89b444aaec",
+   "sha": "2c2ce36132135fb8",
    "src": "主表补正文"
   },
   "P1005": {
@@ -481,175 +486,175 @@
    "ts": "2026-11-26 02:13:24",
    "kind": "article",
    "verdict": "题解",
-   "sha": "aac4f0664286af75",
+   "sha": "584ea7d6e454858a",
    "src": "主表补正文"
   },
   "xmumv7ok": {
    "ts": "2026-11-26 02:13:27",
    "kind": "article",
    "verdict": "题解",
-   "sha": "bcb5480858451d35",
+   "sha": "3f2240ea29b55f66",
    "src": "主表补正文"
   },
   "biep97vd": {
    "ts": "2026-11-26 02:13:29",
    "kind": "article",
    "verdict": "学术/题解文字",
-   "sha": "81e5d22d0d2cc6fa",
+   "sha": "adb5c8e38e5b3c1c",
    "src": "主表补正文"
   },
   "lgmnaw1h": {
    "ts": "2026-11-26 02:13:33",
    "kind": "article",
    "verdict": "题解",
-   "sha": "5ed1e29cca8c7d4c",
+   "sha": "58de829cc543e914",
    "src": "主表补正文"
   },
   "ehkpairy": {
    "ts": "2026-11-26 02:13:36",
    "kind": "article",
    "verdict": "题解",
-   "sha": "d3d84a50fde67beb",
+   "sha": "9b37b46bdb9f8f1a",
    "src": "主表补正文"
   },
   "j4zpxmp6": {
    "ts": "2026-11-26 02:13:39",
    "kind": "article",
    "verdict": "学术/题解文字",
-   "sha": "08f6bda62f9591fe",
+   "sha": "62dd7aae82ff674a",
    "src": "主表补正文"
   },
   "jm3biw0r": {
    "ts": "2026-11-26 02:13:42",
    "kind": "article",
    "verdict": "题解",
-   "sha": "f5041186db52e281",
+   "sha": "c89640597120b9bb",
    "src": "主表补正文"
   },
   "wiofo14v": {
    "ts": "2026-11-26 02:13:45",
    "kind": "article",
    "verdict": "题解",
-   "sha": "b765f2d62edd67f7",
+   "sha": "510120b04179a15c",
    "src": "主表补正文"
   },
   "z3dolqp8": {
    "ts": "2026-11-26 02:13:48",
    "kind": "article",
    "verdict": "题解",
-   "sha": "7370d33fa6409a02",
+   "sha": "9cb25ac77b214d51",
    "src": "主表补正文"
   },
   "dmza5ifn": {
    "ts": "2026-11-26 02:13:52",
    "kind": "article",
    "verdict": "题解",
-   "sha": "010b9e93631cd25e",
+   "sha": "1ff7ba2c816d1f07",
    "src": "主表补正文"
   },
   "h8ic4o0m": {
    "ts": "2026-11-26 02:13:54",
    "kind": "article",
    "verdict": "题解",
-   "sha": "06212b2ff557edb6",
+   "sha": "fb7b17a6235e74fe",
    "src": "主表补正文"
   },
   "v5aspqez": {
    "ts": "2026-11-26 02:13:57",
    "kind": "article",
    "verdict": "题解",
-   "sha": "a2ff3444aa16632f",
+   "sha": "fcaa3822ec5aab41",
    "src": "主表补正文"
   },
   "xgwn9tfg": {
    "ts": "2026-11-26 02:14:01",
    "kind": "article",
    "verdict": "题解",
-   "sha": "d82dae4e7abde6b9",
+   "sha": "d35477004b24bd26",
    "src": "主表补正文"
   },
   "vgwp3k30": {
    "ts": "2026-11-26 02:14:03",
    "kind": "article",
    "verdict": "题解",
-   "sha": "503edb3db7680073",
+   "sha": "931c4fe83d4ae18d",
    "src": "主表补正文"
   },
   "b7py0ojt": {
    "ts": "2026-11-26 02:14:07",
    "kind": "article",
    "verdict": "题解",
-   "sha": "e217d6a40a9c595b",
+   "sha": "3b9e63bd0debeed9",
    "src": "主表补正文"
   },
   "bv44vwt6": {
    "ts": "2026-11-26 02:14:10",
    "kind": "article",
    "verdict": "题解",
-   "sha": "3c388adafb6d81bb",
+   "sha": "cb89e8c51f5d593f",
    "src": "主表补正文"
   },
   "0dhpwlt6": {
    "ts": "2026-11-26 02:14:13",
    "kind": "article",
    "verdict": "学术/题解文字",
-   "sha": "cfa900327c366ff7",
+   "sha": "1616c7228a816545",
    "src": "主表补正文"
   },
   "7p4p6gdm": {
    "ts": "2026-11-26 02:14:34",
    "kind": "article",
    "verdict": "题解",
-   "sha": "cbc7907588354470",
+   "sha": "1ef4503e18ab6759",
    "src": "主表补正文"
   },
   "79f7f3bn": {
    "ts": "2026-11-26 02:14:37",
    "kind": "article",
    "verdict": "题解",
-   "sha": "625a0abc4bc908ba",
+   "sha": "88a5917807060db2",
    "src": "主表补正文"
   },
   "smtoxvvs": {
    "ts": "2026-11-26 02:14:40",
    "kind": "article",
    "verdict": "题解",
-   "sha": "55b0f8175e92875e",
+   "sha": "2bb6a5d4318575e5",
    "src": "主表补正文"
   },
   "l6u32sp7": {
    "ts": "2026-11-26 02:14:43",
    "kind": "article",
    "verdict": "题解",
-   "sha": "01d06b19c0770bcd",
+   "sha": "ae40ade6d50a21bf",
    "src": "主表补正文"
   },
   "up402yw6": {
    "ts": "2026-11-26 02:14:47",
    "kind": "article",
    "verdict": "题解",
-   "sha": "0080b55763b4728d",
+   "sha": "53765625d6fd7647",
    "src": "主表补正文"
   },
   "g8gclrnk": {
    "ts": "2026-11-26 02:14:50",
    "kind": "article",
    "verdict": "题解",
-   "sha": "81ba5d7e9b701922",
+   "sha": "109c6828ce47436e",
    "src": "主表补正文"
   },
   "qajlal91": {
    "ts": "2026-11-26 02:14:53",
    "kind": "article",
    "verdict": "题解",
-   "sha": "1b90c8caf4ed0b88",
+   "sha": "efc93febb936843d",
    "src": "主表补正文"
   },
   "nzmytiez": {
    "ts": "2026-11-26 02:14:57",
    "kind": "article",
    "verdict": "题解",
-   "sha": "3431d27b8d21675a",
+   "sha": "6e470d6974144829",
    "src": "主表补正文"
   },
   "P1008": {
@@ -777,5 +782,13 @@
   "count": 42
  },
  "last_push": "2026-11-26 14:17:21",
- "problem_skeleton_streak": 17
+ "problem_skeleton_streak": 17,
+ "audit_baseline": {
+  "ts": "2026-11-26",
+  "cleaned": 85,
+  "skeletons_removed": 0,
+  "rejudged": 6,
+  "note": "公开归档清洗基线：csrf 已移除、骨架不存档、多语言判定已修",
+  "http200_503_removed": 5
+ }
 }

@@ -1,0 +1,24 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>基础设施审查与验证报告.md · 离线归档</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">02_文章编号索引 / 基础设施审查与验证报告.md</span></header>
+<main class="doc"><h1>基础设施审查与类对拍验证</h1>
+<blockquote>生成时间：2026-11-26 22:24:34　总体：<strong>通过</strong></blockquote>
+<h2>一、对新取回正文的逐篇审查（Part A）</h2>
+<p>扫描 <code>site/data/ingested/</code> 共 <strong>86</strong> 份正文，逐条核对原文链接、正文长度、代码块可提取性、判定一致性、sha 唯一性、敏感残留与 provenance 署名覆盖。</p>
+<table class="tb"><thead><tr><th>项</th><th>数值</th></tr></thead><tbody><tr><td>文件数</td><td>86</td></tr><tr><td>有代码正文</td><td>84</td></tr><tr><td>503/骨架存档</td><td>0</td></tr><tr><td>csrf残留</td><td>0</td></tr><tr><td>凭据残留</td><td>0</td></tr><tr><td>邮箱残留</td><td>0</td></tr><tr><td>原文链接缺项</td><td>0</td></tr><tr><td>未覆盖署名</td><td>0</td></tr><tr><td>无签名</td><td>0</td></tr></tbody></table>
+<p>判定分布：<code>{&#x27;题解&#x27;: 86}</code>；重复正文：0 组；问题总数：0。</p>
+<p>另有 <strong>2</strong> 篇题解正文无 <code>&lt;pre&gt;</code> 代码块（页面以别的形式渲染代码），仅登记、不算缺陷：其逐字复现代码已在 <code>04_复现代码/</code> 单独归档，正文保留题解文字与原文链接。</p>
+<p><strong>无遗留问题。</strong></p>
+<h3>本轮修复</h3>
+<ol><li><strong>85 篇新正文残留匿名 <code>csrf-token</code> meta</strong>：旧版只在 <code>azdjstpm</code> 上手工清过一次，Actions 批量取回的正文没走清洗。现已在 <code>crawl_daemon.fetch()</code> 后加 <code>sanitize_body()</code> 常态清洗，并回填历史正文；内容 sha256 与完整性签名随之轮换一次，之后稳定。</li><li><strong>5 篇多语言题解被误判为「学术/题解文字」</strong>：<code>biep97vd</code>(Python)、<code>vckbob2z</code>/<code>3aph5o1d</code>(Pascal)、<code>j4zpxmp6</code>/<code>0dhpwlt6</code>(伪代码/思路块)。原因是旧判据只认 <code>#include / int main / printf / cout / scanf</code>。现改为先取 <code>&lt;pre&gt;</code> 再按多语言特征判定，已全部改判「题解」。</li><li><strong>5 份「HTTP 200 但正文是 503 错误页」被当成题面存档</strong>（P1000~P1004，2887 字节，标题「503 - 洛谷日爆」）：只看状态码踩的坑。现已把 503 特征写入 <code>STOP_MARKERS</code>，命中即长退避；历史文件删除，校对台账失效证据路径同步修正。</li></ol>
+<h2>二、类对拍验证（Part B）</h2>
+<p>思路与题解对拍完全一致：<strong>不能只证明「跑过了」，得证明测试集有分辨力</strong>。每个检查点同时跑真实实现与一个故意改坏的变异实现，变异必须被抓到。</p>
+<p>共 <strong>13</strong> 个检查点，全部变异被抓到：<strong>True</strong>。</p>
+<table class="tb"><thead><tr><th>检查点</th><th>真实实现</th><th>变异实现</th><th>变异被抓到</th></tr></thead><tbody><tr><td>classify 标准 C++ 题解→题解</td><td><code>题解</code></td><td><code>学术/题解文字</code></td><td>✓</td></tr><tr><td>classify 题解_Python→题解</td><td><code>题解</code></td><td><code>学术/题解文字</code></td><td>✓</td></tr><tr><td>classify 题解_Pascal→题解</td><td><code>题解</code></td><td><code>学术/题解文字</code></td><td>✓</td></tr><tr><td>classify 题解_伪代码→题解</td><td><code>题解</code></td><td><code>学术/题解文字</code></td><td>✓</td></tr><tr><td>classify 规范文章→非题解</td><td><code>学术/规范文章</code></td><td><code>学术/题解文字</code></td><td>✓</td></tr><tr><td>classify SPA 骨架→未知</td><td><code>未知</code></td><td><code>学术/题解文字</code></td><td>✓</td></tr><tr><td>sanitize_body 移除匿名页面令牌</td><td><code>无令牌</code></td><td><code>仍含令牌</code></td><td>✓</td></tr><tr><td>extract_code 提取代码块</td><td><code>1</code></td><td><code>0</code></td><td>✓</td></tr><tr><td>STOP_MARKERS 命中即停</td><td><code>True</code></td><td><code>False</code></td><td>✓</td></tr><tr><td>STOP_MARKERS 识别 HTTP200 的 503 错误页</td><td><code>True</code></td><td><code>False</code></td><td>✓</td></tr><tr><td>replenish 有序 + 去重</td><td><code>a=3 queue=[&#x27;aaaaaaaa&#x27;, &#x27;bbbbbb</code></td><td><code>a=4 queue=[&#x27;bbbbbbbb&#x27;, &#x27;</code></td><td>✓</td></tr><tr><td>provenance 签名可复现（不漂移）</td><td><code>8ea288136ded</code></td><td><code>两次不同</code></td><td>✓</td></tr><tr><td>verify_l1 不存档 SPA 骨架</td><td><code>落盘 0 个</code></td><td><code>落盘 1 个</code></td><td>✓</td></tr></tbody></table>
+<p>覆盖：<code>classify</code> 多语言判定（变异=修复前旧实现）、<code>sanitize_body</code> 令牌清洗、<code>extract_code</code> 代码块提取、<code>STOP_MARKERS</code> 降级即停、<code>replenish</code> 有序去重、<code>provenance</code> 签名不漂移、<code>verify_l1</code> 骨架不落盘、503 错误页识别（变异=修复前标记表）。</p>
+<blockquote>夹具全是手写 HTML 字符串，<strong>不发网络请求、不碰真实数据</strong>；临时目录做状态隔离，跑完还原模块级路径。</blockquote>
+<h2>三、复现</h2>
+<pre class="code"><code>python3 tools/verify_infra.py           # 写报告与结果
+python3 tools/verify_infra.py --check  # Pages 部署前自检，只断言不写文件</code></pre>
+<p>结果机器可读：<code>05_对拍原始数据/基础设施验证结果.json</code>、<code>05_对拍原始数据/新取回正文审查.json</code>。</p></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>

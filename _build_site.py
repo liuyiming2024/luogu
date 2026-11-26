@@ -165,9 +165,13 @@ for sub in ["01_批次清单", "00_总览"]:
     for fn in sorted(os.listdir(d)):
         if fn.endswith(".md"):
             REPORT_FILES.append((sub, fn, os.path.join(d, fn)))
-_prog = os.path.join(REPO, "02_文章编号索引", "爬取进度.md")
-if os.path.exists(_prog):
-    REPORT_FILES.append(("02_文章编号索引", "爬取进度.md", _prog))
+for _extra in ["爬取进度.md", "基础设施审查与验证报告.md",
+               "全量爬取与校对说明.md", "归档与版权声明.md"]:
+    # 归档与版权声明在 00_总览 里已由上面的循环收集，避免重复
+    if _extra == "归档与版权声明.md": continue
+    _p = os.path.join(REPO, "02_文章编号索引", _extra)
+    if os.path.exists(_p):
+        REPORT_FILES.append(("02_文章编号索引", _extra, _p))
 for sub, fn, p in REPORT_FILES:
     md = open(p, encoding="utf-8").read()
     body = md2html(md)
