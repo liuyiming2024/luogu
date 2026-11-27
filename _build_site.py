@@ -122,6 +122,10 @@ def md2html(md):
             while i < n and lines[i].strip() and not re.match(
                 r"^\s*(#{1,6}\s|```|\||>|[-*]\s|\d+\.\s|---|\*\*\*|___)", lines[i]):
                 buf.append(lines[i].strip()); i += 1
+            # 防御：某行被上面的排除规则挡住、却没被任何专用分支接住时，
+            # 段落 while 一次不进 → 若不强制推进 i 会无限循环（第12批文档触发）。
+            if not buf:
+                buf.append(L.strip()); i += 1
             out.append(f"<p>{inline(' '.join(buf))}</p>")
             continue
         i += 1

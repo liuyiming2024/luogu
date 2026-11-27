@@ -1,0 +1,15 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>图片按需抓取与优先级淘汰.md · 离线归档</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/local.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">00_总览 / 图片按需抓取与优先级淘汰.md</span></header>
+<main class="doc"><h1>图片按需抓取与优先级淘汰</h1>
+<h2>抓取原则</h2>
+<p><strong>不做全量抓取。</strong> 只在文章、题面、讨论区等页面<strong>正文里遇到图片引用时</strong>才保存该图片； 保存时记录来源 URL、所属条目、sha256 与抓取时间，随条目一起纳入本库数据源。</p>
+<ul><li>低频：随内容取回顺带保存，不单独开图片遍历任务</li><li>离线可用：图片落到 <code>site/assets/img/</code>，页面引用本地副本；原 URL 仅作来源留痕</li><li>版权：图片版权归原作者 / 洛谷所有，随《归档与版权声明》一并处理；权利人可申请移除</li></ul>
+<h2>空间不够且无法扩容时的保留优先级</h2>
+<pre class="code"><code>题面  &gt;  题解  &gt;  学术类文章  &gt;  其它（讨论区 / 犇犇 / 装饰图）</code></pre>
+<p>淘汰顺序从「其它」开始，逐级回退；<strong>题面附件最后淘汰</strong>。 淘汰只删本地副本与引用映射，不删条目本身的文字、代码块、署名与签名。</p>
+<h2>与「题目附件」的关系</h2>
+<p>题目页提供页面附件（自己先在库中抓回缓存），附件与图片同样按按需抓取 + 同优先级淘汰处理。详见 <code>problems.html</code> 与《全量任务完成清单》。</p>
+<h2>与保存站流量的关系</h2>
+<p>借用保存站流量做<strong>延迟维护</strong>：本地最新信息推送线上数据源， 不因图片抓取额外增加对保存站 / 洛谷的请求频率（沿用 2.0~3.5s 抖动、 每 20 次小憩、50 分钟窗口 / 15 分钟静默）。</p></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer><script src="../assets/local.js"></script></body></html>

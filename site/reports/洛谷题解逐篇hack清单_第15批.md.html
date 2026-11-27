@@ -1,6 +1,6 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>洛谷题解逐篇hack清单_第15批.md · 离线归档</title><link rel="stylesheet" href="../assets/style.css"></head>
+<title>洛谷题解逐篇hack清单_第15批.md · 离线归档</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/local.css"></head>
 <body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">01_批次清单 / 洛谷题解逐篇hack清单_第15批.md</span></header>
 <main class="doc"><h1>洛谷题解逐篇 hack 清单 · 第 15 批（并行对拍 + Actions 取回 + 全量爬取架构）</h1>
 <blockquote>三件流程改进： 1. <strong>对拍与其他工作并行</strong>，不再串行等待；每篇附「变异版」敏感性检查， 故意改一处后必须被抓到错，证明测试集不是空跑。 2. 按「用仓库的 work 来爬取」新增 GitHub Actions 取回： Actions 出口<strong>成功取回</strong>了沙盒三种通道都拿不到的 <code>azdjstpm</code> 正文， 并 commit 回仓库（run <code>45410907569</code>，HTTP 200，8836 字节 HTML）。 3. 按「写个大脚本一直跑、但每小时歇十分钟」新增 <code>tools/crawl_daemon.py</code> + <code>crawl_tick.yml</code> + 《全量爬取与校对说明.md》， 见本文 §6。</blockquote>
@@ -79,4 +79,4 @@ for (int i = 1; i &lt;= 9; i++) {
 <ol><li><code>azdjstpm</code> 搜索摘要疑似越界 → 若直接判甲就错了；实测五档全对 → 归丙。</li></ol>
 <hr>
 <h2>8. 低频声明</h2>
-<table class="tb"><thead><tr><th>动作</th><th>次数</th></tr></thead><tbody><tr><td>检索（12 轮，定位新编号 / 核对 4 道题面范围）</td><td>12</td></tr><tr><td>逐字取回正文</td><td>4 成功 + 1 由 Actions 补回</td></tr><tr><td>GitHub API（推 workflow / dispatch / 查 run / pull）</td><td>少量</td></tr><tr><td>Actions 爬取</td><td>1 次 dispatch，单次 1 篇、2 秒间隔</td></tr><tr><td>daemon 冒烟</td><td>1 次 <code>--dry-run</code>，<strong>不发包</strong></td></tr><tr><td>洛谷登录 / 题解提交 / 保存 API 批量拉取</td><td><strong>0</strong></td></tr></tbody></table></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>
+<table class="tb"><thead><tr><th>动作</th><th>次数</th></tr></thead><tbody><tr><td>检索（12 轮，定位新编号 / 核对 4 道题面范围）</td><td>12</td></tr><tr><td>逐字取回正文</td><td>4 成功 + 1 由 Actions 补回</td></tr><tr><td>GitHub API（推 workflow / dispatch / 查 run / pull）</td><td>少量</td></tr><tr><td>Actions 爬取</td><td>1 次 dispatch，单次 1 篇、2 秒间隔</td></tr><tr><td>daemon 冒烟</td><td>1 次 <code>--dry-run</code>，<strong>不发包</strong></td></tr><tr><td>洛谷登录 / 题解提交 / 保存 API 批量拉取</td><td><strong>0</strong></td></tr></tbody></table></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer><script src="../assets/local.js"></script></body></html>

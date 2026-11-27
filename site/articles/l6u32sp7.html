@@ -1,0 +1,134 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P3959 · l6u32sp7 · 题解归档</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/local.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">题解 / P3959 / l6u32sp7</span></header>
+<main class="article"><h1>P3959 <span class="lid">l6u32sp7</span></h1>
+<div class="badge 丙">丙·未 hack</div>
+<table class="tb meta"><tbody>
+<tr><th>是否题解</th><td>是（题解文章（8 位 article 编号））</td></tr>
+<tr><th>归类</th><td>丙·未 hack</td></tr>
+<tr><th>批次</th><td>第1批</td></tr>
+<tr><th>可逐字验证</th><td>是</td></tr>
+<tr><th>判定备注</th><td>Prüfer 全枚举未找到更优解（第2批重判）</td></tr>
+<tr><th>原文地址</th><td><a href="https://www.luogu.com/article/l6u32sp7" referrerpolicy="no-referrer" rel="noopener">https://www.luogu.com/article/l6u32sp7</a> <span class="hint">（原文链接 · 点击跳转；离线时仅留来源）</span></td></tr>
+<tr><th>原文作者</th><td>QiFeng233</td></tr>
+<tr><th>归档 / 取回时间</th><td>2026-11-26 02:14:43 · 正文+代码块</td></tr>
+<tr><th>内容完整性签名</th><td><code>6b1834ff03bdfc18bed03fdce2fc8914</code><span class="hint"> · sha256 内容校验值（非加密签名）</span></td></tr>
+</tbody></table>
+<h2>引用与署名</h2>
+<div class="src" style="border-left:3px solid var(--acc)"><p>QiFeng233. 《题解 P3959 【宝藏】》. 洛谷, 原文: https://www.luogu.com/article/l6u32sp7（本仓库归档于 2026-11-26 02:14:43，内容 sha256: ae40ade6d50a21bf，完整性签名: 6b1834ff03bdfc18bed03fdce2fc8914）. 版权归原作者所有，仅作学术归档引用。</p>
+<p class="hint">版权归原作者及洛谷所有；本库仅作个人学习 / 学术研究的离线归档与校对留痕，不用于商业用途。每篇保留原文链接与作者署名；权利人可申请移除，详见《归档与版权声明》。 <a href="../reports/归档与版权声明.md.html">《归档与版权声明》</a></p></div>
+<h2>题解代码 · 逐字取回 + 最小外壳（1 份）</h2>
+<p class="hint">代码只是辅助：只补 include / main / 必要声明，缺头文件与页面吞字符不计缺陷，仅验核心逻辑。</p>
+<div class="src"><div class="srcname">build__P3959_l6u32sp7.cpp <span class="hint">· 编号精确匹配</span></div><pre class="code"><code>
+#include&lt;cstdio&gt;
+#include&lt;algorithm&gt;
+#include&lt;cstdlib&gt;
+#include&lt;cstring&gt;
+#include&lt;queue&gt;
+const int maxn=15,maxm=1010*2;
+const int inf=0x3f3f3f3f;
+const int seed=19260817,randtime=25000,swaptime=10;
+struct KEDGE{ int x,y,w; bool isInMST; };
+struct STAR{ int e,nxt,w; };
+int n,m;
+int map[maxn][maxn];
+KEDGE kruskalEdge[maxm];
+int father[maxn];
+int head[maxn],starCnt=0;
+STAR starEdge[maxm];
+int vis1[maxn],vis2[maxn],kdep[maxn];
+int kcnt=0,rcnt=0,cnt=0;
+int ans=inf;
+int rand(int l,int r){ return l + rand()%(r-l+1); }
+bool compareLaw(const KEDGE &amp;a,const KEDGE &amp;b){ return a.w&lt;b.w; }
+int find(int x){ return father[x]==x?x:father[x]=find(father[x]); }
+void unionx(int x,int y){ father[find(x)]=find(y); }
+void add(int x,int y,int w){ starEdge[++starCnt]=(STAR){y,head[x],w}; head[x]=starCnt; }
+void solve(int time){
+ for(int i=1;i&lt;=n;++i)father[i]=i;
+ cnt=1,rcnt=0;
+ memset(head,0,sizeof(head));
+ memset(starEdge,0,sizeof(starEdge));
+ for(int i=1;i&lt;=kcnt;++i)kruskalEdge[i].isInMST=0;
+ std::sort(kruskalEdge+1,kruskalEdge+kcnt+1,compareLaw);
+ for(int i=1;i&lt;=swaptime;++i)std::swap(kruskalEdge[rand(1,kcnt)],kruskalEdge[rand(1,kcnt)]);
+ starCnt=0;
+ for(int i=1;i&lt;=kcnt;i++){
+  int x=kruskalEdge[i].x,y=kruskalEdge[i].y;
+  if(find(x)!=find(y)){
+   unionx(x,y);
+   kruskalEdge[i].isInMST=1;
+   rcnt++;
+   if(rcnt==n-1)break;
+  }
+ }
+ for(int i=1;i&lt;=kcnt;++i){
+  if(kruskalEdge[i].isInMST){
+   int x=kruskalEdge[i].x,y=kruskalEdge[i].y,w=kruskalEdge[i].w;
+   add(x,y,w);
+   add(y,x,w);
+  }
+ }
+ for(int i=1;i&lt;=n;++i){
+  int res=0;
+  memset(vis1,0,sizeof(vis1));
+  memset(vis2,0,sizeof(vis2));
+  memset(kdep,0,sizeof(kdep));
+  std::queue&lt;int&gt;q1,q2;
+  q1.push(i);
+  kdep[i]=1;
+  while(!q1.empty()){
+   int pos=q1.front(); q1.pop();
+   if(vis1[pos])continue;
+   vis1[pos]=1;
+   for(int j=head[pos];j;j=starEdge[j].nxt){
+    int to=starEdge[j].e;
+    if(!vis1[to]){ kdep[to]=kdep[pos]+1; q1.push(to); }
+   }
+  }
+  q2.push(i);
+  while(!q2.empty()){
+   int pos=q2.front(); q2.pop();
+   if(vis2[pos])continue;
+   vis2[pos]=1;
+   for(int j=head[pos];j;j=starEdge[j].nxt){
+    int to=starEdge[j].e;
+    if(!vis2[to]){ res+=starEdge[j].w*kdep[pos]; q2.push(to); }
+   }
+  }
+  ans=std::min(ans,res);
+ }
+}
+int main(){
+ memset(map,0x3f,sizeof(map));
+ srand(seed);
+ scanf(&quot;%d%d&quot;,&amp;n,&amp;m);
+ if(n==1&amp;&amp;m==0){ printf(&quot;0&quot;); return 0; }
+ for(int i=1;i&lt;=m;++i){
+  int u,v,w;
+  scanf(&quot;%d%d%d&quot;,&amp;u,&amp;v,&amp;w);
+  map[u][v]=std::min(map[u][v],w);
+  map[v][u]=std::min(map[v][u],w);
+ }
+ for(int i=1;i&lt;=n;++i){
+  for(int j=i;j&lt;=n;++j){
+   if(map[i][j]!=inf) kruskalEdge[++kcnt]=(KEDGE){i,j,map[i][j],0};
+  }
+ }
+ for(int i=1;i&lt;=randtime;++i)solve(i);
+ printf(&quot;%d&quot;,ans);
+ return 0;
+}
+</code></pre></div>
+<h2>复现</h2><pre class="code"><code>g++ -std=c++17 -O2 -o /tmp/t 04_复现代码/&lt;对应文件&gt;
+echo &quot;&lt;题面内输入&gt;&quot; | /tmp/t</code></pre>
+<h2>相关报告</h2><ul class="links">
+<li><a href="../reports/洛谷题解逐篇hack清单_第10批.md.html">洛谷题解逐篇hack清单_第10批.md</a></li>
+<li><a href="../reports/洛谷题解逐篇hack清单_第11批.md.html">洛谷题解逐篇hack清单_第11批.md</a></li>
+<li><a href="../reports/洛谷题解逐篇hack清单_第12批.md.html">洛谷题解逐篇hack清单_第12批.md</a></li>
+<li><a href="../reports/洛谷题解逐篇hack清单_第13批.md.html">洛谷题解逐篇hack清单_第13批.md</a></li>
+<li><a href="../reports/洛谷题解逐篇hack清单_第14批.md.html">洛谷题解逐篇hack清单_第14批.md</a></li>
+<li><a href="../reports/洛谷题解逐篇hack清单_第15批.md.html">洛谷题解逐篇hack清单_第15批.md</a></li>
+<li><a href="../reports/三类口径与累计统计.md.html">三类口径与自查纪律</a></li>
+</ul></main><footer><div class="wrap">纯离线静态页 · 无外部资源 · 无网络请求 · 原文版权归作者所有 · 版权归原作者及洛谷所有；本库仅作个人学习 / 学术研究的离线归档与校对留痕， … <a href="../reports/归档与版权声明.md.html">声明</a></div></footer><script src="../assets/local.js"></script></body></html>

@@ -1,0 +1,135 @@
+/* 本地轻量版 luogu · 独立主题
+   仿洛谷的「清爽蓝 + 卡片 + 轻圆角」气质，但配色、间距、组件命名均独立，
+   不复用其样式表、不直接重合。零字体外链、零 CDN。 */
+:root{
+  --ll-bg:#f5f8fc; --ll-card:#fff; --ll-ink:#22303f; --ll-mute:#7c8b9c;
+  --ll-line:#e3ebf3; --ll-main:#1f8ac0; --ll-main2:#36b3a8;
+  --ll-acc:#eef7fd; --ll-warn:#e8a13a; --ll-bad:#d9634f; --ll-ok:#2fa36b;
+  --ll-gray:#9aa6b2; --ll-shadow:0 2px 10px rgba(31,138,192,.08);
+  --ll-r:10px;
+  /* 覆盖生成器旧深色变量：仿洛谷默认浅蓝风格，既有页面无需改动即协调 */
+  --bg:#f5f8fc; --panel:#fff; --panel2:#f7fafc; --fg:#22303f;
+  --mut:#7c8b9c; --line:#e3ebf3; --acc:#1f8ac0;
+  --a:#d9634f; --b:#e8a13a; --c:#2fa36b; --d:#9aa6b2;
+}
+/* 浅色下把旧样式的卡片/代码块稍微提亮 */
+.src,.tb,.card,.doc,.article{background:var(--panel)}
+pre.code,.src pre{background:#f7fafc}
+
+html,body{margin:0;padding:0}
+body.ll{background:var(--ll-bg);color:var(--ll-ink);
+  font:14px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+.ll a{color:var(--ll-main);text-decoration:none}
+.ll a:hover{text-decoration:underline}
+.ll .wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+
+/* 顶栏（由 local.js 注入到所有页面） */
+.ll-top{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.96);
+  border-bottom:1px solid var(--ll-line);backdrop-filter:blur(6px)}
+.ll-top .in{max-width:1080px;margin:0 auto;padding:8px 16px;display:flex;
+  align-items:center;gap:14px;flex-wrap:wrap}
+.ll-logo{font-weight:800;font-size:16px;letter-spacing:.5px;
+  background:linear-gradient(100deg,var(--ll-main),var(--ll-main2));
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.ll-nav{display:flex;gap:12px;flex:1;flex-wrap:wrap}
+.ll-nav a{color:var(--ll-ink);font-size:13px;padding:4px 6px;border-radius:6px}
+.ll-nav a:hover{background:var(--ll-acc);text-decoration:none}
+.ll-me{display:flex;align-items:center;gap:8px;font-size:13px}
+.ll-av{width:26px;height:26px;border-radius:50%;border:1px solid var(--ll-line);
+  background:#fff;display:block;flex:none}
+.ll-name{font-weight:600}
+.ll-name.online{color:var(--ll-main)}
+.ll-name.cached{color:var(--ll-ok)}
+.ll-name.invalid{color:var(--ll-gray)}   /* 无缓存且无网 → 灰色 */
+.ll-btn{border:1px solid var(--ll-line);background:#fff;color:var(--ll-ink);
+  border-radius:8px;padding:5px 11px;cursor:pointer;font-size:13px}
+.ll-btn:hover{border-color:var(--ll-main);color:var(--ll-main)}
+.ll-btn.pri{background:var(--ll-main);border-color:var(--ll-main);color:#fff}
+.ll-btn.pri:hover{opacity:.9;color:#fff}
+.ll-btn:disabled{opacity:.5;cursor:not-allowed}
+.ll-badge,.ll-bubble{font-size:11px;padding:1px 7px;border-radius:20px;
+  background:var(--ll-acc);color:var(--ll-main);border:1px solid var(--ll-line)}
+
+/* 登录/设置弹层 */
+.ll-mask{position:fixed;inset:0;background:rgba(20,35,50,.42);z-index:80;
+  display:flex;align-items:center;justify-content:center;padding:16px}
+.ll-modal{background:#fff;border-radius:14px;max-width:460px;width:100%;
+  padding:20px 22px;box-shadow:0 12px 40px rgba(0,0,0,.18)}
+.ll-modal h3{margin:0 0 10px;font-size:17px}
+.ll-modal label{display:block;font-size:12px;color:var(--ll-mute);margin:9px 0 3px}
+.ll-modal input,.ll-modal select,.ll-modal textarea{width:100%;box-sizing:border-box;
+  border:1px solid var(--ll-line);border-radius:8px;padding:8px 10px;font:inherit}
+.ll-modal .row{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
+.ll-note{font-size:12px;color:var(--ll-mute);background:var(--ll-acc);
+  border-left:3px solid var(--ll-main);padding:8px 10px;border-radius:0 6px 6px 0;margin:10px 0}
+
+/* 主页区块 */
+.ll-sec{margin:22px 0}
+.ll-sec h2{font-size:17px;margin:0 0 10px;padding-left:10px;
+  border-left:4px solid var(--ll-main)}
+.ll-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.ll-card{background:var(--ll-card);border:1px solid var(--ll-line);
+  border-radius:var(--ll-r);padding:12px 14px;box-shadow:var(--ll-shadow)}
+.ll-card h3{margin:0 0 8px;font-size:14px}
+.ll-list{margin:0;padding-left:18px;font-size:13px;color:var(--ll-ink)}
+.ll-list li{margin:3px 0}
+.ll-empty{color:var(--ll-mute);font-size:13px}
+.ll-pill{display:inline-block;font-size:11px;padding:1px 8px;border-radius:20px;
+  background:var(--ll-acc);color:var(--ll-main);margin-right:5px}
+
+/* 评论 + Markdown */
+.ll-cm{margin-top:26px;border-top:1px solid var(--ll-line);padding-top:16px}
+.ll-cm h2{font-size:17px;margin:0 0 10px}
+.ll-cm-item{background:#fff;border:1px solid var(--ll-line);border-radius:var(--ll-r);
+  padding:10px 13px;margin:8px 0}
+.ll-cm-head{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--ll-mute)}
+.ll-md{font-size:14px;line-height:1.75;overflow-wrap:anywhere}
+.ll-md h1,.ll-md h2,.ll-md h3{margin:.6em 0 .3em;font-size:1.1em}
+.ll-md p{margin:.45em 0}
+.ll-md code{background:#f2f6fa;border:1px solid var(--ll-line);border-radius:4px;
+  padding:1px 5px;font-family:ui-monospace,Consolas,monospace;font-size:.9em}
+.ll-md pre{background:#f7fafc;border:1px solid var(--ll-line);border-radius:8px;
+  padding:10px;overflow:auto}
+.ll-md pre code{background:none;border:0;padding:0}
+.ll-md blockquote{margin:.5em 0;padding:2px 12px;border-left:3px solid var(--ll-main);
+  color:var(--ll-mute);background:var(--ll-acc)}
+.ll-md ul,.ll-md ol{padding-left:22px}
+.ll-md a{word-break:break-all}
+.ll-captcha{display:flex;gap:8px;align-items:center;margin:8px 0;flex-wrap:wrap}
+.ll-captcha .q{background:var(--ll-acc);border:1px dashed var(--ll-main);
+  padding:5px 12px;border-radius:8px;font-weight:700;letter-spacing:1px}
+.ll-captcha input{width:90px;border:1px solid var(--ll-line);border-radius:8px;padding:6px 9px}
+.ll-msg{font-size:12px;color:var(--ll-bad);min-height:18px}
+
+/* IDE */
+.ll-ide{border:1px solid var(--ll-line);border-radius:var(--ll-r);overflow:hidden;background:#fff}
+.ll-ide-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;
+  padding:8px 10px;background:var(--ll-acc);border-bottom:1px solid var(--ll-line)}
+.ll-ide select,.ll-ide input{border:1px solid var(--ll-line);border-radius:7px;padding:5px 8px;font:inherit}
+.ll-editor{display:flex;min-height:230px;font-family:ui-monospace,Consolas,monospace;font-size:13px}
+.ll-ln{padding:10px 8px;text-align:right;color:var(--ll-mute);background:#f7fafc;
+  border-right:1px solid var(--ll-line);user-select:none;min-width:38px;line-height:1.55}
+.ll-editor textarea{flex:1;border:0;outline:0;padding:10px;resize:vertical;
+  line-height:1.55;font:inherit;white-space:pre;tab-size:4}
+.ll-judge{margin-top:10px;font-size:13px}
+.ll-verdict{padding:8px 11px;border-radius:8px;margin:8px 0;font-weight:600}
+.ll-verdict.ok{background:#eaf7ef;color:var(--ll-ok)}
+.ll-verdict.no{background:#fdeeea;color:var(--ll-bad)}
+
+/* 本人 / 工单 / 编译面板 */
+.ll-tb{width:100%;border-collapse:collapse;font-size:13px;background:#fff}
+.ll-tb th,.ll-tb td{border:1px solid var(--ll-line);padding:7px 9px;text-align:left}
+.ll-tb th{background:var(--ll-acc)}
+.ll-state{display:inline-block;padding:1px 9px;border-radius:20px;
+  font-size:11px;background:var(--ll-acc);color:var(--ll-main)}
+.ll-state.wait{background:#fff5e6;color:var(--ll-warn)}
+.ll-state.done{background:#eaf7ef;color:var(--ll-ok)}
+.ll-flow{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0;font-size:12px;align-items:center}
+.ll-flow span{background:#fff;border:1px solid var(--ll-line);padding:4px 9px;border-radius:7px}
+.ll-flow i{color:var(--ll-mute);font-style:normal}
+.ll-mirror{display:flex;gap:8px;align-items:center;flex-wrap:wrap;
+  padding:7px 0;border-bottom:1px dashed var(--ll-line);font-size:13px}
+.ll-mirror code{background:#f2f6fa;padding:2px 6px;border-radius:5px;word-break:break-all}
+.ll-foot{margin-top:30px;padding:14px 0;border-top:1px solid var(--ll-line);
+  color:var(--ll-mute);font-size:12px;text-align:center}
+@media(max-width:640px){.ll-nav{gap:6px}.ll-top .in{gap:8px}.ll-editor{min-height:180px}}

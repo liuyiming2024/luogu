@@ -1,0 +1,62 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P2089 · vgwp3k30 · 题解归档</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/local.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">题解 / P2089 / vgwp3k30</span></header>
+<main class="article"><h1>P2089 <span class="lid">vgwp3k30</span></h1>
+<div class="badge 丙">丙·未 hack</div>
+<table class="tb meta"><tbody>
+<tr><th>是否题解</th><td>是（题解文章（8 位 article 编号））</td></tr>
+<tr><th>归类</th><td>丙·未 hack</td></tr>
+<tr><th>批次</th><td>第11批</td></tr>
+<tr><th>可逐字验证</th><td>是</td></tr>
+<tr><th>判定备注</th><td>10 层枚举，峰值方案数 8953</td></tr>
+<tr><th>原文地址</th><td><a href="https://www.luogu.com/article/vgwp3k30" referrerpolicy="no-referrer" rel="noopener">https://www.luogu.com/article/vgwp3k30</a> <span class="hint">（原文链接 · 点击跳转；离线时仅留来源）</span></td></tr>
+<tr><th>原文作者</th><td>crystallee</td></tr>
+<tr><th>归档 / 取回时间</th><td>2026-11-26 02:14:03 · 正文+代码块</td></tr>
+<tr><th>内容完整性签名</th><td><code>abdcdcabd7291a57215586ec9c78d550</code><span class="hint"> · sha256 内容校验值（非加密签名）</span></td></tr>
+</tbody></table>
+<h2>引用与署名</h2>
+<div class="src" style="border-left:3px solid var(--acc)"><p>crystallee. 《深基第10章暴力枚举：P2089 烤鸡》. 洛谷, 原文: https://www.luogu.com/article/vgwp3k30（本仓库归档于 2026-11-26 02:14:03，内容 sha256: 931c4fe83d4ae18d，完整性签名: abdcdcabd7291a57215586ec9c78d550）. 版权归原作者所有，仅作学术归档引用。</p>
+<p class="hint">版权归原作者及洛谷所有；本库仅作个人学习 / 学术研究的离线归档与校对留痕，不用于商业用途。每篇保留原文链接与作者署名；权利人可申请移除，详见《归档与版权声明》。 <a href="../reports/归档与版权声明.md.html">《归档与版权声明》</a></p></div>
+<h2>题解代码 · 逐字取回 + 最小外壳（1 份）</h2>
+<p class="hint">代码只是辅助：只补 include / main / 必要声明，缺头文件与页面吞字符不计缺陷，仅验核心逻辑。</p>
+<div class="src"><div class="srcname">build__r11__s2089.cpp <span class="hint">· 按题号关联</span></div><pre class="code"><code>
+#include&lt;bits/stdc++.h&gt;
+using namespace std;
+int zl[50000][10];
+int main(){
+    int n,ans=0;
+    cin&gt;&gt;n;
+    for (int a=1;a&lt;=3;a++){
+    for (int b=1;b&lt;=3;b++){
+    for (int c=1;c&lt;=3;c++){
+    for (int d=1;d&lt;=3;d++){
+    for (int e=1;e&lt;=3;e++){
+    for (int f=1;f&lt;=3;f++){
+    for (int g=1;g&lt;=3;g++){
+    for (int h=1;h&lt;=3;h++){
+    for  (int i=1;i&lt;=3;i++){
+    for  (int j=1;j&lt;=3;j++){
+        if (a+b+c+d+e+f+g+h+i+j==n) {
+            ans++;
+            zl[ans][0]=a;zl[ans][1]=b; zl[ans][2]=c;zl[ans][3]=d;
+            zl[ans][4]=e;zl[ans][5]=f;zl[ans][6]=g;zl[ans][7]=h;
+            zl[ans][8]=i;zl[ans][9]=j;
+        }
+    } } } } } } } } } }
+    cout&lt;&lt;ans&lt;&lt;endl;
+    for (int i=1;i&lt;=ans;i++){
+        cout&lt;&lt;zl[i][0]&lt;&lt;&quot; &quot;; cout&lt;&lt;zl[i][1]&lt;&lt;&quot; &quot;; cout&lt;&lt;zl[i][2]&lt;&lt;&quot; &quot;;
+        cout&lt;&lt;zl[i][3]&lt;&lt;&quot; &quot;; cout&lt;&lt;zl[i][4]&lt;&lt;&quot; &quot;; cout&lt;&lt;zl[i][5]&lt;&lt;&quot; &quot;;
+        cout&lt;&lt;zl[i][6]&lt;&lt;&quot; &quot;; cout&lt;&lt;zl[i][7]&lt;&lt;&quot; &quot;; cout&lt;&lt;zl[i][8]&lt;&lt;&quot; &quot;;
+        cout&lt;&lt;zl[i][9]&lt;&lt;endl;
+    }
+    return 0;
+}
+</code></pre></div>
+<h2>复现</h2><pre class="code"><code>g++ -std=c++17 -O2 -o /tmp/t 04_复现代码/&lt;对应文件&gt;
+echo &quot;&lt;题面内输入&gt;&quot; | /tmp/t</code></pre>
+<h2>相关报告</h2><ul class="links">
+<li><a href="../reports/洛谷题解逐篇hack清单_第11批.md.html">洛谷题解逐篇hack清单_第11批.md</a></li>
+<li><a href="../reports/三类口径与累计统计.md.html">三类口径与自查纪律</a></li>
+</ul></main><footer><div class="wrap">纯离线静态页 · 无外部资源 · 无网络请求 · 原文版权归作者所有 · 版权归原作者及洛谷所有；本库仅作个人学习 / 学术研究的离线归档与校对留痕， … <a href="../reports/归档与版权声明.md.html">声明</a></div></footer><script src="../assets/local.js"></script></body></html>

@@ -1,0 +1,88 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>架构可达性测试报告.md · 离线归档</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/local.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">00_总览 / 架构可达性测试报告.md</span></header>
+<main class="doc"><h1>架构可达性测试报告</h1>
+<blockquote>目的：在继续实现前，先回答「<strong>是否有难以实现的架构</strong>」。 方法：只读探测（不登录、不提交凭据、间隔 2 秒）+ 静态资产自检 + 浏览器模型推断。 可复跑：<code>python3 tools/check_reachability.py</code>（默认<strong>不发任何网络请求</strong>； <code>--probe</code> 才做只读状态码探测，且不带任何账号信息）。</blockquote>
+<h2>〇、为什么「静态 Pages 直连洛谷写操作」不可达（原理详解）</h2>
+<p>先给结论：<strong>不是洛谷不能写，也不是网络不通，而是「第三方域下的网页 JS 不能以用户身份向另一个域发起带登录态的写请求」被浏览器模型禁止。</strong> 三层锁叠着，缺一层都还有办法绕，三层一起就死了。</p>
+<h3>锁 1 · 同源策略 / CORS：响应根本到不了 JS</h3>
+<p>页面在 <code>https://liuyiming2024.github.io/luogu/</code>，请求发往 <code>https://www.luogu.com/...</code>，<strong>协议+域名+端口不同 = 跨源</strong>。</p>
+<p>写操作（POST + JSON + 自定义 header）不是「简单请求」，浏览器会先发 <code>OPTIONS</code> <strong>预检</strong>，问洛谷：「允许我这个源吗？」洛谷不返回 <code>Access-Control-Allow-Origin: https://liuyiming2024.github.io</code>， 浏览器就<strong>直接把后续 POST 和响应一起丢掉</strong>。</p>
+<p>关键：JS 连「失败原因」都拿不到，只会看到一个笼统的 TypeError。 所以这不是「返回 403」，是<strong>请求压根没被允许发出 / 响应压根没交到 JS 手里</strong>。 （顺带区分：实测沙盒 curl 全 403 是*出口策略网关*默认拒绝，发生在更外层； 即使换成能出网的机器，锁 1 依然存在。）</p>
+<h3>锁 2 · HttpOnly + SameSite cookie：钥匙你摸不着</h3>
+<p>洛谷的登录态是一枚会话 cookie。就算对方愿意放行 CORS：</p>
+<ul><li><strong>HttpOnly</strong>：JS 的 <code>document.cookie</code> 读不到它，没法手动塞进</li></ul>
+<p><code>Authorization</code> 或自定义 header；只能靠浏览器自动带。</p>
+<ul><li><strong><code>credentials: &#x27;include&#x27;</code></strong> 能让浏览器自动带，但写请求还要洛谷返回</li></ul>
+<p><code>Access-Control-Allow-Credentials: true</code> 且 <code>Access-Control-Allow-Origin</code> 不能是 <code>*</code>（必须是精确源），第三方站拿不到。</p>
+<ul><li><strong>SameSite=Lax/Strict</strong>：在跨站子请求里，浏览器<strong>根本不会带上</strong>这枚 cookie。</li></ul>
+<p>所以「用用户的账号」这句话，在第三方域的 JS 里物理上做不到—— 钥匙在浏览器手里，但保安（同源策略）不让它交给外人。</p>
+<h3>锁 3 · CSRF token：就算混进去也验不过</h3>
+<p>洛谷页面里的 <code>csrf-token</code> 是服务端<strong>按当前会话渲染</strong>的，写在 HTML meta 里， 每次会话/有时每次请求都变。第三方静态页：</p>
+<ul><li>读不到洛谷页面里的 token（跨源读 HTML 同样被拦）；</li><li>就算拿到了，也无法保证和浏览器里那枚会话 cookie 对应；</li><li>写接口校验不通过 → 403/401。</li></ul>
+<h3>为什么 curl / 后端 / 扩展 / 洛谷自己的页面却可以</h3>
+<table class="tb"><thead><tr><th>执行端</th><th>为什么不受这三锁</th></tr></thead><tbody><tr><td>curl / Python 后端</td><td>不是浏览器，没有同源策略；cookie 由你手动管，token 自己取</td></tr><tr><td>浏览器扩展（host permissions）</td><td>扩展有声明过的跨域权限，可带 cookie</td></tr><tr><td><strong>洛谷域下自己开的页面</strong>（IDE / 文章页 / 提交页）</td><td>同源！cookie 自动带、token 就在本页 DOM 里</td></tr><tr><td>本机代理 / 自托管 runner</td><td>等价于后端，且持有用户个人的登录态</td></tr></tbody></table>
+<p><strong>一句话类比</strong>：你站在别人家门外（github.io），想用人家屋里的钥匙 （HttpOnly cookie）替人家开门办事；浏览器这个保安不允许钥匙出门。 但你<strong>自己走进屋里</strong>（打开 luogu.com 的 IDE/文章页）就随便用—— 这正是第 10 条「借洛谷 IDE」和第 9 条「评论推洛谷」能成立的原因。</p>
+<h3>精确措辞</h3>
+<blockquote>「架构级不可达」= <strong>第三方域静态 JS 无法以用户身份对洛谷发起写请求</strong>。 不等于「洛谷不可写」「评论推不了」「真编译做不了」。 换执行端（洛谷域页面 / 本机代理 / 扩展）后全部可达。</blockquote>
+<hr>
+<h2>一、实测证据</h2>
+<table class="tb"><thead><tr><th>检查</th><th>结果</th></tr></thead><tbody><tr><td><code>site_src/local.js</code> / <code>api/reference_server.py</code> 语法</td><td>OK</td></tr><tr><td>新 CSS 外链 / CDN</td><td>0 / 0</td></tr><tr><td>新 JS 外链</td><td>2 处，均为 <code>http://www.w3.org/2000/svg</code>（SVG 命名空间，不是网络请求）与设置框里的示例地址；CDN 0</td></tr><tr><td><strong>页面加载即发 fetch</strong></td><td><strong>0</strong>（唯一 fetch 在「探测可达性」按钮的点击回调里）</td></tr><tr><td>当前沙盒 curl 出口：<code>luogu.com/article</code> / <code>/api/user/login</code> / <code>luogu.me</code> / <code>github.io</code></td><td>全部 <strong>403</strong>，<code>HTTP/2 403</code> 且读不到 CORS 头</td></tr><tr><td>浏览器真编译条件</td><td>无 emscripten / WASM 工具链；浏览器内无 g++</td></tr><tr><td>Pages workflow 能力</td><td><code>setup-python</code> + <code>upload-pages-artifact</code> + <code>deploy-pages</code>，<strong>纯静态托管，无服务端进程</strong></td></tr></tbody></table>
+<h3>关于「全 403」的重要区分</h3>
+<p><strong>这不是站点挂了，也不是频率被限，是沙盒出口策略网关的默认拒绝</strong>（响应体 <code>No policy rule matched the request / policy_default_denied</code>）。同一时段：</p>
+<ul><li>GitHub Actions 出口取洛谷文章正文为 <strong>HTTP 200</strong>（<code>azdjstpm</code> 8836 字节，第 15 批实证）</li><li>另一读取通道读 <code>liuyiming2024.github.io/luogu/</code> 返回正常 HTML（87 篇）</li></ul>
+<p>所以结论是「<strong>当前这一端出不去</strong>」，不是「目标不可达」。架构因此必须把 <strong>取回</strong>放 Actions、<strong>推送</strong>放能出网且持有登录态的一端，而不是全塞进静态站。</p>
+<h2>二、三个真正的难点</h2>
+<h3>难点 1 · 静态 Pages 浏览器直推洛谷 —— 架构级不可达（硬障碍）</h3>
+<p>与新口径「评论持久化直接推洛谷」直接相关。<strong>与 403 无关</strong>，是浏览器模型决定：</p>
+<table class="tb"><thead><tr><th>障碍</th><th>说明</th></tr></thead><tbody><tr><td>跨源</td><td>Pages 域 <code>liuyiming2024.github.io</code> ≠ <code>www.luogu.com</code>，写操作触发 CORS preflight</td></tr><tr><td>响应头</td><td>洛谷不返回 <code>Access-Control-Allow-Origin: *</code>，浏览器阻断响应</td></tr><tr><td>凭据</td><td>登录态是 HttpOnly + SameSite cookie，跨站 <code>credentials: &#x27;include&#x27;</code> 带不过去</td></tr><tr><td>CSRF</td><td>页面 <code>csrf-token</code> 与会话绑定，静态页拿不到也用不了</td></tr></tbody></table>
+<p><strong>curl / 后端不受这四条限制，浏览器一定受。</strong> 所以「直接推洛谷」不能用 <code>fetch(&quot;https://www.luogu.com/...&quot;)</code> 实现。</p>
+<p><strong>落地形态（已实现）</strong>：</p>
+<pre class="code"><code>文章页写评论
+   ↓ 本地先存（localStorage，离线可看）→ state: 本地已存
+   ↓ 待推队列（显式开关 + 配置了 apiBase 才启用）
+   ↓ POST /api/comments/push-luogu   ← 交给「本机代理 / 自托管 runner / 浏览器扩展」
+   ↓ 该端持有用户个人账号登录态，低频、人工确认、可一键关闭
+   ↓ 洛谷文章评论区（权威持久层）
+   ↓ 回写 state: 已推洛谷 / 失败待重试</code></pre>
+<ul><li><strong>洛谷 = 权威持久层；本地 = 离线镜像 + 队列</strong>，不另建评论数据库</li><li>用<strong>用户个人账号</strong>；低频检索账号（本人持有的低频检索账号（凭据仅存 Settings Secrets / 本机））不参与评论</li><li>静态站代码里<strong>没有</strong>任何直接指向 luogu.com 的写请求</li><li>与「发文回推 luogu.com.cn」复用同一个适配器（<code>/api/publish</code>）</li></ul>
+<h3>难点 2 · 浏览器内真编译 —— 已按第 10 条降级为「可达」</h3>
+<p>原判断：静态站自身无 WASM / g++ / CPython，浏览器内真编译能力级不可达。 <strong>用户给出更优解</strong>：可以要求对方<strong>联网且已登录</strong>，用<strong>对方自己的账号</strong> 借<strong>洛谷 IDE</strong> 真编译。这把问题从「自己造编译器」变成「换执行端」， 与难点 1 的规避同构，而且更省事——不用自建 runner、不用打包 emscripten。</p>
+<p>落地形态（已实现）：</p>
+<pre class="code"><code>IDE 页写代码
+   ↓ 点「洛谷 IDE 真编译」/「提交洛谷评测」（先过第 11 条确认门）
+   ↓ 新窗口打开洛谷域下的 IDE / 题目页（同源！登录态自动生效）
+   ↓ 代码经剪贴板粘贴 → 由洛谷自己的 IDE 编译 / 评测
+   ↓ 静态站：不 fetch 洛谷、不读 cookie、不碰内部 API</code></pre>
+<ul><li>入口 URL 可在「设置」里按你所在网络自行确认（默认</li></ul>
+<p><code>https://www.luogu.com/ide</code>、提交页模板 <code>.../problem/{pid}</code>）； <strong>不编造洛谷内部 API</strong>，因为当前沙盒出口 403 无法实测真实路径</p>
+<ul><li><strong>局限如实说</strong>：新窗口打开 + 剪贴板是「人手动粘贴」，不是程序化一键提交；</li></ul>
+<p>若以后要全自动，仍需扩展 / 本机代理持有登录态，那是另一个执行端</p>
+<ul><li>离线兜底保留：库中 <code>site/data/judge_cases.json</code> 的 std 期望输出对照，</li></ul>
+<p>断网也能用（浏览器本身依然不编译）</p>
+<h3>难点 3 · 写操作风控 —— 可达但高风险</h3>
+<p>评论 / 发文 / 回推都是<strong>写操作</strong>，比 GET 更容易触发风控与封号。 沿用「别给我封了」：2.0~3.5s 抖动、每 20 次小憩、50 分钟窗口 / 15 分钟静默、 403/降级长退避 30 分钟、<strong>失败不轰炸重试</strong>、默认关闭、仅个人账号。</p>
+<h2>三之前 · 运行态自己加 / 自己下载（第 12 条）</h2>
+<p>「静态 Pages 没有服务端」<strong>不是障碍</strong>：壳只负责离线渲染，运行态由使用者自行添加或下载。 本仓库提供两种现成运行态，任选其一或并用：</p>
+<table class="tb"><thead><tr><th>运行态</th><th>谁提供</th><th>做什么</th></tr></thead><tbody><tr><td><strong>GitHub Actions runner</strong></td><td>GitHub</td><td><code>.github/workflows/submit_to_luogu.yml</code> 读取 <code>site/data/outbox/</code>，低频代提交 luogu；也可跑爬取 / 重生成</td></tr><tr><td><strong>本机脚本</strong></td><td>使用者自己下载</td><td><code>python3 tools/luogu_submit.py --dry-run</code>（或去掉 dry-run 真跑），凭据只在本机环境变量</td></tr><tr><td>洛谷自己的页面</td><td>洛谷</td><td>第 10 条：新窗口打开 IDE，登录态自然生效，代码走剪贴板（真编译）</td></tr></tbody></table>
+<h3>Action 代提交的安全门</h3>
+<pre class="code"><code>本地待推队列 → 「导出待推队列」→ site/data/outbox/*.json → push
+   → 手动 workflow_dispatch（confirm=I_UNDERSTAND_AND_ACCEPT_ALL_RISK、dry_run=false）
+   → runner 从 Settings Secrets 读 LUOGU_COOKIE / LUOGU_CSRF / LUOGU_UID
+   → 2.0~3.5s 抖动 / 每 20 次小憩 / 403·降级即停 / 失败不轰炸重试
+   → 回写状态并 commit</code></pre>
+<ul><li><strong>push / schedule 一律只预览</strong>，不碰洛谷；只有手动触发 + 确认值 + <code>dry_run=false</code> 才真提交</li><li>凭据<strong>不进仓库、不打印</strong>；端点按洛谷当前页面填 Secrets / Variables，<strong>不编造内部 API</strong></li><li>只处理 <code>confirmed=true</code> 的条目，这个标记来自前端第 11 条自担确认门</li><li>返回 <code>queued</code> 不谎报已提交；状态三态可核对</li></ul>
+<blockquote>这把「难点 1」从「必须用户端代理」收敛成「<strong>运行态可选、用户自己加</strong>」， 目标（评论/发文/IDE 提交到 luogu）不变，发请求的不再是静态页。</blockquote>
+<h2>三、不是架构障碍的几项</h2>
+<table class="tb"><thead><tr><th>项</th><th>判断</th></tr></thead><tbody><tr><td>全量 16 万篇题解</td><td>长期渐进，非一次搬完；<code>on: schedule</code> 自持爬取 + 断点续传已跑通</td></tr><tr><td>保存站刷新</td><td>无公开刷新接口（SPA 骨架 + 降级公告），做成可插拔 hook，不编造接口</td></tr><tr><td>在线取用户名/头像</td><td>出口 403 → 本地缓存 + 内联默认头像 + 三态颜色，已覆盖</td></tr><tr><td>Supabase / Webnote</td><td>free 版、契约就位；当前未授权，属于「待接入」而非「做不了」</td></tr><tr><td>两个本人差一个 i</td><td>配置问题，已原样并列登记</td></tr><tr><td>HTTP 200 的 503 错误页 / csrf 残留</td><td>第 16 批已修，属内容校验不属于架构</td></tr></tbody></table>
+<h2>四、结论</h2>
+<p><strong>有难以实现的架构，且只有一处是硬的</strong>：静态 Pages 不能自己直连洛谷做写操作 （CORS + HttpOnly/SameSite cookie + CSRF 三锁，见「〇」）。 规避方案明确、已落地为「本地队列 + 外部执行端」适配器，<strong>不需要改目标</strong>—— 评论依然直接推洛谷、依然是权威持久层，只是发请求的不是浏览器。</p>
+<p>按第 10 条，<strong>真编译已降级为可达</strong>：借洛谷 IDE、用用户个人账号、联网已登录， 新窗口 + 剪贴板，静态站不碰登录态。</p>
+<p>按第 11 条，<strong>风险归属已交给用户自己</strong>：所有写操作 / 借账号动作前弹确认门， 列明账号与平台痕迹，勾选 + 输入「我自担」才执行，本地留审计。 写操作风控仍保留低频、默认关闭、失败不轰炸作为默认保护，但责任由确认人承担。</p>
+<p>不阻塞交付。</p>
+<blockquote>诚实边界：本机代理 / 自托管 runner / 评测后端<strong>不在本仓库内运行</strong>， 仓库提供的是接口契约、参考实现与前端队列。需在你自己的网络里接上才生效。</blockquote>
+<h2>附 · 代提交链路的可复跑验证</h2>
+<p><code>python3 tools/verify_submit.py</code>（<strong>零外网</strong>，127.0.0.1 假端点）：</p>
+<ul><li><code>confirmed=false</code> 跳过；<code>true + dry-run</code> 只预览、零 POST、不改原条目</li><li><code>true + 假端点</code> POST 成功、状态回写「已提交」、<strong>无内部字段污染</strong></li><li>再跑一次 → 幂等，不重复 POST</li><li>全程脚本输出不打印 cookie</li></ul>
+<p>5 个检查点均配「反例」性质（false / 预览 / 已提交），不是只证明「跑过了」。</p></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>

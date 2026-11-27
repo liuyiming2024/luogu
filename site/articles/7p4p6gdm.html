@@ -1,0 +1,109 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P2615 · 7p4p6gdm · 题解归档</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/local.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">题解 / P2615 / 7p4p6gdm</span></header>
+<main class="article"><h1>P2615 <span class="lid">7p4p6gdm</span></h1>
+<div class="badge 甲">甲·已 hack</div>
+<table class="tb meta"><tbody>
+<tr><th>是否题解</th><td>是（题解文章（8 位 article 编号））</td></tr>
+<tr><th>归类</th><td>甲·已 hack</td></tr>
+<tr><th>批次</th><td>第13批</td></tr>
+<tr><th>可逐字验证</th><td>是</td></tr>
+<tr><th>判定备注</th><td>memset 误标「初始化x,y」，x/y 未赋值；n=1 期望 1 实际 0，官方样例 n=3 即挂；补 x=1;y=n/2+1 后 20 组全对</td></tr>
+<tr><th>原文地址</th><td><a href="https://www.luogu.com/article/7p4p6gdm" referrerpolicy="no-referrer" rel="noopener">https://www.luogu.com/article/7p4p6gdm</a> <span class="hint">（原文链接 · 点击跳转；离线时仅留来源）</span></td></tr>
+<tr><th>原文作者</th><td>Konnyaku</td></tr>
+<tr><th>归档 / 取回时间</th><td>2026-11-26 02:14:34 · 正文+代码块</td></tr>
+<tr><th>内容完整性签名</th><td><code>30e2537b2ba99bdd98dd7813d4093d77</code><span class="hint"> · sha256 内容校验值（非加密签名）</span></td></tr>
+</tbody></table>
+<h2>引用与署名</h2>
+<div class="src" style="border-left:3px solid var(--acc)"><p>Konnyaku. 《题解 P2615 【神奇的幻方】》. 洛谷, 原文: https://www.luogu.com/article/7p4p6gdm（本仓库归档于 2026-11-26 02:14:34，内容 sha256: 1ef4503e18ab6759，完整性签名: 30e2537b2ba99bdd98dd7813d4093d77）. 版权归原作者所有，仅作学术归档引用。</p>
+<p class="hint">版权归原作者及洛谷所有；本库仅作个人学习 / 学术研究的离线归档与校对留痕，不用于商业用途。每篇保留原文链接与作者署名；权利人可申请移除，详见《归档与版权声明》。 <a href="../reports/归档与版权声明.md.html">《归档与版权声明》</a></p></div>
+<h2>题解代码 · 逐字取回 + 最小外壳（4 份）</h2>
+<p class="hint">代码只是辅助：只补 include / main / 必要声明，缺头文件与页面吞字符不计缺陷，仅验核心逻辑。</p>
+<div class="src"><div class="srcname">r13__P2615_7p4p6gdm.cpp <span class="hint">· 编号精确匹配</span></div><pre class="code"><code>#include&lt;bits/stdc++.h&gt;
+using namespace std;
+int x, y;
+int main(){
+int n,a[40][40];
+cin&gt;&gt;n;
+memset(a,0,sizeof(a));//初始化x,y
+a[x][y]=1;
+for(int i=2;i&lt;=n*n;i++)
+{
+if(x==1&amp;&amp;y!=n) { x=n; y++; }
+else if(y==n&amp;&amp;x!=1) { y=1; x--; }
+else if(x==1&amp;&amp;y==n) { x++; y=y; }
+else if(x!=1&amp;&amp;y!=n) { if(a[x-1][y+1]==0) { x--; y++; } else { x++; y=y; } }
+a[x][y]=i;
+}
+for(int i=1;i&lt;=n;i++) { for(int j=1;j&lt;=n;j++) cout&lt;&lt;a[i][j]&lt;&lt;&quot; &quot;; cout&lt;&lt;endl; }
+return 0;
+}
+</code></pre></div>
+<div class="src"><div class="srcname">r13__P2615_7p4p6gdm_by_text.cpp <span class="hint">· 编号精确匹配</span></div><pre class="code"><code>#include&lt;bits/stdc++.h&gt;
+using namespace std;
+int x, y;
+int main(){
+int n,a[40][40];
+cin&gt;&gt;n;
+x=n/2+1; y=1;
+memset(a,0,sizeof(a));//初始化x,y
+a[x][y]=1;
+for(int i=2;i&lt;=n*n;i++)
+{
+if(x==1&amp;&amp;y!=n) { x=n; y++; }
+else if(y==n&amp;&amp;x!=1) { y=1; x--; }
+else if(x==1&amp;&amp;y==n) { x++; y=y; }
+else if(x!=1&amp;&amp;y!=n) { if(a[x-1][y+1]==0) { x--; y++; } else { x++; y=y; } }
+a[x][y]=i;
+}
+for(int i=1;i&lt;=n;i++) { for(int j=1;j&lt;=n;j++) cout&lt;&lt;a[i][j]&lt;&lt;&quot; &quot;; cout&lt;&lt;endl; }
+return 0;
+}
+</code></pre></div>
+<div class="src"><div class="srcname">r13__P2615_7p4p6gdm_fix.cpp <span class="hint">· 编号精确匹配</span></div><pre class="code"><code>#include&lt;bits/stdc++.h&gt;
+using namespace std;
+int x, y;
+int main(){
+int n,a[40][40];
+cin&gt;&gt;n;
+x=1; y=n/2+1;
+memset(a,0,sizeof(a));//初始化x,y
+a[x][y]=1;
+for(int i=2;i&lt;=n*n;i++)
+{
+if(x==1&amp;&amp;y!=n) { x=n; y++; }
+else if(y==n&amp;&amp;x!=1) { y=1; x--; }
+else if(x==1&amp;&amp;y==n) { x++; y=y; }
+else if(x!=1&amp;&amp;y!=n) { if(a[x-1][y+1]==0) { x--; y++; } else { x++; y=y; } }
+a[x][y]=i;
+}
+for(int i=1;i&lt;=n;i++) { for(int j=1;j&lt;=n;j++) cout&lt;&lt;a[i][j]&lt;&lt;&quot; &quot;; cout&lt;&lt;endl; }
+return 0;
+}
+</code></pre></div>
+<div class="src"><div class="srcname">r13__P2615_7p4p6gdm_local.cpp <span class="hint">· 编号精确匹配</span></div><pre class="code"><code>#include&lt;bits/stdc++.h&gt;
+using namespace std;
+int main(){
+int n,a[40][40],x,y;
+cin&gt;&gt;n;
+memset(a,0,sizeof(a));//初始化x,y
+a[x][y]=1;
+for(int i=2;i&lt;=n*n;i++)
+{
+if(x==1&amp;&amp;y!=n) { x=n; y++; }
+else if(y==n&amp;&amp;x!=1) { y=1; x--; }
+else if(x==1&amp;&amp;y==n) { x++; y=y; }
+else if(x!=1&amp;&amp;y!=n) { if(a[x-1][y+1]==0) { x--; y++; } else { x++; y=y; } }
+a[x][y]=i;
+}
+for(int i=1;i&lt;=n;i++) { for(int j=1;j&lt;=n;j++) cout&lt;&lt;a[i][j]&lt;&lt;&quot; &quot;; cout&lt;&lt;endl; }
+return 0;
+}
+</code></pre></div>
+<h2>复现</h2><pre class="code"><code>g++ -std=c++17 -O2 -o /tmp/t 04_复现代码/&lt;对应文件&gt;
+echo &quot;&lt;题面内输入&gt;&quot; | /tmp/t</code></pre>
+<h2>相关报告</h2><ul class="links">
+<li><a href="../reports/洛谷题解逐篇hack清单_第13批.md.html">洛谷题解逐篇hack清单_第13批.md</a></li>
+<li><a href="../reports/三类口径与累计统计.md.html">三类口径与自查纪律</a></li>
+</ul></main><footer><div class="wrap">纯离线静态页 · 无外部资源 · 无网络请求 · 原文版权归作者所有 · 版权归原作者及洛谷所有；本库仅作个人学习 / 学术研究的离线归档与校对留痕， … <a href="../reports/归档与版权声明.md.html">声明</a></div></footer><script src="../assets/local.js"></script></body></html>

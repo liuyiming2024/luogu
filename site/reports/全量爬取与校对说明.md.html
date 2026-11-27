@@ -1,0 +1,99 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>全量爬取与校对说明.md · 离线归档</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/local.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">02_文章编号索引 / 全量爬取与校对说明.md</span></header>
+<main class="doc"><h1>全量公开资料汇集与校对 · 架构说明</h1>
+<blockquote>目标（你的原话）：<strong>把洛谷的所有公开题面、公开题解、有用的学术文章都汇集进这个库，并且都做校对</strong>； 保存站内容可更新，爬之前先刷新一下让它重新从洛谷抓，或直接爬洛谷； 写一个大脚本做枚举与爬取、实时写回仓库、一直跑； 但不要恒定 2 秒太明显，比如每隔一个小时停上十分钟。</blockquote>
+<p>这份文档说明<strong>怎么落地</strong>、<strong>能到什么程度</strong>、<strong>哪些必须如实说清</strong>。</p>
+<hr>
+<h2>1. 先说清三件不能假装的事</h2>
+<ol><li><strong>全量是长期渐进，不是一次交付。</strong> 洛谷公开题解约 16 万篇量级（保存站帮助页曾提到归档 163139 篇文章），</li></ol>
+<p>题面数万。当前仓库是 <strong>87 个编号 / 96 篇逐篇验证</strong>。脚本是「一直跑、越攒越全」的架构， 不是「今晚搬完」。</p>
+<ol><li><strong>全量自动判甲/乙/丙不可行。</strong> 三类判定需要<strong>每题写独立正确解 + 对拍 + 变异版敏感性检查</strong>，</li></ol>
+<p>这是逐批人工/半自动的活。脚本能做的是 L0/L1 自动校对并把条目送进 <strong>L2 待对拍队列</strong>， 不越权替你下结论。</p>
+<ol><li><strong>沙盒里不能真的「一直跑」。</strong> 后台进程在工具调用之间会被回收（第 15 批实测过）。</li></ol>
+<p>现已按「爬取放在那边」把<strong>爬取主路径改到 GitHub Actions</strong>：<code>crawl_tick.yml</code> 每天 4 次错峰 tick（随机起步 + 抖动 + 降级即停），正文直接 commit 回仓库； 本地 <code>crawl_daemon.py --forever</code> 保留为可选补强，不再是必需。 <strong>对拍放本地</strong>（<code>tools/verify_pipeline.py</code>），<strong>网页放 Pages</strong>（<code>pages.yml</code>）。</p>
+<hr>
+<h2>2. 大脚本：<code>tools/crawl_daemon.py</code></h2>
+<p>一个文件把「枚举 → 取回 → 校对 → 落盘 → 实时 push → 休息」串成闭环，断点续传。</p>
+<h3>2.1 有序枚举（不是遍历编号空间）</h3>
+<table class="tb"><thead><tr><th>来源</th><th>入队方式</th><th>说明</th></tr></thead><tbody><tr><td>公开题面</td><td><code>--seed-problems 1000:1200</code></td><td><strong>P 号顺序推进</strong>，这才是「枚举 = 有序」</td></tr><tr><td>题解（已知）</td><td>主表里 <code>可逐字验证 != 是</code> 的条目，按题号升序</td><td>也可 <code>--lids a,b,c</code> 显式给</td></tr><tr><td>题解（新发现）</td><td>从已取回正文里正则提取 <code>/article/&lt;8位&gt;</code>，<strong>BFS</strong> 入队，深度上限 <code>--max-depth 2</code></td><td>有序发现，不猜 ID</td></tr><tr><td>学术/规范文章</td><td>8 位 ID 但无代码块、含「题解审核规范 / 算法 / 证明 / 专栏」等判据</td><td>单独归类存证</td></tr></tbody></table>
+<p><strong>绝不遍历 36⁸ 编号空间</strong>、不并发、不登录、不提交题解、不刷保存 API。 <code>site/data/crawl_state.json</code> 存 <code>seen / queue / failed / 进度游标</code>，重跑接着上次走。</p>
+<h3>2.2 保存站刷新（可插拔，不编造接口）</h3>
+<p>你说「保存站内容可以更新，爬之前先刷新一下」。落地方式：</p>
+<ul><li>每个运行窗口<strong>开始时</strong>调一次 hook：<code>--refresh-url &lt;入口&gt;</code> 或 <code>--refresh-cmd &quot;&lt;命令&gt;&quot;</code></li><li><strong>保存站没有公开刷新 API</strong>：实测首页只有导航 + 「近期有大量 AI 自动化程序不断请求保存 API,导致队列堵塞」降级公告，</li></ul>
+<p><code>/article</code>、<code>/articles</code>、<code>/square</code>、<code>/search</code>、<code>/statistics</code> 全是 SPA 骨架，直连全 403 <code>policy_default_denied</code></p>
+<ul><li>所以<strong>不臆造接口路径</strong>；若你手上有刷新入口就注入，刷新失败也不阻塞主流程，</li></ul>
+<p><strong>默认直接爬 <code>www.luogu.com</code></strong>（你说的「或者你直接爬洛谷」）</p>
+<ul><li><code>--base</code> 可切保存站：<code>--base &#x27;https://www.luogu.me/article/{lid}&#x27;</code></li></ul>
+<h3>2.3 节奏：跑 50 分钟 / 歇 10 分钟（不恒定 2 秒）</h3>
+<table class="tb"><thead><tr><th>参数</th><th>默认</th><th>作用</th></tr></thead><tbody><tr><td><code>--run-minutes</code> / <code>--rest-minutes</code></td><td><code>50</code> / <code>10</code></td><td><strong>每个小时歇十分钟</strong>，窗口结束静默后再开新窗口</td></tr><tr><td><code>--delay</code> / <code>--jitter</code></td><td><code>2.0</code> / <code>1.5</code></td><td>每次间隔在 <strong>2.0~3.5 秒随机抖动</strong>，不是固定 2 秒</td></tr><tr><td><code>--micro-batch</code> / <code>--micro-rest</code></td><td><code>20</code> / <code>30s</code></td><td>每 20 次请求小憩 ~30 秒（带 ±30% 抖动）</td></tr><tr><td><code>--daily-cap</code></td><td><code>2000</code></td><td>每日总请求上限，到点提前收工</td></tr><tr><td><code>--cooldown</code></td><td><code>1800</code></td><td>403/429/5xx/降级公告 → 长退避 30 分钟、本窗口提前结束</td></tr><tr><td><code>--max-hours</code> / <code>--max-requests</code></td><td><code>0</code>(不限)</td><td>总时长 / 总请求上限</td></tr></tbody></table>
+<p>即：不是匀速爬，是「有抖动的小批 + 微憩 + 整段休息」。固定 UA、单并发， 命中「服务降级公告 / Request denied / 队列堵塞」立即停本轮，不给站点添负担。</p>
+<h3>2.4 实时写回仓库</h3>
+<ul><li>每 <code>--push-every 10</code> 篇<strong>或</strong>每 <code>--push-interval 600</code> 秒：<code>git add → commit → pull --rebase → push</code></li><li>写回内容：<code>site/data/ingested/&lt;id&gt;.json</code>（正文）、<code>crawl_state.json</code>、</li></ul>
+<p><code>取回日志.jsonl</code>、<code>校对台账.csv</code>、<code>爬取进度.md</code>、<code>verify_queue.jsonl</code></p>
+<ul><li>token 只从环境变量 <code>GITHUB_TOKEN</code> 读，<strong>不进仓库、不写 <code>.git/config</code></strong></li><li>每个窗口结束重生成 <code>_build_site.py</code>（选择性清理，不会删 ingested 与常驻脚本）</li><li><code>concurrency</code> 组保证同一时刻只有一个 crawl run</li></ul>
+<hr>
+<h2>3. 校对分三层</h2>
+<table class="tb"><thead><tr><th>层</th><th>做什么</th><th>自动？</th></tr></thead><tbody><tr><td><strong>L0 编目判定</strong></td><td>8 位 ID 格式、是否题解 / 题面 / 学术规范文章、题号与 URL 一致、SPA 骨架识别</td><td>✅</td></tr><tr><td><strong>L1 内容校对</strong></td><td>代码块提取（<code>&lt;pre&gt;</code>）、sha256 去重留证、可选 <code>-fsyntax-only</code> 编译预检（CE 只登记、<strong>不算 hack</strong>）、证据落盘</td><td>✅</td></tr><tr><td><strong>L2 三类判定</strong></td><td>写进 <code>site/data/verify_queue.jsonl</code>，等逐批「独立正确解 + 对拍 + 变异版敏感性检查」后定甲/乙/丙</td><td>❌ 排队，不越权</td></tr></tbody></table>
+<p><code>02_文章编号索引/校对台账.csv</code> 每条都带 L0/L1 结果、sha256、证据路径、L2 状态， 离线也能查「这条有没有被核过、凭什么」。</p>
+<p>题面页会摘录「题目描述 / 输入格式 / 说明·数据范围」进索引， 正是后续对拍判断<strong>反例是否合规</strong>（题面内）的依据——这是「校对」里最值钱的一层。</p>
+<hr>
+<h2>4. Actions 是自主主路径（不需要人工触发）</h2>
+<blockquote><strong>2026-11-25 更正</strong>：仓库已由私有改为<strong>公开</strong>。官方计费文档明确 「标准 GitHub 托管运行器在公共仓库中免费、不计分钟」，私有仓库 GitHub Free 的 2000 分钟/月额度<strong>不再适用</strong>。此前「50 分钟/小时会烧光额度」 的估算是私有口径，已作废。</blockquote>
+<table class="tb"><thead><tr><th>项</th><th>现在的配置</th></tr></thead><tbody><tr><td>触发</td><td><code>on: schedule</code> —— GitHub 自己的调度器，<strong>不看对话、不需要我或你按 dispatch</strong></td></tr><tr><td>频率</td><td>每 2 小时一个错峰窗口（UTC 奇数小时第 23 分，避开整点高负载）</td></tr><tr><td>窗口</td><td>随机起步 0~150s → 45 分钟爬取 → 窗口间天然静默 15 分钟</td></tr><tr><td>单次上限</td><td>200 请求；每日 2000 请求硬上限；403/降级长退避 30 分钟</td></tr><tr><td>断点续传</td><td><code>site/data/crawl_state.json</code>，丢一次 run 也不丢进度</td></tr><tr><td>实时写回</td><td>每 50 篇或窗口末 commit + push，重生成署名与离线站</td></tr><tr><td>队列自续</td><td>主表无正文题解按题号升序补入；题面连续骨架降为每轮 1 个探测</td></tr></tbody></table>
+<p><strong>仍然存在的平台限制</strong>（不是钱的问题）：单个 runner 是临时 VM，job 结束即销毁； 单 job 最长 6 小时；<code>GITHUB_TOKEN</code> 最多 24 小时；<code>schedule</code> 最短每 5 分钟一次， 高负载时可能延迟甚至<strong>丢弃</strong>某次 run（官方建议错开整点）；公开仓库 60 天无 「仓库活动」会自动禁用 schedule，且 cron 自身运行不算活动。</p>
+<p>对应加固：</p>
+<ul><li><code>crawl_tick.yml</code> 的「有效产出校验」步骤：job 全绿但全部只拿到 SPA 骨架时会</li></ul>
+<p>写 <code>::warning::</code> 并留痕，杜绝第 1 次那种「静默空转」</p>
+<ul><li><code>.github/workflows/keepalive.yml</code>：每周一次极小提交刷新活动时钟，防止 60 天后</li></ul>
+<p>定时工作流被静默关掉</p>
+<ul><li><code>concurrency</code> 组保证同一时刻只有一个爬取 job，不打断正在写回的进程</li><li>丢一次 run 无所谓：state 断点续传，下一个窗口接着队列走</li></ul>
+<p><code>tools/crawl_daemon.py --forever</code>（跑 50 / 歇 10）保留为<strong>可选补强</strong>： 在你自己的机器上它才是真正的常驻进程，不受 6 小时上限与 cron 抖动影响。 但<strong>不再必需</strong>——没人盯着时，Actions 这条链自己会跑。</p>
+<h2>5. 怎么开始</h2>
+<pre class="code"><code># 1) 冒烟（不发包、不推送，验证状态机）
+python3 tools/crawl_daemon.py --dry-run --max-requests 3 --run-minutes 1 --rest-minutes 0
+
+# 2) 本地长期跑：50 分钟跑 / 10 分钟歇，P1000 起顺序灌 200 个题面
+export GITHUB_TOKEN=你的token
+python3 tools/crawl_daemon.py --forever \
+    --seed-problems 1000:1200 \
+    --delay 2.0 --jitter 1.5 \
+    --push-every 10
+
+# 3) 如果有保存站刷新入口
+python3 tools/crawl_daemon.py --forever \
+    --refresh-url &#x27;https://你的刷新入口&#x27; \
+    --base &#x27;https://www.luogu.me/article/{lid}&#x27;
+
+# 4) 随时看进度
+cat 02_文章编号索引/爬取进度.md
+python3 _build_site.py &amp;&amp; 双击 site/index.html</code></pre>
+<p>闭环：</p>
+<pre class="code"><code>Actions 错峰 tick（随机起步 + 抖动 + 降级即停）
+  → 有序队列（P号顺序 / 主表待补 / 正文 BFS 发现 ID）
+  → L0 判定 + L1 校对留证 + L2 排队
+  → 每10篇实时 commit/push 回仓库
+  → 每窗口重生成离线站
+  → 本地 tools/verify_pipeline.py 消费 verify_queue.jsonl 做三类对拍
+  → 结果写回 article_index.csv / 批次报告 / 站点</code></pre>
+<hr>
+<h2>6. 与其他文档的关系</h2>
+<ul><li><code>保存站可用性记录.md</code> —— 为什么刷新接口不编造、为什么直连 403</li><li><code>编号池_待取回.md</code> —— 有序补录流程（单篇手动版）</li><li><code>GitHubActions爬取说明.md</code> —— 第 15 批的手动 dispatch 探针</li><li><code>00_总览/三类口径与累计统计.md</code> —— 三类判据与累计，L2 必须服从它</li><li><code>_build_site.py</code> —— 离线保存站生成器（选择性清理，保护 ingested）</li></ul>
+<h2>7. 公开、版权与署名（2026-11-24 追加）</h2>
+<p>仓库已按归档者意见改为<strong>公开</strong>并上线 GitHub Pages 归档库网页。 每条收录内容由 <code>tools/provenance.py</code> 生成<strong>原文链接 / 作者署名 / 取回时间 / sha256 内容完整性签名 / 可复制引用格式</strong>，渲染进每篇文章页的「引用与署名」块。 <code>pages.yml</code> 部署前会校验「署名条目数 == 收录总数」且无缺项。 版权归原作者及洛谷所有，不用于商业用途，权利人可申请移除； 详见 <code>00_总览/归档与版权声明.md</code>。</p>
+<h2>8. 审查与防回归（第 16 批追加）</h2>
+<p>爬取链自动化之后，风险从「跑不跑」变成「跑出来的东西对不对」。<code>tools/verify_infra.py</code> 提供两层校验，<strong>不发网络请求、全用受控夹具</strong>：</p>
+<ul><li><strong>Part A 逐篇审查</strong> <code>site/data/ingested/</code>：原文链接、代码块可提取、sha 唯一、</li></ul>
+<p>csrf/凭据/邮箱残留、503 错误页与 SPA 骨架不得存档、provenance 署名与签名覆盖</p>
+<ul><li><strong>Part B 类对拍</strong>：13 个检查点，每个同时跑真实实现与变异实现，</li></ul>
+<p><strong>变异没被抓到即判空跑</strong>（与题解对拍同一纪律）</p>
+<p><code>pages.yml</code> 在部署前执行 <code>python3 tools/verify_infra.py --check</code>，失败即阻断部署。 报告：<code>02_文章编号索引/基础设施审查与验证报告.md</code>； 机器可读：<code>05_对拍原始数据/基础设施验证结果.json</code>。</p>
+<h3>本轮实际修掉的三个真问题</h3>
+<ol><li><strong>匿名页面令牌</strong>：洛谷页面带一次性 <code>csrf-token</code> meta，公开仓库不该留。</li></ol>
+<p>取回即 <code>sanitize_body()</code>，历史 85 篇回填；正文与 <code>&lt;pre&gt;</code> 逐字不动。</p>
+<ol><li><strong>只认 C++ 的判定</strong>：Python / Pascal / 伪代码题解被归成「学术/题解文字」。</li></ol>
+<p><code>extract_code()</code> 改为先取 <code>&lt;pre&gt;</code> 再按多语言特征判定。</p>
+<ol><li><strong>HTTP 200 不等于正文</strong>：限流时洛谷返回 200 + 「503 - 洛谷日爆」错误页，</li></ol>
+<p>旧逻辑当题面存档了 5 份。503 特征进 <code>STOP_MARKERS</code>，命中长退避。</p>
+<blockquote>纪律：<strong>状态码、job 是否变绿、文案里有没有「已移除」，都不能当作内容正确的证据</strong>； 必须看响应体本身。</blockquote></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer><script src="../assets/local.js"></script></body></html>

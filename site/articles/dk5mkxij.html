@@ -1,0 +1,103 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P1421 · dk5mkxij · 题解归档</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/local.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">题解 / P1421 / dk5mkxij</span></header>
+<main class="article"><h1>P1421 <span class="lid">dk5mkxij</span></h1>
+<div class="badge 甲">甲·已 hack</div>
+<table class="tb meta"><tbody>
+<tr><th>是否题解</th><td>是（题解文章（8 位 article 编号））</td></tr>
+<tr><th>归类</th><td>甲·已 hack</td></tr>
+<tr><th>批次</th><td>第7批</td></tr>
+<tr><th>可逐字验证</th><td>是</td></tr>
+<tr><th>判定备注</th><td>double 累减边界，全枚举 2031 组 WA</td></tr>
+<tr><th>原文地址</th><td><a href="https://www.luogu.com/article/dk5mkxij" referrerpolicy="no-referrer" rel="noopener">https://www.luogu.com/article/dk5mkxij</a> <span class="hint">（原文链接 · 点击跳转；离线时仅留来源）</span></td></tr>
+<tr><th>原文作者</th><td>ZYB_001</td></tr>
+<tr><th>归档 / 取回时间</th><td>2026-11-25 17:59:52 · 正文+代码块</td></tr>
+<tr><th>内容完整性签名</th><td><code>2dfb89794de7e971ba5a27d6f442a4df</code><span class="hint"> · sha256 内容校验值（非加密签名）</span></td></tr>
+</tbody></table>
+<h2>引用与署名</h2>
+<div class="src" style="border-left:3px solid var(--acc)"><p>ZYB_001. 《简单易懂题解 P1421 【小玉买文具】》. 洛谷, 原文: https://www.luogu.com/article/dk5mkxij（本仓库归档于 2026-11-25 17:59:52，内容 sha256: b517169daa4ac7ac，完整性签名: 2dfb89794de7e971ba5a27d6f442a4df）. 版权归原作者所有，仅作学术归档引用。</p>
+<p class="hint">版权归原作者及洛谷所有；本库仅作个人学习 / 学术研究的离线归档与校对留痕，不用于商业用途。每篇保留原文链接与作者署名；权利人可申请移除，详见《归档与版权声明》。 <a href="../reports/归档与版权声明.md.html">《归档与版权声明》</a></p></div>
+<h2>题解代码 · 逐字取回 + 最小外壳（4 份）</h2>
+<p class="hint">代码只是辅助：只补 include / main / 必要声明，缺头文件与页面吞字符不计缺陷，仅验核心逻辑。</p>
+<div class="src"><div class="srcname">build__r7__a_p1421_enum.cpp <span class="hint">· 按题号关联</span></div><pre class="code"><code>
+#include &lt;bits/stdc++.h&gt;
+using namespace std;
+// 题解拼装版（逐字段）
+int solve_sol(int A,int B){
+    double a,b; int sum=0;
+    a=A; b=B;
+    b=b/10;
+    a=a+b;
+    while(a&gt;=1.9){ a=a-1.9; sum++; }
+    return sum;
+}
+// 独立正确解：全部换算成角，整数除法
+int solve_ok(int A,int B){ return (A*10+B)/19; }
+int main(){
+    int total=0,bad=0; vector&lt;string&gt; ex;
+    for(int A=0;A&lt;=10000;A++) for(int B=0;B&lt;=9;B++){
+        total++;
+        int s=solve_sol(A,B), o=solve_ok(A,B);
+        if(s!=o){ bad++; if((int)ex.size()&lt;12){ char buf[128]; sprintf(buf,&quot;%d %d -&gt; sol=%d ok=%d&quot;,A,B,s,o); ex.push_back(buf); } }
+    }
+    printf(&quot;A|total=%d|bad=%d\n&quot;,total,bad);
+    for(auto &amp;e:ex) printf(&quot;A|%s\n&quot;,e.c_str());
+    return 0;
+}
+</code></pre></div>
+<div class="src"><div class="srcname">build__r7__a_p1421_eps.cpp <span class="hint">· 按题号关联</span></div><pre class="code"><code>
+#include &lt;bits/stdc++.h&gt;
+using namespace std;
+// 题解拼装版（逐字段）
+int solve_sol(int A,int B){
+    double a,b; int sum=0;
+    a=A; b=B;
+    b=b/10;
+    a=a+b;
+    while(a&gt;=1.9-1e-9){ a=a-1.9; sum++; }
+    return sum;
+}
+// 独立正确解：全部换算成角，整数除法
+int solve_ok(int A,int B){ return (A*10+B)/19; }
+int main(){
+    int total=0,bad=0; vector&lt;string&gt; ex;
+    for(int A=0;A&lt;=10000;A++) for(int B=0;B&lt;=9;B++){
+        total++;
+        int s=solve_sol(A,B), o=solve_ok(A,B);
+        if(s!=o){ bad++; if((int)ex.size()&lt;12){ char buf[128]; sprintf(buf,&quot;%d %d -&gt; sol=%d ok=%d&quot;,A,B,s,o); ex.push_back(buf); } }
+    }
+    printf(&quot;A|total=%d|bad=%d\n&quot;,total,bad);
+    for(auto &amp;e:ex) printf(&quot;A|%s\n&quot;,e.c_str());
+    return 0;
+}
+</code></pre></div>
+<div class="src"><div class="srcname">build__r7__d_P1421_int_ref.cpp <span class="hint">· 按题号关联</span></div><pre class="code"><code>
+#include&lt;bits/stdc++.h&gt;
+using namespace std;
+int main(){ int a,b,c,sum; cin&gt;&gt;a&gt;&gt;b; sum=a*10+b; c=sum/19; cout&lt;&lt;c; return 0; }
+</code></pre></div>
+<div class="src"><div class="srcname">build__r7__p1421_real.cpp <span class="hint">· 按题号关联</span></div><pre class="code"><code>
+#include &lt;bits/stdc++.h&gt;
+using namespace std;
+int main(){
+ double a,b;
+ int sum=0;
+ cin&gt;&gt;a&gt;&gt;b;
+ b=b/10;
+ a=a+b;
+ while(a&gt;=1.9){ a=a-1.9; sum++; }
+ cout&lt;&lt;sum&lt;&lt;endl;
+ return 0;
+}
+</code></pre></div>
+<h2>甲类合法反例（题面内 · 确定性 WA/RE）</h2>
+<table class="tb"><thead><tr><th>编号</th><th>题解</th><th>代表输入</th><th>期望 → 实际</th></tr></thead><tbody>
+<tr><td>H-011/012/013</td><td>P1421 <code>dk5mkxij</code></td><td><code>7 6</code> / <code>19 0</code> / <code>20 9</code></td><td><code>4</code> / <code>10</code> / <code>11</code> → <code>3</code> / <code>9</code> / <code>10</code></td></tr>
+</tbody></table>
+<h2>复现</h2><pre class="code"><code>g++ -std=c++17 -O2 -o /tmp/t 04_复现代码/&lt;对应文件&gt;
+echo &quot;&lt;题面内输入&gt;&quot; | /tmp/t</code></pre>
+<h2>相关报告</h2><ul class="links">
+<li><a href="../reports/洛谷题解逐篇hack清单_第7批.md.html">洛谷题解逐篇hack清单_第7批.md</a></li>
+<li><a href="../reports/三类口径与累计统计.md.html">三类口径与自查纪律</a></li>
+</ul></main><footer><div class="wrap">纯离线静态页 · 无外部资源 · 无网络请求 · 原文版权归作者所有 · 版权归原作者及洛谷所有；本库仅作个人学习 / 学术研究的离线归档与校对留痕， … <a href="../reports/归档与版权声明.md.html">声明</a></div></footer><script src="../assets/local.js"></script></body></html>

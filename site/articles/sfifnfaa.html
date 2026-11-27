@@ -1,0 +1,136 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P1002 · sfifnfaa · 题解归档</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/local.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">题解 / P1002 / sfifnfaa</span></header>
+<main class="article"><h1>P1002 <span class="lid">sfifnfaa</span></h1>
+<div class="badge 甲">甲·已 hack</div>
+<table class="tb meta"><tbody>
+<tr><th>是否题解</th><td>是（题解文章（8 位 article 编号））</td></tr>
+<tr><th>归类</th><td>甲·已 hack</td></tr>
+<tr><th>批次</th><td>第1批</td></tr>
+<tr><th>可逐字验证</th><td>是</td></tr>
+<tr><th>判定备注</th><td>过河卒 dp[0][0] 被自身覆盖，整表恒零</td></tr>
+<tr><th>原文地址</th><td><a href="https://www.luogu.com/article/sfifnfaa" referrerpolicy="no-referrer" rel="noopener">https://www.luogu.com/article/sfifnfaa</a> <span class="hint">（原文链接 · 点击跳转；离线时仅留来源）</span></td></tr>
+<tr><th>原文作者</th><td>yangmengcheng1103</td></tr>
+<tr><th>归档 / 取回时间</th><td>2026-11-25 07:51:11 · 正文+代码块</td></tr>
+<tr><th>内容完整性签名</th><td><code>ea5d85abe6ef63511056b33981e167a8</code><span class="hint"> · sha256 内容校验值（非加密签名）</span></td></tr>
+</tbody></table>
+<h2>引用与署名</h2>
+<div class="src" style="border-left:3px solid var(--acc)"><p>yangmengcheng1103. 《P1002 [NOIP2002 普及组] 过河卒（题解）》. 洛谷, 原文: https://www.luogu.com/article/sfifnfaa（本仓库归档于 2026-11-25 07:51:11，内容 sha256: fb9fc5e4846e32d7，完整性签名: ea5d85abe6ef63511056b33981e167a8）. 版权归原作者所有，仅作学术归档引用。</p>
+<p class="hint">版权归原作者及洛谷所有；本库仅作个人学习 / 学术研究的离线归档与校对留痕，不用于商业用途。每篇保留原文链接与作者署名；权利人可申请移除，详见《归档与版权声明》。 <a href="../reports/归档与版权声明.md.html">《归档与版权声明》</a></p></div>
+<h2>题解代码 · 逐字取回 + 最小外壳（4 份）</h2>
+<p class="hint">代码只是辅助：只补 include / main / 必要声明，缺头文件与页面吞字符不计缺陷，仅验核心逻辑。</p>
+<div class="src"><div class="srcname">build__P1002_sfifnfaa.cpp <span class="hint">· 编号精确匹配</span></div><pre class="code"><code>
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+int countPaths(int n, int m, int horse_x, int horse_y) {
+    vector&lt;vector&lt;int&gt;&gt; dp(n+1, vector&lt;int&gt;(m+1, 0));
+    dp[0][0] = 1;
+
+    for (int i = 0; i &lt;= n; i++) {
+        for (int j = 0; j &lt;= m; j++) {
+            if ((i-2 == horse_x &amp;&amp; j-1 == horse_y) || (i-1 == horse_x &amp;&amp; j-2 == horse_y)) {
+                dp[i][j] = 0;
+            } else {
+                dp[i][j] = (i &gt; 0 ? dp[i-1][j] : 0) + (j &gt; 0 ? dp[i][j-1] : 0);
+            }
+        }
+    }
+
+    return dp[n][m];
+}
+
+int main() {
+    int n, m, horse_x, horse_y;
+    cin &gt;&gt; n &gt;&gt; m &gt;&gt; horse_x &gt;&gt; horse_y;
+
+    int paths = countPaths(n, m, horse_x, horse_y);
+    cout &lt;&lt; paths &lt;&lt; endl;
+
+    return 0;
+}
+</code></pre></div>
+<div class="src"><div class="srcname">build__r2__P1002_vis.cpp <span class="hint">· 按题号关联</span></div><pre class="code"><code>
+#include &lt;bits/stdc++.h&gt;
+using namespace std;
+const int maxn=210;
+long long dp[maxn][maxn];
+int n,m,a,b;
+bool vis[maxn][maxn];
+const int x[]={0,-2,-1,1,2,2,1,-1,-2};
+const int y[]={0,1,2,2,1,-1,-2,-2,-1};
+int main(){
+ memset(vis,true,sizeof(vis));
+ cin&gt;&gt;n&gt;&gt;m&gt;&gt;a&gt;&gt;b;
+ n+=2,m+=2,a+=2,b+=2;
+ for(int i=1;i&lt;=8;i++){ vis[a+x[i]][b+y[i]]=false; }
+ vis[a][b]=false;
+ dp[2][1]=1;
+ for(int i=2;i&lt;=n;i++){
+  for(int j=2;j&lt;=m;j++){
+   if(vis[i][j]){ dp[i][j]=dp[i-1][j]+dp[i][j-1]; }
+  }
+ }
+ cout&lt;&lt;dp[n][m]&lt;&lt;endl;
+ return 0;
+}
+</code></pre></div>
+<div class="src"><div class="srcname">build__r4__p1002_rolling.cpp <span class="hint">· 按题号关联</span></div><pre class="code"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+int a,b,n,m;
+long long f[23];
+bool ma[23][23];
+void work(long long x,long long y){
+ ma[x][y]=true; ma[x-1][y-2]=true; ma[x-2][y-1]=true; ma[x-2][y+1]=true;
+ ma[x-1][y+2]=true; ma[x+1][y-2]=true; ma[x+2][y-1]=true;
+ ma[x+2][y+1]=true; ma[x+1][y+2]=true;
+}
+int main(){
+ cin&gt;&gt;n&gt;&gt;m&gt;&gt;a&gt;&gt;b; a+=2; b+=2; n+=2; m+=2; work(a,b);
+ f[2]=1;
+ for(int i=2;i&lt;=n;i++) for(int j=2;j&lt;=m;j++){
+  if(i==2&amp;&amp;j==2)continue;
+  if(!ma[i][j])f[j]+=f[j-1]; else f[j]=0;
+ }
+ cout&lt;&lt;f[m];
+ return 0;
+}
+</code></pre></div>
+<div class="src"><div class="srcname">build__r4__p1002_rolling_wide.cpp <span class="hint">· 按题号关联</span></div><pre class="code"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+int a,b,n,m;
+long long f[23];
+bool ma[27][27];
+void work(long long x,long long y){
+ ma[x][y]=true; ma[x-1][y-2]=true; ma[x-2][y-1]=true; ma[x-2][y+1]=true;
+ ma[x-1][y+2]=true; ma[x+1][y-2]=true; ma[x+2][y-1]=true;
+ ma[x+2][y+1]=true; ma[x+1][y+2]=true;
+}
+int main(){
+ cin&gt;&gt;n&gt;&gt;m&gt;&gt;a&gt;&gt;b; a+=2; b+=2; n+=2; m+=2; work(a,b);
+ f[2]=1;
+ for(int i=2;i&lt;=n;i++) for(int j=2;j&lt;=m;j++){
+  if(i==2&amp;&amp;j==2)continue;
+  if(!ma[i][j])f[j]+=f[j-1]; else f[j]=0;
+ }
+ cout&lt;&lt;f[m];
+ return 0;
+}
+</code></pre></div>
+<h2>甲类合法反例（题面内 · 确定性 WA/RE）</h2>
+<table class="tb"><thead><tr><th>编号</th><th>题解</th><th>代表输入</th><th>期望 → 实际</th></tr></thead><tbody>
+<tr><td>H-001~003</td><td>P1002 <code>sfifnfaa</code></td><td><code>6 6 3 3</code> / <code>20 20 0 20</code> / <code>20 20 10 10</code></td><td><code>6</code> / <code>137846521561</code> / <code>21388094780</code> → 均 <code>0</code></td></tr>
+</tbody></table>
+<h2>复现</h2><pre class="code"><code>g++ -std=c++17 -O2 -o /tmp/t 04_复现代码/&lt;对应文件&gt;
+echo &quot;&lt;题面内输入&gt;&quot; | /tmp/t</code></pre>
+<h2>相关报告</h2><ul class="links">
+<li><a href="../reports/洛谷题解逐篇hack清单_第10批.md.html">洛谷题解逐篇hack清单_第10批.md</a></li>
+<li><a href="../reports/洛谷题解逐篇hack清单_第11批.md.html">洛谷题解逐篇hack清单_第11批.md</a></li>
+<li><a href="../reports/洛谷题解逐篇hack清单_第12批.md.html">洛谷题解逐篇hack清单_第12批.md</a></li>
+<li><a href="../reports/洛谷题解逐篇hack清单_第13批.md.html">洛谷题解逐篇hack清单_第13批.md</a></li>
+<li><a href="../reports/洛谷题解逐篇hack清单_第14批.md.html">洛谷题解逐篇hack清单_第14批.md</a></li>
+<li><a href="../reports/洛谷题解逐篇hack清单_第15批.md.html">洛谷题解逐篇hack清单_第15批.md</a></li>
+<li><a href="../reports/三类口径与累计统计.md.html">三类口径与自查纪律</a></li>
+</ul></main><footer><div class="wrap">纯离线静态页 · 无外部资源 · 无网络请求 · 原文版权归作者所有 · 版权归原作者及洛谷所有；本库仅作个人学习 / 学术研究的离线归档与校对留痕， … <a href="../reports/归档与版权声明.md.html">声明</a></div></footer><script src="../assets/local.js"></script></body></html>

@@ -1,0 +1,62 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P1424 · ju6tr560 · 题解归档</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/local.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">题解 / P1424 / ju6tr560</span></header>
+<main class="article"><h1>P1424 <span class="lid">ju6tr560</span></h1>
+<div class="badge 丙">丙·未 hack</div>
+<table class="tb meta"><tbody>
+<tr><th>是否题解</th><td>是（题解文章（8 位 article 编号））</td></tr>
+<tr><th>归类</th><td>丙·未 hack</td></tr>
+<tr><th>批次</th><td>第15批</td></tr>
+<tr><th>可逐字验证</th><td>是</td></tr>
+<tr><th>判定备注</th><td>整周1250*temp + 剩余n%7天逐天累加；与逐天模拟独立解312组(含n=10⁶)0不一致；int cnt 上界1.79e8不溢出</td></tr>
+<tr><th>原文地址</th><td><a href="https://www.luogu.com/article/ju6tr560" referrerpolicy="no-referrer" rel="noopener">https://www.luogu.com/article/ju6tr560</a> <span class="hint">（原文链接 · 点击跳转；离线时仅留来源）</span></td></tr>
+<tr><th>原文作者</th><td>woshiluo</td></tr>
+<tr><th>归档 / 取回时间</th><td>2026-11-25 18:00:01 · 正文+代码块</td></tr>
+<tr><th>内容完整性签名</th><td><code>03c02bd6ba395ee479894c32f9e707f7</code><span class="hint"> · sha256 内容校验值（非加密签名）</span></td></tr>
+</tbody></table>
+<h2>引用与署名</h2>
+<div class="src" style="border-left:3px solid var(--acc)"><p>woshiluo. 《题解 P1424 【小鱼的航程(改进版)】》. 洛谷, 原文: https://www.luogu.com/article/ju6tr560（本仓库归档于 2026-11-25 18:00:01，内容 sha256: eda47a748a2a310b，完整性签名: 03c02bd6ba395ee479894c32f9e707f7）. 版权归原作者所有，仅作学术归档引用。</p>
+<p class="hint">版权归原作者及洛谷所有；本库仅作个人学习 / 学术研究的离线归档与校对留痕，不用于商业用途。每篇保留原文链接与作者署名；权利人可申请移除，详见《归档与版权声明》。 <a href="../reports/归档与版权声明.md.html">《归档与版权声明》</a></p></div>
+<h2>题解代码 · 逐字取回 + 最小外壳（2 份）</h2>
+<p class="hint">代码只是辅助：只补 include / main / 必要声明，缺头文件与页面吞字符不计缺陷，仅验核心逻辑。</p>
+<div class="src"><div class="srcname">r15__P1424_ju6tr560.cpp <span class="hint">· 编号精确匹配</span></div><pre class="code"><code>#include&lt;cstdio&gt;
+using namespace std;
+int a[8]={0,250,250,250,250,250,0,0};
+int x,n,cnt;
+int main(){
+    scanf(&quot;%d%d&quot;,&amp;x,&amp;n);
+    int temp=n/7;
+    n%=7;
+    cnt+=1250*temp;
+    for(int i=1;i&lt;=n;i++){
+        cnt+=a[x];
+        x++;
+        if(x&gt;7)x-=7;
+    }
+    printf(&quot;%d&quot;,cnt);
+}
+</code></pre></div>
+<div class="src"><div class="srcname">r15__P1424_ju6tr560_mut.cpp <span class="hint">· 编号精确匹配</span></div><pre class="code"><code>#include&lt;cstdio&gt;
+using namespace std;
+int a[8]={0,250,250,250,250,250,0,0};
+int x,n,cnt;
+int main(){
+    scanf(&quot;%d%d&quot;,&amp;x,&amp;n);
+    int temp=n/7;
+    n%=7;
+    cnt+=1000*temp;
+    for(int i=1;i&lt;=n;i++){
+        cnt+=a[x];
+        x++;
+        if(x&gt;7)x-=7;
+    }
+    printf(&quot;%d&quot;,cnt);
+}
+</code></pre></div>
+<h2>复现</h2><pre class="code"><code>g++ -std=c++17 -O2 -o /tmp/t 04_复现代码/&lt;对应文件&gt;
+echo &quot;&lt;题面内输入&gt;&quot; | /tmp/t</code></pre>
+<h2>相关报告</h2><ul class="links">
+<li><a href="../reports/洛谷题解逐篇hack清单_第15批.md.html">洛谷题解逐篇hack清单_第15批.md</a></li>
+<li><a href="../reports/三类口径与累计统计.md.html">三类口径与自查纪律</a></li>
+</ul></main><footer><div class="wrap">纯离线静态页 · 无外部资源 · 无网络请求 · 原文版权归作者所有 · 版权归原作者及洛谷所有；本库仅作个人学习 / 学术研究的离线归档与校对留痕， … <a href="../reports/归档与版权声明.md.html">声明</a></div></footer><script src="../assets/local.js"></script></body></html>

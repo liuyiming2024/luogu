@@ -1,0 +1,80 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P1098 · 88laurj5 · 题解归档</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/local.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">题解 / P1098 / 88laurj5</span></header>
+<main class="article"><h1>P1098 <span class="lid">88laurj5</span></h1>
+<div class="badge 乙">乙·笔误/防抄袭</div>
+<table class="tb meta"><tbody>
+<tr><th>是否题解</th><td>是（题解文章（8 位 article 编号））</td></tr>
+<tr><th>归类</th><td>乙·笔误/防抄袭</td></tr>
+<tr><th>批次</th><td>第14批</td></tr>
+<tr><th>可逐字验证</th><td>是</td></tr>
+<tr><th>判定备注</th><td>原第8批「代码取不全」登记条目，本轮逐字取回全文；p1=2 数字顺序展开 j+30 应为 j+32，2 2 1 / 1-5 期望 12233445 实际 10011225；改一个数字后 415 组 0 不一致</td></tr>
+<tr><th>原文地址</th><td><a href="https://www.luogu.com/article/88laurj5" referrerpolicy="no-referrer" rel="noopener">https://www.luogu.com/article/88laurj5</a> <span class="hint">（原文链接 · 点击跳转；离线时仅留来源）</span></td></tr>
+<tr><th>原文作者</th><td>我的父亲</td></tr>
+<tr><th>归档 / 取回时间</th><td>2026-11-25 07:52:56 · 正文+代码块</td></tr>
+<tr><th>内容完整性签名</th><td><code>59eaba70bec47483cd349c4547fd7c9c</code><span class="hint"> · sha256 内容校验值（非加密签名）</span></td></tr>
+</tbody></table>
+<h2>引用与署名</h2>
+<div class="src" style="border-left:3px solid var(--acc)"><p>我的父亲. 《题解 P1098 【字符串的展开】》. 洛谷, 原文: https://www.luogu.com/article/88laurj5（本仓库归档于 2026-11-25 07:52:56，内容 sha256: f4b3728350083b17，完整性签名: 59eaba70bec47483cd349c4547fd7c9c）. 版权归原作者所有，仅作学术归档引用。</p>
+<p class="hint">版权归原作者及洛谷所有；本库仅作个人学习 / 学术研究的离线归档与校对留痕，不用于商业用途。每篇保留原文链接与作者署名；权利人可申请移除，详见《归档与版权声明》。 <a href="../reports/归档与版权声明.md.html">《归档与版权声明》</a></p></div>
+<h2>题解代码 · 逐字取回 + 最小外壳（2 份）</h2>
+<p class="hint">代码只是辅助：只补 include / main / 必要声明，缺头文件与页面吞字符不计缺陷，仅验核心逻辑。</p>
+<div class="src"><div class="srcname">r14__P1098_88laurj5.cpp <span class="hint">· 编号精确匹配</span></div><pre class="code"><code>#include&lt;bits/stdc++.h&gt;
+using namespace std;
+int p1,p2,p3; char a[101];
+int main() {
+scanf(&quot;%d%d%d&quot;,&amp;p1,&amp;p2,&amp;p3);
+cin&gt;&gt;a;
+for(int i=0;i&lt;strlen(a);i++) {
+if(a[i]!=&#x27;-&#x27;) { cout&lt;&lt;a[i]; continue; }
+if(a[i-1]&gt;=&#x27;0&#x27;&amp;&amp;a[i-1]&lt;=&#x27;9&#x27;&amp;&amp;(a[i+1]&lt;&#x27;0&#x27;||a[i+1]&gt;&#x27;9&#x27;)) { printf(&quot;-&quot;); continue; }
+if(a[i+1]&gt;=&#x27;0&#x27;&amp;&amp;a[i+1]&lt;=&#x27;9&#x27;&amp;&amp;(a[i-1]&lt;&#x27;0&#x27;||a[i-1]&gt;&#x27;9&#x27;)) { printf(&quot;-&quot;); continue; }
+if(a[i-1]&gt;=a[i+1]) { printf(&quot;-&quot;); continue; }
+if(a[i+1]==&#x27;-&#x27;||a[i-1]==&#x27;-&#x27;) { printf(&quot;-&quot;); continue; }
+if(i==0) { printf(&quot;-&quot;); continue; }
+if(p1==3&amp;&amp;i!=0) { for(char j=a[i-1]+1;j&lt;a[i+1];j++) for(int k=1;k&lt;=p2;k++) printf(&quot;*&quot;); continue; }
+if(p3==1) {
+if(p1==1) for(char j=a[i-1]+1;j&lt;a[i+1];j++) for(int k=1;k&lt;=p2;k++) cout&lt;&lt;char(j);
+if(p1==2) for(char j=a[i-1]-31;j&lt;a[i+1]-32;j++) for(int k=1;k&lt;=p2;k++) { if((a[i+1]&gt;=&#x27;0&#x27;&amp;&amp;a[i+1]&lt;=&#x27;9&#x27;)||(a[i-1]&gt;=&#x27;0&#x27;&amp;&amp;a[i-1]&lt;=&#x27;9&#x27;)) cout&lt;&lt;char(j+30); else cout&lt;&lt;char(j); }
+}
+if(p3==2) {
+if(p1==1) for(char j=a[i+1]-1;j&gt;a[i-1];j--) for(int k=1;k&lt;=p2;k++) cout&lt;&lt;char(j);
+if(p1==2) for(char j=a[i+1]-33;j&gt;a[i-1]-32;j--) for(int k=1;k&lt;=p2;k++) { if((a[i+1]&gt;=&#x27;0&#x27;&amp;&amp;a[i+1]&lt;=&#x27;9&#x27;)||(a[i-1]&gt;=&#x27;0&#x27;&amp;&amp;a[i-1]&lt;=&#x27;9&#x27;)) cout&lt;&lt;char(j+32); else cout&lt;&lt;char(j); }
+}
+}
+return 0;
+}
+</code></pre></div>
+<div class="src"><div class="srcname">r14__P1098_88laurj5_fix.cpp <span class="hint">· 编号精确匹配</span></div><pre class="code"><code>#include&lt;bits/stdc++.h&gt;
+using namespace std;
+int p1,p2,p3; char a[101];
+int main() {
+scanf(&quot;%d%d%d&quot;,&amp;p1,&amp;p2,&amp;p3);
+cin&gt;&gt;a;
+for(int i=0;i&lt;strlen(a);i++) {
+if(a[i]!=&#x27;-&#x27;) { cout&lt;&lt;a[i]; continue; }
+if(a[i-1]&gt;=&#x27;0&#x27;&amp;&amp;a[i-1]&lt;=&#x27;9&#x27;&amp;&amp;(a[i+1]&lt;&#x27;0&#x27;||a[i+1]&gt;&#x27;9&#x27;)) { printf(&quot;-&quot;); continue; }
+if(a[i+1]&gt;=&#x27;0&#x27;&amp;&amp;a[i+1]&lt;=&#x27;9&#x27;&amp;&amp;(a[i-1]&lt;&#x27;0&#x27;||a[i-1]&gt;&#x27;9&#x27;)) { printf(&quot;-&quot;); continue; }
+if(a[i-1]&gt;=a[i+1]) { printf(&quot;-&quot;); continue; }
+if(a[i+1]==&#x27;-&#x27;||a[i-1]==&#x27;-&#x27;) { printf(&quot;-&quot;); continue; }
+if(i==0) { printf(&quot;-&quot;); continue; }
+if(p1==3&amp;&amp;i!=0) { for(char j=a[i-1]+1;j&lt;a[i+1];j++) for(int k=1;k&lt;=p2;k++) printf(&quot;*&quot;); continue; }
+if(p3==1) {
+if(p1==1) for(char j=a[i-1]+1;j&lt;a[i+1];j++) for(int k=1;k&lt;=p2;k++) cout&lt;&lt;char(j);
+if(p1==2) for(char j=a[i-1]-31;j&lt;a[i+1]-32;j++) for(int k=1;k&lt;=p2;k++) { if((a[i+1]&gt;=&#x27;0&#x27;&amp;&amp;a[i+1]&lt;=&#x27;9&#x27;)||(a[i-1]&gt;=&#x27;0&#x27;&amp;&amp;a[i-1]&lt;=&#x27;9&#x27;)) cout&lt;&lt;char(j+32); else cout&lt;&lt;char(j); }
+}
+if(p3==2) {
+if(p1==1) for(char j=a[i+1]-1;j&gt;a[i-1];j--) for(int k=1;k&lt;=p2;k++) cout&lt;&lt;char(j);
+if(p1==2) for(char j=a[i+1]-33;j&gt;a[i-1]-32;j--) for(int k=1;k&lt;=p2;k++) { if((a[i+1]&gt;=&#x27;0&#x27;&amp;&amp;a[i+1]&lt;=&#x27;9&#x27;)||(a[i-1]&gt;=&#x27;0&#x27;&amp;&amp;a[i-1]&lt;=&#x27;9&#x27;)) cout&lt;&lt;char(j+32); else cout&lt;&lt;char(j); }
+}
+}
+return 0;
+}
+</code></pre></div>
+<h2>复现</h2><pre class="code"><code>g++ -std=c++17 -O2 -o /tmp/t 04_复现代码/&lt;对应文件&gt;
+echo &quot;&lt;题面内输入&gt;&quot; | /tmp/t</code></pre>
+<h2>相关报告</h2><ul class="links">
+<li><a href="../reports/洛谷题解逐篇hack清单_第14批.md.html">洛谷题解逐篇hack清单_第14批.md</a></li>
+<li><a href="../reports/三类口径与累计统计.md.html">三类口径与自查纪律</a></li>
+</ul></main><footer><div class="wrap">纯离线静态页 · 无外部资源 · 无网络请求 · 原文版权归作者所有 · 版权归原作者及洛谷所有；本库仅作个人学习 / 学术研究的离线归档与校对留痕， … <a href="../reports/归档与版权声明.md.html">声明</a></div></footer><script src="../assets/local.js"></script></body></html>
