@@ -33,12 +33,13 @@ def load_items(kind):
             continue
         try: d = json.load(open(p, encoding="utf-8"))
         except Exception: continue
-        for it in (d if isinstance(d, list) else [d]):
-            if not isinstance(it, dict): continue
-            if it.get("confirmed") is not True: continue
-            if it.get("state") in ("已提交", "已推送"): continue
-            if kind != "all" and it.get("kind") != kind: continue
-            it["_file"] = p
+        for raw in (d if isinstance(d, list) else [d]):
+            if not isinstance(raw, dict): continue
+            if raw.get("confirmed") is not True: continue
+            if raw.get("state") in ("已提交", "已推送"): continue
+            if kind != "all" and raw.get("kind") != kind: continue
+            # 拷贝一份：避免把 _file 等内部字段写回用户文件，也避免改到原数组引用
+            it = dict(raw); it["_file"] = p
             items.append(it)
     return items
 

@@ -88,7 +88,9 @@ jobs:
           if [ "$ALLOW_REAL" != "1" ]; then ARGS="$ARGS --dry-run"; fi
           python3 tools/luogu_submit.py $ARGS
 
-      - name: 回写队列状态
+      - name: 回写队列状态（仅本人确认过的手动真提交）
+        # push / 定时触发只预览，绝不写回仓库，避免与其他自动提交产生竞态
+        if: steps.gate.outputs.allow == '1'
         run: |
           git config user.name "luogu-submit-bot"
           git config user.email "luogu-submit-bot@users.noreply.github.com"
