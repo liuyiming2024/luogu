@@ -155,6 +155,20 @@ def main():
     else:
         print("  ✗ 缺 submit_to_luogu.yml"); fail.append("缺 Action")
 
+    # 10 第 14 条：授权兜底 —— 保存路径齐备、不代填 consent、不接收 token 明文
+    hb = open(p("00_总览/帮助手册.md"), encoding="utf-8").read()
+    ig = open(p(".gitignore"), encoding="utf-8").read()
+    paths = ["localStorage[\"ll:gh_token\"]", "Settings → Secrets and variables → Actions",
+             "~/.config/luogu_submit/env", "LUOGU_SUBMIT_CONSENT", "chmod 600"]
+    miss_path = [x for x in paths if x not in hb]
+    consent_ok = ("secrets.LUOGU_SUBMIT_CONSENT" in open(
+        p(".github/workflows/submit_to_luogu.yml"), encoding="utf-8").read())
+    hb_plain = hb.replace("**", "").replace("`", "")
+    no_plain = ("我不接收任何 token 明文" in hb_plain and "credentials/" in ig)
+    print("  ✓ 授权兜底：保存路径齐备 / consent 由本人填写 / 不接收明文 / 凭据路径已忽略"
+          if not miss_path and consent_ok and no_plain else "  ✗ 授权兜底缺项 " + str(miss_path))
+    if miss_path or not consent_ok or not no_plain: fail.append("第14条授权兜底缺项")
+
     # 角色字样回归：只查「源文件 / 文档 / 工作流」；site/ 下产物由生成器覆盖，
     #   workflows/pages.yml 在重生成之后才跑本自检，产物届时必然干净。
     #   字面量拆开写，避免本脚本自己命中自己。

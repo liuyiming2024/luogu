@@ -15,7 +15,8 @@
 <p class="hint">⚙️ <b>运行态自己加 / 自己下载</b>：静态站只是壳，GitHub Actions 即现成运行态。
 首次在 Secrets 写一次 <code>LUOGU_SUBMIT_CONSENT</code> 后，评论 / 发文 / 洛谷 IDE 评测 →
 本地待推队列 → <b>自动写回仓库 outbox</b> → Action 自动低频代提交，
-<b>本人不用提交、不用手动跑工作流</b>；凭据走 Secrets，<b>不进仓库</b>。
+<b>本人不用提交、不用手动跑工作流</b>；凭据走 Secrets，<b>不进仓库</b>。授权由本人自行完成（不代填、不接收 token 明文），
+保存路径见<a href="reports/帮助手册.md.html">帮助手册 5d</a>；未配置 consent 永远只预览。
 <a href="reports/架构可达性测试报告.md.html">架构可达性报告</a> ·
 <a href="reports/帮助手册.md.html">帮助手册 5c</a>。</p>
 <p class="hint">💬 <b>评论持久化 = 直接推洛谷</b>：本地先存离线副本 + 待推队列，由持有个人账号登录态的一端低频推送；<b>静态站不直连洛谷</b>（CORS + HttpOnly/SameSite cookie + CSRF 不可达）。详见<a href="reports/架构可达性测试报告.md.html">架构可达性测试报告</a>。</p>

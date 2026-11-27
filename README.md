@@ -118,3 +118,17 @@ Markdown 评论 + 算术验证码 / 三态身份 / 编译环境内置下载 / �
 **本人自行确认、自行承担全部后果。** 仓库内不含任何账号、cookie 或令牌。
 
 详见 `00_总览/帮助手册.md` 5c、`00_总览/架构可达性测试报告.md`、`api/API契约.md`。
+
+## 兜底 · 本人自行上传 token、自己授权（第 14 条）
+
+自动化里**唯一不能由我代劳的是授权本身**：`LUOGU_SUBMIT_CONSENT` 表示「本人确认并自担后果」，
+代填等于替你确认；洛谷登录态我也没有、也不接收。**我不接收任何 token 明文。**
+
+| 用途 | 保存路径 |
+|---|---|
+| 前端自动入库（GitHub fine-grained token） | 网页「设置」里填 → 浏览器 `localStorage["ll:gh_token"]`，无文件、不进仓库 |
+| 洛谷凭据 + 一次性授权 | 仓库 **Settings → Secrets and variables → Actions**：`LUOGU_SUBMIT_CONSENT` / `LUOGU_COOKIE` / `LUOGU_CSRF` / `LUOGU_UID` / `LUOGU_SUBMIT_ENDPOINT`，IDE 端点放 Variables `LUOGU_IDE_ENDPOINT` |
+| 本机运行态 | `~/.config/luogu_submit/env`（`chmod 600`，仓库外）；仓库内 `credentials/local.env` 已被 `.gitignore` 排除 |
+
+填一次即可；**未配置 consent → 永远只预览**，不向洛谷发任何写请求。
+完整步骤见 `00_总览/帮助手册.md` 5d。

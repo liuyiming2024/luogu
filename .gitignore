@@ -1,2 +1,7 @@
 __pycache__/
 *.pyc
+
+# 本人凭据（绝不入库；本机文件放仓库外 ~/.config/luogu_submit/）
+credentials/
+*.local.env
+.env
