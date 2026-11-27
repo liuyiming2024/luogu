@@ -7,7 +7,8 @@
 var LL = {};
 var K = {sess:"ll:sess", token:"ll:token", api:"ll:api", cmt:"ll:cmt:",
          std:"ll:std", imgs:"ll:imgs", pub:"ll:pub", push:"ll:push", pq:"ll:push_q",
-         audit:"ll:audit", ideUrl:"ll:ide_url", subUrl:"ll:sub_url"};
+         audit:"ll:audit", ideUrl:"ll:ide_url", subUrl:"ll:sub_url",
+         ghToken:"ll:gh_token", ghRepo:"ll:gh_repo", autoPush:"ll:auto_push"};
 
 /* ---------- 小工具 ---------- */
 function $(s,r){return (r||document).querySelector(s);}
@@ -34,6 +35,30 @@ function toast(m,cls){
   d.style.cssText="position:fixed;right:16px;bottom:16px;z-index:99;max-width:340px;background:#fff;border:1px solid var(--ll-line);box-shadow:var(--ll-shadow)";
   d.textContent=m; document.body.appendChild(d);
   setTimeout(function(){d.remove();},3200);
+}
+
+function b64utf8(str){
+  return btoa(unescape(encodeURIComponent(str)));
+}
+/* 只在「点导出 + 自担确认门通过 + 已配置 fine-grained token」时调用；
+   目标是 api.github.com（支持 CORS），绝不静态加载时请求、绝不连 luogu.com 写接口。 */
+function putOutboxToRepo(items, onOk, onFail){
+  var tk=get(K.ghToken,""), repo=get(K.ghRepo,"liuyiming2024/luogu");
+  if(!tk){onFail("未配置 GitHub token");return;}
+  var name="outbox-"+new Date().toISOString().replace(/[-:T]/g,"").slice(0,14)
+           +"-"+Math.floor(Math.random()*9999)+".json";
+  var url="https://api.github.com/repos/"+repo+"/contents/site/data/outbox/"+name;
+  fetch(url,{method:"PUT",
+    headers:{"Authorization":"Bearer "+tk,
+             "Accept":"application/vnd.github+json",
+             "Content-Type":"application/json"},
+    body:JSON.stringify({message:"待推队列自动入库（本人已确认自担，无凭据入库）",
+                         content:b64utf8(JSON.stringify(items,null,1)),branch:"main"})})
+   .then(function(r){ return r.json().then(function(j){return {ok:r.ok,j:j};}); })
+   .then(function(x){
+     if(x.ok && x.j && x.j.content) onOk(name);
+     else onFail((x.j&&x.j.message)||("HTTP 写入失败"));
+   }).catch(function(e){onFail(String(e));});
 }
 
 /* ---------- 默认头像（看 luogu：洛谷风格默认头像，内联 SVG，零请求） ---------- */
@@ -181,16 +206,24 @@ function settingsDialog(){
     '<input id="ll-ide-url" value="'+esc(get(K.ideUrl,"https://www.luogu.com/ide"))+'" placeholder="https://www.luogu.com/ide">'+
     '<label>洛谷题目提交页模板（{pid} 会被替换）</label>'+
     '<input id="ll-sub-url" value="'+esc(get(K.subUrl,"https://www.luogu.com/problem/{pid}"))+'">'+
+    '<label>自动入库（本人不用提交）</label><select id="ll-auto">'+
+      '<option value="0"'+(get(K.autoPush,false)?"":" selected")+'>关闭：导出为本地文件，自行放入 outbox 并 push</option>'+
+      '<option value="1"'+(get(K.autoPush,false)?" selected":"")+'>开启：确认后自动写入仓库，Action 自动代提交</option></select>'+
+    '<label>GitHub fine-grained token（仅本仓库 Contents 读写；只存浏览器本地）</label>'+
+    '<input id="ll-gh-token" type="password" value="'+esc(get(K.ghToken,""))+'" placeholder="github_pat_...">'+
+    '<label>仓库（owner/name）</label>'+
+    '<input id="ll-gh-repo" value="'+esc(get(K.ghRepo,"liuyiming2024/luogu"))+'">'+
     '<div class="ll-note"><b>静态站绝不直连洛谷</b>：跨源 + HttpOnly cookie + CSRF 使浏览器直推不可达。'+
     '评论/发文交给 <code>/api/comments/push-luogu</code> 等适配器；'+
     '<b>真编译则新窗口打开洛谷 IDE</b>（洛谷域下、你的登录态自然生效），代码走剪贴板粘贴。'+
     '入口按你所在网络自行确认，不编造内部 API。当前出口无法访问外部域名，默认关闭。</div>'+
     '<div class="ll-note"><b>运行态自己加 / 自己下载</b>：静态站只是壳，'+
     'GitHub Actions runner 就是现成运行态，也可本机跑 <code>tools/luogu_submit.py</code>。'+
-    '评论 / 发文 / 洛谷 IDE 评测先本地入队 → 「导出待推队列」→ 放进 '+
-    '<code>site/data/outbox/</code> → push → 手动跑「代提交 luogu」工作流并输入确认值。'+
-    '凭据填在仓库 Settings → Secrets（<code>LUOGU_COOKIE / LUOGU_CSRF / LUOGU_UID / '+
-    'LUOGU_SUBMIT_ENDPOINT</code>），<b>不进仓库</b>；端点按洛谷当前页面填写，不编造。</div>'+
+    '评论 / 发文 / 洛谷 IDE 评测先本地入队 → 「导出待推队列」→ <b>自动写入仓库</b> → '+
+    'Action 自动低频代提交，<b>本人不用提交、不用手动跑工作流、不用每次填确认值</b>。'+
+    '首次在 Settings → Secrets 填 <code>LUOGU_SUBMIT_CONSENT=I_UNDERSTAND_AND_ACCEPT_ALL_RISK</code>'+
+    '（一次性授权）以及 <code>LUOGU_COOKIE / LUOGU_CSRF / LUOGU_UID / LUOGU_SUBMIT_ENDPOINT</code>；'+
+    '未配置 consent 时永远只预览。凭据<b>不进仓库</b>；端点按洛谷当前页面填写，不编造。</div>'+
     '<div class="ll-note" style="border-left-color:var(--ll-bad);background:#fdeeea;color:#7a3527">'+
     '<b>后果自担</b>：任何写操作 / 借账号动作都会先弹确认门，由你自己确认并承担全部后果；'+
     '默认每次确认，你也可主动选择会话内不再提示。</div>'+
@@ -206,6 +239,8 @@ function settingsDialog(){
     set(K.api,$("#ll-api",m).value.trim()); set(K.token,$("#ll-token",m).value.trim());
     set(K.pub,$("#ll-pub",m).value==="1"); set(K.push,$("#ll-push",m).value==="1");
     set(K.ideUrl,$("#ll-ide-url",m).value.trim()); set(K.subUrl,$("#ll-sub-url",m).value.trim());
+    set(K.autoPush,$("#ll-auto",m).value==="1");
+    set(K.ghToken,$("#ll-gh-token",m).value.trim()); set(K.ghRepo,$("#ll-gh-repo",m).value.trim());
     m.remove();
     toast("已保存；页面仍不主动发请求","ok"); location.reload();
   };
@@ -265,18 +300,30 @@ function exportOutbox(lid){
               confirmed:true,state:"本地已存 · 待推",created_at:x.created_at||ts()});
   });
   if(!out.length){toast("待推队列为空","ok");return;}
+
+  var auto=get(K.autoPush,false) && !!get(K.ghToken,"");
   confirmAction({
-    kind:"导出 "+out.length+" 条待推内容，交给 GitHub Action 代提交 luogu",
-    target:"site/data/outbox/ · workflow: 代提交 luogu",
-    traces:"导出本身只下载到本地文件，不发起任何请求；真正提交发生在你手动跑 Action 并输入确认值之后",
+    kind:(auto?"自动入库并代提交":"导出")+" "+out.length+" 条待推内容到 luogu",
+    target:auto?"api.github.com → site/data/outbox/ → Action 自动提交":"本地文件 → 自行放入 outbox",
+    traces:auto?"你已配置 fine-grained token：确认后自动写入仓库；push 触发的 Action 会自动低频提交 luogu，"
+               +"本人无需再点任何按钮。后果由你自行确认并自行承担。"
+          :"导出本身只下载到本地文件，不发起任何请求；放入 outbox 并 push 后 Action 自动处理",
     detail:out.length+" 条 / "+lid
   },function(){
-    var blob=new Blob([JSON.stringify(out,null,1)],{type:"application/json;charset=utf-8"});
-    var u=URL.createObjectURL(blob), a=document.createElement("a");
-    a.href=u; a.download="outbox-"+new Date().toISOString().slice(0,10).replace(/-/g,"")+".json";
-    document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(function(){URL.revokeObjectURL(u);},1000);
-    toast("已导出 "+out.length+" 条：放进 site/data/outbox/ 后 push，再手动跑 Action","ok");
+    function download(reason){
+      var blob=new Blob([JSON.stringify(out,null,1)],{type:"application/json;charset=utf-8"});
+      var u=URL.createObjectURL(blob), a=document.createElement("a");
+      a.href=u; a.download="outbox-"+new Date().toISOString().slice(0,10).replace(/-/g,"")+".json";
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function(){URL.revokeObjectURL(u);},1000);
+      toast(reason?("自动入库未成功，已降级下载："+reason):"已导出，放进 site/data/outbox/ 即可","ok");
+    }
+    if(!auto){download("");return;}
+    putOutboxToRepo(out,function(name){
+      toast("已自动写入仓库 "+name+"；Action 会自动代提交，你不用管","ok");
+      /* 本地已入队条目标记，避免重复导出；洛谷侧状态由 Action 回写 */
+      set(K.pq,[]);
+    },download);
   });
 }
 
@@ -294,7 +341,7 @@ function comments(lid){
       '静态站不直连洛谷。未开启或未配置 apiBase 时纯本地、零请求。</div><div id="ll-cm-list"></div>';
     host.innerHTML=h;
     var exp=document.createElement("button"); exp.className="ll-btn";
-    exp.textContent="导出待推队列（给 Action 用）"; exp.style.margin="0 0 10px 0";
+    exp.textContent="导出待推队列 / 自动入库"; exp.style.margin="0 0 10px 0";
     exp.onclick=function(){ exportOutbox(lid); };
     host.insertBefore(exp, host.querySelector("#ll-cm-list").nextSibling);
     var box=$("#ll-cm-list",host);

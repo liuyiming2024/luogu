@@ -346,8 +346,9 @@ index = f"""<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
 <p class="hint">「枚举」= 对已发现的全部 8 位编号按题号升序、同题按编号字典序有序编目并逐条判定是否题解；<b>不对编号空间或全站做高频遍历</b>。新增编号用 <code>ingest.py</code> 低频补录。</p>
 <p class="hint">📌 <b>引用与署名</b>：每篇均保留<a href="reports/{RIGHTS_PAGE}">原文链接、作者署名、取回时间与内容完整性签名</a>；版权归原作者及洛谷所有，本库仅作学术归档留痕，权利人可申请移除。</p>
 <p class="hint">⚙️ <b>运行态自己加 / 自己下载</b>：静态站只是壳，GitHub Actions 即现成运行态。
-评论 / 发文 / 洛谷 IDE 评测 → 本地待推队列 → 导出 <code>site/data/outbox/</code> →
-手动跑「代提交 luogu」工作流并输入确认值才真提交；凭据走 Settings Secrets，<b>不进仓库</b>。
+首次在 Secrets 写一次 <code>LUOGU_SUBMIT_CONSENT</code> 后，评论 / 发文 / 洛谷 IDE 评测 →
+本地待推队列 → <b>自动写回仓库 outbox</b> → Action 自动低频代提交，
+<b>本人不用提交、不用手动跑工作流</b>；凭据走 Secrets，<b>不进仓库</b>。
 <a href="reports/架构可达性测试报告.md.html">架构可达性报告</a> ·
 <a href="reports/帮助手册.md.html">帮助手册 5c</a>。</p>
 <p class="hint">💬 <b>评论持久化 = 直接推洛谷</b>：本地先存离线副本 + 待推队列，由持有个人账号登录态的一端低频推送；<b>静态站不直连洛谷</b>（CORS + HttpOnly/SameSite cookie + CSRF 不可达）。详见<a href="reports/架构可达性测试报告.md.html">架构可达性测试报告</a>。</p>
@@ -648,6 +649,8 @@ with open(_srp, "a", encoding="utf-8") as _f:
              "- **评论持久化直接推洛谷**：本地先存 + 待推队列 + `/api/comments/push-luogu` 适配器；"
              "静态站不直连洛谷（跨源 + HttpOnly cookie + CSRF 不可达）\n"
              "- 页面加载零外网请求；`apiBase` 留空时全部功能纯本地可用\n"
-             "- 架构可达性结论见 `reports/架构可达性测试报告.md.html`\n")
+             "- 架构可达性结论见 `reports/架构可达性测试报告.md.html`\n"
+             "- **本人不用提交**：一次性 `LUOGU_SUBMIT_CONSENT` Secret + 前端 fine-grained token，\n"
+             "  导出待推队列即自动入库，push/定时触发 Action 自动低频代提交 luogu；未授权只预览\n")
 
 print(f"LOCAL_LUOGU 层：资产 {len(_mini)} 条数据 · {len(_cases)} 个测试点 · 3 个子页面 · 全页注入完成")

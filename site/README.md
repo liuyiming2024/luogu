@@ -54,3 +54,5 @@ python3 site/ingest.py new.json
 - **评论持久化直接推洛谷**：本地先存 + 待推队列 + `/api/comments/push-luogu` 适配器；静态站不直连洛谷（跨源 + HttpOnly cookie + CSRF 不可达）
 - 页面加载零外网请求；`apiBase` 留空时全部功能纯本地可用
 - 架构可达性结论见 `reports/架构可达性测试报告.md.html`
+- **本人不用提交**：一次性 `LUOGU_SUBMIT_CONSENT` Secret + 前端 fine-grained token，
+  导出待推队列即自动入库，push/定时触发 Action 自动低频代提交 luogu；未授权只预览

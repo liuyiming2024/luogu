@@ -28,11 +28,14 @@
 <h2>5b. 后果自担确认门（第 11 条）</h2>
 <p>任何写操作 / 借账号动作前会弹确认门，列明<strong>动作、目标、用谁的账号、 会在洛谷留下什么公开痕迹、可能触发风控/封号、版权责任</strong>。 必须勾选「我已阅读并自行承担全部后果」并输入 <strong>「我自担」</strong> 才执行； 默认每次确认，你也可主动选择「本次会话不再重复」（责任仍归你）。 「设置 → 查看本地审计」可看留痕（仅存浏览器，不上传）。</p>
 <blockquote>确认门是<strong>明示同意与责任划分，不是安全边界</strong>；真鉴权仍靠 token。 验证码同理，只防误触。</blockquote>
-<h2>5c. 用 Action 代提交 luogu（第 12 条）</h2>
+<h2>5c. 用 Action 代提交 luogu（第 12 / 13 条 · 本人不用提交）</h2>
 <p><strong>运行态自己加、自己下载</strong>：静态站只是壳，GitHub Actions runner 就是现成运行态， 也可以把 <code>tools/luogu_submit.py</code> 下载到本机自己跑。项目按<strong>单人自用</strong>设计。</p>
-<ol><li>写评论 / 发文 / 用洛谷 IDE 真编译 → 都会先过<strong>自担确认门</strong>（勾选 + 输入「我自担」）</li><li>文章页点「<strong>导出待推队列（给 Action 用）</strong>」→ 下载 <code>outbox-YYYYMMDD.json</code></li><li>把文件放进仓库 <code>site/data/outbox/</code> 并 push</li><li>仓库 → Actions → 「<strong>代提交 luogu · 需本人确认</strong>」→ Run workflow：</li><li><code>confirm</code> 填 <code>I_UNDERSTAND_AND_ACCEPT_ALL_RISK</code></li><li><code>dry_run</code> 选 <code>false</code></li><li><code>kind</code> 选 <code>comment</code> / <code>publish</code> / <code>judge</code> / <code>all</code></li><li>首次使用先在 <strong>Settings → Secrets</strong> 添加：</li></ol>
-<p><code>LUOGU_COOKIE</code>、<code>LUOGU_CSRF</code>、<code>LUOGU_UID</code>、<code>LUOGU_SUBMIT_ENDPOINT</code>； 洛谷 IDE 端点放 Variables 的 <code>LUOGU_IDE_ENDPOINT</code>。<strong>端点按你登录后洛谷当前页面填写，仓库不编造。</strong></p>
-<ul><li><strong>push 触发只预览</strong>，不向洛谷发任何写请求；只有手动触发 + 确认值才真提交</li><li>低频：2.0~3.5s 抖动、每 20 次小憩、403/降级立即停、失败不轰炸重试</li><li>状态回写到 <code>site/data/outbox/_状态.json</code>，<code>已提交 / 失败待重试 / 预览</code> 可核对</li><li><strong>你自行确认、自行承担全部后果</strong>；项目不代持会话、不认人只认 token</li></ul>
+<p><strong>首次配置一次，之后本人不用再提交。</strong></p>
+<ol><li><strong>Settings → Secrets</strong>（一次性）：</li><li><code>LUOGU_SUBMIT_CONSENT</code> = <code>I_UNDERSTAND_AND_ACCEPT_ALL_RISK</code>（一次性授权，长期有效）</li><li><code>LUOGU_COOKIE</code>、<code>LUOGU_CSRF</code>、<code>LUOGU_UID</code>、<code>LUOGU_SUBMIT_ENDPOINT</code></li><li>洛谷 IDE 端点放 Variables 的 <code>LUOGU_IDE_ENDPOINT</code></li><li><strong>端点按你登录后洛谷当前页面填写，仓库不编造</strong></li><li>网页「设置」里填一次 <strong>GitHub fine-grained token</strong>（只给本仓库 Contents 读写）、</li></ol>
+<p>仓库名，并把「自动入库」设为开启。token 只存浏览器本地，不进仓库</p>
+<ol><li>之后：写评论 / 发文 / 洛谷 IDE 评测 → 过<strong>自担确认门</strong> → 点「导出待推队列」</li></ol>
+<p>→ <strong>自动写入仓库</strong> → Action 自动低频代提交 luogu</p>
+<ul><li><strong>不用 push、不用手动跑工作流、不用每次填确认值</strong>；每 6 小时定时兜底重试失败条目</li><li><strong>未配置 consent → 永远只预览</strong>，不向洛谷发任何写请求</li><li>没配 GitHub token 时降级为下载文件，自行放进 <code>site/data/outbox/</code> 即可</li><li>低频：2.0~3.5s 抖动、每 20 次小憩、403/降级立即停、失败不轰炸重试、幂等</li><li>状态回写到 <code>site/data/outbox/_状态.json</code>，<code>已提交 / 失败待重试 / 预览</code> 可核对</li><li><strong>你自行确认、自行承担全部后果</strong>；项目不代持会话、不认人只认 token</li></ul>
 <h2>6. 本地操作面板（单人自用）</h2>
 <p><code>admin.html</code>：审 std、删资源、按 uid / 用户名 search。 用户名搜不到时可在洛谷评论里用 <code>@</code> 搜索（低频、无风险、仅必需时用 本人持有的低频检索账号（凭据仅存 Secrets / 本机））。<strong>只认 token 不认人</strong>：没配 token 时面板只读。 低频检索账号标识见《本人操作与 token 约定》，<strong>仓库内无任何凭据</strong>。</p>
 <h2>7. 图片与附件</h2>

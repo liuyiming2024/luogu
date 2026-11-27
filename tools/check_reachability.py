@@ -71,13 +71,16 @@ def main():
     if not guarded: fail.append("洛谷域目标未受 window.open/确认门约束")
 
     # 3 页面加载不自动 fetch：boot 只挂 DOMContentLoaded 监听；
-    #   唯一 fetch 在 mirrors() 的按钮 onclick 回调内，且需 apiBase 已配置。
+    #   两处 fetch 均在用户点击回调内：mirrors 受 apiBase 守卫，
+    #   putOutboxToRepo 受 autoPush + ghToken + 自担确认门守卫。
     boot = re.search(r"function boot\(\)\s*\{([\s\S]*?)\n\}", js)
     auto_fetch = re.findall(r"\bfetch\s*\(", boot.group(1)) if boot else ["未找到 boot"]
-    guarded = "if(!apiBase())" in js
-    print("  ✓ 页面加载零 fetch（唯一 fetch 在按钮回调且受 apiBase 守卫）"
+    guarded = ("if(!apiBase())" in js
+               and 'get(K.autoPush,false) && !!get(K.ghToken,"")' in js
+               and "putOutboxToRepo" in js)
+    print("  ✓ 页面加载零 fetch（两处均在按钮回调，受 apiBase / token+确认门守卫）"
           if not auto_fetch and guarded else "  ✗ 加载即 fetch 或缺守卫")
-    if auto_fetch or not guarded: fail.append("加载即 fetch / 缺 apiBase 守卫")
+    if auto_fetch or not guarded: fail.append("加载即 fetch / 缺守卫")
 
     # 4 静态站不得直连洛谷写接口
     bad = re.findall(r'fetch\s*\(\s*["\']https?://(?:www\.)?luogu\.com', js, re.I)
@@ -119,22 +122,36 @@ def main():
           + ("本机无 emscripten，离线兜底用 std 期望输出对照" if not emcc else "本机有工具链")
           + "（非失败项）")
 
-    # 9 第 12 条：Action 代提交运行态 + 双重确认 + outbox 契约 + 单人自用
+    # 9 第 12 条：Action 代提交（一次性授权 → 自动，本人不用提交）+ outbox 契约
     wf = p(".github/workflows/submit_to_luogu.yml")
     ok_wf = os.path.exists(wf)
     if ok_wf:
         y2 = open(wf, encoding="utf-8").read()
-        gate_ok = ("I_UNDERSTAND_AND_ACCEPT_ALL_RISK" in y2
-                   and "workflow_dispatch" in y2 and "contents: write" in y2
-                   and "secrets.LUOGU_COOKIE" in y2)
+        gate_ok = ("secrets.LUOGU_SUBMIT_CONSENT" in y2
+                   and "I_UNDERSTAND_AND_ACCEPT_ALL_RISK" in y2
+                   and "schedule:" in y2 and "paths:" in y2
+                   and "contents: write" in y2 and "secrets.LUOGU_COOKIE" in y2
+                   and "steps.run.outputs.sent" in y2)
+        auto_ok = ("inputs.confirm" not in y2 and "LUOGU_SUBMIT_CONSENT" in y2)
+        print("  ✓ 免手动：一次性 consent Secret + push/定时自动触发 + sent 门" if auto_ok
+              else "  ✗ 仍要求本人每次手动确认")
+        if not auto_ok: fail.append("仍要求本人每次手填确认值")
         out_ok = os.path.isdir(p("site/data/outbox")) and os.path.exists(p("tools/luogu_submit.py"))
         scr = open(p("tools/luogu_submit.py"), encoding="utf-8").read()
         scr_ok = ("confirmed" in scr and "STOP_MARK" in scr
-                  and "--dry-run" in scr and "random.uniform(2.0, 3.5)" in scr
-                  and "print" not in scr.split("cookie =")[0][-400:])  # 凭据不打印（粗检）
-        print("  ✓ Action 代提交：确认值 / Secrets / outbox / 低频 / 降级即停"
+                  and "--dry-run" in scr and "random.uniform(2.0, 3.5)" in scr)
+        print("  ✓ Action 代提交：一次性授权 / Secrets / outbox / 低频 / 降级即停"
               if gate_ok and out_ok and scr_ok else "  ✗ Action 代提交契约缺项")
         if not (gate_ok and out_ok and scr_ok): fail.append("Action 代提交契约缺项")
+        # 本人不用提交：前端自动入库受确认门 + fine-grained token 守卫
+        js2 = open(p("site_src/local.js"), encoding="utf-8").read()
+        auto_put = ("function putOutboxToRepo" in js2
+                    and 'get(K.autoPush,false) && !!get(K.ghToken,"")' in js2
+                    and "confirmAction(" in js2.split("function exportOutbox")[1][:1200]
+                    and "api.github.com/repos/" in js2)
+        print("  ✓ 自动入库：确认门 + fine-grained token 守卫，连 GitHub 非洛谷" if auto_put
+              else "  ✗ 自动入库缺守卫")
+        if not auto_put: fail.append("自动入库缺守卫")
     else:
         print("  ✗ 缺 submit_to_luogu.yml"); fail.append("缺 Action")
 

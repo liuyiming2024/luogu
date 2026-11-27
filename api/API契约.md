@@ -87,9 +87,13 @@ Authorization: Bearer <token>
 ```
 
 - `confirmed` 由前端第 11 条自担确认门写入；**false 的条目脚本永不提交**（示例文件即如此）
-- `tools/luogu_submit.py` 只处理 `confirmed=true` 且未成功的条目
+- `tools/luogu_submit.py` 只处理 `confirmed=true` 且未成功的条目（幂等）
+- 前端可经自担确认门 `PUT https://api.github.com/repos/<repo>/contents/site/data/outbox/<file>`
+  自动入库（fine-grained token 仅本仓库 Contents 读写、只存浏览器本地），**连的是 GitHub 不是洛谷**；
+  失败则降级为下载文件
 - 端点来自 Secrets / Variables，按洛谷当前页面填写，**不写死、不编造**
 - 状态回写 `site/data/outbox/_状态.json`：`已提交` / `失败待重试` / `预览（未提交）`
+- 一次性授权 Secret `LUOGU_SUBMIT_CONSENT` 存在时，push / 定时自动真提交；不存在则只预览
 - `POST /api/luogu/submit` 为本机代理的可选入口，语义与 outbox 一致；
   静态 Pages **不调用** `https://www.luogu.com/...`
 

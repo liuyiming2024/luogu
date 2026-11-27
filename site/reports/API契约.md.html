@@ -25,7 +25,9 @@
 <pre class="code"><code>{&quot;id&quot;:&quot;c1732...&quot;,&quot;kind&quot;:&quot;comment|publish|judge&quot;,&quot;lid&quot;:&quot;sfifnfaa&quot;,&quot;pid&quot;:&quot;P1001&quot;,
  &quot;text&quot;:&quot;...&quot;,&quot;code&quot;:&quot;...&quot;,&quot;lang&quot;:&quot;C++&quot;,&quot;confirmed&quot;:true,
  &quot;state&quot;:&quot;本地已存 · 待推&quot;,&quot;created_at&quot;:&quot;2026-11-27T...&quot;}</code></pre>
-<ul><li><code>confirmed</code> 由前端第 11 条自担确认门写入；<strong>false 的条目脚本永不提交</strong>（示例文件即如此）</li><li><code>tools/luogu_submit.py</code> 只处理 <code>confirmed=true</code> 且未成功的条目</li><li>端点来自 Secrets / Variables，按洛谷当前页面填写，<strong>不写死、不编造</strong></li><li>状态回写 <code>site/data/outbox/_状态.json</code>：<code>已提交</code> / <code>失败待重试</code> / <code>预览（未提交）</code></li><li><code>POST /api/luogu/submit</code> 为本机代理的可选入口，语义与 outbox 一致；</li></ul>
+<ul><li><code>confirmed</code> 由前端第 11 条自担确认门写入；<strong>false 的条目脚本永不提交</strong>（示例文件即如此）</li><li><code>tools/luogu_submit.py</code> 只处理 <code>confirmed=true</code> 且未成功的条目（幂等）</li><li>前端可经自担确认门 <code>PUT https://api.github.com/repos/&lt;repo&gt;/contents/site/data/outbox/&lt;file&gt;</code></li></ul>
+<p>自动入库（fine-grained token 仅本仓库 Contents 读写、只存浏览器本地），<strong>连的是 GitHub 不是洛谷</strong>； 失败则降级为下载文件</p>
+<ul><li>端点来自 Secrets / Variables，按洛谷当前页面填写，<strong>不写死、不编造</strong></li><li>状态回写 <code>site/data/outbox/_状态.json</code>：<code>已提交</code> / <code>失败待重试</code> / <code>预览（未提交）</code></li><li>一次性授权 Secret <code>LUOGU_SUBMIT_CONSENT</code> 存在时，push / 定时自动真提交；不存在则只预览</li><li><code>POST /api/luogu/submit</code> 为本机代理的可选入口，语义与 outbox 一致；</li></ul>
 <p>静态 Pages <strong>不调用</strong> <code>https://www.luogu.com/...</code></p>
 <h2>约定</h2>
 <ul><li>所有写操作<strong>幂等</strong>：带 <code>Idempotency-Key</code> 或内容 sha，重复提交不产生副本</li><li>时间统一 ISO8601 UTC；内容一律带 <code>sha256</code> 与 <code>original_url</code></li><li>删除资源：<code>204</code> + 写一条「已移除」审计（对应隐私声明「源已删则本地也删」）</li><li><code>/api/publish</code> 只在「已登录 + 联网 + 显式启用」时调用；</li></ul>

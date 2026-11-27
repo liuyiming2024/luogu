@@ -84,3 +84,37 @@
 - 校对分三层：**全量自动判甲/乙/丙不可行**（每题需独立正确解），L2 只进待对拍队列
 
 整理日期：2026-11-24
+
+---
+
+## 最终要求落地 · 本地轻量版 luogu（2026-11-27 更新）
+
+把归档库升级成**单人自用**的本地轻量版 luogu：主页 / 题目 IDE / std 投稿 / 本地操作面板 /
+Markdown 评论 + 算术验证码 / 三态身份 / 编译环境内置下载 / 只认 token 不认人的 API 契约 /
+帮助手册 / 隐私声明（含「此条」）/《全量任务完成清单》/《架构可达性测试报告》。
+
+静态 Pages 浏览器**不能直连洛谷写操作**（CORS + HttpOnly/SameSite cookie + CSRF，
+与出口 403 无关），所以运行态由使用者自己加、自己下载：GitHub Actions runner 即现成运行态，
+本机也可跑 `tools/luogu_submit.py`。项目不代持会话、不认人只认 token。
+
+### 本人不用提交（第 13 条）
+
+**首次配置一次，之后无需任何手动提交动作：**
+
+1. Settings → Secrets 写一次 `LUOGU_SUBMIT_CONSENT=I_UNDERSTAND_AND_ACCEPT_ALL_RISK`
+   （一次性授权，长期有效），以及 `LUOGU_COOKIE` / `LUOGU_CSRF` / `LUOGU_UID` /
+   `LUOGU_SUBMIT_ENDPOINT`；端点按洛谷当前页面填，**不编造内部 API**
+2. 网页「设置」填一次 GitHub **fine-grained token**（仅本仓库 Contents 读写，只存浏览器本地）
+3. 之后：写评论 / 发文 / 洛谷 IDE 评测 → 过「我自担」确认门 → 点「导出待推队列」
+   → **自动写入仓库 `site/data/outbox/`** → push / 定时触发 `.github/workflows/submit_to_luogu.yml`
+   → **自动低频代提交 luogu**
+
+- 不用 push、不用手动跑工作流、不用每次填确认值；每 6 小时定时兜底重试「失败待重试」
+- **未配置 consent → 永远只预览**，不向洛谷发任何写请求
+- 低频 2.0~3.5s 抖动 / 每 20 次小憩 / 403·降级即停 / 失败不轰炸重试 / 幂等
+- 仅「真提交且确有发出」才回写状态，避免无意义提交与竞态
+- `python3 tools/verify_submit.py`：本地假端点类对拍（跳过 / 预览 / 提交 / 幂等 / 不打印凭据）
+
+**本人自行确认、自行承担全部后果。** 仓库内不含任何账号、cookie 或令牌。
+
+详见 `00_总览/帮助手册.md` 5c、`00_总览/架构可达性测试报告.md`、`api/API契约.md`。

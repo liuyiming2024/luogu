@@ -67,12 +67,18 @@
 <p>「静态 Pages 没有服务端」<strong>不是障碍</strong>：壳只负责离线渲染，运行态由使用者自行添加或下载。 本仓库提供两种现成运行态，任选其一或并用：</p>
 <table class="tb"><thead><tr><th>运行态</th><th>谁提供</th><th>做什么</th></tr></thead><tbody><tr><td><strong>GitHub Actions runner</strong></td><td>GitHub</td><td><code>.github/workflows/submit_to_luogu.yml</code> 读取 <code>site/data/outbox/</code>，低频代提交 luogu；也可跑爬取 / 重生成</td></tr><tr><td><strong>本机脚本</strong></td><td>使用者自己下载</td><td><code>python3 tools/luogu_submit.py --dry-run</code>（或去掉 dry-run 真跑），凭据只在本机环境变量</td></tr><tr><td>洛谷自己的页面</td><td>洛谷</td><td>第 10 条：新窗口打开 IDE，登录态自然生效，代码走剪贴板（真编译）</td></tr></tbody></table>
 <h3>Action 代提交的安全门</h3>
-<pre class="code"><code>本地待推队列 → 「导出待推队列」→ site/data/outbox/*.json → push
-   → 手动 workflow_dispatch（confirm=I_UNDERSTAND_AND_ACCEPT_ALL_RISK、dry_run=false）
+<pre class="code"><code>本地待推队列 → 「导出待推队列」（自担确认门已过）
+   → 自动 PUT 到 site/data/outbox/*.json（fine-grained token，连的是 api.github.com）
+   → push 事件自动触发 → gate 读一次性 consent Secret
    → runner 从 Settings Secrets 读 LUOGU_COOKIE / LUOGU_CSRF / LUOGU_UID
    → 2.0~3.5s 抖动 / 每 20 次小憩 / 403·降级即停 / 失败不轰炸重试
-   → 回写状态并 commit</code></pre>
-<ul><li><strong>push / schedule 一律只预览</strong>，不碰洛谷；只有手动触发 + 确认值 + <code>dry_run=false</code> 才真提交</li><li>凭据<strong>不进仓库、不打印</strong>；端点按洛谷当前页面填 Secrets / Variables，<strong>不编造内部 API</strong></li><li>只处理 <code>confirmed=true</code> 的条目，这个标记来自前端第 11 条自担确认门</li><li>返回 <code>queued</code> 不谎报已提交；状态三态可核对</li></ul>
+   → 仅在真提交且确有发出时回写状态并 commit
+   ↑ 全程本人无需再操作；定时兜底重试「失败待重试」条目</code></pre>
+<ul><li><strong>一次性授权</strong>：首次在 Secrets 写 <code>LUOGU_SUBMIT_CONSENT=I_UNDERSTAND_AND_ACCEPT_ALL_RISK</code>，</li></ul>
+<p>之后 <code>push(outbox 变化)</code> / <code>schedule(每 6 小时错峰)</code> <strong>自动真提交</strong>； <strong>本人不用 push、不用手动跑工作流、不用每次填确认值</strong>（第 13 条）</p>
+<ul><li><strong>未配置 consent → 永远只预览</strong>，不碰洛谷（安全默认）；手动 dispatch 可强制预览调试</li><li>前端配一次 GitHub fine-grained token 后，「导出待推队列」经自担确认门直接 PUT 到</li></ul>
+<p><code>site/data/outbox/</code>，连 push 都不用本人做；失败则降级为下载文件</p>
+<ul><li>凭据<strong>不进仓库、不打印</strong>；端点按洛谷当前页面填 Secrets / Variables，<strong>不编造内部 API</strong></li><li>只处理 <code>confirmed=true</code> 的条目，这个标记来自前端第 11 条自担确认门</li><li>返回 <code>queued</code> 不谎报已提交；状态三态可核对；幂等保证不重复发</li><li>仅「真提交且确有发出」才回写状态，预览 / 零条目轮次不写仓库，避免竞态</li></ul>
 <blockquote>这把「难点 1」从「必须用户端代理」收敛成「<strong>运行态可选、用户自己加</strong>」， 目标（评论/发文/IDE 提交到 luogu）不变，发请求的不再是静态页。</blockquote>
 <h2>三、不是架构障碍的几项</h2>
 <table class="tb"><thead><tr><th>项</th><th>判断</th></tr></thead><tbody><tr><td>全量 16 万篇题解</td><td>长期渐进，非一次搬完；<code>on: schedule</code> 自持爬取 + 断点续传已跑通</td></tr><tr><td>保存站刷新</td><td>无公开刷新接口（SPA 骨架 + 降级公告），做成可插拔 hook，不编造接口</td></tr><tr><td>在线取用户名/头像</td><td>出口 403 → 本地缓存 + 内联默认头像 + 三态颜色，已覆盖</td></tr><tr><td>Supabase / Webnote</td><td>free 版、契约就位；当前未授权，属于「待接入」而非「做不了」</td></tr><tr><td>两个本人差一个 i</td><td>配置问题，已原样并列登记</td></tr><tr><td>HTTP 200 的 503 错误页 / csrf 残留</td><td>第 16 批已修，属内容校验不属于架构</td></tr></tbody></table>

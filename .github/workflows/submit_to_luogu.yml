@@ -1,38 +1,42 @@
-name: 代提交 luogu · 需本人确认
+name: 代提交 luogu · 自动（免本人提交）
 
-# 「你在 hub 写个 action，帮我提交 luogu」
-# GitHub 提供的 runner 就是运行态，不需要静态 Pages 自带服务端；
-# 使用者也可自行下载本机运行态（见《架构可达性测试报告》）。
+# 「你在 hub 写个 action，帮我提交 luogu」+「我本人就不用提交」
+#
+# 本人**一次性**在 Settings → Secrets 写入 LUOGU_SUBMIT_CONSENT，
+# 之后 push(outbox 变化) / 定时即自动低频代提交，无需手动 dispatch、
+# 无需每次填确认值、无需本人点任何按钮。
+#
+# 未配置 consent → **永远只预览**，不向洛谷发任何写请求（安全默认）。
 #
 # 硬约束：
 #  - 凭据只从 Settings → Secrets 读，绝不进仓库、绝不打印
-#  - 只有 workflow_dispatch 且确认值正确才「真提交」；
-#    push / schedule 一律只预览（dry-run），不碰洛谷
-#  - 用户自行确认并自行承担后果；本项目不代持会话、不认人只认 token
-#  - 低频：2.0~3.5s 抖动、每 20 次小憩、403/降级即停、失败不轰炸重试
+#  - 只处理前端「我自担」确认门写入 confirmed=true 的条目
+#  - 低频：2.0~3.5s 抖动、每 20 次小憩、403/降级即停、失败不轰炸重试、幂等
+#  - 后果由本人自行确认并自行承担；本项目不代持会话、不认人只认 token
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'site/data/outbox/**'
+      - 'tools/luogu_submit.py'
+  schedule:
+    # 错峰兜底：重试「失败待重试」条目；幂等保证不会重复提交
+    - cron: '41 */6 * * *'
   workflow_dispatch:
     inputs:
-      confirm:
-        description: '输入 I_UNDERSTAND_AND_ACCEPT_ALL_RISK 才会真正提交；留空只预览'
-        required: false
-        default: ''
       kind:
-        description: 'comment（评论）/ publish（发文）/ judge（洛谷 IDE 评测）/ all'
+        description: 'comment / publish / judge / all'
         required: true
         default: 'all'
         type: choice
         options: [all, comment, publish, judge]
-      dry_run:
-        description: 'true = 只预览不提交（默认）'
+      force_dry_run:
+        description: 'true = 本轮强制只预览（调试用）'
         required: true
-        default: 'true'
+        default: 'false'
         type: choice
-        options: ['true', 'false']
-  push:
-    paths:
-      - 'site/data/outbox/**'
+        options: ['false', 'true']
   workflow_call:
 
 permissions:
@@ -49,24 +53,27 @@ jobs:
       - name: 检出仓库
         uses: actions/checkout@v4
 
-      - name: 判定是否允许真提交
+      - name: 判定是否允许真提交（一次性授权）
         id: gate
         env:
-          CONFIRM: ${{ inputs.confirm }}
-          DRY: ${{ inputs.dry_run }}
+          CONSENT: ${{ secrets.LUOGU_SUBMIT_CONSENT }}
+          FORCE_DRY: ${{ inputs.force_dry_run }}
           EVENT: ${{ github.event_name }}
         run: |
           ALLOW=0
-          if [ "$EVENT" = "workflow_dispatch" ] && \
-             [ "$CONFIRM" = "I_UNDERSTAND_AND_ACCEPT_ALL_RISK" ] && \
-             [ "$DRY" = "false" ]; then
+          # 一次性授权：Secret 里存了确认值即长期生效，本人不必再操作
+          if [ "$CONSENT" = "I_UNDERSTAND_AND_ACCEPT_ALL_RISK" ]; then
             ALLOW=1
+          fi
+          # 手动调试可强制预览
+          if [ "$EVENT" = "workflow_dispatch" ] && [ "$FORCE_DRY" = "true" ]; then
+            ALLOW=0
           fi
           echo "allow=$ALLOW" >> "$GITHUB_OUTPUT"
           if [ "$ALLOW" = "1" ]; then
-            echo "::warning::本人已确认并自担后果；本轮将使用 Secrets 中的登录态向洛谷发起低频提交"
+            echo "本人已完成一次性授权并自担后果；本轮自动低频代提交 luogu"
           else
-            echo "未满足「手动触发 + 确认值 + dry_run=false」→ 本轮仅预览，不向洛谷发任何写请求"
+            echo "未配置 LUOGU_SUBMIT_CONSENT（或强制预览）→ 本轮仅预览，不向洛谷发任何写请求"
           fi
 
       - name: 准备 Python
@@ -74,7 +81,8 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: 执行待推队列（未确认则强制 dry-run）
+      - name: 执行待推队列
+        id: run
         env:
           LUOGU_COOKIE: ${{ secrets.LUOGU_COOKIE }}
           LUOGU_CSRF: ${{ secrets.LUOGU_CSRF }}
@@ -87,10 +95,12 @@ jobs:
           ARGS="--kind ${SUBMIT_KIND:-all}"
           if [ "$ALLOW_REAL" != "1" ]; then ARGS="$ARGS --dry-run"; fi
           python3 tools/luogu_submit.py $ARGS
+          SENT=$(python3 -c "import json;print(json.load(open('site/data/outbox/_状态.json',encoding='utf-8'))['实际发出'])")
+          echo "sent=$SENT" >> "$GITHUB_OUTPUT"
 
-      - name: 回写队列状态（仅本人确认过的手动真提交）
-        # push / 定时触发只预览，绝不写回仓库，避免与其他自动提交产生竞态
-        if: steps.gate.outputs.allow == '1'
+      - name: 回写队列状态（仅真提交且确有发出）
+        # 预览 / 零条目的轮次绝不写回仓库，避免与本人推送产生竞态和无意义提交
+        if: steps.gate.outputs.allow == '1' && steps.run.outputs.sent != '0'
         run: |
           git config user.name "luogu-submit-bot"
           git config user.email "luogu-submit-bot@users.noreply.github.com"
@@ -98,6 +108,11 @@ jobs:
           if git diff --cached --quiet; then
             echo "状态无变化，跳过提交"
           else
-            git commit -m "代提交 luogu：回写待推队列状态（无凭据入库）"
+            git commit -m "代提交 luogu：自动回写待推队列状态（无凭据入库）"
+            git pull --rebase origin main
             git push
           fi
+
+      - name: 清理预览轮次的状态文件改动
+        if: steps.gate.outputs.allow != '1' || steps.run.outputs.sent == '0'
+        run: git checkout -- site/data/outbox/_状态.json || true
