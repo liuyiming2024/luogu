@@ -770,14 +770,14 @@
   "problems": 10,
   "academic": 5,
   "rest_windows": 0,
-  "pushes": 9,
+  "pushes": 10,
   "skeleton": 12
  },
  "daily": {
   "date": "2026-11-26",
   "count": 42
  },
- "last_push": "2026-11-26 23:56:36",
+ "last_push": "2026-11-27 09:47:44",
  "problem_skeleton_streak": 17,
  "audit_baseline": {
   "ts": "2026-11-26",
