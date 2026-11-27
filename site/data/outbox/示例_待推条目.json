@@ -7,6 +7,6 @@
   "confirmed": false,
   "state": "本地已存 · 待推",
   "created_at": "2026-11-27T00:00:00Z",
-  "note": "把 confirmed 改为 true 并由本人在 workflow_dispatch 输入确认值后才会处理"
+  "note": "把 confirmed 改为 true；本人完成一次性 consent 授权后，push/定时自动代提交；未授权只预览"
  }
 ]
