@@ -16,6 +16,10 @@
 <ul><li>用<strong>用户个人账号</strong>；管理员账号不参与评论</li><li>返回 <code>queued</code> 只表示已入队，前端状态仍是「待推」；</li></ul>
 <p>只有回传 <code>pushed:true</code> / <code>state:&quot;已推洛谷&quot;</code> 才标成功，<strong>不谎报</strong></p>
 <ul><li>失败进「失败待重试」，<strong>不轰炸重试</strong>；403/降级长退避</li><li>本地副本始终保留，保证离线可看评论</li></ul>
+<h2>真编译通道 · 借洛谷 IDE（第 10 条）</h2>
+<p><strong>不新增评测 API 也能真编译</strong>：前端 <code>luoguRun()</code> 在用户联网且已登录时， <code>window.open()</code> 打开<strong>洛谷域下</strong>的 IDE / 题目提交页（同源，登录态自动生效）， 代码经剪贴板粘贴，由洛谷自己的 IDE 编译。静态站：</p>
+<ul><li>不 <code>fetch</code> 洛谷、不读 cookie、不调洛谷内部 API（入口 URL 由用户自行确认）</li><li>打开前必须过第 11 条确认门</li><li>离线时回退 <code>site/data/judge_cases.json</code> 的 std 期望输出对照</li></ul>
+<p>若以后要<strong>程序化一键提交</strong>，需扩展 / 本机代理持有登录态，那是另一个执行端， 接口形态仍走本节契约，不在当前静态站范围内。</p>
 <h2>约定</h2>
 <ul><li>所有写操作<strong>幂等</strong>：带 <code>Idempotency-Key</code> 或内容 sha，重复提交不产生副本</li><li>时间统一 ISO8601 UTC；内容一律带 <code>sha256</code> 与 <code>original_url</code></li><li>删除资源：<code>204</code> + 写一条「已移除」审计（对应隐私声明「源已删则本地也删」）</li><li><code>/api/publish</code> 只在「已登录 + 联网 + 显式启用」时调用；</li></ul>
 <p>适配器内部仍走低频礼貌节奏，失败不重试轰炸</p>

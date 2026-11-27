@@ -19,9 +19,25 @@ def strip_comments(t):
     return t
 
 def real_urls(t):
+    """只对「页面加载就会去取」的**资源外链**报警。
+    洛谷域的 IDE/提交页入口是 window.open 的目标（用户主动点击 + 确认门），
+    不是资源引用，单独归类、单独校验，不计入外链。"""
+    t = strip_comments(t)
+    out = []
+    # <link>/<script>/<img>/CSS @import/url() 形式的外部资源
+    for u in re.findall(r'(?:src|href)\s*=\s*["\'](https?://[^"\']+)', t):
+        out.append(u)
+    for u in re.findall(r'@import\s+["\']?(https?://[^\s"\';)]+)', t):
+        out.append(u)
+    for u in re.findall(r'url\(\s*["\']?(https?://[^\s"\')]+)', t):
+        out.append(u)
+    return [u for u in out if "www.w3.org/2000/svg" not in u and "127.0.0.1" not in u]
+
+def luogu_targets(t):
+    """洛谷域字符串常量：必须都是 window.open 的目标，且受确认门保护。"""
     t = strip_comments(t)
     return [u for u in re.findall(r'https?://[^\s"\'<>)]+', t)
-            if "www.w3.org/2000/svg" not in u and "127.0.0.1" not in u]
+            if re.search(r'luogu\.(com|com\.cn|org)', u)]
 
 def main():
     ap = argparse.ArgumentParser()
@@ -47,8 +63,12 @@ def main():
     css = open(p("site_src/local.css"), encoding="utf-8").read()
     u = real_urls(js) + real_urls(css)
     cdn = [x for x in u if re.search(r"cdn|unpkg|jsdelivr|googleapis|fonts\.g", x, re.I)]
-    print(f"  {'✓' if not u and not cdn else '✗'} 真实外链 {len(u)} | CDN {len(cdn)}")
-    if u or cdn: fail.append("存在真实外链/CDN: " + str((u + cdn)[:3]))
+    print(f"  {'✓' if not u and not cdn else '✗'} 页面加载资源外链 {len(u)} | CDN {len(cdn)}")
+    if u or cdn: fail.append("存在资源外链/CDN: " + str((u + cdn)[:3]))
+    tg = luogu_targets(js)
+    guarded = "window.open" in js and js.count("confirmAction(") >= 5
+    print(f"  {'✓' if guarded else '✗'} 洛谷域目标 {len(tg)} 处（均为 window.open 用户动作 + 确认门，非资源外链）")
+    if not guarded: fail.append("洛谷域目标未受 window.open/确认门约束")
 
     # 3 页面加载不自动 fetch：boot 只挂 DOMContentLoaded 监听；
     #   唯一 fetch 在 mirrors() 的按钮 onclick 回调内，且需 apiBase 已配置。
@@ -70,6 +90,21 @@ def main():
     print("  ✓ 评论推洛谷适配器 + 三态齐全" if not miss else "  ✗ 缺 " + str(miss))
     if miss: fail.append("评论适配器/三态缺项: " + str(miss))
 
+    # 5b 第 10 条：真编译借洛谷 IDE（新窗口 + 剪贴板），不是跨域 fetch
+    ide_ok = ("function luoguRun" in js and "window.open" in js
+              and "navigator.clipboard" in js and "洛谷 IDE 真编译" in js)
+    print("  ✓ 真编译借洛谷 IDE（新窗口 + 剪贴板，不跨域 fetch）" if ide_ok
+          else "  ✗ 缺洛谷 IDE 通道")
+    if not ide_ok: fail.append("缺第10条洛谷 IDE 通道")
+
+    # 5c 第 11 条：后果自担确认门 + 全写操作接入 + 审计
+    n_conf = js.count("confirmAction(")
+    gate = ("我自担" in js and "我已阅读并" in js and "function audit(" in js
+            and n_conf >= 5)
+    print(f"  ✓ 后果自担确认门（勾选+输入「我自担」+审计，接入 {n_conf} 处）" if gate
+          else f"  ✗ 确认门不全（接入 {n_conf} 处）")
+    if not gate: fail.append("第11条确认门不全")
+
     # 6 Pages 是纯静态托管
     y = open(p(".github/workflows/pages.yml"), encoding="utf-8").read()
     srv = re.findall(r"Flask|uvicorn|gunicorn|node\s+server|supabase\s+start", y, re.I)
@@ -80,8 +115,9 @@ def main():
     # 7 浏览器真编译条件（非失败项，只登记口径）
     emcc = subprocess.run(["bash", "-lc", "command -v emcc || true"],
                           capture_output=True, text=True).stdout.strip()
-    print("  ⚠ 浏览器真编译：" + ("无 emscripten → 已用 std 期望输出对照替代" if not emcc
-                                  else "有工具链，仍按契约走评测 API") + "（非失败项）")
+    print("  ✓ 真编译：第10条借洛谷 IDE（用用户账号）可达；"
+          + ("本机无 emscripten，离线兜底用 std 期望输出对照" if not emcc else "本机有工具链")
+          + "（非失败项）")
 
     # 8 可选只读探测
     if a.probe:

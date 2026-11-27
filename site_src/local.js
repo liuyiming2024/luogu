@@ -6,7 +6,8 @@
 "use strict";
 var LL = {};
 var K = {sess:"ll:sess", token:"ll:token", api:"ll:api", cmt:"ll:cmt:",
-         std:"ll:std", imgs:"ll:imgs", pub:"ll:pub", push:"ll:push", pq:"ll:push_q"};
+         std:"ll:std", imgs:"ll:imgs", pub:"ll:pub", push:"ll:push", pq:"ll:push_q",
+         audit:"ll:audit", ideUrl:"ll:ide_url", subUrl:"ll:sub_url"};
 
 /* ---------- 小工具 ---------- */
 function $(s,r){return (r||document).querySelector(s);}
@@ -84,6 +85,61 @@ function dialog(inner){
   m.addEventListener("click",function(e){if(e.target===m) m.remove();});
   return m;
 }
+/* ---------- 用户自担确认门（第 11 条口径） ----------
+   写操作 / 借账号操作前必须让用户自己看清后果、自己确认、自己承担。
+   这是「明示同意 + 责任划分」，不是安全边界（纯前端可绕过；真鉴权仍靠 token）。
+   默认每次确认；用户可主动勾选「本次会话不再重复」，责任仍归用户。 */
+function sha256(t){
+  /* 轻量非加密摘要，仅用于审计留痕标识；不是完整性签名 */
+  var h=0,i,c; t=String(t||"");
+  for(i=0;i<t.length;i++){c=t.charCodeAt(i);h=((h<<5)-h+c)|0;}
+  return ("00000000"+(h>>>0).toString(16)).slice(-8);
+}
+function confirmAction(o, onOk){
+  /* o: {kind, target, account, traces, detail} */
+  if(sessionStorage.getItem("ll:confirm_once")==="1"){
+    audit(o,"会话内已确认"); onOk(); return;
+  }
+  var acct=o.account||"你自己的洛谷账号（个人账号，非管理员）";
+  var traces=o.traces||"在洛谷留下公开可见的记录";
+  var m=dialog('<h3>⚠ 请自己确认后果</h3>'+
+    '<div class="ll-note" style="border-left-color:var(--ll-bad);background:#fdeeea;color:#7a3527">'+
+      '即将执行 <b>'+esc(o.kind)+'</b>。此动作<b>使用'+esc(acct)+'</b>，'+
+      esc(traces)+'。可能触发平台风控、限流乃至账号封禁；'+
+      '内容的版权与合规责任亦由你承担。<b>后果全部由你自行承担。</b></div>'+
+    '<table class="ll-tb"><tbody>'+
+      '<tr><th>动作</th><td>'+esc(o.kind)+'</td></tr>'+
+      '<tr><th>目标</th><td>'+esc(o.target||"—")+'</td></tr>'+
+      '<tr><th>账号</th><td>'+esc(acct)+'</td></tr>'+
+      '<tr><th>平台痕迹</th><td>'+esc(traces)+'</td></tr>'+
+      '<tr><th>内容摘要</th><td><code>'+esc(sha256(o.detail))+'</code>（仅本地留痕）</td></tr>'+
+    '</tbody></table>'+
+    '<label style="display:flex;gap:7px;align-items:center;margin-top:10px;font-size:13px">'+
+      '<input type="checkbox" id="ll-agree"> 我已阅读并<b>自行承担全部后果</b></label>'+
+    '<label style="display:flex;gap:7px;align-items:center;margin-top:6px;font-size:13px">'+
+      '<input type="checkbox" id="ll-once"> 本次会话内不再重复确认（责任仍由我承担）</label>'+
+    '<label style="font-size:12px;color:var(--ll-mute);display:block;margin-top:9px">'+
+      '输入 <code>我自担</code> 以确认</label>'+
+    '<input id="ll-word" placeholder="我自担" autocomplete="off">'+
+    '<div class="ll-msg" id="ll-conf-msg"></div>'+
+    '<div class="row"><button class="ll-btn" id="ll-conf-no">取消</button>'+
+    '<button class="ll-btn pri" id="ll-conf-yes">我已确认，执行</button></div>');
+  $("#ll-conf-no",m).onclick=function(){m.remove();};
+  $("#ll-conf-yes",m).onclick=function(){
+    var ok=$("#ll-agree",m).checked, w=$("#ll-word",m).value.trim();
+    if(!ok||w!=="我自担"){$("#ll-conf-msg",m).textContent="需勾选并输入「我自担」";return;}
+    if($("#ll-once",m).checked) sessionStorage.setItem("ll:confirm_once","1");
+    audit(o,"用户已确认自担"); m.remove(); onOk();
+  };
+}
+function audit(o,result){
+  var a=get(K.audit,[]);
+  a.push({ts:ts(),kind:o.kind,target:o.target||"",hash:sha256(o.detail),
+          account:o.account||"个人账号",result:result});
+  set(K.audit,a.slice(-200));
+  console.log("[本地 luogu] 自担审计留痕",a[a.length-1]);
+}
+
 function loginDialog(){
   var s=session()||{};
   var m=dialog('<h3>登录 · 本地优先</h3>'+
@@ -121,15 +177,30 @@ function settingsDialog(){
     '<label>评论持久化 · 直接推洛谷</label><select id="ll-push">'+
       '<option value="0"'+(get(K.push,false)?"":" selected")+'>关闭（仅本地，默认）</option>'+
       '<option value="1"'+(get(K.push,false)?" selected":"")+'>本地先存 + 待推队列 → 个人账号低频推洛谷</option></select>'+
+    '<label>洛谷 IDE 入口（用你的账号真编译）</label>'+
+    '<input id="ll-ide-url" value="'+esc(get(K.ideUrl,"https://www.luogu.com/ide"))+'" placeholder="https://www.luogu.com/ide">'+
+    '<label>洛谷题目提交页模板（{pid} 会被替换）</label>'+
+    '<input id="ll-sub-url" value="'+esc(get(K.subUrl,"https://www.luogu.com/problem/{pid}"))+'">'+
     '<div class="ll-note"><b>静态站绝不直连洛谷</b>：跨源 + HttpOnly cookie + CSRF 使浏览器直推不可达。'+
-    '开启后只把待推项交给 <code>/api/comments/push-luogu</code>，由能出网且持有登录态的'+
-    '一端（本机代理 / 自托管 runner / 扩展）执行。当前出口无法访问外部域名，默认关闭。</div>'+
-    '<div class="row"><button class="ll-btn" id="ll-cancel">取消</button>'+
+    '评论/发文交给 <code>/api/comments/push-luogu</code> 等适配器；'+
+    '<b>真编译则新窗口打开洛谷 IDE</b>（洛谷域下、你的登录态自然生效），代码走剪贴板粘贴。'+
+    '入口按你所在网络自行确认，不编造内部 API。当前出口无法访问外部域名，默认关闭。</div>'+
+    '<div class="ll-note" style="border-left-color:var(--ll-bad);background:#fdeeea;color:#7a3527">'+
+    '<b>后果自担</b>：任何写操作 / 借账号动作都会先弹确认门，由你自己确认并承担全部后果；'+
+    '默认每次确认，你也可主动选择会话内不再提示。</div>'+
+    '<div class="row"><button class="ll-btn" id="ll-audit">查看本地审计</button>'+
+    '<button class="ll-btn" id="ll-cancel">取消</button>'+
     '<button class="ll-btn pri" id="ll-save">保存</button></div>');
   $("#ll-cancel",m).onclick=function(){m.remove();};
+  $("#ll-audit",m).onclick=function(){
+    var a=get(K.audit,[]);
+    toast(a.length?("本地审计 "+a.length+" 条，最近："+a[a.length-1].kind+" / "+a[a.length-1].result):"暂无审计记录");
+  };
   $("#ll-save",m).onclick=function(){
     set(K.api,$("#ll-api",m).value.trim()); set(K.token,$("#ll-token",m).value.trim());
-    set(K.pub,$("#ll-pub",m).value==="1"); set(K.push,$("#ll-push",m).value==="1"); m.remove();
+    set(K.pub,$("#ll-pub",m).value==="1"); set(K.push,$("#ll-push",m).value==="1");
+    set(K.ideUrl,$("#ll-ide-url",m).value.trim()); set(K.subUrl,$("#ll-sub-url",m).value.trim());
+    m.remove();
     toast("已保存；页面仍不主动发请求","ok"); location.reload();
   };
 }
@@ -213,14 +284,21 @@ function comments(lid){
          跨源 + HttpOnly/SameSite cookie + CSRF 使浏览器直推不可达。
          只把「待推」交给能出网且持有用户个人账号登录态的一端。 */
       if(get(K.push,false) && apiBase() && online()){
-        var q=get(K.pq,[]); q.push(c); set(K.pq,q);
-        call("/api/comments/push-luogu",{method:"POST",body:JSON.stringify({lid:lid,comment:c})})
-          .then(function(r){
-            if(r && (r.pushed===true || r.state==="已推洛谷")){
-              c.state="已推洛谷"; set(key,list); render(); toast("已推洛谷","ok");
-            }else if(r && r.error){ c.state="失败待重试"; set(key,list); render(); }
-            /* r.queued 只表示已入队，状态仍为「待推」，不谎报已推送 */
-          });
+        confirmAction({
+          kind:"把评论推送到洛谷文章评论区",
+          target:lid+" · www.luogu.com/article/"+lid,
+          traces:"生成一条公开评论，任何人可见；可能触发洛谷风控 / 限流 / 封号",
+          detail:v
+        },function(){
+          var q=get(K.pq,[]); q.push(c); set(K.pq,q);
+          call("/api/comments/push-luogu",{method:"POST",body:JSON.stringify({lid:lid,comment:c})})
+            .then(function(r){
+              if(r && (r.pushed===true || r.state==="已推洛谷")){
+                c.state="已推洛谷"; set(key,list); render(); toast("已推洛谷","ok");
+              }else if(r && r.error){ c.state="失败待重试"; set(key,list); render(); }
+              /* r.queued 只表示已入队，状态仍为「待推」，不谎报已推送 */
+            });
+        });
       }
       ta.value=""; msg.textContent=""; render(); toast("已本地保存"+(get(K.push,false)?"，已入待推队列":""),"ok");
     };
@@ -285,14 +363,19 @@ function ide(){
     '<b>IDE 模式</b><select id="ll-lang"><option>C++</option><option>Python</option><option>C</option></select>'+
     '<input id="ll-pid" value="'+esc(pid)+'" placeholder="题号 如 P1001" style="width:110px">'+
     '<button class="ll-btn" id="ll-tpl">载入模板</button>'+
-    '<button class="ll-btn pri" id="ll-submit">提交</button>'+
+    '<button class="ll-btn" id="ll-copy">复制代码</button>'+
+    '<button class="ll-btn pri" id="ll-submit">本地入队</button>'+
+    '<button class="ll-btn" id="ll-luogu-ide" title="联网+已登录时，用你的账号在洛谷 IDE 真编译">洛谷 IDE 真编译</button>'+
+    '<button class="ll-btn" id="ll-luogu-sub" title="用你的账号提交到洛谷评测">提交洛谷评测</button>'+
     '<span class="hint">仅 C++ / Python / C（最终要求：无额外语言）</span></div>'+
     '<div class="ll-editor"><div class="ll-ln" id="ll-ln">1</div>'+
     '<textarea id="ll-code" spellcheck="false"></textarea></div></div>'+
     '<div class="ll-judge"><h2>本地评测（无网 · 与库中 std 期望输出对照）</h2>'+
-    '<div class="ll-note">浏览器内<b>不做真编译</b>（没有 g++/CPython）。'+
-    '这里用 <code>site/data/judge_cases.json</code> 的 std 期望输出做对照；'+
-    '真编译走评测 API 适配器（需你接后端）。</div>'+
+    '<div class="ll-note"><b>真编译 = 借洛谷 IDE，用你自己的账号</b>（第 10 条口径）：'+
+    '要求你<b>联网且已登录洛谷</b>，点按钮后会<b>新窗口打开洛谷域下的 IDE</b>——'+
+    '在洛谷域里你的会话自然生效，不受跨源限制；代码走剪贴板粘贴，静态站不碰你的账号、'+
+    '不调洛谷内部 API。后果由你自己在确认门里承担。'+
+    '<br>离线兜底：下面仍可用库中 <code>site/data/judge_cases.json</code> 的 std 期望输出做对照。</div>'+
     '<select id="ll-case" style="border:1px solid var(--ll-line);border-radius:8px;padding:6px 9px">'+
       '<option value="">选择测试点</option>'+
       cases.map(function(c,i){return '<option value="'+i+'">'+esc(c.label||("用例 "+(i+1)))+"</option>";}).join("")+
@@ -311,6 +394,38 @@ function ide(){
     if(apiBase()) call("/api/judge",{method:"POST",body:JSON.stringify(payload)});
     toast("已本地入队（未联网提交）","ok");
   };
+  /* 复制代码（用户主动动作，零请求） */
+  $("#ll-copy",host).onclick=function(){
+    if(navigator.clipboard) navigator.clipboard.writeText(code.value)
+      .then(function(){toast("代码已复制","ok");});
+    else toast("浏览器不支持剪贴板，请手动选中复制");
+  };
+  /* 借洛谷 IDE 真编译：新窗口打开洛谷域 + 剪贴板；不跨域 fetch、不碰登录态 */
+  function luoguRun(kind,urlTpl){
+    var pid=$("#ll-pid",host).value.trim()||"P1001";
+    var url=(urlTpl||"").replace("{pid}",encodeURIComponent(pid));
+    if(!/^https?:\/\/(www\.)?luogu\.(com|com\.cn|org)\//i.test(url)){
+      toast("请先在「设置」里填写洛谷域下的 IDE / 提交页入口","no"); return;
+    }
+    confirmAction({
+      kind:kind, target:url,
+      account:"你自己的洛谷账号（联网且已登录；非管理员账号）",
+      traces:"在洛谷 IDE 运行 / 产生一次提交记录，可能触发风控、限流或封号；代码内容责任由你承担",
+      detail:code.value
+    },function(){
+      if(navigator.clipboard) navigator.clipboard.writeText(code.value);
+      var w=window.open(url,"_blank","noopener,noreferrer");
+      if(!w) toast("浏览器拦截了新窗口；请允许后重试","no");
+      else toast("已打开洛谷域页面；代码已复制，粘贴后运行","ok");
+    });
+  }
+  $("#ll-luogu-ide",host).onclick=function(){
+    luoguRun("用洛谷 IDE 真编译",get(K.ideUrl,"https://www.luogu.com/ide"));
+  };
+  $("#ll-luogu-sub",host).onclick=function(){
+    luoguRun("提交到洛谷评测",get(K.subUrl,"https://www.luogu.com/problem/{pid}"));
+  };
+
   $("#ll-check",host).onclick=function(){
     var i=$("#ll-case",host).value, out=$("#ll-out",host).value.trim(), v=$("#ll-verdict",host);
     if(i===""){v.innerHTML='<div class="ll-verdict no">请先选测试点</div>';return;}
@@ -392,7 +507,11 @@ function submit(){
     if(!pid||!body){toast("题号和内容都要填","no");return;}
     var item={pid:pid,body:body,state:"待对跑",ts:ts()};
     q.push(item); set(K.std,q);
-    if(apiBase()) call("/api/std/submit",{method:"POST",body:JSON.stringify(item)});
+    if(apiBase()){
+      confirmAction({kind:"把 std 投稿同步到外部队列",target:"apiBase /api/std/submit",
+        traces:"产生一条投稿记录，后续可能被审核并公开；后果由你承担",detail:body},
+        function(){call("/api/std/submit",{method:"POST",body:JSON.stringify(item)});});
+    }
     $("#ll-s-body",host).value=""; render(); toast("已本地入队","ok");
   };
 }
@@ -429,8 +548,12 @@ function admin(){
     $$("[data-del]",host).forEach(function(b){b.onclick=function(){
       if(!tok()){toast("未配置 token，只读","no");return;}
       var id=b.getAttribute("data-del");
-      if(apiBase()) call("/api/resources/"+encodeURIComponent(id),{method:"DELETE"});
-      toast("已提交删除（本地不直接删归档）","ok");
+      confirmAction({kind:"删除归档资源",target:id,
+        traces:"本地与线上数据源同步删除该条目，仅保留「已移除」审计；不可恢复，后果由你承担",
+        detail:id},function(){
+        if(apiBase()) call("/api/resources/"+encodeURIComponent(id),{method:"DELETE"});
+        toast("已提交删除（本地不直接删归档）","ok");
+      });
     };});
   }
   renderAdm(""); renderRes("");
