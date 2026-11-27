@@ -341,6 +341,11 @@ index = f"""<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
 </div>
 <p class="hint">「枚举」= 对已发现的全部 8 位编号按题号升序、同题按编号字典序有序编目并逐条判定是否题解；<b>不对编号空间或全站做高频遍历</b>。新增编号用 <code>ingest.py</code> 低频补录。</p>
 <p class="hint">📌 <b>引用与署名</b>：每篇均保留<a href="reports/{RIGHTS_PAGE}">原文链接、作者署名、取回时间与内容完整性签名</a>；版权归原作者及洛谷所有，本库仅作学术归档留痕，权利人可申请移除。</p>
+<p class="hint">⚙️ <b>运行态自己加 / 自己下载</b>：静态站只是壳，GitHub Actions 即现成运行态。
+评论 / 发文 / 洛谷 IDE 评测 → 本地待推队列 → 导出 <code>site/data/outbox/</code> →
+手动跑「代提交 luogu」工作流并输入确认值才真提交；凭据走 Settings Secrets，<b>不进仓库</b>。
+<a href="reports/架构可达性测试报告.md.html">架构可达性报告</a> ·
+<a href="reports/帮助手册.md.html">帮助手册 5c</a>。</p>
 <p class="hint">💬 <b>评论持久化 = 直接推洛谷</b>：本地先存离线副本 + 待推队列，由持有个人账号登录态的一端低频推送；<b>静态站不直连洛谷</b>（CORS + HttpOnly/SameSite cookie + CSRF 不可达）。详见<a href="reports/架构可达性测试报告.md.html">架构可达性测试报告</a>。</p>
 <p class="hint">⚙ <b>真编译借洛谷 IDE</b>（联网+已登录、用你自己的账号，新窗口 + 剪贴板）；<b>所有写操作先过后果自担确认门</b>（勾选 + 输入「我自担」）。见<a href="reports/帮助手册.md.html">帮助手册</a>与<a href="reports/隐私声明与数据处理条款.md.html">隐私声明</a>。</p>
 </div></header>
@@ -531,10 +536,10 @@ for _f in ["local.css", "local.js"]:
         _sh.copyfile(_p, os.path.join(SITE, "assets", _f))
 
 # 2) 数据脚本（内联，零 fetch）
-_adm = os.path.join(DATA, "admins.json")
-_admins = json.load(open(_adm, encoding="utf-8")).get("admins", []) if os.path.exists(_adm) else []
-open(os.path.join(SITE, "assets", "admins.js"), "w", encoding="utf-8").write(
-    "window.LL_ADMINS=" + json.dumps(_admins, ensure_ascii=False) + ";\n")
+_adm = os.path.join(DATA, "self.json")
+_self = json.load(open(_adm, encoding="utf-8")).get("operators", []) if os.path.exists(_adm) else []
+open(os.path.join(SITE, "assets", "self.js"), "w", encoding="utf-8").write(
+    "window.LL_SELF=" + json.dumps(_self, ensure_ascii=False) + ";\n")
 
 # 3) std 期望输出表 = 甲类反例 + 少量标准用例（供 IDE「本地评测」对照）
 _cases = [{"label": "P1001 A+B 标准用例", "input": "1 2", "expect": "3",
@@ -595,7 +600,7 @@ def _page(title, page_id, body, extra_js=""):
 </main><div class="ll-foot wrap">本地版、轻量版 luogu · 版权归原作者及洛谷所有 ·
 <a href="reports/归档与版权声明.md.html">归档与版权声明</a> ·
 <a href="reports/帮助手册.md.html">帮助手册</a></div>
-<script src="assets/admins.js"></script><script src="assets/judge_cases.js"></script>
+<script src="assets/self.js"></script><script src="assets/judge_cases.js"></script>
 <script src="assets/mirrors.js"></script>{extra_js}
 <script src="assets/local.js"></script></body></html>'''
 
@@ -607,8 +612,8 @@ open(os.path.join(SITE, "problems.html"), "w", encoding="utf-8").write(_page(
     '<div id="ll-ide"></div><div id="ll-hacks"></div><div id="ll-mirrors"></div>'))
 open(os.path.join(SITE, "submit.html"), "w", encoding="utf-8").write(_page(
     "std 工单（投稿）", "submit", '<div id="ll-submit"></div>'))
-open(os.path.join(SITE, "admin.html"), "w", encoding="utf-8").write(_page(
-    "管理员 · 只认 token 不认人", "admin", '<div id="ll-admin"></div>'))
+open(os.path.join(SITE, "self.html"), "w", encoding="utf-8").write(_page(
+    "本地操作 · 只认 token 不认人", "self", '<div id="ll-admin"></div>'))
 
 # 8) API 契约也做成可点开的报告页，并挂到首页资料清单
 _apip = os.path.join(REPO, "api", "API契约.md")
@@ -626,7 +631,7 @@ if os.path.exists(_apip):
         '<h2>归档资料</h2><ul class="links">'
         '<li><a href="reports/API契约.md.html">API契约（只认 token 不认人）</a></li>'
         '<li><a href="problems.html">题目 / IDE / 本地评测</a></li>'
-        '<li><a href="submit.html">std 投稿</a></li><li><a href="admin.html">管理员面板</a></li>')
+        '<li><a href="submit.html">std 投稿</a></li><li><a href="self.html">本地操作面板</a></li>')
     open(_idxp, "w", encoding="utf-8").write(_t)
 
 # 9) 站点说明补一段
@@ -634,8 +639,8 @@ _srp = os.path.join(SITE, "README.md")
 with open(_srp, "a", encoding="utf-8") as _f:
     _f.write("\n## 本地轻量版 luogu 层（2026-11-27）\n\n"
              "- `assets/local.css` / `local.js`：独立洛谷风主题、三态身份、Markdown 评论 + 算术验证码、"
-             "IDE、本地评测、std 投稿、管理员、编译环境内置下载面板\n"
-             "- `problems.html` / `submit.html` / `admin.html`：三个子页面\n"
+             "IDE、本地评测、std 投稿、本人、编译环境内置下载面板\n"
+             "- `problems.html` / `submit.html` / `self.html`：三个子页面\n"
              "- **评论持久化直接推洛谷**：本地先存 + 待推队列 + `/api/comments/push-luogu` 适配器；"
              "静态站不直连洛谷（跨源 + HttpOnly cookie + CSRF 不可达）\n"
              "- 页面加载零外网请求；`apiBase` 留空时全部功能纯本地可用\n"

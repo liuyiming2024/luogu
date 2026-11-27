@@ -46,7 +46,7 @@
    ↓ 该端持有用户个人账号登录态，低频、人工确认、可一键关闭
    ↓ 洛谷文章评论区（权威持久层）
    ↓ 回写 state: 已推洛谷 / 失败待重试</code></pre>
-<ul><li><strong>洛谷 = 权威持久层；本地 = 离线镜像 + 队列</strong>，不另建评论数据库</li><li>用<strong>用户个人账号</strong>；管理员账号（<code>liuyiming2024_1</code> / <code>liiyiming2024_1</code>）不参与评论</li><li>静态站代码里<strong>没有</strong>任何直接指向 luogu.com 的写请求</li><li>与「发文回推 luogu.com.cn」复用同一个适配器（<code>/api/publish</code>）</li></ul>
+<ul><li><strong>洛谷 = 权威持久层；本地 = 离线镜像 + 队列</strong>，不另建评论数据库</li><li>用<strong>用户个人账号</strong>；低频检索账号（本人持有的低频检索账号（凭据仅存 Settings Secrets / 本机））不参与评论</li><li>静态站代码里<strong>没有</strong>任何直接指向 luogu.com 的写请求</li><li>与「发文回推 luogu.com.cn」复用同一个适配器（<code>/api/publish</code>）</li></ul>
 <h3>难点 2 · 浏览器内真编译 —— 已按第 10 条降级为「可达」</h3>
 <p>原判断：静态站自身无 WASM / g++ / CPython，浏览器内真编译能力级不可达。 <strong>用户给出更优解</strong>：可以要求对方<strong>联网且已登录</strong>，用<strong>对方自己的账号</strong> 借<strong>洛谷 IDE</strong> 真编译。这把问题从「自己造编译器」变成「换执行端」， 与难点 1 的规避同构，而且更省事——不用自建 runner、不用打包 emscripten。</p>
 <p>落地形态（已实现）：</p>
@@ -63,8 +63,19 @@
 <p>断网也能用（浏览器本身依然不编译）</p>
 <h3>难点 3 · 写操作风控 —— 可达但高风险</h3>
 <p>评论 / 发文 / 回推都是<strong>写操作</strong>，比 GET 更容易触发风控与封号。 沿用「别给我封了」：2.0~3.5s 抖动、每 20 次小憩、50 分钟窗口 / 15 分钟静默、 403/降级长退避 30 分钟、<strong>失败不轰炸重试</strong>、默认关闭、仅个人账号。</p>
+<h2>三之前 · 运行态自己加 / 自己下载（第 12 条）</h2>
+<p>「静态 Pages 没有服务端」<strong>不是障碍</strong>：壳只负责离线渲染，运行态由使用者自行添加或下载。 本仓库提供两种现成运行态，任选其一或并用：</p>
+<table class="tb"><thead><tr><th>运行态</th><th>谁提供</th><th>做什么</th></tr></thead><tbody><tr><td><strong>GitHub Actions runner</strong></td><td>GitHub</td><td><code>.github/workflows/submit_to_luogu.yml</code> 读取 <code>site/data/outbox/</code>，低频代提交 luogu；也可跑爬取 / 重生成</td></tr><tr><td><strong>本机脚本</strong></td><td>使用者自己下载</td><td><code>python3 tools/luogu_submit.py --dry-run</code>（或去掉 dry-run 真跑），凭据只在本机环境变量</td></tr><tr><td>洛谷自己的页面</td><td>洛谷</td><td>第 10 条：新窗口打开 IDE，登录态自然生效，代码走剪贴板（真编译）</td></tr></tbody></table>
+<h3>Action 代提交的安全门</h3>
+<pre class="code"><code>本地待推队列 → 「导出待推队列」→ site/data/outbox/*.json → push
+   → 手动 workflow_dispatch（confirm=I_UNDERSTAND_AND_ACCEPT_ALL_RISK、dry_run=false）
+   → runner 从 Settings Secrets 读 LUOGU_COOKIE / LUOGU_CSRF / LUOGU_UID
+   → 2.0~3.5s 抖动 / 每 20 次小憩 / 403·降级即停 / 失败不轰炸重试
+   → 回写状态并 commit</code></pre>
+<ul><li><strong>push / schedule 一律只预览</strong>，不碰洛谷；只有手动触发 + 确认值 + <code>dry_run=false</code> 才真提交</li><li>凭据<strong>不进仓库、不打印</strong>；端点按洛谷当前页面填 Secrets / Variables，<strong>不编造内部 API</strong></li><li>只处理 <code>confirmed=true</code> 的条目，这个标记来自前端第 11 条自担确认门</li><li>返回 <code>queued</code> 不谎报已提交；状态三态可核对</li></ul>
+<blockquote>这把「难点 1」从「必须用户端代理」收敛成「<strong>运行态可选、用户自己加</strong>」， 目标（评论/发文/IDE 提交到 luogu）不变，发请求的不再是静态页。</blockquote>
 <h2>三、不是架构障碍的几项</h2>
-<table class="tb"><thead><tr><th>项</th><th>判断</th></tr></thead><tbody><tr><td>全量 16 万篇题解</td><td>长期渐进，非一次搬完；<code>on: schedule</code> 自持爬取 + 断点续传已跑通</td></tr><tr><td>保存站刷新</td><td>无公开刷新接口（SPA 骨架 + 降级公告），做成可插拔 hook，不编造接口</td></tr><tr><td>在线取用户名/头像</td><td>出口 403 → 本地缓存 + 内联默认头像 + 三态颜色，已覆盖</td></tr><tr><td>Supabase / Webnote</td><td>free 版、契约就位；当前未授权，属于「待接入」而非「做不了」</td></tr><tr><td>两个管理员差一个 i</td><td>配置问题，已原样并列登记</td></tr><tr><td>HTTP 200 的 503 错误页 / csrf 残留</td><td>第 16 批已修，属内容校验不属于架构</td></tr></tbody></table>
+<table class="tb"><thead><tr><th>项</th><th>判断</th></tr></thead><tbody><tr><td>全量 16 万篇题解</td><td>长期渐进，非一次搬完；<code>on: schedule</code> 自持爬取 + 断点续传已跑通</td></tr><tr><td>保存站刷新</td><td>无公开刷新接口（SPA 骨架 + 降级公告），做成可插拔 hook，不编造接口</td></tr><tr><td>在线取用户名/头像</td><td>出口 403 → 本地缓存 + 内联默认头像 + 三态颜色，已覆盖</td></tr><tr><td>Supabase / Webnote</td><td>free 版、契约就位；当前未授权，属于「待接入」而非「做不了」</td></tr><tr><td>两个本人差一个 i</td><td>配置问题，已原样并列登记</td></tr><tr><td>HTTP 200 的 503 错误页 / csrf 残留</td><td>第 16 批已修，属内容校验不属于架构</td></tr></tbody></table>
 <h2>四、结论</h2>
 <p><strong>有难以实现的架构，且只有一处是硬的</strong>：静态 Pages 不能自己直连洛谷做写操作 （CORS + HttpOnly/SameSite cookie + CSRF 三锁，见「〇」）。 规避方案明确、已落地为「本地队列 + 外部执行端」适配器，<strong>不需要改目标</strong>—— 评论依然直接推洛谷、依然是权威持久层，只是发请求的不是浏览器。</p>
 <p>按第 10 条，<strong>真编译已降级为可达</strong>：借洛谷 IDE、用用户个人账号、联网已登录， 新窗口 + 剪贴板，静态站不碰登录态。</p>

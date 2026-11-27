@@ -119,6 +119,48 @@ def main():
           + ("本机无 emscripten，离线兜底用 std 期望输出对照" if not emcc else "本机有工具链")
           + "（非失败项）")
 
+    # 9 第 12 条：Action 代提交运行态 + 双重确认 + outbox 契约 + 单人自用
+    wf = p(".github/workflows/submit_to_luogu.yml")
+    ok_wf = os.path.exists(wf)
+    if ok_wf:
+        y2 = open(wf, encoding="utf-8").read()
+        gate_ok = ("I_UNDERSTAND_AND_ACCEPT_ALL_RISK" in y2
+                   and "workflow_dispatch" in y2 and "contents: write" in y2
+                   and "secrets.LUOGU_COOKIE" in y2)
+        out_ok = os.path.isdir(p("site/data/outbox")) and os.path.exists(p("tools/luogu_submit.py"))
+        scr = open(p("tools/luogu_submit.py"), encoding="utf-8").read()
+        scr_ok = ("confirmed" in scr and "STOP_MARK" in scr
+                  and "--dry-run" in scr and "random.uniform(2.0, 3.5)" in scr
+                  and "print" not in scr.split("cookie =")[0][-400:])  # 凭据不打印（粗检）
+        print("  ✓ Action 代提交：确认值 / Secrets / outbox / 低频 / 降级即停"
+              if gate_ok and out_ok and scr_ok else "  ✗ Action 代提交契约缺项")
+        if not (gate_ok and out_ok and scr_ok): fail.append("Action 代提交契约缺项")
+    else:
+        print("  ✗ 缺 submit_to_luogu.yml"); fail.append("缺 Action")
+
+    # 角色字样回归：只查「源文件 / 文档 / 工作流」；site/ 下产物由生成器覆盖，
+    #   workflows/pages.yml 在重生成之后才跑本自检，产物届时必然干净。
+    #   字面量拆开写，避免本脚本自己命中自己。
+    ROLE = "管理" + "员"
+    bad_role = []
+    for dp, dn, fn in os.walk(R):
+        rel_dp = os.path.relpath(dp, R)
+        if (".git" in dp.split(os.sep) or "__pycache__" in dp.split(os.sep)
+                or rel_dp.startswith("site") or "01_批次清单" in rel_dp
+                or "data/ingested" in rel_dp
+                or rel_dp.startswith("03_验证脚本")):
+            continue
+        for f in fn:
+            if f == "check_reachability.py": continue
+            if not f.endswith((".md", ".js", ".css", ".py", ".json", ".yml")): continue
+            fp = os.path.join(dp, f)
+            try: t = open(fp, encoding="utf-8").read()
+            except Exception: continue
+            if ROLE in t: bad_role.append(os.path.relpath(fp, R))
+    print("  ✓ 单人自用：源/文档/工作流无角色字样" if not bad_role
+          else "  ✗ 仍出现角色字样: " + str(bad_role[:4]))
+    if bad_role: fail.append("角色字样回归: " + str(bad_role[:4]))
+
     # 8 可选只读探测
     if a.probe:
         import time, urllib.request

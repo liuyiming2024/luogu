@@ -116,7 +116,7 @@ body.ll{background:var(--ll-bg);color:var(--ll-ink);
 .ll-verdict.ok{background:#eaf7ef;color:var(--ll-ok)}
 .ll-verdict.no{background:#fdeeea;color:var(--ll-bad)}
 
-/* 管理员 / 工单 / 编译面板 */
+/* 本人 / 工单 / 编译面板 */
 .ll-tb{width:100%;border-collapse:collapse;font-size:13px;background:#fff}
 .ll-tb th,.ll-tb td{border:1px solid var(--ll-line);padding:7px 9px;text-align:left}
 .ll-tb th{background:var(--ll-acc)}

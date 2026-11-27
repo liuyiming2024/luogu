@@ -18,6 +18,9 @@ on:
       - 'site_src/**'
       - 'api/**'
       - 'tools/check_reachability.py'
+      - 'tools/luogu_submit.py'
+      - 'site/data/outbox/**'
+      - '.github/workflows/submit_to_luogu.yml'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
 

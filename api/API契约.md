@@ -38,9 +38,9 @@ Authorization: Bearer <token>
 | POST | `/api/std/submit` | std 工单投稿 | 是 |
 | GET | `/api/std/queue` | 投稿队列 | 是 |
 | POST | `/api/std/compare` | 与原 std 对跑 → 去 WA / 去不优 | 是 |
-| POST | `/api/std/approve` | 人工审核无错 → 迁入 std | 是（管理员） |
-| GET | `/api/search?uid=` / `?name=` | 管理员 search | 是 |
-| DELETE | `/api/resources/:id` | 删资源 | 是（管理员） |
+| POST | `/api/std/approve` | 人工审核无错 → 迁入 std | 是（本人） |
+| GET | `/api/search?uid=` / `?name=` | 本人 search | 是 |
+| DELETE | `/api/resources/:id` | 删资源 | 是（本人） |
 | GET | `/api/images/:sha` | 按需图片副本 | 否 |
 | GET | `/api/mirrors` | 编译镜像清单（内置下载功能） | 否 |
 | GET | `/api/crawl/status` | 爬取进度 / 降级状态 | 否 |
@@ -57,7 +57,7 @@ Authorization: Bearer <token>
 
 - 静态 Pages **绝不直接 `fetch("https://www.luogu.com/...")`**：跨源 preflight、
   HttpOnly + SameSite cookie、csrf-token 三重不可达（详见《架构可达性测试报告》）
-- 用**用户个人账号**；管理员账号不参与评论
+- 用**用户个人账号**；低频检索账号不参与评论
 - 返回 `queued` 只表示已入队，前端状态仍是「待推」；
   只有回传 `pushed:true` / `state:"已推洛谷"` 才标成功，**不谎报**
 - 失败进「失败待重试」，**不轰炸重试**；403/降级长退避
@@ -75,6 +75,23 @@ Authorization: Bearer <token>
 
 若以后要**程序化一键提交**，需扩展 / 本机代理持有登录态，那是另一个执行端，
 接口形态仍走本节契约，不在当前静态站范围内。
+
+## outbox 契约 · Action 代提交（第 12 条）
+
+`site/data/outbox/*.json` 为待推队列（数组或单对象），每条：
+
+```json
+{"id":"c1732...","kind":"comment|publish|judge","lid":"sfifnfaa","pid":"P1001",
+ "text":"...","code":"...","lang":"C++","confirmed":true,
+ "state":"本地已存 · 待推","created_at":"2026-11-27T..."}
+```
+
+- `confirmed` 由前端第 11 条自担确认门写入；**false 的条目脚本永不提交**（示例文件即如此）
+- `tools/luogu_submit.py` 只处理 `confirmed=true` 且未成功的条目
+- 端点来自 Secrets / Variables，按洛谷当前页面填写，**不写死、不编造**
+- 状态回写 `site/data/outbox/_状态.json`：`已提交` / `失败待重试` / `预览（未提交）`
+- `POST /api/luogu/submit` 为本机代理的可选入口，语义与 outbox 一致；
+  静态 Pages **不调用** `https://www.luogu.com/...`
 
 ## 约定
 

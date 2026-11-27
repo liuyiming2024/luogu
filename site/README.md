@@ -49,8 +49,8 @@ python3 site/ingest.py new.json
 
 ## 本地轻量版 luogu 层（2026-11-27）
 
-- `assets/local.css` / `local.js`：独立洛谷风主题、三态身份、Markdown 评论 + 算术验证码、IDE、本地评测、std 投稿、管理员、编译环境内置下载面板
-- `problems.html` / `submit.html` / `admin.html`：三个子页面
+- `assets/local.css` / `local.js`：独立洛谷风主题、三态身份、Markdown 评论 + 算术验证码、IDE、本地评测、std 投稿、本人、编译环境内置下载面板
+- `problems.html` / `submit.html` / `self.html`：三个子页面
 - **评论持久化直接推洛谷**：本地先存 + 待推队列 + `/api/comments/push-luogu` 适配器；静态站不直连洛谷（跨源 + HttpOnly cookie + CSRF 不可达）
 - 页面加载零外网请求；`apiBase` 留空时全部功能纯本地可用
 - 架构可达性结论见 `reports/架构可达性测试报告.md.html`

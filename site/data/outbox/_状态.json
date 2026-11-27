@@ -1,0 +1,22 @@
+{
+ "生成时间": "2026-11-27T13:27:44+00:00",
+ "模式": "预览",
+ "处理": 1,
+ "实际发出": 0,
+ "提前停止": false,
+ "凭据来源": "Settings Secrets（本文件不含任何凭据）",
+ "低频": "2.0~3.5s 抖动 / 每20次小憩30s / 降级即停 / 失败不轰炸重试",
+ "结果": [
+  {
+   "id": "t-true",
+   "kind": "comment",
+   "lid": "sfifnfaa",
+   "pid": null,
+   "confirmed": true,
+   "checked_at": "2026-11-27T13:27:44+00:00",
+   "state": "预览（未提交）",
+   "note": "显式 dry-run / 未确认；未配置 LUOGU_COOKIE（Settings → Secrets）；未配置端点（按洛谷当前页面填 Secrets/Variables，不编造接口）"
+  }
+ ],
+ "说明": "示例留痕：confirmed=false 跳过、confirmed=true 仅预览；临时测试条目已删除"
+}

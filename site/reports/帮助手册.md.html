@@ -24,12 +24,17 @@
 <p>点「洛谷 IDE 真编译」/「提交洛谷评测」→ 先过确认门 → <strong>新窗口打开洛谷域下的页面</strong> （同源，登录态自动生效）→ 代码已复制到剪贴板，粘贴后由洛谷 IDE 编译 / 评测。 静态站不 fetch 洛谷、不读 cookie、不碰内部 API。入口在「设置」里可自行确认</p>
 <ul><li>无网时「编译环境」面板内置国内易联镜像清单，可一键复制 / 主动点击探测可达性</li><li>题目页附「已知 hack」（讨论区 / 工单题解），复用甲类反例数据</li></ul>
 <h2>5. std 投稿与审核</h2>
-<p><code>submit.html</code> 投工单 → 本地入队 → <strong>与原 std 对跑比较</strong> → 去除 <strong>WA</strong> 与 <strong>不优</strong> → 添入可选项 → <strong>管理员人工审核无错</strong> → 迁入 std。 脚本不自动迁入。详见《std工单与迁入流程》。</p>
+<p><code>submit.html</code> 投工单 → 本地入队 → <strong>与原 std 对跑比较</strong> → 去除 <strong>WA</strong> 与 <strong>不优</strong> → 添入可选项 → <strong>本人人工审核无错</strong> → 迁入 std。 脚本不自动迁入。详见《std工单与迁入流程》。</p>
 <h2>5b. 后果自担确认门（第 11 条）</h2>
 <p>任何写操作 / 借账号动作前会弹确认门，列明<strong>动作、目标、用谁的账号、 会在洛谷留下什么公开痕迹、可能触发风控/封号、版权责任</strong>。 必须勾选「我已阅读并自行承担全部后果」并输入 <strong>「我自担」</strong> 才执行； 默认每次确认，你也可主动选择「本次会话不再重复」（责任仍归你）。 「设置 → 查看本地审计」可看留痕（仅存浏览器，不上传）。</p>
 <blockquote>确认门是<strong>明示同意与责任划分，不是安全边界</strong>；真鉴权仍靠 token。 验证码同理，只防误触。</blockquote>
-<h2>6. 管理员</h2>
-<p><code>admin.html</code>：审 std、删资源、按 uid / 用户名 search。 用户名搜不到时可在洛谷评论里用 <code>@</code> 搜索（低频、无风险、仅必需时用 <code>liuyiming2024_1</code>）。<strong>只认 token 不认人</strong>：没配 token 时面板只读。 管理员标识见《管理员与权限配置》，<strong>仓库内无任何凭据</strong>。</p>
+<h2>5c. 用 Action 代提交 luogu（第 12 条）</h2>
+<p><strong>运行态自己加、自己下载</strong>：静态站只是壳，GitHub Actions runner 就是现成运行态， 也可以把 <code>tools/luogu_submit.py</code> 下载到本机自己跑。项目按<strong>单人自用</strong>设计。</p>
+<ol><li>写评论 / 发文 / 用洛谷 IDE 真编译 → 都会先过<strong>自担确认门</strong>（勾选 + 输入「我自担」）</li><li>文章页点「<strong>导出待推队列（给 Action 用）</strong>」→ 下载 <code>outbox-YYYYMMDD.json</code></li><li>把文件放进仓库 <code>site/data/outbox/</code> 并 push</li><li>仓库 → Actions → 「<strong>代提交 luogu · 需本人确认</strong>」→ Run workflow：</li><li><code>confirm</code> 填 <code>I_UNDERSTAND_AND_ACCEPT_ALL_RISK</code></li><li><code>dry_run</code> 选 <code>false</code></li><li><code>kind</code> 选 <code>comment</code> / <code>publish</code> / <code>judge</code> / <code>all</code></li><li>首次使用先在 <strong>Settings → Secrets</strong> 添加：</li></ol>
+<p><code>LUOGU_COOKIE</code>、<code>LUOGU_CSRF</code>、<code>LUOGU_UID</code>、<code>LUOGU_SUBMIT_ENDPOINT</code>； 洛谷 IDE 端点放 Variables 的 <code>LUOGU_IDE_ENDPOINT</code>。<strong>端点按你登录后洛谷当前页面填写，仓库不编造。</strong></p>
+<ul><li><strong>push 触发只预览</strong>，不向洛谷发任何写请求；只有手动触发 + 确认值才真提交</li><li>低频：2.0~3.5s 抖动、每 20 次小憩、403/降级立即停、失败不轰炸重试</li><li>状态回写到 <code>site/data/outbox/_状态.json</code>，<code>已提交 / 失败待重试 / 预览</code> 可核对</li><li><strong>你自行确认、自行承担全部后果</strong>；项目不代持会话、不认人只认 token</li></ul>
+<h2>6. 本地操作面板（单人自用）</h2>
+<p><code>admin.html</code>：审 std、删资源、按 uid / 用户名 search。 用户名搜不到时可在洛谷评论里用 <code>@</code> 搜索（低频、无风险、仅必需时用 本人持有的低频检索账号（凭据仅存 Secrets / 本机））。<strong>只认 token 不认人</strong>：没配 token 时面板只读。 低频检索账号标识见《本人操作与 token 约定》，<strong>仓库内无任何凭据</strong>。</p>
 <h2>7. 图片与附件</h2>
 <p><strong>不全量抓取</strong>：只在正文里遇到才保存，落到 <code>site/assets/img/</code>。 空间不够且无法扩容时按 <code>题面 &gt; 题解 &gt; 学术类文章 &gt; 其它</code> 保留。 详见《图片按需抓取与优先级淘汰》。</p>
 <h2>8. 数据与同步</h2>

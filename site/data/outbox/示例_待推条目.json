@@ -1,0 +1,12 @@
+[
+  {
+    "id": "example-0001",
+    "kind": "comment",
+    "lid": "sfifnfaa",
+    "text": "（示例：这是一条待推评论，confirmed=false 时脚本永不提交）",
+    "confirmed": false,
+    "state": "本地已存 · 待推",
+    "created_at": "2026-11-27T00:00:00Z",
+    "note": "把 confirmed 改为 true 并由本人在 workflow_dispatch 输入确认值后才会处理"
+  }
+]

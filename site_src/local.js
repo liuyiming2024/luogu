@@ -64,7 +64,7 @@ function chrome(){
   bar.innerHTML='<div class="in"><span class="ll-logo">本地 luogu</span>'+
     '<nav class="ll-nav">'+
       '<a href="index.html">首页</a><a href="problems.html">题目 / IDE</a>'+
-      '<a href="submit.html">std 投稿</a><a href="admin.html">管理员</a>'+
+      '<a href="submit.html">std 投稿</a><a href="self.html">本地操作</a>'+
       '<a href="reports/帮助手册.md.html">帮助手册</a>'+
       '<a href="reports/全量任务完成清单.md.html">完成清单</a>'+
       '<a href="reports/隐私声明与数据处理条款.md.html">隐私声明</a>'+
@@ -100,7 +100,7 @@ function confirmAction(o, onOk){
   if(sessionStorage.getItem("ll:confirm_once")==="1"){
     audit(o,"会话内已确认"); onOk(); return;
   }
-  var acct=o.account||"你自己的洛谷账号（个人账号，非管理员）";
+  var acct=o.account||"你自己的洛谷账号（个人账号，非本人）";
   var traces=o.traces||"在洛谷留下公开可见的记录";
   var m=dialog('<h3>⚠ 请自己确认后果</h3>'+
     '<div class="ll-note" style="border-left-color:var(--ll-bad);background:#fdeeea;color:#7a3527">'+
@@ -185,6 +185,12 @@ function settingsDialog(){
     '评论/发文交给 <code>/api/comments/push-luogu</code> 等适配器；'+
     '<b>真编译则新窗口打开洛谷 IDE</b>（洛谷域下、你的登录态自然生效），代码走剪贴板粘贴。'+
     '入口按你所在网络自行确认，不编造内部 API。当前出口无法访问外部域名，默认关闭。</div>'+
+    '<div class="ll-note"><b>运行态自己加 / 自己下载</b>：静态站只是壳，'+
+    'GitHub Actions runner 就是现成运行态，也可本机跑 <code>tools/luogu_submit.py</code>。'+
+    '评论 / 发文 / 洛谷 IDE 评测先本地入队 → 「导出待推队列」→ 放进 '+
+    '<code>site/data/outbox/</code> → push → 手动跑「代提交 luogu」工作流并输入确认值。'+
+    '凭据填在仓库 Settings → Secrets（<code>LUOGU_COOKIE / LUOGU_CSRF / LUOGU_UID / '+
+    'LUOGU_SUBMIT_ENDPOINT</code>），<b>不进仓库</b>；端点按洛谷当前页面填写，不编造。</div>'+
     '<div class="ll-note" style="border-left-color:var(--ll-bad);background:#fdeeea;color:#7a3527">'+
     '<b>后果自担</b>：任何写操作 / 借账号动作都会先弹确认门，由你自己确认并承担全部后果；'+
     '默认每次确认，你也可主动选择会话内不再提示。</div>'+
@@ -242,6 +248,38 @@ function captcha(host){
   return function(){return $("input",box).value.trim()===sessionStorage.getItem("ll:cap");};
 }
 
+/* ---------- 待推队列 → outbox（喂给 GitHub Action） ----------
+   运行态由使用者自行添加 / 下载：这里只导出，不碰洛谷、不持凭据。 */
+function exportOutbox(lid){
+  var q=get(K.pq,[]), list=get(K.cmt+lid,[]);
+  var extra=list.filter(function(c){return c.state!=="已推洛谷";}).map(function(c){
+    return {id:c.id||("c"+Date.now()+Math.floor(Math.random()*999)),kind:"comment",
+            lid:lid,text:c.text,confirmed:true,state:"本地已存 · 待推",created_at:ts()};
+  });
+  var seen={}, out=[];
+  q.concat(extra).forEach(function(x){
+    if(!x || !x.id || seen[x.id]) return;
+    seen[x.id]=1;
+    out.push({id:x.id,kind:x.kind||"comment",lid:x.lid||lid,pid:x.pid||"",
+              text:x.text||"",code:x.code||"",lang:x.lang||"",
+              confirmed:true,state:"本地已存 · 待推",created_at:x.created_at||ts()});
+  });
+  if(!out.length){toast("待推队列为空","ok");return;}
+  confirmAction({
+    kind:"导出 "+out.length+" 条待推内容，交给 GitHub Action 代提交 luogu",
+    target:"site/data/outbox/ · workflow: 代提交 luogu",
+    traces:"导出本身只下载到本地文件，不发起任何请求；真正提交发生在你手动跑 Action 并输入确认值之后",
+    detail:out.length+" 条 / "+lid
+  },function(){
+    var blob=new Blob([JSON.stringify(out,null,1)],{type:"application/json;charset=utf-8"});
+    var u=URL.createObjectURL(blob), a=document.createElement("a");
+    a.href=u; a.download="outbox-"+new Date().toISOString().slice(0,10).replace(/-/g,"")+".json";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){URL.revokeObjectURL(u);},1000);
+    toast("已导出 "+out.length+" 条：放进 site/data/outbox/ 后 push，再手动跑 Action","ok");
+  });
+}
+
 /* ---------- 评论 ---------- */
 function comments(lid){
   var host=$("#ll-comments"); if(!host) return;
@@ -255,6 +293,10 @@ function comments(lid){
       ' 条已推），待推项交给外部执行端用<b>个人账号</b>低频推送；'+
       '静态站不直连洛谷。未开启或未配置 apiBase 时纯本地、零请求。</div><div id="ll-cm-list"></div>';
     host.innerHTML=h;
+    var exp=document.createElement("button"); exp.className="ll-btn";
+    exp.textContent="导出待推队列（给 Action 用）"; exp.style.margin="0 0 10px 0";
+    exp.onclick=function(){ exportOutbox(lid); };
+    host.insertBefore(exp, host.querySelector("#ll-cm-list").nextSibling);
     var box=$("#ll-cm-list",host);
     if(!list.length){box.innerHTML='<p class="ll-empty">还没有评论。</p>';}
     list.forEach(function(c){
@@ -278,7 +320,8 @@ function comments(lid){
       if(!check()){msg.textContent="验证码不对，换一题再试";return;}
       var v=ta.value.trim(); if(!v){msg.textContent="内容为空";return;}
       var s=session(), who=(s&&(s.name||"已登录"))||"本地用户";
-      var c={who:who,text:v,ts:ts(),lid:lid,state:"本地已存",id:"c"+Date.now()};
+      var c={who:who,text:v,ts:ts(),lid:lid,state:"本地已存",id:"c"+Date.now(),
+             kind:"comment",confirmed:false,created_at:ts()};
       list.push(c); set(key,list);
       /* 评论持久层 = 洛谷。静态站绝不 fetch luogu.com：
          跨源 + HttpOnly/SameSite cookie + CSRF 使浏览器直推不可达。
@@ -290,6 +333,7 @@ function comments(lid){
           traces:"生成一条公开评论，任何人可见；可能触发洛谷风控 / 限流 / 封号",
           detail:v
         },function(){
+          c.confirmed=true; set(key,list);
           var q=get(K.pq,[]); q.push(c); set(K.pq,q);
           call("/api/comments/push-luogu",{method:"POST",body:JSON.stringify({lid:lid,comment:c})})
             .then(function(r){
@@ -409,7 +453,7 @@ function ide(){
     }
     confirmAction({
       kind:kind, target:url,
-      account:"你自己的洛谷账号（联网且已登录；非管理员账号）",
+      account:"你自己的洛谷账号（联网且已登录；非低频检索账号）",
       traces:"在洛谷 IDE 运行 / 产生一次提交记录，可能触发风控、限流或封号；代码内容责任由你承担",
       detail:code.value
     },function(){
@@ -516,25 +560,25 @@ function submit(){
   };
 }
 
-/* ---------- 管理员（只认 token 不认人） ---------- */
-function admin(){
-  var host=$("#ll-admin"); if(!host) return;
-  var admins=window.LL_ADMINS||[], A=window.LL_ARTICLES||[];
+/* ---------- 本人（只认 token 不认人） ---------- */
+function selfPanel(){
+  var host=$("#ll-self"); if(!host) return;
+  var ops=window.LL_SELF||[], A=window.LL_ARTICLES||[];
   var rw=!!tok();
-  host.innerHTML='<h2>管理员面板</h2>'+
+  host.innerHTML='<h2>本地操作面板</h2>'+
     '<div class="ll-note"><b>只认 token 不认人</b>：服务端只校验 '+
     '<code>Authorization: Bearer &lt;token&gt;</code>，不校验自然人。'+
     (rw?'当前已配置 token → <b>可写</b>':'未配置 token → <b>只读</b>，不会误删')+'。</div>'+
     '<div style="margin:10px 0"><input id="ll-q" placeholder="按 uid 或 用户名 search" '+
       'style="border:1px solid var(--ll-line);border-radius:8px;padding:7px 10px;width:260px">'+
     ' <button class="ll-btn" id="ll-search">搜索</button></div>'+
-    '<div id="ll-adm-list"></div>'+
+    '<div id="ll-self-list"></div>'+
     '<div class="ll-note" style="margin-top:14px">用户名搜不到时，可在洛谷评论里用 <code>@</code> 搜索'+
-    '（低频、无风险、仅必需时使用 <code>liuyiming2024_1</code>）。</div>'+
+    '（低频、无风险、仅必需时使用 <code>本人低频检索账号</code>）。</div>'+
     '<h3 style="margin-top:18px">资源（删资源需 token）</h3><div id="ll-res"></div>';
   function renderAdm(f){
-    var list=admins.filter(function(a){return !f||(a.id||"").indexOf(f)>=0||(a.role||"").indexOf(f)>=0;});
-    $("#ll-adm-list",host).innerHTML='<table class="ll-tb"><thead><tr><th>标识</th><th>用途</th><th>约束</th></tr></thead><tbody>'+
+    var list=ops.filter(function(a){return !f||(a.id||"").indexOf(f)>=0||(a.role||"").indexOf(f)>=0;});
+    $("#ll-self-list",host).innerHTML='<table class="ll-tb"><thead><tr><th>标识</th><th>用途</th><th>约束</th></tr></thead><tbody>'+
       (list.length?list.map(function(a){return "<tr><td><code>"+esc(a.id)+"</code></td><td>"+
         esc(a.role)+"</td><td>"+esc(a.constraint||"")+"</td></tr>";}).join("")
         :'<tr><td colspan="3" class="ll-empty">无匹配</td></tr>')+"</tbody></table>";
@@ -571,7 +615,7 @@ function page(){
     else if($("#groups")) p="home";
     else if($("#ll-ide")) p="problems";
     else if($("#ll-submit")) p="submit";
-    else if($("#ll-admin")) p="admin";
+    else if($("#ll-self")) p="self";
     else p="doc";
   }
   return p;
@@ -594,7 +638,7 @@ function boot(){
   if(p==="problems"||$("#ll-ide")) ide();
   if($("#ll-mirrors")) mirrors();
   if(p==="submit"||$("#ll-submit")) submit();
-  if(p==="admin"||$("#ll-admin")) admin();
+  if(p==="self"||$("#ll-self")) selfPanel();
   if(imgs) console.log("[本地 luogu] 按需图片登记 "+imgs+" 处，未发起抓取");
   console.log("[本地 luogu] page="+p+" | apiBase="+(apiBase()?"已配置":"空(零请求)")+
     " | 加载完成，未发起任何外网请求");

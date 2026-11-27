@@ -20,7 +20,7 @@
 <p>静态页面不直连洛谷、不代持会话</p>
 <ul><li>本地保留评论副本与待推队列，仅用于离线阅读与断点续传；</li></ul>
 <p>「已推洛谷 / 待推 / 失败待重试」状态对用户可见</p>
-<ul><li>推送为<strong>低频、人工确认、可一键关闭</strong>；失败不轰炸重试</li><li>管理员账号不参与评论推送</li></ul>
+<ul><li>推送为<strong>低频、人工确认、可一键关闭</strong>；失败不轰炸重试</li><li>低频检索账号不参与评论推送</li></ul>
 <h2>用户自担风险条款（第 11 条口径）</h2>
 <blockquote><strong>让对方自己确认后果、让对方自己承担。</strong></blockquote>
 <ol><li>所有<strong>写操作</strong>（评论推洛谷、发文回推、std 投稿外发、删资源）与</li></ol>
@@ -35,7 +35,13 @@
 <p>真正的鉴权仍靠 <code>Authorization: Bearer &lt;token&gt;</code>。</p>
 <ol><li>平台仍保留<strong>低频、默认关闭、失败不轰炸重试</strong>作为默认保护；</li></ol>
 <p>用户自行放宽频率或强行重试所致后果，同样由用户承担。</p>
-<ol><li>管理员账号不参与评论与 IDE；IDE / 写操作一律用<strong>用户个人账号</strong>。</li></ol>
+<ol><li>低频检索账号不参与评论与 IDE；IDE / 写操作一律用<strong>用户个人账号</strong>。</li></ol>
+<h2>Action 代提交与自担后果（第 12 条）</h2>
+<ul><li><strong>运行态由使用者自行添加 / 下载</strong>：Actions runner 或本机脚本；静态站不承担运行态</li><li>凭据（<code>LUOGU_COOKIE</code> / <code>LUOGU_CSRF</code> / <code>LUOGU_UID</code>）只存 <strong>Settings Secrets / 本机环境变量</strong>，</li></ul>
+<p>不进仓库、不打印、不上传</p>
+<ul><li>待推队列只含本人已确认的内容；导出为 <code>site/data/outbox/*.json</code> 由本人自行 push</li><li><strong>只有本人手动触发工作流并输入确认值才真提交</strong>；push / 定时一律只预览</li><li><strong>本人自行确认并自行承担全部后果</strong>：公开评论 / 提交记录、平台频次限制、风控、</li></ul>
+<p>账号限制与内容责任均由本人承担；项目仅提供本地工具与队列</p>
+<ul><li>项目按<strong>单人自用</strong>设计，不设角色体系，公开产物不出现角色字样、不明文登记账号</li></ul>
 <h2>账号与隐私信息</h2>
 <ul><li>登录使用 <strong>cookie 或账密</strong>，账号等隐私信息<strong>只在本地缓存</strong>，支持子页面不重复登录</li><li>使用 cookie 时，部分信息（手机号 / uid / 用户名等标识）<strong>不显示</strong></li><li>未登录或无法联网获取头像时，使用<strong>洛谷默认头像</strong></li><li>用户名：联网时从洛谷获取；无网时用缓存或登录时的标识信息</li><li><strong>无效状态（无缓存且无网）</strong>：用户名显示灰色</li><li>本站<strong>不向仓库写入任何密码、cookie、token</strong>；公开仓库里只有标识与结构</li></ul>
 <h2>鉴权</h2>
