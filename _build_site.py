@@ -341,6 +341,7 @@ index = f"""<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
 </div>
 <p class="hint">「枚举」= 对已发现的全部 8 位编号按题号升序、同题按编号字典序有序编目并逐条判定是否题解；<b>不对编号空间或全站做高频遍历</b>。新增编号用 <code>ingest.py</code> 低频补录。</p>
 <p class="hint">📌 <b>引用与署名</b>：每篇均保留<a href="reports/{RIGHTS_PAGE}">原文链接、作者署名、取回时间与内容完整性签名</a>；版权归原作者及洛谷所有，本库仅作学术归档留痕，权利人可申请移除。</p>
+<p class="hint">💬 <b>评论持久化 = 直接推洛谷</b>：本地先存离线副本 + 待推队列，由持有个人账号登录态的一端低频推送；<b>静态站不直连洛谷</b>（跨源 + HttpOnly cookie + CSRF 不可达）。详见<a href="reports/架构可达性测试报告.md.html">架构可达性测试报告</a>与<a href="reports/帮助手册.md.html">帮助手册</a>。</p>
 </div></header>
 <main class="wrap"><div id="groups">{''.join(cards)}</div>
 <p id="none" class="empty" hidden>没有匹配的文章。</p>
