@@ -1,6 +1,6 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>甲类合法反例_23条.md · 离线归档</title><link rel="stylesheet" href="../assets/style.css"></head>
+<title>甲类合法反例_23条.md · 离线归档</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/local.css"></head>
 <body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">00_总览 / 甲类合法反例_23条.md</span></header>
 <main class="doc"><h1>甲类合法反例清单（32 条 · 第 17 批撤销 2 条）</h1>
 <blockquote>全部满足：题面内 + 确定性 WA/RE + 不考虑评测机波动。 第 11 批无新增；第 12 批新增 8 条；第 13 批新增 3 条（H-032~H-034）。 <strong>第 17 批撤销 H-006 / H-007</strong>：<code>yk90rg78</code> 经 2025 组全范围原文级对拍确认正确， 第 2 批的「输出恒 0」来自转录版把 <code>f[0][0]=1-ctrl[0][0]</code> 错置到 DP 循环之后，属误判， 该篇已下调为丙·未 hack。累计 34 → <strong>32</strong> 条。</blockquote>
@@ -8,4 +8,4 @@
 <p>逐条复现：在 <code>04_复现代码/</code> 找 <code>r13__*.cpp</code> 或 <code>P####_&lt;lid&gt;.cpp</code>， <code>g++ -std=c++17 -O2</code> 编译后喂上表输入；H-031 需加 <code>-static</code> 并用 <code>RLIMIT_AS=8MB</code>（见 <code>03_验证脚本/verify_batch12c.py</code>）。 独立正确解与对拍脚本在 <code>03_验证脚本/</code>，原始输出在 <code>05_对拍原始数据/</code>。</p>
 <hr>
 <h2>附：乙类反例（单列，不计甲类 34 条）</h2>
-<table class="tb"><thead><tr><th>编号</th><th>题解</th><th>输入</th><th>期望 → 实际</th><th>修复</th></tr></thead><tbody><tr><td>B-001</td><td>P1049 <code>v3wxayi3</code></td><td><code>50 8 / 18 26 41 24 1 48 37 47</code></td><td><code>0</code> → <code>1</code>（作者自述随机放弃最优）</td><td>随机化无保证</td></tr><tr><td>B-002</td><td>P1098 <code>88laurj5</code></td><td><code>2 2 1 / 1-5</code></td><td><code>12233445</code> → <code>10011225</code></td><td><code>j+30</code> → <code>j+32</code>，415 组全对</td></tr></tbody></table></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>
+<table class="tb"><thead><tr><th>编号</th><th>题解</th><th>输入</th><th>期望 → 实际</th><th>修复</th></tr></thead><tbody><tr><td>B-001</td><td>P1049 <code>v3wxayi3</code></td><td><code>50 8 / 18 26 41 24 1 48 37 47</code></td><td><code>0</code> → <code>1</code>（作者自述随机放弃最优）</td><td>随机化无保证</td></tr><tr><td>B-002</td><td>P1098 <code>88laurj5</code></td><td><code>2 2 1 / 1-5</code></td><td><code>12233445</code> → <code>10011225</code></td><td><code>j+30</code> → <code>j+32</code>，415 组全对</td></tr></tbody></table></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer><script src="../assets/local.js"></script></body></html>

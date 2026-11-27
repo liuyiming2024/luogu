@@ -1,6 +1,6 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>全量爬取与校对说明.md · 离线归档</title><link rel="stylesheet" href="../assets/style.css"></head>
+<title>全量爬取与校对说明.md · 离线归档</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/local.css"></head>
 <body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">02_文章编号索引 / 全量爬取与校对说明.md</span></header>
 <main class="doc"><h1>全量公开资料汇集与校对 · 架构说明</h1>
 <blockquote>目标（你的原话）：<strong>把洛谷的所有公开题面、公开题解、有用的学术文章都汇集进这个库，并且都做校对</strong>； 保存站内容可更新，爬之前先刷新一下让它重新从洛谷抓，或直接爬洛谷； 写一个大脚本做枚举与爬取、实时写回仓库、一直跑； 但不要恒定 2 秒太明显，比如每隔一个小时停上十分钟。</blockquote>
@@ -96,4 +96,4 @@ python3 _build_site.py &amp;&amp; 双击 site/index.html</code></pre>
 <p><code>extract_code()</code> 改为先取 <code>&lt;pre&gt;</code> 再按多语言特征判定。</p>
 <ol><li><strong>HTTP 200 不等于正文</strong>：限流时洛谷返回 200 + 「503 - 洛谷日爆」错误页，</li></ol>
 <p>旧逻辑当题面存档了 5 份。503 特征进 <code>STOP_MARKERS</code>，命中长退避。</p>
-<blockquote>纪律：<strong>状态码、job 是否变绿、文案里有没有「已移除」，都不能当作内容正确的证据</strong>； 必须看响应体本身。</blockquote></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>
+<blockquote>纪律：<strong>状态码、job 是否变绿、文案里有没有「已移除」，都不能当作内容正确的证据</strong>； 必须看响应体本身。</blockquote></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer><script src="../assets/local.js"></script></body></html>

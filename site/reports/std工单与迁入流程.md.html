@@ -1,0 +1,23 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>std工单与迁入流程.md · 离线归档</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/local.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">00_总览 / std工单与迁入流程.md</span></header>
+<main class="doc"><h1>std 工单（投稿）与迁入流程</h1>
+<blockquote>背景：<strong>取不到官方数据</strong>，所以正确性以 <strong>std 对拍</strong>为准， 而不是假装手里有官方测试数据。</blockquote>
+<h2>状态机</h2>
+<pre class="code"><code>投稿（工单）
+   ↓ 与原 std 对跑比较
+   ├─ WA              → 去除（不进入候选）
+   ├─ 结果正确但不优  → 去除（时间/空间明显劣于原 std）
+   └─ 不 WA 且更优    → 添入「可选项」
+                            ↓ 人工审核（管理员：审 std）
+                            ├─ 有错 → 打回 / 去除
+                            └─ 无错 → 迁入 std</code></pre>
+<h2>判据</h2>
+<table class="tb"><thead><tr><th>项</th><th>口径</th></tr></thead><tbody><tr><td>官方数据</td><td><strong>无</strong>。不编造、不引用不存在的官方 std/测试点</td></tr><tr><td>对拍</td><td>自写独立正确解 + 题面内输入；与原 std 多轮对跑</td></tr><tr><td>去除 WA</td><td>任何题面内确定性 WA/RE 直接淘汰（沿用甲类口径）</td></tr><tr><td>去除不优</td><td>与第 1 批起的三类口径一致：<strong>最小时间/空间、省资源</strong>是默认要求；明显劣于原 std 不收</td></tr><tr><td>不优的定义</td><td>同输入下输出一致但耗时/内存明显更差，或依赖更大数组/更慢算法</td></tr><tr><td>人工审核</td><td>管理员（见《管理员与权限配置》）逐条确认后迁入，脚本不自动迁入</td></tr></tbody></table>
+<h2>与现有对拍体系的关系</h2>
+<ul><li><code>03_验证脚本/</code> 与 <code>05_对拍原始数据/</code> 已提供独立正确解 + 变异版敏感性检查</li><li><code>tools/verify_infra.py</code> 的「变异必须被抓到」纪律同样适用于 std 投稿：</li></ul>
+<p><strong>对跑比较若抓不到已知反例，判为空跑，投稿不通过</strong></p>
+<ul><li>第 17 批 <code>yk90rg78</code> 翻案说明：<strong>转录位置也是语义</strong>，投稿代码必须回原文/原文件逐字核对</li></ul>
+<h2>前端入口</h2>
+<p><code>submit.html</code> 提交工单 → 本地保存（离线可用）→ 队列写回本库； 真正的对跑比较在 <code>tools/</code> 本地执行（浏览器内不做真编译）， 结果由管理员在 <code>admin.html</code> 审核。接口契约见 <code>api/API契约.md</code>。</p></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer><script src="../assets/local.js"></script></body></html>

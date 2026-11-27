@@ -1,0 +1,36 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>架构可达性测试报告.md · 离线归档</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/local.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">00_总览 / 架构可达性测试报告.md</span></header>
+<main class="doc"><h1>架构可达性测试报告</h1>
+<blockquote>目的：在继续实现前，先回答「<strong>是否有难以实现的架构</strong>」。 方法：只读探测（不登录、不提交凭据、间隔 2 秒）+ 静态资产自检 + 浏览器模型推断。 可复跑：<code>python3 tools/check_reachability.py</code>（默认<strong>不发任何网络请求</strong>； <code>--probe</code> 才做只读状态码探测，且不带任何账号信息）。</blockquote>
+<h2>一、实测证据</h2>
+<table class="tb"><thead><tr><th>检查</th><th>结果</th></tr></thead><tbody><tr><td><code>site_src/local.js</code> / <code>api/reference_server.py</code> 语法</td><td>OK</td></tr><tr><td>新 CSS 外链 / CDN</td><td>0 / 0</td></tr><tr><td>新 JS 外链</td><td>2 处，均为 <code>http://www.w3.org/2000/svg</code>（SVG 命名空间，不是网络请求）与设置框里的示例地址；CDN 0</td></tr><tr><td><strong>页面加载即发 fetch</strong></td><td><strong>0</strong>（唯一 fetch 在「探测可达性」按钮的点击回调里）</td></tr><tr><td>当前沙盒 curl 出口：<code>luogu.com/article</code> / <code>/api/user/login</code> / <code>luogu.me</code> / <code>github.io</code></td><td>全部 <strong>403</strong>，<code>HTTP/2 403</code> 且读不到 CORS 头</td></tr><tr><td>浏览器真编译条件</td><td>无 emscripten / WASM 工具链；浏览器内无 g++</td></tr><tr><td>Pages workflow 能力</td><td><code>setup-python</code> + <code>upload-pages-artifact</code> + <code>deploy-pages</code>，<strong>纯静态托管，无服务端进程</strong></td></tr></tbody></table>
+<h3>关于「全 403」的重要区分</h3>
+<p><strong>这不是站点挂了，也不是频率被限，是沙盒出口策略网关的默认拒绝</strong>（响应体 <code>No policy rule matched the request / policy_default_denied</code>）。同一时段：</p>
+<ul><li>GitHub Actions 出口取洛谷文章正文为 <strong>HTTP 200</strong>（<code>azdjstpm</code> 8836 字节，第 15 批实证）</li><li>另一读取通道读 <code>liuyiming2024.github.io/luogu/</code> 返回正常 HTML（87 篇）</li></ul>
+<p>所以结论是「<strong>当前这一端出不去</strong>」，不是「目标不可达」。架构因此必须把 <strong>取回</strong>放 Actions、<strong>推送</strong>放能出网且持有登录态的一端，而不是全塞进静态站。</p>
+<h2>二、三个真正的难点</h2>
+<h3>难点 1 · 静态 Pages 浏览器直推洛谷 —— 架构级不可达（硬障碍）</h3>
+<p>与新口径「评论持久化直接推洛谷」直接相关。<strong>与 403 无关</strong>，是浏览器模型决定：</p>
+<table class="tb"><thead><tr><th>障碍</th><th>说明</th></tr></thead><tbody><tr><td>跨源</td><td>Pages 域 <code>liuyiming2024.github.io</code> ≠ <code>www.luogu.com</code>，写操作触发 CORS preflight</td></tr><tr><td>响应头</td><td>洛谷不返回 <code>Access-Control-Allow-Origin: *</code>，浏览器阻断响应</td></tr><tr><td>凭据</td><td>登录态是 HttpOnly + SameSite cookie，跨站 <code>credentials: &#x27;include&#x27;</code> 带不过去</td></tr><tr><td>CSRF</td><td>页面 <code>csrf-token</code> 与会话绑定，静态页拿不到也用不了</td></tr></tbody></table>
+<p><strong>curl / 后端不受这四条限制，浏览器一定受。</strong> 所以「直接推洛谷」不能用 <code>fetch(&quot;https://www.luogu.com/...&quot;)</code> 实现。</p>
+<p><strong>落地形态（已实现）</strong>：</p>
+<pre class="code"><code>文章页写评论
+   ↓ 本地先存（localStorage，离线可看）→ state: 本地已存
+   ↓ 待推队列（显式开关 + 配置了 apiBase 才启用）
+   ↓ POST /api/comments/push-luogu   ← 交给「本机代理 / 自托管 runner / 浏览器扩展」
+   ↓ 该端持有用户个人账号登录态，低频、人工确认、可一键关闭
+   ↓ 洛谷文章评论区（权威持久层）
+   ↓ 回写 state: 已推洛谷 / 失败待重试</code></pre>
+<ul><li><strong>洛谷 = 权威持久层；本地 = 离线镜像 + 队列</strong>，不另建评论数据库</li><li>用<strong>用户个人账号</strong>；管理员账号（<code>liuyiming2024_1</code> / <code>liiyiming2024_1</code>）不参与评论</li><li>静态站代码里<strong>没有</strong>任何直接指向 luogu.com 的写请求</li><li>与「发文回推 luogu.com.cn」复用同一个适配器（<code>/api/publish</code>）</li></ul>
+<h3>难点 2 · 浏览器内真编译 —— 能力级不可达</h3>
+<p>无 emscripten/WASM 工具链，浏览器没有 g++/CPython 运行时。 已用「库中 <code>site/data/judge_cases.json</code> 的 std 期望输出对照」替代本地评测， 真编译走评测 API 适配器。<strong>不假装浏览器能编译</strong>。</p>
+<h3>难点 3 · 写操作风控 —— 可达但高风险</h3>
+<p>评论 / 发文 / 回推都是<strong>写操作</strong>，比 GET 更容易触发风控与封号。 沿用「别给我封了」：2.0~3.5s 抖动、每 20 次小憩、50 分钟窗口 / 15 分钟静默、 403/降级长退避 30 分钟、<strong>失败不轰炸重试</strong>、默认关闭、仅个人账号。</p>
+<h2>三、不是架构障碍的几项</h2>
+<table class="tb"><thead><tr><th>项</th><th>判断</th></tr></thead><tbody><tr><td>全量 16 万篇题解</td><td>长期渐进，非一次搬完；<code>on: schedule</code> 自持爬取 + 断点续传已跑通</td></tr><tr><td>保存站刷新</td><td>无公开刷新接口（SPA 骨架 + 降级公告），做成可插拔 hook，不编造接口</td></tr><tr><td>在线取用户名/头像</td><td>出口 403 → 本地缓存 + 内联默认头像 + 三态颜色，已覆盖</td></tr><tr><td>Supabase / Webnote</td><td>free 版、契约就位；当前未授权，属于「待接入」而非「做不了」</td></tr><tr><td>两个管理员差一个 i</td><td>配置问题，已原样并列登记</td></tr><tr><td>HTTP 200 的 503 错误页 / csrf 残留</td><td>第 16 批已修，属内容校验不属于架构</td></tr></tbody></table>
+<h2>四、结论</h2>
+<p><strong>有难以实现的架构，且只有一处是硬的</strong>：静态 Pages 不能自己直连洛谷做写操作。 规避方案明确、已落地为「本地队列 + 外部执行端」适配器，<strong>不需要改目标</strong>—— 评论依然直接推洛谷、依然是权威持久层，只是发请求的不是浏览器。</p>
+<p>其余两项（真编译、写操作风控）是能力边界与风险边界，已用替代方案和 礼貌节奏处理，不阻塞交付。</p>
+<blockquote>诚实边界：本机代理 / 自托管 runner / 评测后端<strong>不在本仓库内运行</strong>， 仓库提供的是接口契约、参考实现与前端队列。需在你自己的网络里接上才生效。</blockquote></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>

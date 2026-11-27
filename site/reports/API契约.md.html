@@ -1,0 +1,25 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>API契约 · 离线归档</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/local.css"></head><body><header class="top"><a href="../index.html">← 归档首页</a></header><main class="doc"><h1>API 契约 · 只认 token 不认人</h1>
+<blockquote><strong>这是接口契约</strong>，供人工接入 Supabase / Webnote / 自建 Worker。 仓库<strong>不内置线上服务端</strong>，静态 Pages 无法持有密钥。 <code>api/reference_server.py</code> 是本地参考实现，默认不启动、不监听公网。</blockquote>
+<h2>鉴权</h2>
+<pre class="code"><code>Authorization: Bearer &lt;token&gt;</code></pre>
+<p>服务端<strong>只校验 token 是否匹配环境变量 <code>LUOGU_API_TOKEN</code></strong>， 不校验自然人、不查 uid、不认账号名。token 不进仓库、不进前端代码， 只由使用者在浏览器「设置」里填入并存本地，或走 Actions secrets。</p>
+<p>未带 / 错 token → <code>401 {&quot;error&quot;:&quot;invalid token&quot;}</code>。 写操作一律要求 token；读接口默认开放（可配置为也要求 token）。</p>
+<h2>接口一览</h2>
+<table class="tb"><thead><tr><th>方法</th><th>路径</th><th>说明</th><th>需 token</th></tr></thead><tbody><tr><td>GET</td><td><code>/api/health</code></td><td>存活与版本</td><td>否</td></tr><tr><td>GET</td><td><code>/api/articles</code></td><td>条目列表（本库数据源）</td><td>否</td></tr><tr><td>GET</td><td><code>/api/article/:lid</code></td><td>单条文章 + 署名 + 签名</td><td>否</td></tr><tr><td>GET</td><td><code>/api/problems</code></td><td>题目列表</td><td>否</td></tr><tr><td>GET</td><td><code>/api/problems/:pid</code></td><td>题面 + 附件清单</td><td>否</td></tr><tr><td>GET</td><td><code>/api/problems/:pid/attachments</code></td><td>附件（按需缓存）</td><td>否</td></tr><tr><td>GET</td><td><code>/api/judge/cases</code></td><td>std 期望输出表</td><td>否</td></tr><tr><td>POST</td><td><code>/api/judge</code></td><td>评测（真编译，接你自己的 runner）</td><td>是</td></tr><tr><td>GET</td><td><code>/api/comments/:lid</code></td><td>评论</td><td>否</td></tr><tr><td>POST</td><td><code>/api/comments</code></td><td>本地评论副本同步（可选）</td><td>是</td></tr><tr><td>POST</td><td><code>/api/comments/push-luogu</code></td><td><strong>评论持久化 · 直接推洛谷</strong>：入待推队列，由外部执行端用个人账号低频推送</td><td>是</td></tr><tr><td>POST</td><td><code>/api/login</code></td><td>cookie/账密 → 本地会话标识</td><td>是</td></tr><tr><td>GET</td><td><code>/api/profile</code></td><td>用户名/头像/颜色状态</td><td>是</td></tr><tr><td>POST</td><td><code>/api/publish</code></td><td><strong>回推 luogu.com.cn 适配器</strong>（默认关闭）</td><td>是</td></tr><tr><td>POST</td><td><code>/api/std/submit</code></td><td>std 工单投稿</td><td>是</td></tr><tr><td>GET</td><td><code>/api/std/queue</code></td><td>投稿队列</td><td>是</td></tr><tr><td>POST</td><td><code>/api/std/compare</code></td><td>与原 std 对跑 → 去 WA / 去不优</td><td>是</td></tr><tr><td>POST</td><td><code>/api/std/approve</code></td><td>人工审核无错 → 迁入 std</td><td>是（管理员）</td></tr><tr><td>GET</td><td><code>/api/search?uid=</code> / <code>?name=</code></td><td>管理员 search</td><td>是</td></tr><tr><td>DELETE</td><td><code>/api/resources/:id</code></td><td>删资源</td><td>是（管理员）</td></tr><tr><td>GET</td><td><code>/api/images/:sha</code></td><td>按需图片副本</td><td>否</td></tr><tr><td>GET</td><td><code>/api/mirrors</code></td><td>编译镜像清单（内置下载功能）</td><td>否</td></tr><tr><td>GET</td><td><code>/api/crawl/status</code></td><td>爬取进度 / 降级状态</td><td>否</td></tr></tbody></table>
+<h2>评论持久化 · 直接推洛谷（第 9 条口径）</h2>
+<p><strong>洛谷文章评论区是权威持久层，不另建评论数据库。</strong> 流程：</p>
+<pre class="code"><code>本地先存（离线可读）→ 待推队列 → POST /api/comments/push-luogu
+   → 本机代理 / 自托管 runner / 浏览器扩展（持用户个人账号登录态）
+   → 低频、人工确认、可关闭 → 洛谷 → 回写「已推洛谷」</code></pre>
+<ul><li>静态 Pages <strong>绝不直接 <code>fetch(&quot;https://www.luogu.com/...&quot;)</code></strong>：跨源 preflight、</li></ul>
+<p>HttpOnly + SameSite cookie、csrf-token 三重不可达（详见《架构可达性测试报告》）</p>
+<ul><li>用<strong>用户个人账号</strong>；管理员账号不参与评论</li><li>返回 <code>queued</code> 只表示已入队，前端状态仍是「待推」；</li></ul>
+<p>只有回传 <code>pushed:true</code> / <code>state:&quot;已推洛谷&quot;</code> 才标成功，<strong>不谎报</strong></p>
+<ul><li>失败进「失败待重试」，<strong>不轰炸重试</strong>；403/降级长退避</li><li>本地副本始终保留，保证离线可看评论</li></ul>
+<h2>约定</h2>
+<ul><li>所有写操作<strong>幂等</strong>：带 <code>Idempotency-Key</code> 或内容 sha，重复提交不产生副本</li><li>时间统一 ISO8601 UTC；内容一律带 <code>sha256</code> 与 <code>original_url</code></li><li>删除资源：<code>204</code> + 写一条「已移除」审计（对应隐私声明「源已删则本地也删」）</li><li><code>/api/publish</code> 只在「已登录 + 联网 + 显式启用」时调用；</li></ul>
+<p>适配器内部仍走低频礼貌节奏，失败不重试轰炸</p>
+<ul><li>前端 <code>assets/local.js</code> 未配置 <code>apiBase</code> 时<strong>全部走本地 localStorage</strong>，</li></ul>
+<p>零网络请求；配置了才按上表调用</p>
+<h2>版权</h2>
+<p>接口只传输本库自己维护的数据与使用者自己的投稿； 原文正文保留 <code>original_url</code> / <code>author</code> / <code>signature</code>，不改写、不去署名。</p></main></body></html>

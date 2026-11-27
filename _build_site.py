@@ -506,3 +506,137 @@ print("SITE_PAGES", 2 + len(articles) + len(REPORT_FILES))
 print("ARTICLES", len(articles))
 print("WITH_CODE", sum(1 for a in articles if a["has_code"]))
 print("REPORTS", len(REPORT_FILES))
+# ============================================================ 本地轻量版 luogu 层
+# （最终要求 2026-11-27；追加在末尾，确保 assets/style.css 与 app.js 已写完，
+#  因为上面的选择性清理会 rmtree site/assets/）
+import shutil as _sh, html as _html
+
+def _inject(fp, depth):
+    if not os.path.exists(fp): return
+    t = open(fp, encoding="utf-8").read()
+    pre = "../" * depth
+    if "local.css" not in t:
+        t = t.replace("</head>", f'<link rel="stylesheet" href="{pre}assets/local.css"></head>')
+    if "local.js" not in t:
+        t = t.replace("</body>", f'<script src="{pre}assets/local.js"></script></body>')
+    open(fp, "w", encoding="utf-8").write(t)
+
+# 1) 常驻前端资产（site_src/ 是源，assets/ 是产物；重生成不丢源文件）
+_src = os.path.join(REPO, "site_src")
+for _f in ["local.css", "local.js"]:
+    _p = os.path.join(_src, _f)
+    if os.path.exists(_p):
+        _sh.copyfile(_p, os.path.join(SITE, "assets", _f))
+
+# 2) 数据脚本（内联，零 fetch）
+_adm = os.path.join(DATA, "admins.json")
+_admins = json.load(open(_adm, encoding="utf-8")).get("admins", []) if os.path.exists(_adm) else []
+open(os.path.join(SITE, "assets", "admins.js"), "w", encoding="utf-8").write(
+    "window.LL_ADMINS=" + json.dumps(_admins, ensure_ascii=False) + ";\n")
+
+# 3) std 期望输出表 = 甲类反例 + 少量标准用例（供 IDE「本地评测」对照）
+_cases = [{"label": "P1001 A+B 标准用例", "input": "1 2", "expect": "3",
+           "lid": "zaohomhi", "source": "库中 std 对照表", "hack": "—"}]
+for L in hack_lines:
+    if "~~" in L:      # 第 17 批撤销的 H-006/007 不进测试点
+        continue
+    cs = [c.strip() for c in L.strip().strip("|").split("|")]
+    if len(cs) < 4: continue
+    e2a = re.sub(r"\*\*|`", "", cs[3])
+    exp = e2a.split("→")[0].strip().split("/")[0].strip()
+    lid_m = re.search(r"[a-z0-9]{8}", cs[1])
+    _cases.append({"label": re.sub(r"\*\*|`", "", cs[0]) + " " + re.sub(r"\*\*|`", "", cs[1]),
+                   "input": re.sub(r"\*\*|`", "", cs[2])[:90],
+                   "expect": exp, "lid": lid_m.group(0) if lid_m else "",
+                   "source": "甲类合法反例（题面内）", "hack": e2a[:90]})
+open(os.path.join(SITE, "assets", "judge_cases.js"), "w", encoding="utf-8").write(
+    "window.LL_JUDGE_CASES=" + json.dumps(_cases, ensure_ascii=False) + ";\n")
+
+# 4) 编译镜像清单：内置为功能，但不写死可能失效的第三方地址
+_mirrors = [
+    {"lang": "C++", "url": "", "note": "按你所在网络填写国内易联镜像（示例结构，不写死地址）"},
+    {"lang": "Python", "url": "", "note": "同上；无网时先缓存，下载后本地编译"},
+    {"lang": "C", "url": "", "note": "同上；页面只在主动点击时探测可达性"},
+]
+open(os.path.join(SITE, "assets", "mirrors.js"), "w", encoding="utf-8").write(
+    "window.LL_MIRRORS=" + json.dumps(_mirrors, ensure_ascii=False) + ";\n")
+
+# 5) 给所有既有页面注入主题与逻辑
+for _dp, _dn, _fn in os.walk(SITE):
+    if os.path.basename(_dp) == "data": continue
+    _depth = 0 if os.path.normpath(_dp) == os.path.normpath(SITE) else 1
+    for _f in _fn:
+        if _f.endswith(".html"):
+            _inject(os.path.join(_dp, _f), _depth)
+
+# 6) 首页：内联文章数据 + 主页价值区块
+_idxp = os.path.join(SITE, "index.html")
+_t = open(_idxp, encoding="utf-8").read()
+_mini = [{"lid": a["lid"], "problem": a["problem"], "page": a["page"], "class": a["class"]}
+         for a in articles]
+_t = _t.replace('<main class="wrap"><div id="groups">',
+                '<main class="wrap"><div id="ll-home"></div><script>window.LL_ARTICLES='
+                + json.dumps(_mini, ensure_ascii=False) + ';</script><div id="groups">')
+open(_idxp, "w", encoding="utf-8").write(_t)
+_inject(_idxp, 0)
+
+# 7) 三个子页面
+def _page(title, page_id, body, extra_js=""):
+    return f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{_html.escape(title)} · 本地轻量版 luogu</title>
+<link rel="stylesheet" href="assets/style.css"><link rel="stylesheet" href="assets/local.css"></head>
+<body data-page="{page_id}"><main class="wrap">
+<h1>{_html.escape(title)}</h1>
+<p class="hint">纯静态 · 页面加载零外网请求 · 评论/推送/设置均存浏览器本地</p>
+{body}
+</main><div class="ll-foot wrap">本地版、轻量版 luogu · 版权归原作者及洛谷所有 ·
+<a href="reports/归档与版权声明.md.html">归档与版权声明</a> ·
+<a href="reports/帮助手册.md.html">帮助手册</a></div>
+<script src="assets/admins.js"></script><script src="assets/judge_cases.js"></script>
+<script src="assets/mirrors.js"></script>{extra_js}
+<script src="assets/local.js"></script></body></html>'''
+
+open(os.path.join(SITE, "problems.html"), "w", encoding="utf-8").write(_page(
+    "题目 · IDE · 本地评测", "problems",
+    '<div class="ll-sec"><h2>题目附件（库中缓存）</h2><div class="ll-card">'
+    '<p class="ll-empty">附件按「题面 &gt; 题解 &gt; 学术类文章 &gt; 其它」优先级按需抓取；'
+    '未缓存的条目不硬造，低频补录后自动出现。</p></div></div>'
+    '<div id="ll-ide"></div><div id="ll-hacks"></div><div id="ll-mirrors"></div>'))
+open(os.path.join(SITE, "submit.html"), "w", encoding="utf-8").write(_page(
+    "std 工单（投稿）", "submit", '<div id="ll-submit"></div>'))
+open(os.path.join(SITE, "admin.html"), "w", encoding="utf-8").write(_page(
+    "管理员 · 只认 token 不认人", "admin", '<div id="ll-admin"></div>'))
+
+# 8) API 契约也做成可点开的报告页，并挂到首页资料清单
+_apip = os.path.join(REPO, "api", "API契约.md")
+if os.path.exists(_apip):
+    _body = md2html(open(_apip, encoding="utf-8").read())
+    open(os.path.join(SITE, "reports", "API契约.md.html"), "w", encoding="utf-8").write(
+        '<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">'
+        '<meta name="viewport" content="width=device-width,initial-scale=1">'
+        '<title>API契约 · 离线归档</title><link rel="stylesheet" href="../assets/style.css"></head>'
+        '<body><header class="top"><a href="../index.html">← 归档首页</a></header>'
+        '<main class="doc">' + _body + '</main></body></html>')
+    _inject(os.path.join(SITE, "reports", "API契约.md.html"), 1)
+    _t = open(_idxp, encoding="utf-8").read()
+    _t = _t.replace('<h2>归档资料</h2><ul class="links">',
+        '<h2>归档资料</h2><ul class="links">'
+        '<li><a href="reports/API契约.md.html">API契约（只认 token 不认人）</a></li>'
+        '<li><a href="problems.html">题目 / IDE / 本地评测</a></li>'
+        '<li><a href="submit.html">std 投稿</a></li><li><a href="admin.html">管理员面板</a></li>')
+    open(_idxp, "w", encoding="utf-8").write(_t)
+
+# 9) 站点说明补一段
+_srp = os.path.join(SITE, "README.md")
+with open(_srp, "a", encoding="utf-8") as _f:
+    _f.write("\n## 本地轻量版 luogu 层（2026-11-27）\n\n"
+             "- `assets/local.css` / `local.js`：独立洛谷风主题、三态身份、Markdown 评论 + 算术验证码、"
+             "IDE、本地评测、std 投稿、管理员、编译环境内置下载面板\n"
+             "- `problems.html` / `submit.html` / `admin.html`：三个子页面\n"
+             "- **评论持久化直接推洛谷**：本地先存 + 待推队列 + `/api/comments/push-luogu` 适配器；"
+             "静态站不直连洛谷（跨源 + HttpOnly cookie + CSRF 不可达）\n"
+             "- 页面加载零外网请求；`apiBase` 留空时全部功能纯本地可用\n"
+             "- 架构可达性结论见 `reports/架构可达性测试报告.md.html`\n")
+
+print(f"LOCAL_LUOGU 层：资产 {len(_mini)} 条数据 · {len(_cases)} 个测试点 · 3 个子页面 · 全页注入完成")

@@ -7,7 +7,7 @@
 
 - `index.html` —— 按题号分组的全部文章卡片，支持本地搜索与「甲/乙/丙/待补录」筛选
 - `articles/<编号>.html` —— 每篇一页：判定、归类、批次、**原文地址/作者/取回时间/完整性签名/可复制引用**、代码、反例、复现命令
-- `reports/` —— 22 份批次报告 + 总览文档，全部渲染成 HTML
+- `reports/` —— 31 份批次报告 + 总览文档，全部渲染成 HTML
 - `data/articles.json` / `.csv` —— 有序主表，87 条，机读
 - `ingest.py` —— 低频补录入口（写 CSV 主表）
 - `lowfreq_fetch.py` —— 有序取回器，默认 2 秒/次，可切保存站 / luogu.com
@@ -46,3 +46,11 @@ python3 site/ingest.py new.json
 ## 隐私
 
 仓库已设为**公开**并由 GitHub Pages 上线归档库网页。站点内不含账号、密码、令牌；每篇保留原文链接、作者署名与内容完整性签名，离线时链接仅留来源。
+
+## 本地轻量版 luogu 层（2026-11-27）
+
+- `assets/local.css` / `local.js`：独立洛谷风主题、三态身份、Markdown 评论 + 算术验证码、IDE、本地评测、std 投稿、管理员、编译环境内置下载面板
+- `problems.html` / `submit.html` / `admin.html`：三个子页面
+- **评论持久化直接推洛谷**：本地先存 + 待推队列 + `/api/comments/push-luogu` 适配器；静态站不直连洛谷（跨源 + HttpOnly cookie + CSRF 不可达）
+- 页面加载零外网请求；`apiBase` 留空时全部功能纯本地可用
+- 架构可达性结论见 `reports/架构可达性测试报告.md.html`

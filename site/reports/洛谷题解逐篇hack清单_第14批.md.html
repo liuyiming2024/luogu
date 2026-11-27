@@ -1,6 +1,6 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>洛谷题解逐篇hack清单_第14批.md · 离线归档</title><link rel="stylesheet" href="../assets/style.css"></head>
+<title>洛谷题解逐篇hack清单_第14批.md · 离线归档</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/local.css"></head>
 <body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">01_批次清单 / 洛谷题解逐篇hack清单_第14批.md</span></header>
 <main class="doc"><h1>洛谷题解逐篇 hack 清单 · 第 14 批（低频补录）</h1>
 <blockquote>用户提出「可以用保存站，2 秒一次就还好吧」。本轮先按 2 秒间隔实测保存站， 结论见 <code>02_文章编号索引/保存站可用性记录.md</code>：<strong>8 个 curl 端点全 403 policy_default_denied，保存站文章/列表/搜索/统计页全是 SPA 骨架，首页还挂着 「AI 自动化程序不断请求保存 API，导致队列堵塞」的降级公告</strong>——瓶颈不在频率。 于是把「2 秒一次」做成可配置取回器存进仓库，本批继续用可直读通道逐篇补录。</blockquote>
@@ -56,4 +56,4 @@
 <hr>
 <h2>6. 低频声明</h2>
 <table class="tb"><thead><tr><th>动作</th><th>次数</th></tr></thead><tbody><tr><td>curl 探测（严格 sleep 2）</td><td>8</td></tr><tr><td>内置通道取回（保存站 7 页 + 题解列表 1 页 + 正文 4 篇）</td><td>12</td></tr><tr><td>检索（3 轮，找新编号 / 核对题面）</td><td>3</td></tr><tr><td>洛谷登录 / 提交 / 保存 API 批量拉取</td><td><strong>0</strong></td></tr><tr><td>GitHub API（归档查询与推送）</td><td>少量</td></tr></tbody></table>
-<p>「枚举」始终指<strong>对已发现编号做有序编目</strong>，不对 36⁸ 编号空间或全站做遍历。</p></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>
+<p>「枚举」始终指<strong>对已发现编号做有序编目</strong>，不对 36⁸ 编号空间或全站做遍历。</p></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer><script src="../assets/local.js"></script></body></html>

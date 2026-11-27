@@ -1,0 +1,37 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>帮助手册.md · 离线归档</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/local.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">00_总览 / 帮助手册.md</span></header>
+<main class="doc"><h1>帮助手册 · 本地轻量版 luogu</h1>
+<blockquote>纯静态、无 CDN、无外部依赖。<strong>双击 <code>site/index.html</code> 即可离线使用</strong>。 页面加载不发起任何网络请求；所有「联网」能力都要你主动配置或点击才启用。</blockquote>
+<h2>1. 开始使用</h2>
+<table class="tb"><thead><tr><th>想做什么</th><th>怎么做</th></tr></thead><tbody><tr><td>看题解</td><td>首页按题号分组，搜索框输题号 / 编号 / 关键词；点卡片进文章页</td></tr><tr><td>看结论</td><td>文章页有「归类（甲/乙/丙）」「判定备注」「甲类合法反例」「引用与署名」</td></tr><tr><td>看报告</td><td>首页侧栏「归档资料清单」，含各批次报告、审查报告、本手册</td></tr><tr><td>离线</td><td>直接打开本地文件；<code>luogu_离线归档.zip</code> 解压即用</td></tr><tr><td>线上</td><td>GitHub Pages 已开启，地址见仓库 README</td></tr></tbody></table>
+<h2>2. 登录与身份（离线优先）</h2>
+<ul><li>右上角「登录」可用 <strong>cookie 或账密</strong>；信息存在<strong>浏览器本地</strong>，子页面不重复登录</li><li>未登录 / 取不到头像 → <strong>洛谷默认头像</strong>（内联 SVG，不请求外网）</li><li>用户名：联网从洛谷取；无网用缓存或登录标识</li><li><strong>无效（无缓存且无网）→ 灰色</strong>；有缓存或联网 → 主题色</li><li>用 cookie 时，手机号 / uid 等标识不显示</li><li>气泡、牌子等次要元素：<strong>有则渲染，没有不添加</strong></li><li>发文先本地保存；<strong>只有「已登录 + 联网 + 已配置回推 API」</strong>才推到 <code>luogu.com.cn</code></li></ul>
+<blockquote>当前沙盒出口无法访问外部域名，回推适配器默认<strong>关闭</strong>并在界面明示； 你在自己网络里按 <code>api/API契约.md</code> 接上即可启用。</blockquote>
+<h2>3. 评论（Markdown + 验证码）</h2>
+<ul><li>每篇文章页底部有评论区，按文章隔离</li><li><strong>评论持久化 = 直接推洛谷</strong>（第 9 条口径）：本地先存离线副本 → 待推队列 →</li></ul>
+<p>由「设置」里开启后交给 <code>/api/comments/push-luogu</code>，用<strong>你个人的洛谷账号</strong>低频推到 洛谷文章评论区。洛谷是权威持久层，不另建评论数据库</p>
+<ul><li>静态站<strong>不直连洛谷</strong>（跨源 + HttpOnly cookie + CSRF 不可达）；真正发请求的是</li></ul>
+<p>本机代理 / 自托管 runner / 扩展。未开启时纯本地、零请求</p>
+<ul><li>每条评论显示状态：<code>本地已存 · 待推</code> / <code>已推洛谷</code> / <code>失败待重试</code>；失败不轰炸重试</li><li>支持 Markdown：<strong>标题、粗体、斜体、行内代码、代码块、链接、列表、引用</strong></li></ul>
+<p>渲染器内置在 <code>assets/local.js</code>，<strong>不引任何 CDN</strong>，断网可用</p>
+<ul><li>发评论需过<strong>算术验证码</strong>（纯前端，离线可用）</li><li>说明：前端验证码只防误触与简单脚本，<strong>真正的鉴权靠 token</strong></li></ul>
+<h2>4. 主页与题目</h2>
+<ul><li>主页仿洛谷默认风格但<strong>不重合</strong>，包含：最近文章、犇犇、题目入口、公告、比赛</li><li><code>problems.html</code>：题目列表 + 附件（库中缓存）+ <strong>IDE 模式</strong></li><li>IDE：C++ / Python / C 三语言切换、行号、模板、提交按钮</li><li><strong>本地评测</strong>：浏览器内不真编译，用库中 <code>site/data/judge_cases.json</code></li></ul>
+<p>的 std 期望输出做对照；选测试点或粘贴输出即可比对</p>
+<ul><li>真编译走评测 API 适配器（需你接后端）；无网时「编译环境」面板内置</li></ul>
+<p>国内易联镜像清单，可一键复制 / 主动点击探测可达性</p>
+<ul><li>题目页附「已知 hack」（讨论区 / 工单题解），复用甲类反例数据</li></ul>
+<h2>5. std 投稿与审核</h2>
+<p><code>submit.html</code> 投工单 → 本地入队 → <strong>与原 std 对跑比较</strong> → 去除 <strong>WA</strong> 与 <strong>不优</strong> → 添入可选项 → <strong>管理员人工审核无错</strong> → 迁入 std。 脚本不自动迁入。详见《std工单与迁入流程》。</p>
+<h2>6. 管理员</h2>
+<p><code>admin.html</code>：审 std、删资源、按 uid / 用户名 search。 用户名搜不到时可在洛谷评论里用 <code>@</code> 搜索（低频、无风险、仅必需时用 <code>liuyiming2024_1</code>）。<strong>只认 token 不认人</strong>：没配 token 时面板只读。 管理员标识见《管理员与权限配置》，<strong>仓库内无任何凭据</strong>。</p>
+<h2>7. 图片与附件</h2>
+<p><strong>不全量抓取</strong>：只在正文里遇到才保存，落到 <code>site/assets/img/</code>。 空间不够且无法扩容时按 <code>题面 &gt; 题解 &gt; 学术类文章 &gt; 其它</code> 保留。 详见《图片按需抓取与优先级淘汰》。</p>
+<h2>8. 数据与同步</h2>
+<p><strong>本库自己就是数据源</strong>（最终要求第 1 条），维护文章 / 讨论区 / 题面 / 工单。 联网用户浏览时抓取所浏览内容、<strong>延迟维护</strong>，源已删则本地也删； 条款见《隐私声明与数据处理条款》「此条」。爬取由 GitHub Actions 的 <code>on: schedule</code> 自持触发，不用发消息激活。</p>
+<h2>9. 版权</h2>
+<p>版权归原作者及洛谷所有，仅作学术归档留痕；每篇保留原文链接、真实作者署名 （86/87 篇已从原文内嵌字段提取）与内容完整性签名。权利人可申请移除， 见《归档与版权声明》。</p>
+<h2>10. 常见问题</h2>
+<table class="tb"><thead><tr><th>问题</th><th>回答</th></tr></thead><tbody><tr><td>为什么页面不自动登录洛谷？</td><td>本地优先 + 出口限制；且避免高频请求触发风控</td></tr><tr><td>为什么 IDE 不能真编译？</td><td>浏览器没有编译器；真编译由你接评测 API</td></tr><tr><td>为什么有些条目「正文待补录」？</td><td>低频逐批取回中，编号已登记不会漏</td></tr><tr><td>签名是加密签名吗？</td><td>不是，是 sha256 <strong>内容完整性校验值</strong></td></tr><tr><td>断点续传在哪？</td><td><code>site/data/crawl_state.json</code>，丢一次 run 不丢进度</td></tr><tr><td>想改爬取频率？</td><td><code>.github/workflows/crawl_tick.yml</code> 的 cron 与 <code>crawl_daemon.py</code> 参数</td></tr></tbody></table></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer></body></html>
