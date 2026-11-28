@@ -562,8 +562,26 @@ for L in hack_lines:
                    "input": re.sub(r"\*\*|`", "", cs[2])[:90],
                    "expect": exp, "lid": lid_m.group(0) if lid_m else "",
                    "source": "甲类合法反例（题面内）", "hack": e2a[:90]})
+# 3b) 追加本地 std 期望表（自写独立正确解逐条跑出；不引用官方数据）
+_exp_p = os.path.join(DATA, "std_expect.json")
+if os.path.exists(_exp_p):
+    _exp = json.load(open(_exp_p, encoding="utf-8"))
+    for _pid, _v in _exp.get("题目", {}).items():
+        for _i, _c in enumerate(_v["cases"][:12]):
+            _cases.append({"label": "%s %s · std#%d" % (_pid, _v["title"], _i + 1),
+                           "input": _c["in"].strip(), "expect": _c["out"],
+                           "lid": "", "source": "本地 std 期望输出表（独立正确解）",
+                           "hack": "—"})
+    print(" 本地评测测试点：+", sum(min(12, len(v["cases"])) for v in _exp["题目"].values()),
+          "组 std 期望")
 open(os.path.join(SITE, "assets", "judge_cases.js"), "w", encoding="utf-8").write(
     "window.LL_JUDGE_CASES=" + json.dumps(_cases, ensure_ascii=False) + ";\n")
+
+# 3c) std 候选台账（脚本只写「待人工审核」，不自动迁入）
+_cand_p = os.path.join(DATA, "std_candidates.json")
+_cand = json.load(open(_cand_p, encoding="utf-8")) if os.path.exists(_cand_p) else {"条目": [], "统计": {}}
+open(os.path.join(SITE, "assets", "std_candidates.js"), "w", encoding="utf-8").write(
+    "window.LL_STD_CANDIDATES=" + json.dumps(_cand, ensure_ascii=False) + ";\n")
 
 # 4) 编译镜像清单：内置为功能，但不写死可能失效的第三方地址
 _mirrors = [
@@ -606,7 +624,7 @@ def _page(title, page_id, body, extra_js=""):
 </main><div class="ll-foot wrap">本地版、轻量版 luogu · 版权归原作者及洛谷所有 ·
 <a href="reports/归档与版权声明.md.html">归档与版权声明</a> ·
 <a href="reports/帮助手册.md.html">帮助手册</a></div>
-<script src="assets/self.js"></script><script src="assets/judge_cases.js"></script>
+<script src="assets/self.js"></script><script src="assets/judge_cases.js"></script><script src="assets/std_candidates.js"></script>
 <script src="assets/mirrors.js"></script>{extra_js}
 <script src="assets/local.js"></script></body></html>'''
 
@@ -617,7 +635,8 @@ open(os.path.join(SITE, "problems.html"), "w", encoding="utf-8").write(_page(
     '未缓存的条目不硬造，低频补录后自动出现。</p></div></div>'
     '<div id="ll-ide"></div><div id="ll-hacks"></div><div id="ll-mirrors"></div>'))
 open(os.path.join(SITE, "submit.html"), "w", encoding="utf-8").write(_page(
-    "std 工单（投稿）", "submit", '<div id="ll-submit"></div>'))
+    "std 工单（投稿）", "submit",
+    '<div id="ll-submit"></div><div id="ll-std-cand"></div>'))
 open(os.path.join(SITE, "self.html"), "w", encoding="utf-8").write(_page(
     "本地操作 · 只认 token 不认人", "self", '<div id="ll-admin"></div>'))
 

@@ -1,0 +1,150 @@
+{
+ "说明": "取不到官方数据，正确性以自写独立正确解 + 题面内输入对拍为准。",
+ "状态机": "投稿 → 与原 std 多轮对跑 → 去除 WA / 去除不优 → 明显更优添入可选项 → 人工审核无错才迁入 std",
+ "纪律": [
+  "CPU 时间取 rusage(ru_utime+ru_stime) 中位数，不用墙钟，减小评测机波动",
+  "多轮方向一致才认「明显更优/不优」；0.80~1.25 波动带判等价不收",
+  "题面外输入一律作废",
+  "脚本绝不自动迁入，候选一律待人工审核"
+ ],
+ "生成时间": "2026-11-28T08:39:01+00:00",
+ "统计": {
+  "工单": 4,
+  "待人工审核": 2,
+  "去除": 2,
+  "不收": 0,
+  "已迁入": 0
+ },
+ "条目": [
+  {
+   "id": "t-001",
+   "pid": "P1421",
+   "file": "P1421_double.cpp",
+   "sha256_前16": "98f01444ea816016",
+   "note": "第7批甲类复现：double 反复减 1.9",
+   "verdict": "WA",
+   "status": "去除",
+   "reason": "题面内确定性 WA",
+   "median_ratio_cpu": null,
+   "median_ratio_rss": null,
+   "first_bad": {
+    "input": "7 6\n",
+    "std": "4\n",
+    "cand": "3\n"
+   },
+   "rounds": [],
+   "checked_at": "2026-11-28T08:38:53+00:00"
+  },
+  {
+   "id": "t-002",
+   "pid": "P1002",
+   "file": "P1002_start_overwrite.cpp",
+   "sha256_前16": "3fc0c9f63ed1ebcc",
+   "note": "起点赋值在 DP 之后",
+   "verdict": "WA",
+   "status": "去除",
+   "reason": "题面内确定性 WA",
+   "median_ratio_cpu": null,
+   "median_ratio_rss": null,
+   "first_bad": {
+    "input": "6 6 3 3\n",
+    "std": "6\n",
+    "cand": "0\n"
+   },
+   "rounds": [],
+   "checked_at": "2026-11-28T08:38:55+00:00"
+  },
+  {
+   "id": "t-003",
+   "pid": "P1001",
+   "file": "P1001_scanf.cpp",
+   "sha256_前16": "669b6a9e930afb00",
+   "note": "scanf 版，等价",
+   "verdict": "明显更优",
+   "status": "待人工审核",
+   "reason": "不 WA 且明显更优 → 添入可选项，待人工审核",
+   "median_ratio_cpu": 0.587,
+   "median_ratio_rss": 1.0,
+   "first_bad": null,
+   "rounds": [
+    {
+     "seed": 0,
+     "n": 60,
+     "cpu_std": 0.117608,
+     "cpu_cand": 0.070516,
+     "ratio_cpu": 0.5996,
+     "rss_std": 5808,
+     "rss_cand": 5808,
+     "ratio_rss": 1.0
+    },
+    {
+     "seed": 1,
+     "n": 60,
+     "cpu_std": 0.116706,
+     "cpu_cand": 0.065905,
+     "ratio_cpu": 0.5647,
+     "rss_std": 5820,
+     "rss_cand": 5820,
+     "ratio_rss": 1.0
+    },
+    {
+     "seed": 2,
+     "n": 60,
+     "cpu_std": 0.120841,
+     "cpu_cand": 0.070939,
+     "ratio_cpu": 0.587,
+     "rss_std": 5824,
+     "rss_cand": 5824,
+     "ratio_rss": 1.0
+    }
+   ],
+   "checked_at": "2026-11-28T08:38:58+00:00"
+  },
+  {
+   "id": "t-004",
+   "pid": "BENCH",
+   "file": "BENCH_fast.cpp",
+   "sha256_前16": "8da3e4fb70e7589a",
+   "note": "流程演示夹具：明显更优（非题库真题）",
+   "verdict": "明显更优",
+   "status": "待人工审核",
+   "reason": "不 WA 且明显更优 → 添入可选项，待人工审核",
+   "median_ratio_cpu": 0.2318,
+   "median_ratio_rss": 1.0,
+   "first_bad": null,
+   "rounds": [
+    {
+     "seed": 0,
+     "n": 3,
+     "cpu_std": 0.023573,
+     "cpu_cand": 0.005746,
+     "ratio_cpu": 0.2438,
+     "rss_std": 5824,
+     "rss_cand": 5824,
+     "ratio_rss": 1.0
+    },
+    {
+     "seed": 1,
+     "n": 3,
+     "cpu_std": 0.022786,
+     "cpu_cand": 0.005282,
+     "ratio_cpu": 0.2318,
+     "rss_std": 5824,
+     "rss_cand": 5824,
+     "ratio_rss": 1.0
+    },
+    {
+     "seed": 2,
+     "n": 3,
+     "cpu_std": 0.028481,
+     "cpu_cand": 0.006259,
+     "ratio_cpu": 0.2198,
+     "rss_std": 5824,
+     "rss_cand": 5824,
+     "ratio_rss": 1.0
+    }
+   ],
+   "checked_at": "2026-11-28T08:39:01+00:00"
+  }
+ ]
+}

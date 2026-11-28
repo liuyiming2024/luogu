@@ -140,3 +140,35 @@ DB 只读凭据。当前 `tools/token_store.py` **默认关闭、零外网、不
 `LUOGU_SUBMIT_CONSENT` 仍留 Secret，**对话仍不收明文**。
 契约、表结构与「给我什么就能接」见 `00_总览/数据库令牌接入方案.md`。
 自检：`python3 tools/token_store.py --check`。
+
+---
+
+## std 先做着（本地，零外网）
+
+最终要求第 2 条落地：**取不到官方数据，所以使用 std 对拍**。
+`tools/std/` 里三道真题的自写独立正确解 + 题面内用例生成器 + 工单流水线，
+全部跑在本地：
+
+```bash
+python3 tools/std/verify_std.py      # 六类变异必须全被抓到（PASS）
+python3 tools/std/std_pipeline.py    # 工单 → 台账 + 期望表
+python3 _build_site.py               # 渲染进离线站
+```
+
+- 判优用 `os.wait4` 的 CPU 时间中位数（**不用墙钟**，避开评测机波动），
+  3 轮方向一致才认明显更优/不优；波动带内判等价不收
+- WA / RE / TLE / CE 一律去除，留首个反例
+- **脚本绝不自动迁入**，明显更优只到「待人工审核」
+- 4 条示例工单里，P1421 `7 6 → 3` 与 P1002 `6 6 3 3 → 0` 都被判 WA，
+  正好复现第 7 批 / 第 2 批人工找到的甲类反例
+- 离线站 `problems.html` 本地评测已并入 std 期望表（49 个测试点），
+  `submit.html` 底部显示候选台账
+
+详见 `00_总览/std工单与迁入流程.md` 与 `tools/std/README.md`。
+
+## 爬取继续自持
+
+`crawl_tick.yml` 由 GitHub 自己的 `on: schedule` 触发，不看对话、不需人工激活；
+题面连续返回 SPA 骨架时不再把队列饿死，每窗口仍按 P 号顺序**有序推进一小批**，
+并用窗口号守卫避免同一窗口反复灌探测请求。节奏不变（45 分钟窗口 / 2~3.5s 抖动 /
+降级即停）。

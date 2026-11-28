@@ -605,6 +605,21 @@ function submit(){
     }
     $("#ll-s-body",host).value=""; render(); toast("已本地入队","ok");
   };
+  /* 候选台账（只读）：本地 tools/std/std_pipeline.py 跑出来的结果，
+     页面不判定、不迁入，只呈现状态机当前进度。 */
+  (function(){
+    var box=$("#ll-std-cand"); if(!box) return;
+    var d=window.LL_STD_CANDIDATES||{条目:[],统计:{}}, rows=d.条目||[];
+    var h='<h2 style="margin-top:18px">候选台账（本地对跑结果 · 只读）</h2>'+
+      '<div class="ll-note">脚本<b>不自动迁入</b>：明显更优者一律「待人工审核」，'+
+      '本人逐条确认无错后才迁入 std。已迁入 '+String(d.统计&&d.统计.已迁入||0)+' 条。</div>';
+    if(!rows.length){box.innerHTML=h+'<p class="ll-empty">台账为空</p>';return;}
+    h+='<table class="ll-tb"><thead><tr><th>工单</th><th>题号</th><th>判定</th><th>状态</th></tr></thead><tbody>'+
+      rows.map(function(x){return '<tr><td>'+esc(x.id)+'</td><td>'+esc(x.pid)+'</td><td>'+
+        esc(x.verdict)+'</td><td><span class="ll-state wait">'+esc(x.status)+'</span></td></tr>';}).join("")+
+      '</tbody></table>';
+    box.innerHTML=h;
+  })();
 }
 
 /* ---------- 本人（只认 token 不认人） ---------- */

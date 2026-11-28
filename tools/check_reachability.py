@@ -8,7 +8,7 @@
 检查：资产语法、零 CDN / 零加载即发请求、静态站不得直连洛谷写接口、
 评论推洛谷适配器存在、Pages 无服务端能力、浏览器真编译条件。
 """
-import os, re, sys, argparse, subprocess
+import os, re, sys, argparse, subprocess, json
 
 R = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 def p(*a): return os.path.join(R, *a)
@@ -186,6 +186,26 @@ def main():
     print("  ✓ 数据库预留位：默认关闭 / 未接入 / 主链路已回归 / consent 仍留 Secret / 不收明文"
           if reserve_ok else "  ✗ 预留位缺项")
     if not reserve_ok: fail.append("第15条数据库预留位缺项")
+
+    # 12 STD 先做着：本地对拍实物、绝不自动迁入、期望表上页
+    sb = p("tools/std/std_bank.json")
+    vs = p("tools/std/verify_std.py")
+    cand = p("site/data/std_candidates.json")
+    expd = p("site/data/std_expect.json")
+    std_ok = all(os.path.exists(x) for x in [sb, vs, cand, expd])
+    if std_ok:
+        c = json.load(open(cand, encoding="utf-8"))
+        e = json.load(open(expd, encoding="utf-8"))
+        jc = open(p("site/assets/judge_cases.js"), encoding="utf-8").read()
+        std_ok = (c["统计"]["已迁入"] == 0
+                  and all(x["status"] != "已迁入" for x in c["条目"])
+                  and e["题目数"] == 3 and e["用例总数"] >= 150
+                  and "std#" in jc
+                  and "window.LL_STD_CANDIDATES" in open(
+                      p("site/assets/std_candidates.js"), encoding="utf-8").read())
+    print("  ✓ STD：本地对跑/期望表已上页 / 台账已迁入=0 / 六类变异脚本在位"
+          if std_ok else "  ✗ STD 实物缺项或出现自动迁入")
+    if not std_ok: fail.append("STD 实物缺项")
 
     # 角色字样回归：只查「源文件 / 文档 / 工作流」；site/ 下产物由生成器覆盖，
     #   workflows/pages.yml 在重生成之后才跑本自检，产物届时必然干净。

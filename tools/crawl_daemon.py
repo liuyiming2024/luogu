@@ -123,7 +123,7 @@ def has_article_body(lid):
     except Exception:
         return False
 
-def replenish(st, args):
+def replenish(st, args, window=None):
     """队列自续（防止 tick 跑完初始队列后空转）。
     题解：主表里「是题解但无正文副本」按题号升序补齐——有序枚举。
     题面：从 problems_cursor 续一小批；若连续拿到 SPA 骨架，降为每轮 1 个探测，
@@ -145,7 +145,16 @@ def replenish(st, args):
                 added_a += 1
     if not args.no_auto_problems:
         streak = int(st.get("problem_skeleton_streak", 0))
-        lim = 1 if streak >= 2 else args.problem_batch
+        # 题面连续骨架时不把队列饿死：每窗口仍按 P 号顺序推进一小批（有序枚举），
+        # 但用窗口号守卫，避免 45 分钟窗口里反复灌注定无正文的探测请求。
+        if streak >= 2:
+            lim = min(args.problem_batch, 3)
+            if window is not None and st.get("last_probe_window") == window:
+                lim = 0
+            elif window is not None:
+                st["last_probe_window"] = window
+        else:
+            lim = args.problem_batch
         cur = max(1000, int(st.get("problems_cursor", 1000)))
         for pnum in range(cur, cur + lim):
             key = "P%d" % pnum
@@ -455,7 +464,7 @@ def main():
         since_micro = 0
         while time.time() < win_end:
             if len(st["queue"]) < 3:
-                ra, rp = replenish(st, args)
+                ra, rp = replenish(st, args, window)
                 if ra + rp:
                     save_state(st)
                     print(f"[{now()}] 队列自续：题解 {ra}｜题面 {rp}｜合计 {len(st['queue'])}")
