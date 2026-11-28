@@ -5,6 +5,10 @@
 凭据全部从环境变量读，**绝不写进仓库、绝不打印、绝不硬编码**：
   LUOGU_COOKIE / LUOGU_CSRF / LUOGU_UID / LUOGU_SUBMIT_ENDPOINT / LUOGU_IDE_ENDPOINT
 
+可选（第 15 条 · 默认关闭）：本人自行把值存进数据库，由 tools/token_store.py
+从库补入空键；`LUOGU_TOKEN_STORE` 未开启时本文件行为与原来完全一致。
+**库只放值，consent 仍留 Secret，对话不收明文。**
+
 端点**不写死**：洛谷接口会变，按你当前登录后的页面填写到
 Settings → Secrets / Variables。留空时只预览，不编造接口、不发请求。
 
@@ -71,6 +75,15 @@ def main():
     a = ap.parse_args()
 
     os.makedirs(OUT, exist_ok=True)
+    # 可选令牌库：默认关闭；开启且失败也安全回退到 Secrets。只补空键，不打印值。
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        from token_store import hydrate_environ
+        _filled = hydrate_environ()
+        if _filled:
+            log("令牌库补入键名（值不打印）:", ",".join(_filled))
+    except Exception as e:
+        log("令牌库未启用/不可用，走 Secrets:", type(e).__name__)
     items = load_items(a.kind)
     cookie = os.environ.get("LUOGU_COOKIE", "").strip()
     csrf = os.environ.get("LUOGU_CSRF", "").strip()

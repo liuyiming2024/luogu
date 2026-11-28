@@ -169,6 +169,24 @@ def main():
           if not miss_path and consent_ok and no_plain else "  ✗ 授权兜底缺项 " + str(miss_path))
     if miss_path or not consent_ok or not no_plain: fail.append("第14条授权兜底缺项")
 
+    # 11 第 15 条：数据库令牌预留位 —— 存在、默认关闭、未硬编码端点、不推翻第14条
+    ts = p("tools/token_store.py")
+    plan = p("00_总览/数据库令牌接入方案.md")
+    sub = open(p("tools/luogu_submit.py"), encoding="utf-8").read()
+    wf3 = open(p(".github/workflows/submit_to_luogu.yml"), encoding="utf-8").read()
+    ts_src = open(ts, encoding="utf-8").read() if os.path.exists(ts) else ""
+    plan_src = open(plan, encoding="utf-8").read() if os.path.exists(plan) else ""
+    reserve_ok = (os.path.exists(ts) and os.path.exists(plan)
+                  and "默认关闭" in ts_src and "未接入" in plan_src
+                  and "def enabled" in ts_src
+                  and "hydrate_environ" in sub
+                  and "vars.LUOGU_TOKEN_STORE" in wf3
+                  and "secrets.LUOGU_SUBMIT_CONSENT" in wf3
+                  and "我不接收任何 token 明文" in plan_src.replace("**", ""))
+    print("  ✓ 数据库预留位：默认关闭 / 未接入 / 主链路已回归 / consent 仍留 Secret / 不收明文"
+          if reserve_ok else "  ✗ 预留位缺项")
+    if not reserve_ok: fail.append("第15条数据库预留位缺项")
+
     # 角色字样回归：只查「源文件 / 文档 / 工作流」；site/ 下产物由生成器覆盖，
     #   workflows/pages.yml 在重生成之后才跑本自检，产物届时必然干净。
     #   字面量拆开写，避免本脚本自己命中自己。

@@ -1,0 +1,32 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>数据库令牌接入方案.md · 离线归档</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/local.css"></head>
+<body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">00_总览 / 数据库令牌接入方案.md</span></header>
+<main class="doc"><h1>数据库令牌接入方案（第 15 条 · 预留位）</h1>
+<blockquote><strong>当前状态：未接入。</strong> 你还没给数据库信息，所以本文件只定义契约， <code>tools/token_store.py</code> <strong>默认关闭、不发任何请求</strong>。 不编造接口、不假装已连库、<strong>我不接收任何 token 明文</strong>（与第 14 条一致）； token 值由本人自己写进库，别发在对话里。</blockquote>
+<h2>这件事解决什么</h2>
+<p>第 14 条里，本人要一次性填 5 个 Secret（cookie / csrf / uid / 端点 / consent）。 你说「可以给我一个数据库供你存储 token」——那就把<strong>值</strong>挪进你的库： 本人自己把 token 写进库，Action 从库读，Secrets 里只剩 <strong>1 个 DB 只读访问凭据</strong>。</p>
+<table class="tb"><thead><tr><th></th><th>无数据库（现状）</th><th>接库后</th></tr></thead><tbody><tr><td>本人要填的 Secret</td><td>5 个洛谷值</td><td><strong>1 个</strong> DB 只读凭据</td></tr><tr><td>token 值放哪</td><td>Settings Secrets</td><td><strong>你的数据库</strong>（本人自行写入）</td></tr><tr><td>consent 由谁确认</td><td>本人写 Secret</td><td><strong>仍必须留 Secret</strong>（当前 gate 只读它；想放库需另改 gate）</td></tr><tr><td>我在对话里收明文</td><td><strong>不收</strong></td><td><strong>仍不收</strong></td></tr></tbody></table>
+<p><strong>1 个凭据不能降为 0</strong>（除非库匿名可读，那不安全，不做）。这 1 个可以用 GitHub 的加密接口代写进 Secrets，不用你进 Settings 页面——但「值」仍由你给、 或由你在库里授权，我不会替你确认自担后果。</p>
+<h2>表结构建议（最小）</h2>
+<pre class="code"><code>create table luogu_tokens (
+  name        text primary key,   -- 键名，见下方白名单
+  value       text not null,      -- 值；建议列级加密或只存短期凭据
+  updated_at  timestamptz default now()
+);</code></pre>
+<p>只往 <code>name</code> 写这些键（写别的会被忽略，不会污染运行时）：</p>
+<p><code>LUOGU_COOKIE</code>、<code>LUOGU_CSRF</code>、<code>LUOGU_UID</code>、<code>LUOGU_SUBMIT_ENDPOINT</code>、 <code>LUOGU_IDE_ENDPOINT</code>、<code>LUOGU_SUBMIT_CONSENT</code></p>
+<blockquote>安全提醒：把<strong>洛谷登录态</strong>放第三方库 = 多一份托管风险。建议开 RLS、 只给 runner 一个只读角色、值列加密、定期轮换。  <strong><code>LUOGU_SUBMIT_CONSENT</code> 当前必须留在 Secret</strong>：工作流的 gate 在 shell 里只读 <code>secrets.LUOGU_SUBMIT_CONSENT</code>，库里的值它看不见。真要把 consent 也放库， 得把 gate 改成 Python 判定（接库时一并做）。让「自担确认」这一下始终在你手里， 也符合第 14 条。</blockquote>
+<h2>已定义的两种后端</h2>
+<p><code>tools/token_store.py</code> 只认这两种，其余明确回退，不做成假功能：</p>
+<table class="tb"><thead><tr><th>后端</th><th>需要的环境变量</th><th>读法</th></tr></thead><tbody><tr><td><code>supabase</code></td><td><code>LUOGU_TOKEN_SUPABASE_URL</code>、<code>LUOGU_TOKEN_SUPABASE_KEY</code>、<code>LUOGU_TOKEN_TABLE</code></td><td>PostgREST <code>GET /rest/v1/{table}?select=name,value</code>（urllib，无需额外包）</td></tr><tr><td><code>sql</code></td><td><code>LUOGU_TOKEN_DSN</code>（<code>postgresql://</code> / <code>mysql://</code>）、<code>LUOGU_TOKEN_TABLE</code></td><td>惰性 <code>psycopg</code> / <code>pymysql</code>，缺驱动即安全回退</td></tr></tbody></table>
+<p>开关：<code>LUOGU_TOKEN_STORE=1</code> + <code>LUOGU_TOKEN_BACKEND=supabase|sql</code>。 <strong>不设就完全关闭</strong>，主链路行为与现在一模一样（<code>tools/verify_submit.py</code> 已回归验证）。</p>
+<h2>安全约束（写死在代码里）</h2>
+<ul><li>默认关闭 → 返回空，<strong>不联网、不导入驱动、不打印</strong></li><li><strong>只补空键</strong>：Secrets 里显式给的值优先，库不会覆盖</li><li>白名单键；表名做 <code>[A-Za-z_][A-Za-z0-9_.]*</code> 校验，阻断拼接注入</li><li>日志只出现<strong>键名</strong>；异常只打印类型名（DSN 可能含口令，不外泄）</li><li>端点按洛谷当前页面填，<strong>仓库不编造内部 API</strong></li><li>低频、降级即停、幂等、失败不轰炸重试等纪律不变</li></ul>
+<h2>你给我什么就能接（一句话即可，不用再做选择题）</h2>
+<ol><li>后端类型：<code>supabase</code> 还是 <code>sql</code></li><li>连接信息：Supabase 项目 URL + 只读 key，或 DSN；<strong>以及表名 / 键名列名 / 值列名</strong></li><li>一个<strong>只读</strong>访问凭据（我可用加密接口代写进 Secrets，或你自己在库里建只读角色）</li><li>你<strong>自己</strong>把 token 值写进库（别发在对话里）</li><li><code>LUOGU_SUBMIT_CONSENT</code> 由你确认后<strong>留在 Secret</strong>（gate 只读它）</li></ol>
+<p>收到后我做：填适配器 env → 在 <code>submit_to_luogu.yml</code> 加一步 <code>hydrate_environ()</code> → 跑 <code>token_store --check</code> + <code>verify_submit</code> → 推仓库。<strong>没收到之前，什么都不连。</strong></p>
+<h2>自检</h2>
+<pre class="code"><code>python3 tools/token_store.py --check          # 7 项，零外网
+python3 tools/verify_submit.py               # 主链路回归，零外网
+python3 tools/check_reachability.py          # 含「预留位默认关闭」检查点</code></pre></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer><script src="../assets/local.js"></script></body></html>

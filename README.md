@@ -132,3 +132,11 @@ Markdown 评论 + 算术验证码 / 三态身份 / 编译环境内置下载 / �
 
 填一次即可；**未配置 consent → 永远只预览**，不向洛谷发任何写请求。
 完整步骤见 `00_总览/帮助手册.md` 5d。
+
+## 可选 · 数据库存 token（第 15 条 · 预留位，未接入）
+
+本人可给一个数据库**自己存 token 值**，Action 从库读，Secrets 从 5 个降到 1 个
+DB 只读凭据。当前 `tools/token_store.py` **默认关闭、零外网、不编造端点**，
+`LUOGU_SUBMIT_CONSENT` 仍留 Secret，**对话仍不收明文**。
+契约、表结构与「给我什么就能接」见 `00_总览/数据库令牌接入方案.md`。
+自检：`python3 tools/token_store.py --check`。

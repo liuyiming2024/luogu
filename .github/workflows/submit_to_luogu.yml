@@ -89,6 +89,13 @@ jobs:
           LUOGU_UID: ${{ secrets.LUOGU_UID }}
           LUOGU_SUBMIT_ENDPOINT: ${{ secrets.LUOGU_SUBMIT_ENDPOINT }}
           LUOGU_IDE_ENDPOINT: ${{ vars.LUOGU_IDE_ENDPOINT }}
+          # 第 15 条预留位：未配置即空字符串，token_store 默认关闭，行为不变
+          LUOGU_TOKEN_STORE: ${{ vars.LUOGU_TOKEN_STORE }}
+          LUOGU_TOKEN_BACKEND: ${{ vars.LUOGU_TOKEN_BACKEND }}
+          LUOGU_TOKEN_TABLE: ${{ vars.LUOGU_TOKEN_TABLE }}
+          LUOGU_TOKEN_SUPABASE_URL: ${{ vars.LUOGU_TOKEN_SUPABASE_URL }}
+          LUOGU_TOKEN_SUPABASE_KEY: ${{ secrets.LUOGU_TOKEN_SUPABASE_KEY }}
+          LUOGU_TOKEN_DSN: ${{ secrets.LUOGU_TOKEN_DSN }}
           ALLOW_REAL: ${{ steps.gate.outputs.allow }}
           SUBMIT_KIND: ${{ inputs.kind }}
         run: |
