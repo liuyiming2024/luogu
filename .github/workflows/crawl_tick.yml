@@ -52,8 +52,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60          # 45 分钟窗口 + 起步延迟 + 重生成 + 提交 + 上传
     steps:
-      - name: 检出仓库
+      - name: 检出仓库（浅克隆，差值拉取）
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: 上一次部署体检（推送前，不等待）
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 tools/precheck_pages.py
 
       - name: 准备 Python
         uses: actions/setup-python@v5
@@ -131,7 +139,12 @@ jobs:
         run: |
           git config user.name "luogu-crawler[bot]"
           git config user.email "luogu-crawler[bot]@users.noreply.github.com"
-          git add -A -- site/ 02_文章编号索引/
+          # 差值推送：git 自动按内容去重，未变化的重生成产物不进提交
+          git add -A -- site/ 02_文章编号索引/ 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "无内容变化，跳过提交"
+            exit 0
+          fi
           if git diff --cached --quiet; then
             echo "无新产物，跳过提交"
           else

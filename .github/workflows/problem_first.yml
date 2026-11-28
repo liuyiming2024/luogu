@@ -16,7 +16,7 @@ on:
       pids:
         description: 'P 号，逗号分隔'
         required: true
-        default: 'P1001,P1002,P1003,P1421,P1909'
+        default: ''
         type: string
       delay:
         description: '每次请求间隔秒数（不得低于 1）'
@@ -36,8 +36,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
-      - name: 检出仓库
+      - name: 检出仓库（浅克隆，差值拉取）
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: 上一次部署体检（推送前，不等待）
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 tools/precheck_pages.py
 
       - name: 准备 Python
         uses: actions/setup-python@v5
@@ -47,12 +55,19 @@ jobs:
       - name: 低频取回题面正文（有序 P 号）
         id: get
         env:
-          PIDS: ${{ inputs.pids || 'P1001,P1002,P1003,P1421,P1909' }}
+          PIDS: ${{ inputs.pids }}
           DELAY: ${{ inputs.delay || '2.0' }}
         run: |
           set -u
-          echo "执行: python3 tools/fetch_problem.py --pids $PIDS --delay $DELAY"
-          python3 tools/fetch_problem.py --pids "$PIDS" --delay "$DELAY" || echo "取回器返回非零，日志已保留"
+          if [ -z "$PIDS" ]; then
+            echo "执行: python3 tools/fetch_problem.py --auto-range --batch 10 --delay $DELAY"
+            python3 tools/fetch_problem.py --auto-range --batch 10 --delay "$DELAY" \
+              || echo "取回器返回非零，日志已保留"
+          else
+            echo "执行: python3 tools/fetch_problem.py --pids $PIDS --delay $DELAY"
+            python3 tools/fetch_problem.py --pids "$PIDS" --delay "$DELAY" \
+              || echo "取回器返回非零，日志已保留"
+          fi
           n=0
           [ -f /tmp/luogu_problem_new ] && n=$(cat /tmp/luogu_problem_new)
           echo "new=$n" >> "$GITHUB_OUTPUT"
@@ -61,7 +76,8 @@ jobs:
           [ -f /tmp/luogu_problem_tag ] && tag=$(tr -cd "A-Za-z0-9._-" < /tmp/luogu_problem_tag | cut -c1-60)
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
           # 只把新增题面存档加入暂存区；未新增则暂存区为空
-          git add -- site/data/problems/*.json 2>/dev/null || true
+          git add -- site/data/problems/*.json site/data/crawl_state.json \
+                     "02_文章编号索引/上一次部署体检.md" 2>/dev/null || true
 
       - name: 提交（仅新增题面正文时才写回）
         if: steps.get.outputs.new != '0' && steps.get.outputs.new != ''

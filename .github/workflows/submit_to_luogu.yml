@@ -52,6 +52,8 @@ jobs:
     steps:
       - name: 检出仓库
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
 
       - name: 判定是否允许真提交（一次性授权）
         id: gate

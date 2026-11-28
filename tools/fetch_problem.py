@@ -141,11 +141,42 @@ def main():
     ap.add_argument("--pids", default="P1001,P1421,P1002")
     ap.add_argument("--delay", type=float, default=2.0)
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--auto-range", action="store_true",
+                    help="按 crawl_state 的 problems_cursor 有序推进，跳过已有正文级存档")
+    ap.add_argument("--batch", type=int, default=10,
+                    help="auto-range 单轮最多取回的题面数")
+    ap.add_argument("--state", default="site/data/crawl_state.json")
     a = ap.parse_args()
     if a.delay < 1.0:
         print("拒绝：间隔不得低于 1 秒"); return 2
     os.makedirs(OUT, exist_ok=True)
     pids = [x.strip() for x in a.pids.split(",") if x.strip()]
+    cursor_file = None
+    if a.auto_range:
+        # 有序枚举：从游标起往后找「还没有 contentOnly 正文」的 P 号，不遍历空间
+        cursor_file = os.path.join(R, a.state)
+        cur = 1000
+        try:
+            st = json.load(open(cursor_file, encoding="utf-8"))
+            cur = max(1000, int(st.get("problems_cursor", 1000)))
+        except Exception:
+            pass
+        pids = []
+        k = cur
+        while len(pids) < a.batch and k < cur + 500:
+            pid = "P%d" % k
+            fp = os.path.join(OUT, pid + ".json")
+            has_body = False
+            if os.path.exists(fp):
+                try:
+                    has_body = str(json.load(open(fp, encoding="utf-8"))
+                                   .get("证据等级", "")).startswith("contentOnly")
+                except Exception:
+                    pass
+            if not has_body: pids.append(pid)
+            k += 1
+        print("[problem] auto-range 游标 P%d 起 → 本轮 %d 题：%s" %
+              (cur, len(pids), ",".join(pids)))
     got, failed, all_diag = [], [], []
     for i, pid in enumerate(pids):
         doc, diag, err = probe(pid, gap=max(1.0, a.delay / 2.0))
@@ -189,6 +220,19 @@ def main():
             "-".join("h%sx%d" % (k, v) for k, v in sorted(codes.items(), key=lambda x: str(x[0]))))
     except OSError:
         pass
+    # 游标推进：只在 auto-range 且本轮确有正文时推进到「本轮最后一个成功 P 号 + 1」
+    if a.auto_range and got and cursor_file and not a.dry_run:
+        try:
+            st = json.load(open(cursor_file, encoding="utf-8"))
+            last = max(int(x[1:]) for x in got if x[1:].isdigit())
+            st["problems_cursor"] = max(int(st.get("problems_cursor", 1000)), last + 1)
+            st["problem_fetch_note"] = "auto-range 推进至 P%d（run %s）" % (
+                st["problems_cursor"], now())
+            json.dump(st, open(cursor_file, "w", encoding="utf-8"),
+                      ensure_ascii=False, indent=1)
+            print("[problem] 游标推进 → P%d" % st["problems_cursor"])
+        except Exception as e:
+            print("[problem] 游标回写跳过：%s" % type(e).__name__)
     print("[problem] 本轮有效题面 %d / 失败 %d" % (len(got), len(failed)))
     return 0
 

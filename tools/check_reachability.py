@@ -249,6 +249,25 @@ def main():
           if ev_ok and gate_ok and no_promote else "  ✗ 第16条缺项")
     if not (ev_ok and gate_ok and no_promote): fail.append("第16条缺项")
 
+    # 14 第 18 条：差值推送 / 推送前体检 / 不等 Pages
+    pc = p("tools/precheck_pages.py")
+    pgs = open(p(".github/workflows/pages.yml"), encoding="utf-8").read()
+    tk = open(p(".github/workflows/crawl_tick.yml"), encoding="utf-8").read()
+    pf18 = open(p(".github/workflows/problem_first.yml"), encoding="utf-8").read()
+    d_ok = (os.path.exists(pc)
+            and "fetch-depth: 1" in pgs and "paths:" in pgs
+            and "fetch-depth: 1" in tk and "fetch-depth: 1" in pf18
+            and "precheck_pages.py" in tk and "precheck_pages.py" in pf18
+            and "git diff --cached --quiet" in tk
+            and "cancel-in-progress: false" in pgs
+            # 「不等 Pages」= 不轮询/不等待部署结果；随机起步延迟是错峰，不算等待
+            and "actions/workflows/pages.yml/runs" not in tk
+            and "actions/workflows/pages.yml/runs" not in pf18
+            and "等待部署" not in tk and "等待部署" not in pf18)
+    print("  ✓ 第18条：浅克隆/路径触发/差值add/推送前体检/推送后不等待"
+          if d_ok else "  ✗ 第18条缺项")
+    if not d_ok: fail.append("第18条缺项")
+
     # 角色字样回归：只查「源文件 / 文档 / 工作流」；site/ 下产物由生成器覆盖，
     #   workflows/pages.yml 在重生成之后才跑本自检，产物届时必然干净。
     #   字面量拆开写，避免本脚本自己命中自己。
