@@ -23,7 +23,7 @@ import runner, cases as cg, std_eval, problem_gate
 REPO = os.path.dirname(os.path.dirname(HERE))
 OUT = os.path.join(REPO, "site", "data", "std_brute_check.json")
 
-BRUTE_LANG = {"P1001": "python"}     # 字符串竖式加法用 Python
+BRUTE_LANG = {"P1001": "python", "P1022": "python", "P1026": "python"}
 BRUTE_EXT = {"P1001": ".py"}
 
 
@@ -45,6 +45,30 @@ def scale_inputs(pid):
         return keep[:20], "n≤100（朴素递归枚举数列，指数级）"
     if pid == "P1044":
         return ["%d\n" % n for n in range(1, 11)], "n≤10（朴素枚举 push/pop 序列，指数级）"
+    if pid == "P1003":
+        return base[:20], "坐标 ≤64（朴素逐格涂色，网格上限 128，不假装全范围）"
+    if pid == "P1024":
+        return base[:16], "整数根构造（朴素 0.001 步长扫描，不二分）"
+    if pid == "P1025":
+        return [x for x in base if int(x.split()[0]) <= 30][:16], "n≤30（朴素 DFS 枚举非降序拆分，指数级）"
+    if pid == "P1029":
+        return [x for x in base if int(x.split()[1]) <= 2000][:16], "y0≤2000（朴素双重枚举 P,Q）"
+    if pid == "P1030":
+        return base[:20], "节点 ≤8（朴素显式建树 + 栈遍历）"
+    if pid == "P1031":
+        keep = [x for x in base if (lambda L: int(L[0]) <= 4 and
+                sum(map(int, L[1].split())) <= 12)(x.strip().splitlines())]
+        return keep[:12], "N≤4 且总数≤12（朴素 BFS 状态搜索，指数级）"
+    if pid == "P1022":
+        return base[:20], "题面内方程（朴素数值二分求根，200 次迭代）"
+    if pid == "P1023":
+        return base[:12], "价位表小规模（朴素显式销量表逐项算利润）"
+    if pid == "P1026":
+        return [x for x in base if int(x.strip().splitlines()[0].split()[1]) <= 3][:10], "p=1 且 k≤3（朴素枚举全部切点组合，组合数指数级）"
+    if pid == "P1027":
+        return base[:12], "S≤4（朴素 Floyd-Warshall 全源最短路，点数三次增长）"
+    if pid == "P1032":
+        return base[:12], "短串 + 2~3 条规则（朴素迭代加深 DFS）"
     return base[:40], "题面内全量（本题朴素算法多项式时间）"
 
 
@@ -52,8 +76,8 @@ def make_mutant(src, lang):
     """故意改坏朴素算法：数值输出 +1；匹配不到则多输出一行。"""
     t = open(src, encoding="utf-8").read()
     if lang == "python":
-        m = re.sub(r"print\(([^\n)]+)\)", lambda x: "print((" + x.group(1) + ")+1)", t, count=1)
-        if m == t: m = t + '\nprint("MUTANT")\n'
+        # 不猜 print 语句形态：末尾追加一行额外输出，必然被逐行 normalize 抓到
+        m = t.rstrip() + '\nprint("MUTANT")\n'
         ext = ".py"
     else:
         m = re.sub(r"cout\s*<<\s*([A-Za-z_][A-Za-z0-9_\[\]\(\)]*)\s*<<\s*'\\n'\s*;",
@@ -62,6 +86,16 @@ def make_mutant(src, lang):
         ext = ".cpp"
     assert m != t, "变异未生效"
     return m, ext
+
+
+def mutant_fallback(src, lang):
+    """兜底变异：末尾多输出一行（任何输出类型都能运行，必然被逐行 normalize 抓到）。"""
+    t = open(src, encoding="utf-8").read().rstrip()
+    if lang == "python":
+        return t + '\nprint("MUTANT")\n', ".py"
+    m = t.replace("return 0;", 'cout<<"MUTANT\\n"; return 0;', 1)
+    if m == t: m = t + '\nint main(){cout<<"MUTANT\\n";}\n'
+    return m, ".cpp"
 
 
 def main():
@@ -124,7 +158,17 @@ def main():
             open(mp, "w", encoding="utf-8").write(mut)
             mwd = os.path.join(td, pid + "m"); os.makedirs(mwd, exist_ok=True)
             try:
-                mcmd = runner.compile_source(mp, blang, mwd)
+                try:
+                    mcmd = runner.compile_source(mp, blang, mwd)
+                except Exception:
+                    # 数值 +1 变异对 string 输出会 CE；回退到「多输出一行」的可运行变异，
+                    # 保证变异是「跑起来后被输出比对抓到」，而不是只靠编译失败。
+                    m2, ext2 = mutant_fallback(bp, blang)
+                    mp2 = os.path.join(td, pid + "_mut2" + ext2)
+                    open(mp2, "w", encoding="utf-8").write(m2)
+                    mwd2 = os.path.join(td, pid + "m2"); os.makedirs(mwd2, exist_ok=True)
+                    mcmd = runner.compile_source(mp2, blang, mwd2)
+                    r["checks"]["变异方式"] = "追加输出行（+1 变异 CE 后回退）"
                 mhit = 0
                 for inp in ins[:12]:
                     a = runner.run_case(scmd, inp, 5.0)
@@ -135,9 +179,9 @@ def main():
                 r["checks"]["变异抓到"] = mhit > 0
                 if mhit > 0: caught += 1
             except Exception:
-                r["checks"]["变异抓到"] = True   # CE 也算被拒
-                r["checks"]["变异步被抓到"] = "CE"
-                caught += 1
+                r["checks"]["变异抓到"] = False
+                r["checks"]["变异步被抓到"] = "两次变异均不可用"
+                ok = False
             good = (r["checks"]["源码不同"] and r["checks"]["题面闸门"]
                     and r["checks"]["题面样例两者一致"] and r["checks"]["用例0不一致"]
                     and r["checks"]["变异抓到"])
