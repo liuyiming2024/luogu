@@ -69,8 +69,9 @@ def main():
 
     # 离线期望输出表：不编译也能判出已知 hack 的错解
     exp = std_eval.build_expect()
-    check("期望表覆盖三道真题", set(exp) == {"P1001", "P1421", "P1002"},
-          str(sorted(exp)))
+    pids = [x["pid"] for x in std_eval.load_bank()["题库"]]
+    check("期望表覆盖全部题库（题面进度 = STD 进度）", set(exp) == set(pids),
+          "%d 题 %s" % (len(pids), str(sorted(pids))))
     p1421 = {c["in"]: c["out"] for c in exp["P1421"]["cases"]}
     std_ans = p1421.get("7 6\n")
     bad_ans = "3"          # 第 7 批：double 反复减 1.9 在 19 角整数倍处少买一支
@@ -105,7 +106,25 @@ def main():
           all("检索摘录" in str(g["level"]) or "contentOnly" in str(g["level"])
               for g in gates.values()))
     check("验证夹具 BENCH 不进正式题库（不做 std）",
-          "BENCH" not in [x["pid"] for x in std_eval.load_bank()["题库"]])
+          "BENCH" not in pids)
+    # 第 17 条：题面进度 = STD 进度 + 每题配独立朴素算法
+    import glob
+    REPO = os.path.dirname(os.path.dirname(HERE))
+    prob_files = {os.path.basename(x)[:-5] for x in
+                  glob.glob(os.path.join(REPO, "site", "data", "problems", "P*.json"))}
+    check("题面存档集合 == STD 题库集合", prob_files == set(pids),
+          "题面 %d / STD %d" % (len(prob_files), len(pids)))
+    bj = os.path.join(REPO, "site", "data", "std_brute_check.json")
+    if os.path.exists(bj):
+        b = json.load(open(bj, encoding="utf-8"))
+        check("STD↔朴素对拍：全部题 PASS 且变异全被抓到",
+              b["统计"]["PASS"] == b["统计"]["题目数"] == len(pids)
+              and b["统计"]["变异抓到"] == len(pids),
+              str(b["统计"]))
+        check("朴素对拍用例数可核对（非 0 空跑）", b["统计"]["用例总数"] >= 100,
+              str(b["统计"]["用例总数"]))
+    else:
+        check("STD↔朴素对拍台账存在", False)
 
     print("\n结论：", "PASS · 变异全被抓到，测试集有分辨力（零外网）" if ok else "FAIL")
     return 0 if ok else 1

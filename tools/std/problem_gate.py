@@ -73,6 +73,14 @@ def gate(pid, verbose=True):
     if not res["checks"]["用例全部in_range"]:
         res["reason"] = "用例生成器产出题面外输入"; return res
 
+    # 5 朴素算法在位（实际对拍由 verify_brute.py 跑，避免循环依赖）
+    bp = os.path.join(HERE, t.get("朴素算法", "").split("（")[0]) if t.get("朴素算法") else ""
+    res["checks"]["朴素算法源码在位"] = bool(bp and os.path.exists(bp) and
+                                       open(bp, encoding="utf-8").read() !=
+                                       open(os.path.join(HERE, t["std"]), encoding="utf-8").read())
+    if not res["checks"]["朴素算法源码在位"]:
+        res["reason"] = "缺独立实现的朴素算法（或与 std 逐字相同）"; return res
+
     res["pass"] = True
     res["reason"] = "证据齐全：范围逐字 / 样例实测 / 用例全在题面内"
     if verbose:

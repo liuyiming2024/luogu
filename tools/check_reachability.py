@@ -199,11 +199,20 @@ def main():
         jc = open(p("site/assets/judge_cases.js"), encoding="utf-8").read()
         std_ok = (c["统计"]["已迁入"] == 0
                   and all(x["status"] != "已迁入" for x in c["条目"])
-                  and e["题目数"] == 3 and e["用例总数"] >= 150
+                  and e["题目数"] >= 7 and e["用例总数"] >= 300
+                  and len(json.load(open(sb, encoding="utf-8"))["题库"]) == e["题目数"]
                   and "std#" in jc
                   and "window.LL_STD_CANDIDATES" in open(
                       p("site/assets/std_candidates.js"), encoding="utf-8").read())
-    print("  ✓ STD：本地对跑/期望表已上页 / 台账已迁入=0 / 六类变异脚本在位"
+    bj = p("site/data/std_brute_check.json")
+    b_ok = False
+    if os.path.exists(bj):
+        b = json.load(open(bj, encoding="utf-8"))
+        b_ok = (b["统计"]["PASS"] == b["统计"]["题目数"]
+                and b["统计"]["变异抓到"] == b["统计"]["题目数"]
+                and b["统计"]["用例总数"] >= 100)
+    std_ok = std_ok and b_ok
+    print("  ✓ STD：题面进度=STD进度 / 朴素对拍全PASS / 期望表上页 / 已迁入=0"
           if std_ok else "  ✗ STD 实物缺项或出现自动迁入")
     if not std_ok: fail.append("STD 实物缺项")
 

@@ -20,6 +20,11 @@ RANGE = {
               "引用": "∣a∣,∣b∣≤10^9"},
     "P1421": {"keys": ["a", "b"], "a": (0, 10**4), "b": (0, 9),
               "引用": "0≤a≤10^4,0≤b≤9"},
+    "P1909": {"n": (1, 10000), "pack": (1, 10000),
+              "引用": "保证所有的 7 个数都是不超过 10000 的正整数"},
+    "P1028": {"n": (1, 1000), "引用": "1≤n≤10^3"},
+    "P1044": {"n": (1, 18), "引用": "1≤n≤18"},
+    "P1059": {"N": (1, 100), "val": (1, 1000), "引用": "N≤100"},
     "P1002": {"n": (1, 20), "m": (1, 20), "horse": (0, 20),
               "保证": "起点不是马的控制点",
               "引用": "1≤n,m≤20,0≤ 马的坐标 ≤20"},
@@ -31,6 +36,10 @@ SPEC = {
     "P1001": {"count": 60, "bounds": "∣a∣,∣b∣≤10^9"},
     "P1421": {"count": 80, "bounds": "0≤a≤10^4,0≤b≤9"},
     "P1002": {"count": 40, "bounds": "1≤n,m≤20,0≤马的坐标≤20；保证起点不是马的控制点"},
+    "P1909": {"count": 40, "bounds": "n 与 6 个包装数均为 1..10000 正整数"},
+    "P1028": {"count": 40, "bounds": "1≤n≤1000"},
+    "P1044": {"count": 40, "bounds": "1≤n≤18"},
+    "P1059": {"count": 40, "bounds": "1≤N≤100，N 个数在 1..1000"},
 }
 
 
@@ -44,6 +53,15 @@ def in_range(pid, line):
         return len(v) == 2 and all(-10**9 <= x <= 10**9 for x in v)
     if pid == "P1421":
         return len(v) == 2 and 0 <= v[0] <= 10**4 and 0 <= v[1] <= 9
+    if pid == "P1909":
+        return len(v) == 7 and all(1 <= x <= 10000 for x in v)
+    if pid == "P1028":
+        return len(v) == 1 and 1 <= v[0] <= 1000
+    if pid == "P1044":
+        return len(v) == 1 and 1 <= v[0] <= 18
+    if pid == "P1059":
+        return (2 <= len(v) <= 101 and 1 <= v[0] <= 100
+                and len(v) == 1 + v[0] and all(1 <= x <= 1000 for x in v[1:]))
     if pid == "P1002":
         if len(v) != 4: return False
         n, m, x, y = v
@@ -102,6 +120,26 @@ def cases(pid, seed=0):
             line = "%d %d %d %d\n" % (n, m, x, y)
             if not in_range(pid, line): continue   # 只作废违反题面保证的
             out.append(line)
+    elif pid == "P1909":
+        while len(out) < spec["count"]:
+            n = r.randint(1, 10000)
+            out.append("%d\n%d %d\n%d %d\n%d %d\n" % (
+                n, r.randint(1,10000), r.randint(1,10000),
+                r.randint(1,10000), r.randint(1,10000),
+                r.randint(1,10000), r.randint(1,10000)))
+    elif pid == "P1028":
+        for n in [1, 2, 3, 4, 5, 6, 10, 100, 1000]:
+            out.append("%d\n" % n)
+        while len(out) < spec["count"]:
+            out.append("%d\n" % r.randint(1, 1000))
+    elif pid == "P1044":
+        for n in range(1, 19): out.append("%d\n" % n)
+        while len(out) < spec["count"]:
+            out.append("%d\n" % r.randint(1, 18))
+    elif pid == "P1059":
+        while len(out) < spec["count"]:
+            N = r.randint(1, 100)
+            out.append("%d\n%s\n" % (N, " ".join(str(r.randint(1,1000)) for _ in range(N))))
     assert all(in_range(pid, x) for x in out), "生成器产出了题面外输入"
     return out[:spec["count"]]
 

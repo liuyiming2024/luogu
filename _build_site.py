@@ -589,6 +589,12 @@ _rev = json.load(open(_revp, encoding="utf-8")) if os.path.exists(_revp) else {"
 open(os.path.join(SITE, "assets", "std_reviews.js"), "w", encoding="utf-8").write(
     "window.LL_STD_REVIEWS=" + json.dumps(_rev, ensure_ascii=False) + ";\n")
 
+# 3e) STD↔朴素算法对拍台账
+_bjp = os.path.join(DATA, "std_brute_check.json")
+_bj = json.load(open(_bjp, encoding="utf-8")) if os.path.exists(_bjp) else {"条目": [], "统计": {}}
+open(os.path.join(SITE, "assets", "std_brute_check.js"), "w", encoding="utf-8").write(
+    "window.LL_STD_BRUTE=" + json.dumps(_bj, ensure_ascii=False) + ";\n")
+
 # 4) 编译镜像清单：内置为功能，但不写死可能失效的第三方地址
 _mirrors = [
     {"lang": "C++", "url": "", "note": "按你所在网络填写国内易联镜像（示例结构，不写死地址）"},
@@ -630,7 +636,7 @@ def _page(title, page_id, body, extra_js=""):
 </main><div class="ll-foot wrap">本地版、轻量版 luogu · 版权归原作者及洛谷所有 ·
 <a href="reports/归档与版权声明.md.html">归档与版权声明</a> ·
 <a href="reports/帮助手册.md.html">帮助手册</a></div>
-<script src="assets/self.js"></script><script src="assets/judge_cases.js"></script><script src="assets/std_candidates.js"></script><script src="assets/std_reviews.js"></script>
+<script src="assets/self.js"></script><script src="assets/judge_cases.js"></script><script src="assets/std_candidates.js"></script><script src="assets/std_reviews.js"></script><script src="assets/std_brute_check.js"></script>
 <script src="assets/mirrors.js"></script>{extra_js}
 <script src="assets/local.js"></script></body></html>'''
 
@@ -642,7 +648,7 @@ open(os.path.join(SITE, "problems.html"), "w", encoding="utf-8").write(_page(
     '<div id="ll-ide"></div><div id="ll-hacks"></div><div id="ll-mirrors"></div>'))
 open(os.path.join(SITE, "submit.html"), "w", encoding="utf-8").write(_page(
     "std 工单（投稿）", "submit",
-    '<div id="ll-submit"></div><div id="ll-std-cand"></div><div id="ll-std-rev"></div>'))
+    '<div id="ll-submit"></div><div id="ll-std-cand"></div><div id="ll-std-rev"></div><div id="ll-std-brute"></div>'))
 open(os.path.join(SITE, "self.html"), "w", encoding="utf-8").write(_page(
     "本地操作 · 只认 token 不认人", "self", '<div id="ll-admin"></div>'))
 

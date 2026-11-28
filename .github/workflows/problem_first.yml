@@ -56,6 +56,10 @@ jobs:
           n=0
           [ -f /tmp/luogu_problem_new ] && n=$(cat /tmp/luogu_problem_new)
           echo "new=$n" >> "$GITHUB_OUTPUT"
+          # 诊断结论编码进 artifact 名：不进仓库、不下载 blob、不造提交也能读到结论
+          tag="none"
+          [ -f /tmp/luogu_problem_tag ] && tag=$(tr -cd "A-Za-z0-9._-" < /tmp/luogu_problem_tag | cut -c1-60)
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
           # 只把新增题面存档加入暂存区；未新增则暂存区为空
           git add -- site/data/problems/*.json 2>/dev/null || true
 
@@ -76,6 +80,8 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: problem-first-log-${{ github.run_number }}
-          path: site/data/problems/
+          name: diag-${{ steps.get.outputs.tag || 'none' }}-r${{ github.run_number }}
+          path: |
+            site/data/problems/
+            /tmp/luogu_problem_diag.json
           if-no-files-found: ignore

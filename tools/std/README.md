@@ -48,3 +48,19 @@ python3 tools/fetch_problem.py --pids P1001,P1421,P1002 --delay 2.0
 | contentOnly 正文（队列取回） | ✅ | ✅ 审核全过后由 `promote.py` 执行 |
 
 把摘录伪装成正文、或凭记忆写范围，都被闸门与回归检查点挡住。
+
+## 第 17 条 · 题面进度 = STD 进度 + 朴素算法对拍
+
+| 目录 | 作用 |
+|---|---|
+| `brute/P*.cpp` / `brute/P1001.py` | 每题一份按题面直译的**朴素算法**，与 std 不同实现 |
+| `verify_brute.py` | STD↔朴素逐字对跑 + 题面样例 + 自动变异敏感性 |
+| `site/data/std_brute_check.json` | 对拍台账（上页，只读） |
+
+```bash
+python3 tools/std/verify_brute.py    # 7/7 PASS · 197 组 · 变异 7/7
+python3 tools/std/verify_std.py      # 含「题面存档集合 == STD 题库集合」检查
+```
+
+指数级朴素算法（P1002 / P1028 / P1044）如实标注对拍规模，
+**不假装全范围**；全部范围的正确性由 std 自身 + 题面闸门 + 样例实测覆盖。

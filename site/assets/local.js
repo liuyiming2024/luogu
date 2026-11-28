@@ -636,6 +636,24 @@ function submit(){
       '</tbody></table>';
     box.innerHTML=h;
   })();
+  /* STD↔朴素算法对拍台账（只读）：题面进度 = STD 进度。 */
+  (function(){
+    var box=$("#ll-std-brute"); if(!box) return;
+    var d=window.LL_STD_BRUTE||{条目:[],统计:{}}, rows=d.条目||[];
+    var st=d.统计||{};
+    var h='<h2 style="margin-top:18px">STD ↔ 朴素算法对拍（只读）</h2>'+
+      '<div class="ll-note">每有一份可核对题面，就配一份独立正确解(std)与一份'+
+      '<b>按题面直译的朴素算法</b>逐字对跑；不同实现、题面样例一致、用例 0 不一致、'+
+      '自动变异版必须被抓到。指数级朴素算法如实标注规模，不假装全范围。'+
+      '当前 '+String(st.PASS||0)+'/'+String(st.题目数||0)+' 题 PASS，'+
+      String(st.用例总数||0)+' 组用例，变异抓到 '+String(st.变异抓到||0)+'。</div>';
+    if(!rows.length){box.innerHTML=h+'<p class="ll-empty">对拍台账为空</p>';return;}
+    h+='<table class="ll-tb"><thead><tr><th>题号</th><th>用例</th><th>不一致</th><th>规模</th></tr></thead><tbody>'+
+      rows.map(function(x){return '<tr><td>'+esc(x.pid)+'</td><td>'+esc(x.用例数||0)+
+        '</td><td>'+esc(x.不一致)+'</td><td style="font-size:12px">'+esc((x.规模说明||'').slice(0,42))+
+        '</td></tr>';}).join("")+'</tbody></table>';
+    box.innerHTML=h;
+  })();
 }
 
 /* ---------- 本人（只认 token 不认人） ---------- */
