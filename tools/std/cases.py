@@ -36,6 +36,8 @@ RANGE = {
     "P1038": {}, "P1039": {}, "P1040": {}, "P1041": {}, "P1042": {},
     "P1043": {}, "P1045": {}, "P1046": {}, "P1047": {}, "P1048": {},
     "P1049": {}, "P1050": {}, "P1051": {}, "P1052": {}, "P1053": {},
+    "P1054": {}, "P1055": {}, "P1056": {}, "P1057": {}, "P1058": {},
+    "P1060": {}, "P1061": {}, "P1062": {}, "P1063": {}, "P1064": {},
     "P1002": {"n": (1, 20), "m": (1, 20), "horse": (0, 20),
               "保证": "起点不是马的控制点",
               "引用": "1≤n,m≤20,0≤ 马的坐标 ≤20"},
@@ -75,6 +77,16 @@ SPEC = {
     "P1051": {"count": 40, "bounds": "1≤N≤100，成绩 0..100，论文 0..10"},
     "P1052": {"count": 40, "bounds": "1≤L≤10^9，1≤S≤T≤10，1≤M≤100；对拍限 L≤300"},
     "P1053": {"count": 40, "bounds": "3≤n≤50000；对拍限 n≤30"},
+    "P1054": {"count": 40, "bounds": "表达式≤50 字符、2≤n≤26；含非法括号选项（题面逐字忽略）"},
+    "P1055": {"count": 40, "bounds": "x-xxx-xxxxx-x 格式，识别码可为 X"},
+    "P1056": {"count": 40, "bounds": "2≤N,M≤1000、0≤K<M、0≤L<N、0≤D≤2000；对拍限 M,N≤8"},
+    "P1057": {"count": 40, "bounds": "3≤n≤30、1≤m≤30；对拍限 m≤12"},
+    "P1058": {"count": 40, "bounds": "1≤m,n≤50、每格 1..100；对拍限 m,n≤4 且高度≤3"},
+    "P1060": {"count": 40, "bounds": "n<3×10^4、m<25；对拍限 m≤12"},
+    "P1061": {"count": 40, "bounds": "1≤s<t≤26、2≤w≤t-s；对拍限 w≤6、t-s≤9"},
+    "P1062": {"count": 40, "bounds": "3≤k≤15、10≤N≤1000（朴素子集枚举可全量覆盖）"},
+    "P1063": {"count": 40, "bounds": "4≤N≤100、标记≤1000；对拍限 n≤6"},
+    "P1064": {"count": 40, "bounds": "1≤n≤3.2×10^4、1≤m≤60；对拍限 m≤10"},
 }
 
 
@@ -83,7 +95,9 @@ NEW_TEXT_PIDS = {"P1003","P1024","P1025","P1029","P1030","P1031",
                  "P1033","P1034","P1035","P1036","P1037",
                  "P1038","P1039","P1040","P1041","P1042",
                  "P1043","P1045","P1046","P1047","P1048",
-                 "P1049","P1050","P1051","P1052","P1053"}
+                 "P1049","P1050","P1051","P1052","P1053",
+                 "P1054","P1055","P1056","P1057","P1058",
+                 "P1060","P1061","P1062","P1063","P1064"}
 
 
 def _text_in_range(pid, line):
@@ -320,6 +334,91 @@ def _text_in_range(pid, line):
                 v = list(map(int, row.split()))
                 if len(v) != 2 or v[0] == v[1]: return False
                 if any(not (1 <= x <= n) or x == i for x in v): return False
+            return True
+        if pid == "P1054":
+            if len(L) < 3: return False
+            if len(L[0]) > 50: return False
+            v = L[1].split()
+            if len(v) != 1 or not v[0].isdigit(): return False
+            n = int(v[0])
+            if not (2 <= n <= 26 and len(L) == 2+n): return False
+            return all(len(row) <= 50 for row in L[2:])
+        if pid == "P1055":
+            if len(L) != 1: return False
+            ss = L[0].strip(); parts = ss.split('-')
+            return (len(parts) == 4 and len(parts[0]) == 1 and parts[0].isdigit()
+                    and len(parts[1]) == 3 and parts[1].isdigit()
+                    and len(parts[2]) == 5 and parts[2].isdigit()
+                    and len(parts[3]) == 1 and (parts[3].isdigit() or parts[3] == 'X'))
+        if pid == "P1056":
+            if len(L) < 1: return False          # D=0 时无对行，题面允许
+            h = list(map(int, L[0].split()))
+            if len(h) != 5: return False
+            M,N,K,Lc,D = h
+            if not (2 <= M <= 1000 and 2 <= N <= 1000 and 0 <= K < M
+                    and 0 <= Lc < N and 0 <= D <= 2000 and len(L) == 1+D): return False
+            for row in L[1:]:
+                v = list(map(int, row.split()))
+                if len(v) != 4: return False
+                x,y,p,q = v
+                if not (1 <= x <= M and 1 <= p <= M and 1 <= y <= N and 1 <= q <= N): return False
+                if not ((x == p and abs(y-q) == 1) or (y == q and abs(x-p) == 1)): return False
+            return True
+        if pid == "P1057":
+            if len(L) != 1: return False
+            v = list(map(int, L[0].split()))
+            return len(v) == 2 and 3 <= v[0] <= 30 and 1 <= v[1] <= 30
+        if pid == "P1058":
+            if len(L) < 2: return False
+            h = L[0].split()
+            if len(h) != 2: return False
+            m,n = int(h[0]), int(h[1])
+            if not (1 <= m <= 50 and 1 <= n <= 50 and len(L) == 1+m): return False
+            for row in L[1:]:
+                v = list(map(int, row.split()))
+                if len(v) != n or any(not (1 <= x <= 100) for x in v): return False
+            return True
+        if pid == "P1060":
+            if len(L) < 2: return False
+            h = L[0].split()
+            if len(h) != 2: return False
+            n,m = int(h[0]), int(h[1])
+            if not (1 <= n < 3*10**4 and 1 <= m < 25 and len(L) == 1+m): return False
+            for row in L[1:]:
+                v = list(map(int, row.split()))
+                if len(v) != 2 or not (0 <= v[0] <= 10**4) or not (1 <= v[1] <= 5): return False
+            return True
+        if pid == "P1061":
+            if len(L) != 2: return False
+            h = L[0].split()
+            if len(h) != 3: return False
+            s0,t,w = map(int,h)
+            cur = L[1].strip()
+            if not (1 <= s0 < t <= 26 and 2 <= w <= t-s0 and len(cur) == w): return False
+            vals = [ord(c)-ord('a')+1 for c in cur]
+            return all(s0 <= x <= t for x in vals) and all(vals[i] < vals[i+1] for i in range(w-1))
+        if pid == "P1062":
+            if len(L) != 1: return False
+            v = list(map(int, L[0].split()))
+            return len(v) == 2 and 3 <= v[0] <= 15 and 10 <= v[1] <= 1000
+        if pid == "P1063":
+            if len(L) != 2: return False
+            n = int(L[0].split()[0])
+            v = list(map(int, L[1].split()))
+            return 4 <= n <= 100 and len(v) == n and all(1 <= x <= 1000 for x in v)
+        if pid == "P1064":
+            if len(L) < 2: return False
+            h = L[0].split()
+            if len(h) != 2: return False
+            n,m = int(h[0]), int(h[1])
+            if not (1 <= n <= 32000 and 1 <= m <= 60 and len(L) == 1+m): return False
+            att_count = {}
+            for row in L[1:]:
+                v = list(map(int, row.split()))
+                if len(v) != 3 or not (0 <= v[0] <= 10**4) or not (1 <= v[1] <= 5) or not (0 <= v[2] <= m): return False
+                if v[2] > 0:
+                    att_count[v[2]] = att_count.get(v[2], 0) + 1
+                    if att_count[v[2]] > 2: return False      # 题面逐字：每个主件最多 2 个附件
             return True
     except Exception:
         return False
@@ -688,6 +787,87 @@ def cases(pid, seed=0):
                     c = r.sample([q for q in range(1, n+1) if q != p], 2)
                     rows.append("%d %d" % (c[0], c[1]))
             out.append("%d\n%s\n" % (n, "\n".join(rows)))
+    elif pid == "P1054":
+        TEMPLATES = [
+          ("(a + 1)^2", ["a^2+2*a+1","(a+1)*(a+1)","(a-1)^2+4*a","1+a*2+a^2"], ["a^2+1","a+1","(a+1)^3","a*a+1"]),
+          ("a^2+2*a+1", ["(a+1)^2","(a+1) ^ 2","1+2*a+a*a"], ["a^2+a+1","(a+2)^2","a^2+2*a"]),
+          ("a*a+a-a", ["a^2","a^2+0","(a)*(a)"], ["a^3","a*a+a","a^2+1"]),
+          ("9999+(a-a)*a", ["9999","9999+0*a","10000-1"], ["9998","a+9999"]),
+          ("1^10^9", ["1","1^1","2-1"], ["2","1^2^3"]),
+          ("(a+2)^3", ["a^3+6*a^2+12*a+8","(a+2)*(a+2)*(a+2)","8+12*a+6*a*a+a^3"], ["(a+2)^2","a^3+8"]),
+          ("((a+a))", ["2*a","a+a","a*2"], ["3*a","a*a","a+1"]),
+          ("1 + (a -1)^3", ["a^3-3*a^2+3*a","(a-1)^3+1"], ["a^3","1+(a-1)^2"]),
+        ]
+        INVALID = ["(a+1","a+1)","(a+1))","a++1","a^","a+","a 1","(a+1)^"]
+        while len(out) < spec["count"]:
+            target, eq, neq = r.choice(TEMPLATES)
+            opts = [r.choice(eq)] + [r.choice(neq) for _ in range(r.randint(1,3))]
+            if r.random() < 0.4: opts.append(r.choice(INVALID))
+            r.shuffle(opts)
+            out.append(target + "\n%d\n" % len(opts) + "\n".join(opts) + "\n")
+    elif pid == "P1055":
+        while len(out) < spec["count"]:
+            digits = "".join(str(r.randint(0,9)) for _ in range(9))
+            chk = r.choice([str(r.randint(0,9)), "X"])
+            out.append("%s-%s-%s-%s\n" % (digits[0], digits[1:4], digits[4:9], chk))
+    elif pid == "P1056":
+        while len(out) < spec["count"]:
+            M = r.randint(2,8); N = r.randint(2,8)
+            K = r.randint(0, M-1); Lc = r.randint(0, N-1)
+            maxpairs = (M-1)*N + M*(N-1)
+            D = r.randint(0, min(12, maxpairs))
+            pairs = set()
+            while len(pairs) < D:
+                x = r.randint(1,M); y = r.randint(1,N)
+                if r.random() < 0.5 and x < M: p,q = x+1,y
+                elif y < N: p,q = x,y+1
+                else: continue
+                pairs.add((x,y,p,q))
+            rows = "\n".join("%d %d %d %d" % t for t in sorted(pairs))
+            out.append("%d %d %d %d %d\n%s\n" % (M,N,K,Lc,len(pairs),rows))
+    elif pid == "P1057":
+        while len(out) < spec["count"]:
+            out.append("%d %d\n" % (r.randint(3,30), r.randint(1,12)))
+    elif pid == "P1058":
+        while len(out) < spec["count"]:
+            m = r.randint(1,4); n = r.randint(1,4)
+            hs = [[r.randint(1,3) for _ in range(n)] for _ in range(m)]
+            out.append("%d %d\n%s\n" % (m,n,"\n".join(" ".join(map(str,row)) for row in hs)))
+    elif pid == "P1060":
+        while len(out) < spec["count"]:
+            N = r.randint(100, 1000); m = r.randint(1, 12)
+            rows = ["%d %d" % (r.randint(0, 10**4), r.randint(1,5)) for _ in range(m)]
+            out.append("%d %d\n%s\n" % (N,m,"\n".join(rows)))
+    elif pid == "P1061":
+        import itertools as _it
+        while len(out) < spec["count"]:
+            s0 = r.randint(1,17); t = min(26, s0 + r.randint(2,9)); w = r.randint(2, min(6, t-s0))
+            combos = list(_it.combinations(range(s0,t+1), w))
+            cur = "".join(chr(ord('a')+x-1) for x in r.choice(combos))
+            out.append("%d %d %d\n%s\n" % (s0,t,w,cur))
+    elif pid == "P1062":
+        for k in range(3,16): out.append("%d %d\n" % (k, r.randint(10,1000)))
+        while len(out) < spec["count"]:
+            out.append("%d %d\n" % (r.randint(3,15), r.randint(10,1000)))
+    elif pid == "P1063":
+        while len(out) < spec["count"]:
+            n = r.randint(4,6)
+            a = [r.randint(1,1000) for _ in range(n)]
+            out.append("%d\n%s\n" % (n," ".join(map(str,a))))
+    elif pid == "P1064":
+        while len(out) < spec["count"]:
+            N = r.randint(100, 32000); m = r.randint(1, 10)
+            rows = []; mains = []; used = {}
+            for i in range(1, m+1):
+                avail = [x for x in mains if used.get(x,0) < 2]
+                if not avail or r.random() < 0.45:
+                    rows.append("%d %d 0" % (r.randint(0, 10**4), r.randint(1,5)))
+                    mains.append(i)
+                else:
+                    q = r.choice(avail)
+                    used[q] = used.get(q,0) + 1
+                    rows.append("%d %d %d" % (r.randint(0, 10**4), r.randint(1,5), q))
+            out.append("%d %d\n%s\n" % (N,m,"\n".join(rows)))
     assert all(in_range(pid, x) for x in out), "生成器产出了题面外输入"
     return out[:spec["count"]]
 

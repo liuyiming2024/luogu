@@ -29,7 +29,10 @@ BRUTE_LANG = {"P1001": "python", "P1022": "python", "P1026": "python",
               "P1042": "python", "P1043": "python", "P1045": "python",
               "P1046": "python", "P1047": "python", "P1048": "python",
               "P1049": "python", "P1050": "python", "P1051": "python",
-              "P1053": "python"}
+              "P1053": "python", "P1054": "python", "P1055": "python",
+              "P1056": "python", "P1057": "python", "P1058": "python",
+              "P1060": "python", "P1061": "python", "P1062": "python",
+              "P1063": "python", "P1064": "python"}
 BRUTE_EXT = {"P1001": ".py"}
 
 
@@ -116,6 +119,26 @@ def scale_inputs(pid):
         return base[:40], "L≤300 全量（**不压缩**的原始坐标 DP，不假装覆盖 L≤10^9）"
     if pid == "P1053":
         return base[:40], "n≤30 全量（显式枚举方向×全部旋转，O(n²)；不假装覆盖 n≤50000）"
+    if pid == "P1054":
+        return base[:40], "构造式表达式全量（栈式优先级 + 精确大整数对递归下降模素数指纹）"
+    if pid == "P1055":
+        return base[:40], "题面内全量（按 '-' 分段 + zip 权重 + reduce）"
+    if pid == "P1056":
+        return base[:40], "M,N≤8 全量（枚举全部横/纵通道组合，不假装覆盖 M,N≤1000）"
+    if pid == "P1057":
+        return base[:40], "m≤12 全量（枚举 2^m 传球方向序列，不假装覆盖 m≤30）"
+    if pid == "P1058":
+        return base[:40], "m,n≤4、高度≤3 全量（逐像素反查 + 显式棱位置表，不假装覆盖 m,n≤50）"
+    if pid == "P1060":
+        return base[:40], "m≤12 全量（枚举 2^m 购买子集，不假装覆盖 m<25）"
+    if pid == "P1061":
+        return base[:40], "w≤6、t-s≤9 全量（枚举全部严格递增组合并排序）"
+    if pid == "P1062":
+        return base[:40], "k=3..15、10≤N≤1000 全量（枚举全部 k 幂子集和排序，不依赖二进制映射）"
+    if pid == "P1063":
+        return base[:40], "n≤6 全量（递归枚举全部相邻聚合顺序，不假装覆盖 n≤100）"
+    if pid == "P1064":
+        return base[:40], "m≤10 全量（枚举 2^m 子集 + 显式主件依赖检查，不假装覆盖 m≤60）"
     return base[:40], "题面内全量（本题朴素算法多项式时间）"
 
 
