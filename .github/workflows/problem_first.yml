@@ -1,0 +1,81 @@
+name: 题面优先 · 低频 contentOnly 取回
+
+# 用户口径：「对面那边的爬取队列，让他们先爬题」+「你先爬到题面的，你再做」
+# 本工作流只做一件事：按 P 号顺序低频取回**题面正文**，拿到才落盘。
+# 接口依据：洛谷 API 文档（DataResponse 需 _contentOnly 或 x-luogu-type）。
+# 不编造成功：骨架 / 403 / 非 JSON 一律不写文件。
+#
+# 「不要创造无用的提交历史」：仅当本轮确有新增题面正文时才 commit；
+# 否则只上传日志 artifact，仓库一个字节都不动。
+
+on:
+  schedule:
+    - cron: '37 0,6,12,18 * * *'
+  workflow_dispatch:
+    inputs:
+      pids:
+        description: 'P 号，逗号分隔'
+        required: true
+        default: 'P1001,P1002,P1003,P1421,P1909'
+        type: string
+      delay:
+        description: '每次请求间隔秒数（不得低于 1）'
+        required: true
+        default: '2.0'
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: luogu-problem-first
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+
+      - name: 准备 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 低频取回题面正文（有序 P 号）
+        id: get
+        env:
+          PIDS: ${{ inputs.pids || 'P1001,P1002,P1003,P1421,P1909' }}
+          DELAY: ${{ inputs.delay || '2.0' }}
+        run: |
+          set -u
+          echo "执行: python3 tools/fetch_problem.py --pids $PIDS --delay $DELAY"
+          python3 tools/fetch_problem.py --pids "$PIDS" --delay "$DELAY" || echo "取回器返回非零，日志已保留"
+          n=0
+          [ -f /tmp/luogu_problem_new ] && n=$(cat /tmp/luogu_problem_new)
+          echo "new=$n" >> "$GITHUB_OUTPUT"
+          # 只把新增题面存档加入暂存区；未新增则暂存区为空
+          git add -- site/data/problems/*.json 2>/dev/null || true
+
+      - name: 提交（仅新增题面正文时才写回）
+        if: steps.get.outputs.new != '0' && steps.get.outputs.new != ''
+        run: |
+          git config user.name "luogu-crawler[bot]"
+          git config user.email "luogu-crawler[bot]@users.noreply.github.com"
+          if git diff --cached --quiet; then
+            echo "无新增题面正文，跳过提交"
+          else
+            git commit -m "problem first: 取回题面正文 $(date -u +%Y-%m-%dT%H:%MZ) run ${{ github.run_number }}"
+            git pull --rebase origin main || true
+            git push
+          fi
+
+      - name: 取回日志留痕（artifact，不进提交历史）
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: problem-first-log-${{ github.run_number }}
+          path: site/data/problems/
+          if-no-files-found: ignore

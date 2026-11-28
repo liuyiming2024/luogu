@@ -74,13 +74,15 @@ jobs:
           set -u
           args=(--max-requests "$MAX_REQ" --run-minutes "$RUN_MIN" --rest-minutes 0
                 --push-every 50 --delay 2.0 --jitter 1.5 --micro-batch 20
-                --micro-rest 30 --max-depth 2 --replenish-batch 60 --problem-batch 3)
+                --micro-rest 30 --max-depth 2 --replenish-batch 60 --problem-batch 3
+                --problem-first)
           [ -n "$SEED" ] && args+=(--seed-problems "$SEED")
           [ -n "$REFRESH" ] && args+=(--refresh-url "$REFRESH")
           echo "执行: python3 tools/crawl_daemon.py ${args[*]}"
           python3 tools/crawl_daemon.py "${args[@]}" || echo "daemon 返回非零（多为被拒长退避），日志已保留"
 
       - name: 有效产出校验（防「job 全绿但只拿到 SPA 骨架」的静默空转）
+        id: check
         run: |
           python3 - <<'PY'
           import json, os
@@ -103,14 +105,27 @@ jobs:
                       "）\n")
           if tail and not useful:
               print("::warning::本轮全部为 SPA 骨架，未取回任何有效正文；请检查数据源与队列")
+          # 严格「本轮」增量：daemon 收工时写 /tmp/luogu_tick_new；
+          # 题面取回器写 /tmp/luogu_problem_new。都不读历史日志，避免把旧产出算成本轮。
+          n_tick = n_prob = 0
+          for fp in ("/tmp/luogu_tick_new", "/tmp/luogu_problem_new"):
+              try:
+                  n_tick += int(open(fp, encoding="utf-8").read().strip())
+              except Exception:
+                  pass
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as f:
+              f.write("useful=%d\n" % n_tick)
+          print("本轮有效产出（严格本轮）:", n_tick)
           PY
 
       - name: 重生成来源署名与归档站
+        if: steps.check.outputs.useful != '0'
         run: |
           python3 tools/provenance.py
           python3 _build_site.py
 
       - name: 提交取回结果（含署名与网页产物）
+        if: steps.check.outputs.useful != '0'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |

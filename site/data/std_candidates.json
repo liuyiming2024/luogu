@@ -7,12 +7,13 @@
   "题面外输入一律作废",
   "脚本绝不自动迁入，候选一律待人工审核"
  ],
- "生成时间": "2026-11-28T08:39:01+00:00",
+ "生成时间": "2026-11-28T09:36:13+00:00",
  "统计": {
   "工单": 4,
-  "待人工审核": 2,
+  "待人工审核": 1,
   "去除": 2,
   "不收": 0,
+  "不做": 1,
   "已迁入": 0
  },
  "条目": [
@@ -27,13 +28,24 @@
    "reason": "题面内确定性 WA",
    "median_ratio_cpu": null,
    "median_ratio_rss": null,
+   "证据等级": "检索摘录（逐字，待 contentOnly 队列复核升级）",
+   "题面闸门": {
+    "证据文件存在": true,
+    "原文sha256可核对": true,
+    "证据等级": "检索摘录（逐字，待 contentOnly 队列复核升级）",
+    "范围引用逐字命中": true,
+    "题面样例实测全过": true,
+    "样例数": 1,
+    "用例全部in_range": true,
+    "用例数": 80
+   },
    "first_bad": {
     "input": "7 6\n",
     "std": "4\n",
     "cand": "3\n"
    },
    "rounds": [],
-   "checked_at": "2026-11-28T08:38:53+00:00"
+   "checked_at": "2026-11-28T09:36:05+00:00"
   },
   {
    "id": "t-002",
@@ -46,13 +58,24 @@
    "reason": "题面内确定性 WA",
    "median_ratio_cpu": null,
    "median_ratio_rss": null,
+   "证据等级": "检索摘录（逐字，待 contentOnly 队列复核升级）",
+   "题面闸门": {
+    "证据文件存在": true,
+    "原文sha256可核对": true,
+    "证据等级": "检索摘录（逐字，待 contentOnly 队列复核升级）",
+    "范围引用逐字命中": true,
+    "题面样例实测全过": true,
+    "样例数": 1,
+    "用例全部in_range": true,
+    "用例数": 40
+   },
    "first_bad": {
     "input": "6 6 3 3\n",
     "std": "6\n",
     "cand": "0\n"
    },
    "rounds": [],
-   "checked_at": "2026-11-28T08:38:55+00:00"
+   "checked_at": "2026-11-28T09:36:08+00:00"
   },
   {
    "id": "t-003",
@@ -63,42 +86,53 @@
    "verdict": "明显更优",
    "status": "待人工审核",
    "reason": "不 WA 且明显更优 → 添入可选项，待人工审核",
-   "median_ratio_cpu": 0.587,
+   "median_ratio_cpu": 0.6716,
    "median_ratio_rss": 1.0,
+   "证据等级": "检索摘录（逐字，待 contentOnly 队列复核升级）",
+   "题面闸门": {
+    "证据文件存在": true,
+    "原文sha256可核对": true,
+    "证据等级": "检索摘录（逐字，待 contentOnly 队列复核升级）",
+    "范围引用逐字命中": true,
+    "题面样例实测全过": true,
+    "样例数": 1,
+    "用例全部in_range": true,
+    "用例数": 60
+   },
    "first_bad": null,
    "rounds": [
     {
      "seed": 0,
      "n": 60,
-     "cpu_std": 0.117608,
-     "cpu_cand": 0.070516,
-     "ratio_cpu": 0.5996,
-     "rss_std": 5808,
-     "rss_cand": 5808,
+     "cpu_std": 0.241587,
+     "cpu_cand": 0.155024,
+     "ratio_cpu": 0.6417,
+     "rss_std": 6628,
+     "rss_cand": 6628,
      "ratio_rss": 1.0
     },
     {
      "seed": 1,
      "n": 60,
-     "cpu_std": 0.116706,
-     "cpu_cand": 0.065905,
-     "ratio_cpu": 0.5647,
-     "rss_std": 5820,
-     "rss_cand": 5820,
+     "cpu_std": 0.240207,
+     "cpu_cand": 0.161324,
+     "ratio_cpu": 0.6716,
+     "rss_std": 6640,
+     "rss_cand": 6640,
      "ratio_rss": 1.0
     },
     {
      "seed": 2,
      "n": 60,
-     "cpu_std": 0.120841,
-     "cpu_cand": 0.070939,
-     "ratio_cpu": 0.587,
-     "rss_std": 5824,
-     "rss_cand": 5824,
+     "cpu_std": 0.270373,
+     "cpu_cand": 0.182157,
+     "ratio_cpu": 0.6737,
+     "rss_std": 6648,
+     "rss_cand": 6648,
      "ratio_rss": 1.0
     }
    ],
-   "checked_at": "2026-11-28T08:38:58+00:00"
+   "checked_at": "2026-11-28T09:36:13+00:00"
   },
   {
    "id": "t-004",
@@ -106,45 +140,11 @@
    "file": "BENCH_fast.cpp",
    "sha256_前16": "8da3e4fb70e7589a",
    "note": "流程演示夹具：明显更优（非题库真题）",
-   "verdict": "明显更优",
-   "status": "待人工审核",
-   "reason": "不 WA 且明显更优 → 添入可选项，待人工审核",
-   "median_ratio_cpu": 0.2318,
-   "median_ratio_rss": 1.0,
-   "first_bad": null,
-   "rounds": [
-    {
-     "seed": 0,
-     "n": 3,
-     "cpu_std": 0.023573,
-     "cpu_cand": 0.005746,
-     "ratio_cpu": 0.2438,
-     "rss_std": 5824,
-     "rss_cand": 5824,
-     "ratio_rss": 1.0
-    },
-    {
-     "seed": 1,
-     "n": 3,
-     "cpu_std": 0.022786,
-     "cpu_cand": 0.005282,
-     "ratio_cpu": 0.2318,
-     "rss_std": 5824,
-     "rss_cand": 5824,
-     "ratio_rss": 1.0
-    },
-    {
-     "seed": 2,
-     "n": 3,
-     "cpu_std": 0.028481,
-     "cpu_cand": 0.006259,
-     "ratio_cpu": 0.2198,
-     "rss_std": 5824,
-     "rss_cand": 5824,
-     "ratio_rss": 1.0
-    }
-   ],
-   "checked_at": "2026-11-28T08:39:01+00:00"
+   "verdict": "题面闸门未过",
+   "status": "不做",
+   "reason": "题库未登记（可能是验证夹具）",
+   "证据等级": "无",
+   "checked_at": "2026-11-28T09:36:13+00:00"
   }
  ]
 }

@@ -620,6 +620,22 @@ function submit(){
       '</tbody></table>';
     box.innerHTML=h;
   })();
+  /* 代审台账（只读）：结论由本地 review.py 按证据链给出，页面不放行、不迁入。 */
+  (function(){
+    var box=$("#ll-std-rev"); if(!box) return;
+    var d=window.LL_STD_REVIEWS||{条目:[],统计:{}}, rows=d.条目||[];
+    var h='<h2 style="margin-top:18px">代审台账（证据驱动 · 只读）</h2>'+
+      '<div class="ll-note">审核由本地脚本逐条复核证据链：题面闸门、代码 sha256、'+
+      '复跑对拍、多轮方向一致。<b>不是「觉得对就放」</b>；题面摘录级证据一律'+
+      '<b>挂起待正文复核</b>，正文取回后才允许迁入。当前已迁入 '+
+      String(d.统计&&d.统计.已迁入||0)+' 条。</div>';
+    if(!rows.length){box.innerHTML=h+'<p class="ll-empty">审核台账为空</p>';return;}
+    h+='<table class="ll-tb"><thead><tr><th>工单</th><th>题号</th><th>结论</th><th>理由</th></tr></thead><tbody>'+
+      rows.map(function(x){return '<tr><td>'+esc(x.id)+'</td><td>'+esc(x.pid)+'</td><td>'+
+        esc(x.结论)+'</td><td style="font-size:12px">'+esc((x.理由||'').slice(0,90))+'</td></tr>';}).join("")+
+      '</tbody></table>';
+    box.innerHTML=h;
+  })();
 }
 
 /* ---------- 本人（只认 token 不认人） ---------- */

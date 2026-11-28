@@ -8,7 +8,7 @@
 import os, sys, json, tempfile
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-import std_eval, runner
+import std_eval, runner, problem_gate
 
 FIX = os.path.join(HERE, "fixtures")
 ok = True
@@ -87,12 +87,25 @@ def main():
     check("P1421 用例全在题面内 (0<=a<=1e4, 0<=b<=9)",
           all(0 <= int(x.split()[0]) <= 10000 and 0 <= int(x.split()[1]) <= 9 for x in cs))
     cs2 = cg.cases("P1002")
-    mv = [(1, 2), (1, -2), (2, 1), (2, -1), (-1, 2), (-1, -2), (-2, 1), (-2, -1)]
-    def bad(x):
-        n, m, hx, hy = map(int, x.split())
-        if (hx, hy) in ((0, 0), (n, m)): return True
-        return any((hx + dx, hy + dy) in ((0, 0), (n, m)) for dx, dy in mv)
-    check("P1002 用例起点/终点不被马位或马控制点占据", not any(bad(x) for x in cs2))
+    # 题面只保证「起点不是马的控制点」，并未保证终点 —— 旧检查点把合法输入误判为违规
+    check("P1002 用例遵守题面保证（仅起点不是马的控制点，终点不限）",
+          all(cg.in_range("P1002", x) for x in cs2))
+    check("P1002 含官方样例 6 6 3 3（题面逐字）", "6 6 3 3\n" in cs2)
+
+    # 题面闸门：先爬到题面、证据可核对，才允许做 std
+    gates = problem_gate.gate_all()
+    check("题面闸门：三题证据文件/范围引用/样例实测/用例范围全过",
+          all(g["pass"] for g in gates.values()),
+          str({k: g["reason"][:26] for k, g in gates.items() if not g["pass"]}))
+    check("范围引用逐字命中题面存档（不是凭记忆）",
+          all(g["checks"].get("范围引用逐字命中") for g in gates.values()))
+    check("题面样例用 std 实测全过",
+          all(g["checks"].get("题面样例实测全过") for g in gates.values()))
+    check("证据等级如实标注（摘录不伪装成队列正文）",
+          all("检索摘录" in str(g["level"]) or "contentOnly" in str(g["level"])
+              for g in gates.values()))
+    check("验证夹具 BENCH 不进正式题库（不做 std）",
+          "BENCH" not in [x["pid"] for x in std_eval.load_bank()["题库"]])
 
     print("\n结论：", "PASS · 变异全被抓到，测试集有分辨力（零外网）" if ok else "FAIL")
     return 0 if ok else 1

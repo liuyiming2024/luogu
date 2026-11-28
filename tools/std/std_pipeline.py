@@ -14,7 +14,7 @@ import os, sys, json, hashlib
 from datetime import datetime, timezone
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-import std_eval
+import std_eval, problem_gate
 
 REPO = os.path.dirname(os.path.dirname(HERE))
 TICKETS = os.path.join(HERE, "tickets")
@@ -38,13 +38,37 @@ def sha(path):
 def main():
     os.makedirs(DATA, exist_ok=True)
     idx = json.load(open(os.path.join(TICKETS, "index.json"), encoding="utf-8"))
+    # 外部工单（别人投稿）：扫描 tickets/external/*.json 与 external_index.json
+    ext = os.path.join(TICKETS, "external")
+    if os.path.isdir(ext):
+        for fn in sorted(os.listdir(ext)):
+            if not fn.endswith(".json"): continue
+            try: d = json.load(open(os.path.join(ext, fn), encoding="utf-8"))
+            except Exception: continue
+            items = d if isinstance(d, list) else (d.get("条目", [d]) if isinstance(d, dict) else [])
+            for it in items:
+                if isinstance(it, dict) and it.get("id") and it.get("pid") and it.get("file"):
+                    it = dict(it); it["id"] = "ext:" + str(it["id"])
+                    it["_ext_dir"] = ext
+                    idx.append(it)
     rows = []
     print("[std-pipeline] 工单", len(idx), "条 | 本地对跑，零外网")
     for t in idx:
-        src = os.path.join(TICKETS, t["file"])
+        src = os.path.join(t.get("_ext_dir", TICKETS), t["file"])
         if not os.path.exists(src):
             rows.append({"id": t["id"], "pid": t["pid"], "verdict": "缺失",
                          "status": "去除", "reason": "源码文件不存在"}); continue
+        g = problem_gate.gate(t["pid"], verbose=False)
+        if not g["pass"]:
+            # 「先爬到题面的，你再做」：闸门未过一律不做、不判、不放
+            row = {"id": t["id"], "pid": t["pid"], "file": t["file"],
+                   "sha256_前16": sha(src), "note": t.get("note", ""),
+                   "verdict": "题面闸门未过", "status": "不做",
+                   "reason": g["reason"], "证据等级": g["level"],
+                   "checked_at": datetime.now(timezone.utc).isoformat(timespec="seconds")}
+            rows.append(row)
+            print("  %-6s %-8s 题面闸门未过 → 不做（%s）" % (t["id"], t["pid"], g["reason"][:36]))
+            continue
         spec = bench_spec() if t["pid"] == "BENCH" else std_eval.spec_for(t["pid"])
         r = std_eval.evaluate(src, t.get("lang", "cpp"), spec)
         row = {"id": t["id"], "pid": t["pid"], "file": t["file"],
@@ -53,6 +77,7 @@ def main():
                "reason": r["reason"],
                "median_ratio_cpu": r.get("median_ratio_cpu"),
                "median_ratio_rss": r.get("median_ratio_rss"),
+               "证据等级": g["level"], "题面闸门": g["checks"],
                "first_bad": r.get("first_bad"),
                "rounds": r.get("rounds", []),
                "checked_at": datetime.now(timezone.utc).isoformat(timespec="seconds")}
@@ -70,6 +95,7 @@ def main():
                     "待人工审核": sum(1 for x in rows if x["status"] == "待人工审核"),
                     "去除": sum(1 for x in rows if x["status"] == "去除"),
                     "不收": sum(1 for x in rows if x["status"] == "不收"),
+                    "不做": sum(1 for x in rows if x["status"] == "不做"),
                     "已迁入": sum(1 for x in rows if x["status"] == "已迁入")},
            "条目": rows}
     json.dump(doc, open(CAND, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
@@ -86,6 +112,7 @@ def main():
           "|", exp_doc["题目数"], "题", exp_doc["用例总数"], "组")
     print("[std-pipeline] 待人工审核", doc["统计"]["待人工审核"],
           "| 去除", doc["统计"]["去除"], "| 不收", doc["统计"]["不收"],
+          "| 不做", doc["统计"]["不做"],
           "| 已迁入", doc["统计"]["已迁入"], "（必须为 0）")
     return 0
 

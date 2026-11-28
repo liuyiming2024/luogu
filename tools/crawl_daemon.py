@@ -47,6 +47,7 @@ STATE_P = os.path.join(DATA, "crawl_state.json")
 LOG_P = os.path.join(REPO, "02_文章编号索引", "取回日志.jsonl")
 LEDGER_P = os.path.join(REPO, "02_文章编号索引", "校对台账.csv")
 VERIFY_Q = os.path.join(DATA, "verify_queue.jsonl")
+PROBLEM_URL_TPL = "https://www.luogu.com/problem/{pid}?_contentOnly=1"
 PROGRESS_P = os.path.join(REPO, "02_文章编号索引", "爬取进度.md")
 CSV_P = os.path.join(REPO, "02_文章编号索引", "article_index.csv")
 os.makedirs(INGEST, exist_ok=True)
@@ -130,19 +131,9 @@ def replenish(st, args, window=None):
           不把请求预算浪费在注定无正文的页面上。
     """
     added_a = added_p = 0
-    if not args.no_article_replenish and os.path.exists(CSV_P):
-        rows = list(csv.DictReader(open(CSV_P, encoding="utf-8-sig")))
-        def k(r):
-            m = re.fullmatch(r"P(\d{4})", r["题号"])
-            return (int(m.group(1)) if m else 99999, r["编号"])
-        rows.sort(key=k)
-        for r in rows:
-            lid = r["编号"]
-            if r["是否题解"] != "是" or has_article_body(lid): continue
-            if added_a >= args.replenish_batch: break
-            if enqueue(st, "article", lid, args.base.format(lid=lid),
-                       r["题号"], 0, "主表补正文"):
-                added_a += 1
+    # 题面优先（用户口径「对面那边的爬取队列，让他们先爬题」）：
+    # 先把 P 号顺序的题面放进队列头，题解只补少量，避免 60 条题解占满窗口。
+    art_cap = min(args.replenish_batch, 5) if getattr(args, "problem_first", False) else args.replenish_batch
     if not args.no_auto_problems:
         streak = int(st.get("problem_skeleton_streak", 0))
         # 题面连续骨架时不把队列饿死：每窗口仍按 P 号顺序推进一小批（有序枚举），
@@ -158,9 +149,27 @@ def replenish(st, args, window=None):
         cur = max(1000, int(st.get("problems_cursor", 1000)))
         for pnum in range(cur, cur + lim):
             key = "P%d" % pnum
-            if enqueue(st, "problem", key, args.problem_base.format(pid=key),
+            if enqueue(st, "problem", key, PROBLEM_URL_TPL.format(pid=key),
                        key, 0, "P号顺序·自续"):
                 added_p += 1
+    if not args.no_article_replenish and os.path.exists(CSV_P):
+        rows = list(csv.DictReader(open(CSV_P, encoding="utf-8-sig")))
+        def k(r):
+            m = re.fullmatch(r"P(\d{4})", r["题号"])
+            return (int(m.group(1)) if m else 99999, r["编号"])
+        rows.sort(key=k)
+        for r in rows:
+            lid = r["编号"]
+            if r["是否题解"] != "是" or has_article_body(lid): continue
+            if added_a >= art_cap: break
+            if enqueue(st, "article", lid, args.base.format(lid=lid),
+                       r["题号"], 0, "主表补正文"):
+                added_a += 1
+    if getattr(args, "problem_first", False):
+        # 把本轮新增的题面项移到队首，保证「先爬题」
+        _p = [q for q in st["queue"] if q.get("kind") == "problem"]
+        _o = [q for q in st["queue"] if q.get("kind") != "problem"]
+        st["queue"] = _p + _o
     return added_a, added_p
 
 def seed_problems(st, spec):
@@ -174,7 +183,7 @@ def seed_problems(st, spec):
         if key in st["seen"] or key in st["failed"]: continue
         if any(q.get("id") == key for q in st["queue"]): continue
         st["queue"].append({"kind": "problem", "id": key,
-                            "url": f"https://www.luogu.com/problem/{key}",
+                            "url": PROBLEM_URL_TPL.format(pid=key),
                             "problem": key, "depth": 0, "src": "P号顺序"})
         n += 1
     return n
@@ -197,15 +206,20 @@ def discover_from_body(st, body, depth, max_depth):
             added += 1
     for p in set(PROBLEM_LINK.findall(body or "")):
         key = "P" + p
-        if enqueue(st, "problem", key, f"https://www.luogu.com/problem/{key}",
+        if enqueue(st, "problem", key, PROBLEM_URL_TPL.format(pid=key),
                    key, depth + 1, "BFS"):
             added += 1
     return added
 
 # ---------------------------------------------------------------- 取回
 def fetch(url, timeout):
-    req = urllib.request.Request(url, headers={"User-Agent": UA,
-        "Accept": "text/html,application/xhtml+xml"})
+    h = {"User-Agent": UA, "Accept": "text/html,application/xhtml+xml"}
+    if "_contentOnly" in url:
+        # 洛谷 API 文档：DataResponse 需 _contentOnly 或 x-luogu-type: content-only
+        h.update({"Accept": "application/json, text/plain, */*",
+                  "x-luogu-type": "content-only",
+                  "Referer": "https://www.luogu.com.cn/"})
+    req = urllib.request.Request(url, headers=h)
     with urllib.request.urlopen(req, timeout=timeout) as r:
         raw = r.read(2_000_000)
         return raw.decode("utf-8", errors="ignore"), r.status
@@ -279,6 +293,19 @@ def classify(kind, body, url):
     has_prob = bool(re.search(r"\bP\d{4}\b|题解|思路|算法|题目描述|输入格式", t))
     is_help = bool(re.search(r"帮助中心|撰写规范|审核标准|服务降级|隐私协议", t))
     if kind == "problem":
+        # contentOnly 返回 JSON：字段在 data.problem / currentData.problem / 顶层
+        try:
+            j = json.loads(t)
+            for getter in (lambda x: x,
+                           lambda x: x.get("data", {}).get("problem", {}),
+                           lambda x: x.get("currentData", {}).get("problem", {}),
+                           lambda x: x.get("data", {})):
+                v = getter(j)
+                if isinstance(v, dict) and any(k in v for k in
+                        ("description", "inputFormat", "outputFormat", "samples")):
+                    return "题面", "contentOnly JSON 含题目字段"
+        except Exception:
+            pass
         if re.search(r"题目描述|输入格式|输出格式", t): return "题面", "含题面三段式"
         return "未知", "题面页无正文（SPA 骨架或需登录）"
     if is_help and not has_code: return "学术/规范文章", "规范类，无代码块"
@@ -422,6 +449,8 @@ def main():
     ap.add_argument("--problem-batch", type=int, default=3,
                     help="每轮自动续多少个 P 号题面（连续骨架时降为 1）")
     ap.add_argument("--no-article-replenish", action="store_true")
+    ap.add_argument("--problem-first", action="store_true",
+                    help="题面优先：P 号顺序的题面排在题解之前（对面队列先爬题）")
     ap.add_argument("--no-auto-problems", action="store_true")
     ap.add_argument("--compile-precheck", action="store_true")
     ap.add_argument("--dry-run", action="store_true", help="不发包、不推送，验证状态机")
@@ -451,6 +480,7 @@ def main():
     ledger_buf = []
     last_push_t = time.time()
     total = 0
+    useful_this_run = 0
     forced_stop = False
 
     while True:
@@ -527,6 +557,8 @@ def main():
             st["stats"]["requests"] += 1
             st["daily"]["count"] += 1
             total += 1
+            if verdict != "未知":
+                useful_this_run += 1
             if verdict == "未知":
                 # SPA 骨架 / 不可判定：不计入有效产出，避免「5 个请求全骨架却显示题面 5」
                 st["stats"]["skeleton"] = st["stats"].get("skeleton", 0) + 1
@@ -578,7 +610,11 @@ def main():
         push(st, args)
         regen_site(args)
         if forced_stop or not args.forever:
-            print(f"[{now()}] 结束（窗口 {window}，累计请求 {total}）")
+            try:
+                open("/tmp/luogu_tick_new", "w", encoding="utf-8").write(str(useful_this_run))
+            except OSError:
+                pass
+            print(f"[{now()}] 结束（窗口 {window}，累计请求 {total}，本轮有效 {useful_this_run}）")
             break
         # 跑满 50 分钟 → 歇 10 分钟（你要求的「每隔一个小时停上十分钟」）
         rest_until = datetime.fromtimestamp(time.time() + args.rest_minutes * 60)\

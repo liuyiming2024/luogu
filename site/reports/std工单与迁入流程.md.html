@@ -2,22 +2,55 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>std工单与迁入流程.md · 离线归档</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/local.css"></head>
 <body><header class="top"><a href="../index.html">← 归档首页</a><span class="crumb">00_总览 / std工单与迁入流程.md</span></header>
-<main class="doc"><h1>std 工单（投稿）与迁入流程</h1>
-<blockquote>背景：<strong>取不到官方数据</strong>，所以正确性以 <strong>std 对拍</strong>为准， 而不是假装手里有官方测试数据。</blockquote>
-<h2>状态机</h2>
-<pre class="code"><code>投稿（工单）
-   ↓ 与原 std 对跑比较
-   ├─ WA              → 去除（不进入候选）
-   ├─ 结果正确但不优  → 去除（时间/空间明显劣于原 std）
-   └─ 不 WA 且更优    → 添入「可选项」
-                            ↓ 人工审核（本人：审 std）
-                            ├─ 有错 → 打回 / 去除
-                            └─ 无错 → 迁入 std</code></pre>
-<h2>判据</h2>
-<table class="tb"><thead><tr><th>项</th><th>口径</th></tr></thead><tbody><tr><td>官方数据</td><td><strong>无</strong>。不编造、不引用不存在的官方 std/测试点</td></tr><tr><td>对拍</td><td>自写独立正确解 + 题面内输入；与原 std 多轮对跑</td></tr><tr><td>去除 WA</td><td>任何题面内确定性 WA/RE 直接淘汰（沿用甲类口径）</td></tr><tr><td>去除不优</td><td>与第 1 批起的三类口径一致：<strong>最小时间/空间、省资源</strong>是默认要求；明显劣于原 std 不收</td></tr><tr><td>不优的定义</td><td>同输入下输出一致但耗时/内存明显更差，或依赖更大数组/更慢算法</td></tr><tr><td>人工审核</td><td>本人（见《本人操作与 token 约定》）逐条确认后迁入，脚本不自动迁入</td></tr></tbody></table>
-<h2>与现有对拍体系的关系</h2>
-<ul><li><code>03_验证脚本/</code> 与 <code>05_对拍原始数据/</code> 已提供独立正确解 + 变异版敏感性检查</li><li><code>tools/verify_infra.py</code> 的「变异必须被抓到」纪律同样适用于 std 投稿：</li></ul>
-<p><strong>对跑比较若抓不到已知反例，判为空跑，投稿不通过</strong></p>
-<ul><li>第 17 批 <code>yk90rg78</code> 翻案说明：<strong>转录位置也是语义</strong>，投稿代码必须回原文/原文件逐字核对</li></ul>
-<h2>前端入口</h2>
-<p><code>submit.html</code> 提交工单 → 本地保存（离线可用）→ 队列写回本库； 真正的对跑比较在 <code>tools/</code> 本地执行（浏览器内不做真编译）， 结果由本人在 <code>admin.html</code> 审核。接口契约见 <code>api/API契约.md</code>。</p></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer><script src="../assets/local.js"></script></body></html>
+<main class="doc"><h1>std 工单与迁入流程 · 题面闸门 + 代审</h1>
+<blockquote>背景：<strong>取不到官方数据</strong>，正确性以 <strong>std 对拍</strong>为准。 顺序（最终要求）：<strong>先爬到题面 → 再做 std</strong>；「保证做的是对的， 不要说你觉得对它就放」；审核由本地代跑；别人可发工单。</blockquote>
+<h2>一、先爬题面（对面队列）</h2>
+<ul><li><code>crawl_tick.yml</code> 加 <code>--problem-first</code>：题面按 P 号顺序<strong>排在题解之前</strong>，</li></ul>
+<p>题解只补少量，不再让 60 条题解占满窗口</p>
+<ul><li>题面 URL 走 <code>?_contentOnly=1</code> + <code>x-luogu-type: content-only</code></li></ul>
+<p>（洛谷 API 文档：DataResponse 请求需 <code>_contentOnly</code> 或该头）</p>
+<ul><li><code>.github/workflows/problem_first.yml</code>：每 6 小时错峰、2 秒以上间隔，</li></ul>
+<p><strong>只取题面正文</strong>；<code>tools/fetch_problem.py</code> 逐个试有文档依据的端点， 只有真正解析出含题目字段的 JSON 才落盘，骨架 / 403 / 非 JSON 一律不写文件</p>
+<ul><li><strong>不制造无用提交</strong>：daemon 收工写「本轮有效产出」到 <code>/tmp</code>，</li></ul>
+<p><code>crawl_tick</code> 严格按本轮增量判定；为 0 时跳过重生成与提交。 <code>problem_first</code> 仅在确有新增题面正文时才 commit，否则只留 artifact</p>
+<h2>二、题面证据与闸门（不凭记忆）</h2>
+<p><code>site/data/problems/&lt;PID&gt;.json</code> 逐字存档题面字段，带原文链接、sha256、 取回端点、时间、<strong>证据等级</strong>。当前三题的证据等级是 「<strong>检索摘录（逐字，待 contentOnly 队列复核升级）</strong>」—— 本地出口直连洛谷被策略网关拒、页面取回通道也拿不到题面页， 所以<strong>没有把摘录伪装成队列正文</strong>；正文由对面队列取回后自动升级等级。</p>
+<p><code>tools/std/problem_gate.py</code> 是硬闸门，任一题必须全部通过才允许做 std：</p>
+<table class="tb"><thead><tr><th>检查</th><th>口径</th></tr></thead><tbody><tr><td>证据文件存在、sha256 可核对</td><td>没有题面存档 → 明确「未做」</td></tr><tr><td>范围引用逐字命中</td><td><code>std_bank</code> 的范围声明必须逐字出现在存档题面里</td></tr><tr><td>题面样例实测全过</td><td>用 std 真跑存档样例，逐字比对</td></tr><tr><td>用例全部 <code>in_range()</code></td><td>题面外输入一律作废</td></tr></tbody></table>
+<h3>实测纠错：三处凭记忆写错的范围（这正是「不觉得对就放」）</h3>
+<table class="tb"><thead><tr><th>题</th><th>旧（凭记忆）</th><th>题面逐字</th></tr></thead><tbody><tr><td>P1001</td><td><code>a,b 为 int 范围整数</code>（生成了 ±2³¹ 题面外输入）</td><td><strong>∣a∣,∣b∣≤10⁹</strong>，样例 <code>20 30 → 50</code></td></tr><tr><td>P1421</td><td>题名写「买铅笔」</td><td><strong>「小玉买文具」</strong>；「买铅笔」是 NOIP2016 普及 T1；样例 <code>10 3 → 5</code></td></tr><tr><td>P1002</td><td>「起点/终点不被马控制（题面保证）」</td><td>题面<strong>只保证起点不是马的控制点</strong>，未保证终点；旧版把合法输入误排除</td></tr></tbody></table>
+<p>三处已按存档逐字修正；<code>cases.py</code> 范围引用、样例置顶、机读 <code>in_range()</code> 全部与题面存档对齐，并由 <code>verify_std.py</code> 做回归检查点。</p>
+<h2>三、状态机（已实现）</h2>
+<pre class="code"><code>题面正文（队列 contentOnly）
+   ↓ 题面闸门：范围逐字 / 样例实测 / 用例 in_range
+   ↓ 闸门未过 → 「不做」，不判、不放
+投稿（本地工单 或 external/ 外部工单）
+   ↓ 与原 std 多轮对跑（3 轮不同 seed）
+   ├─ WA / RE / TLE / CE → 去除（留首个反例）
+   ├─ 明显不优（CPU/RSS ≥1.25× 且多轮一致）→ 去除
+   ├─ 等价（0.80~1.25 波动带）→ 不收
+   └─ 明显更优 → 待人工审核
+        ↓ 代审 review.py（证据链复核，不是主观放行）
+        ├─ 证据不足 → 打回
+        ├─ 题面摘录级 → 准予迁入·**挂起待正文复核**
+        └─ contentOnly 正文级 → 准予迁入
+             ↓ promote.py（唯一迁入入口，带 guard）
+             └─ 备份旧 std → 逐字替换 → 记旧/新 sha256 → 台账已迁入</code></pre>
+<p><strong>脚本绝不凭感觉迁入</strong>：<code>promote.py</code> 在证据等级不是 contentOnly 正文时 明确拒绝，挂起项不猜不补。当前台账 <code>已迁入 = 0</code>。</p>
+<h2>四、代审（本地代跑，别人也能投稿）</h2>
+<ul><li><code>tools/std/review.py</code>：逐条复核题面闸门、代码 sha256（防转录位置错）、</li></ul>
+<p><strong>重跑对拍</strong>、多轮方向一致、六类变异脚本在位；结论带完整证据链</p>
+<ul><li><code>tools/std/tickets/external/</code>：外部工单入口，一个 <code>.json</code> + 一份源码，</li></ul>
+<p>不需要账号、不需要联网；<code>std_pipeline.py</code> 自动扫描入队</p>
+<ul><li>前端 <code>submit.html</code> 底部同时显示<strong>候选台账</strong>与<strong>代审台账</strong>（只读），</li></ul>
+<p>页面不判定、不迁入</p>
+<h2>五、实跑结果</h2>
+<pre class="code"><code>python3 tools/std/verify_std.py   → PASS（含题面闸门 6 个新增检查点）
+python3 tools/std/std_pipeline.py → 4 工单：去除 2 / 待审 1 / 不做 1 / 已迁入 0
+python3 tools/std/review.py       → 打回 0 / 准予 0 / 挂起 1 / 已迁入 0
+python3 tools/std/promote.py      → 已迁入 0 / 拒绝 1（题面正文未取回）</code></pre>
+<table class="tb"><thead><tr><th>工单</th><th>题号</th><th>判定</th><th>状态</th></tr></thead><tbody><tr><td>t-001</td><td>P1421</td><td>WA（<code>7 6</code> 期望 4 实际 3）</td><td>去除</td></tr><tr><td>t-002</td><td>P1002</td><td>WA（<code>6 6 3 3</code> 期望 6 实际 0）</td><td>去除</td></tr><tr><td>t-003</td><td>P1001</td><td>明显更优（CPU ≈ 0.66×）</td><td>准予迁入·挂起待正文复核</td></tr><tr><td>t-004</td><td>BENCH</td><td>题面闸门未过</td><td>不做（验证夹具不进题库）</td></tr></tbody></table>
+<p>前两条复现第 7 批 <code>dk5mkxij</code>（double 累减 1.9）与第 2/17 批 <code>yk90rg78</code>（起点赋值写在 DP 之后）的人工反例。</p>
+<h2>六、判据不变</h2>
+<p>CPU 时间取 <code>os.wait4</code> 的 <code>ru_utime+ru_stime</code>（<strong>不用墙钟</strong>，避开评测机波动）； 3 轮方向一致才认明显优/劣；WA/RE/TLE/CE 一律去除； 离线站 <code>problems.html</code> 本地评测 49 个测试点（含 std 期望表）。</p>
+<p>命令与目录见 <code>tools/std/README.md</code>。</p></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer><script src="../assets/local.js"></script></body></html>

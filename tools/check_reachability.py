@@ -207,6 +207,31 @@ def main():
           if std_ok else "  ✗ STD 实物缺项或出现自动迁入")
     if not std_ok: fail.append("STD 实物缺项")
 
+    # 13 第 16 条：先爬题面 / 代审不凭感觉 / 不造无用提交
+    pg = p("tools/std/problem_gate.py")
+    rv = p("site/data/std_reviews.json")
+    pd = p("site/data/std_pending.json")
+    prob_dir = p("site/data", "problems")
+    ck = open(p(".github/workflows/crawl_tick.yml"), encoding="utf-8").read()
+    pf = p(".github/workflows/problem_first.yml")
+    ev_ok = (os.path.exists(pg) and os.path.exists(rv) and os.path.exists(pd)
+             and os.path.isdir(prob_dir)
+             and all(os.path.exists(os.path.join(prob_dir, x + ".json"))
+                     for x in ("P1001", "P1421", "P1002"))
+             and "evidence" not in "")   # 占位，下面细查
+    ev_ok = ev_ok and all(
+        "证据等级" in open(os.path.join(prob_dir, x + ".json"), encoding="utf-8").read()
+        for x in ("P1001", "P1421", "P1002"))
+    rv_d = json.load(open(rv, encoding="utf-8"))
+    gate_ok = ("--problem-first" in ck and "luogu_tick_new" in ck
+               and "steps.check.outputs.useful" in ck
+               and os.path.exists(pf)
+               and "luogu_problem_new" in open(pf, encoding="utf-8").read())
+    no_promote = (rv_d["统计"]["已迁入"] == 0)
+    print("  ✓ 第16条：题面证据/闸门/代审挂起/题面优先/严格本轮计数/已迁入=0"
+          if ev_ok and gate_ok and no_promote else "  ✗ 第16条缺项")
+    if not (ev_ok and gate_ok and no_promote): fail.append("第16条缺项")
+
     # 角色字样回归：只查「源文件 / 文档 / 工作流」；site/ 下产物由生成器覆盖，
     #   workflows/pages.yml 在重生成之后才跑本自检，产物届时必然干净。
     #   字面量拆开写，避免本脚本自己命中自己。
