@@ -26,7 +26,10 @@ OUT = os.path.join(REPO, "site", "data", "std_brute_check.json")
 BRUTE_LANG = {"P1001": "python", "P1022": "python", "P1026": "python",
               "P1034": "python", "P1036": "python", "P1037": "python",
               "P1039": "python", "P1040": "python", "P1041": "python",
-              "P1042": "python"}
+              "P1042": "python", "P1043": "python", "P1045": "python",
+              "P1046": "python", "P1047": "python", "P1048": "python",
+              "P1049": "python", "P1050": "python", "P1051": "python",
+              "P1053": "python"}
 BRUTE_EXT = {"P1001": ".py"}
 
 
@@ -93,6 +96,26 @@ def scale_inputs(pid):
         return base[:8], "n≤9 的小树（bitmask 状态搜索，指数级；疑似错题如实标注）"
     if pid == "P1042":
         return base[:20], "题面内记录（Python 递归切出最早完局）"
+    if pid == "P1043":
+        return base[:40], "n≤8、m≤3 全量（枚举起点×切点组合，指数级）"
+    if pid == "P1045":
+        return base[:40], "P≤20000 全量（Python 内置大整数展开，不假装覆盖 P<3100000）"
+    if pid == "P1046":
+        return base[:40], "题面内全量（排序 + 二分上界计数）"
+    if pid == "P1047":
+        return base[:40], "题面内全量（显式区间排序合并，不用差分）"
+    if pid == "P1048":
+        return base[:40], "M≤12 全量（枚举 2^M 子集，指数级）"
+    if pid == "P1049":
+        return base[:40], "题面内全量（集合 BFS 扩展可达体积，非 DP 数组）"
+    if pid == "P1050":
+        return base[:40], "k≤3 全量（逐次乘幂观察循环，状态数 10^k；不假装覆盖 k≤100）"
+    if pid == "P1051":
+        return base[:40], "题面内全量（规则表 + 生成器求和）"
+    if pid == "P1052":
+        return base[:40], "L≤300 全量（**不压缩**的原始坐标 DP，不假装覆盖 L≤10^9）"
+    if pid == "P1053":
+        return base[:40], "n≤30 全量（显式枚举方向×全部旋转，O(n²)；不假装覆盖 n≤50000）"
     return base[:40], "题面内全量（本题朴素算法多项式时间）"
 
 
