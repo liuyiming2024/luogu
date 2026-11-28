@@ -763,7 +763,7 @@
    "next_ts": 1795739196.1005945
   }
  },
- "problems_cursor": 1022,
+ "problems_cursor": 1033,
  "stats": {
   "requests": 107,
   "articles": 80,
@@ -786,5 +786,6 @@
   "rejudged": 6,
   "note": "公开归档清洗基线：csrf 已移除、骨架不存档、多语言判定已修",
   "http200_503_removed": 5
- }
+ },
+ "problem_fetch_note": "auto-range 推进至 P1033（run 2026-11-28T11:47:53+00:00）"
 }
