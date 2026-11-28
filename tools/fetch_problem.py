@@ -182,6 +182,7 @@ def main():
         doc, diag, err = probe(pid, gap=max(1.0, a.delay / 2.0))
         all_diag += [{"pid": pid, **d} for d in diag]
         if doc:
+            doc0 = doc
             fp = os.path.join(OUT, pid + ".json")
             old = json.load(open(fp, encoding="utf-8")) if os.path.exists(fp) else {}
             unchanged = (str(old.get("证据等级", "")).startswith("contentOnly")
@@ -190,13 +191,20 @@ def main():
                 # 内容完全没变：不写文件、不计入本轮新增，避免仅时间戳漂移造成无用提交
                 print("[problem] %s = 无变化（跳过写入，不造提交）" % pid)
             else:
-                # 只升级：contentOnly 正文覆盖检索摘录，反之绝不降级
+                # old 已是正文级且题面不同 → 正文更新（保留旧元数据，题面用新的），
+                # 不写回 old 本身，否则「内容没变」却计 got、游标空推进。
                 if str(old.get("证据等级", "")).startswith("contentOnly"):
-                    doc = old
+                    doc = dict(old)
+                    doc.update({"题面": doc0["题面"], "sha256": doc0["sha256"],
+                                "原文": doc0["原文"], "取回端点": doc0["取回端点"],
+                                "取回头字段": doc0.get("取回头字段", {}),
+                                "解析说明": doc0.get("解析说明", ""),
+                                "更新说明": "contentOnly 正文复核更新（题面内容变化）"})
+                    doc0 = doc
                 if not a.dry_run:
-                    json.dump(doc, open(fp, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+                    json.dump(doc0, open(fp, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
                 got.append(pid)
-                print("[problem] %s ✓ %s | %s" % (pid, doc["题面"]["标题"][:24], doc["取回端点"]))
+                print("[problem] %s ✓ %s | %s" % (pid, doc0["题面"]["标题"][:24], doc0["取回端点"]))
         else:
             failed.append((pid, err))
             print("[problem] %s ✗ %s（不写题面文件、不假装成功）" % (pid, err))

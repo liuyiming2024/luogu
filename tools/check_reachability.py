@@ -263,7 +263,9 @@ def main():
             # 「不等 Pages」= 不轮询/不等待部署结果；随机起步延迟是错峰，不算等待
             and "actions/workflows/pages.yml/runs" not in tk
             and "actions/workflows/pages.yml/runs" not in pf18
-            and "等待部署" not in tk and "等待部署" not in pf18)
+            and "等待部署" not in tk and "等待部署" not in pf18
+            # 回归：可选留痕文件必须走 -f 判断，不能混进同一条 git add
+            and 'if [ -f "02_文章编号索引/上一次部署体检.md" ]' in pf18)
     print("  ✓ 第18条：浅克隆/路径触发/差值add/推送前体检/推送后不等待"
           if d_ok else "  ✗ 第18条缺项")
     if not d_ok: fail.append("第18条缺项")

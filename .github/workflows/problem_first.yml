@@ -76,8 +76,12 @@ jobs:
           [ -f /tmp/luogu_problem_tag ] && tag=$(tr -cd "A-Za-z0-9._-" < /tmp/luogu_problem_tag | cut -c1-60)
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
           # 只把新增题面存档加入暂存区；未新增则暂存区为空
-          git add -- site/data/problems/*.json site/data/crawl_state.json \
-                     "02_文章编号索引/上一次部署体检.md" 2>/dev/null || true
+          # 差值暂存：不存在的可选文件绝不能混进同一条 git add
+          #（git add 遇不匹配 pathspec 会整批失败，曾导致 10 题正文没入库）
+          git add -- site/data/problems/*.json site/data/crawl_state.json 2>/dev/null || true
+          if [ -f "02_文章编号索引/上一次部署体检.md" ]; then
+            git add -- "02_文章编号索引/上一次部署体检.md" 2>/dev/null || true
+          fi
 
       - name: 提交（仅新增题面正文时才写回）
         if: steps.get.outputs.new != '0' && steps.get.outputs.new != ''
