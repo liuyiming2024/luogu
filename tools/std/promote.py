@@ -49,11 +49,18 @@ def main():
         if not os.path.exists(src):
             skipped.append({"id": x["id"], "pid": pid, "理由": "源码不存在"}); continue
         old_sha = sha(dst)
+        rec = t.get("迁入记录", {})
+        if rec.get("来源工单") == x["id"] and rec.get("新std_sha256") == old_sha:
+            done.append({"id": x["id"], "pid": pid, "幂等跳过": True,
+                         "旧sha": old_sha[:16], "新sha": old_sha[:16]})
+            print("  %-6s %-8s 已迁入（幂等跳过，sha 未变）" % (x["id"], pid))
+            continue
         # 备份 + 原子替换
-        shutil.copy2(dst, os.path.join(BACKUP, "%s_%s.cpp" % (
+        # 沙盒/容器里 copystat 可能不允许改 mtime：只复制内容，不复制元数据
+        shutil.copyfile(dst, os.path.join(BACKUP, "%s_%s.cpp" % (
             pid, datetime.now().strftime("%Y%m%d%H%M%S"))))
         tmp = dst + ".new"
-        shutil.copy2(src, tmp)
+        shutil.copyfile(src, tmp)
         os.replace(tmp, dst)
         t["迁入记录"] = {"时间": datetime.now(timezone.utc).isoformat(timespec="seconds"),
                          "来源工单": x["id"], "旧std_sha256": old_sha,
@@ -63,9 +70,12 @@ def main():
         print("  %-6s %-8s 已迁入（旧 %s → 新 %s）" % (x["id"], pid, old_sha[:12], sha(dst)[:12]))
     json.dump(bank, open(BANK, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     if rev.get("条目"):
-        rev["统计"]["已迁入"] = len(done)
+        rev["统计"]["已迁入"] = sum(1 for t in bank["题库"] if t.get("迁入记录"))
         json.dump(rev, open(REV, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
-    print("[promote] 已迁入 %d / 拒绝 %d（拒绝项保持挂起，不猜不补）" % (len(done), len(skipped)))
+    promoted = sum(1 for t in bank["题库"] if t.get("迁入记录"))
+    print("[promote] 已迁入 %d（本次新迁 %d / 幂等跳过 %d）/ 拒绝 %d" %
+          (promoted, sum(1 for x in done if not x.get("幂等跳过")),
+           sum(1 for x in done if x.get("幂等跳过")), len(skipped)))
     return 0
 
 

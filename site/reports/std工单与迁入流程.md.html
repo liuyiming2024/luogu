@@ -53,4 +53,28 @@ python3 tools/std/promote.py      → 已迁入 0 / 拒绝 1（题面正文未�
 <p>前两条复现第 7 批 <code>dk5mkxij</code>（double 累减 1.9）与第 2/17 批 <code>yk90rg78</code>（起点赋值写在 DP 之后）的人工反例。</p>
 <h2>六、判据不变</h2>
 <p>CPU 时间取 <code>os.wait4</code> 的 <code>ru_utime+ru_stime</code>（<strong>不用墙钟</strong>，避开评测机波动）； 3 轮方向一致才认明显优/劣；WA/RE/TLE/CE 一律去除； 离线站 <code>problems.html</code> 本地评测 49 个测试点（含 std 期望表）。</p>
-<p>命令与目录见 <code>tools/std/README.md</code>。</p></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer><script src="../assets/local.js"></script></body></html>
+<p>命令与目录见 <code>tools/std/README.md</code>。</p>
+<hr>
+<h2>七、现在呢 · 对面 Action 实跑结论与第 17 条</h2>
+<h3>对面 Action 到底跑没跑</h3>
+<p><strong>跑了；旧解析器没拿到正文，修好后 run 2 拿到了 2 题完整正文。</strong></p>
+<ul><li><code>crawl_tick.yml</code> 共 9 次 run（最近 2026-11-28T03:21Z success），</li></ul>
+<p><code>problem_first.yml</code> 1 次手动 dispatch（17:40 CST）success 但 <strong>0 新增正文 → 提交 skipped</strong></p>
+<ul><li>取回日志里 23 条题面相关：17 条 <strong>2885 字节 SPA 骨架</strong>、5 条「503 洛谷日爆」</li></ul>
+<p>错误页；<code>crawl_state.seen</code> 的 22 个 P 号全是「未知」</p>
+<ul><li>进度文件早期「题面 10」是误计（503 页被当题面），已清理</li><li>那 9 次真正攒下的是 <strong>86 篇题解正文</strong>，不是题面</li></ul>
+<p><strong>根因</strong>：contentOnly 题面正文在 <code>data.problem.contenu</code>（<code>formatI</code>/<code>formatO</code>）， 样例在 <code>data.problem.samples</code>；旧解析器只匹配到 <code>samples</code> 键就判成功，字段全空。 <strong>修法</strong>：洛谷 API 文档的 <code>x-lentille-request: content-only</code> 头 + <code>www.luogu.com.cn</code>， 6 种有据组合低频试（组合间 ≥1s），要求 <code>description</code> 与 <code>formatI</code>/<code>hint</code> 非空； 诊断编码进 artifact 名（<code>diag-ok2-fail0-h200x10-r2</code>），零提交可读。</p>
+<p><strong>run 2 实证</strong>：P1001 / P1909 取回 35 KB / 20 KB 完整 JSON → 重建题面存档 → 证据等级升级为「contentOnly 正文（队列取回）」→ 范围引用改正文逐字 → 闸门 7 题全 PASS → 自动提交 <code>c4fd11e</code>（有 2 份正文，不是无用提交）。</p>
+<h3>第 17 条：题面进度 = STD 进度 + 朴素算法对拍</h3>
+<p>「你自己所谓的 STD 就相当于你自己的题面进度，你也要对朴素算法进行对拍」—— 本轮落地：</p>
+<ul><li>题面进度补到 <strong>7 题</strong>（原 3 + 检索逐字摘录 4：P1909 / P1028 / P1044 / P1059）。</li></ul>
+<p>新 4 份证据等级如实写「检索摘录（逐字，待 contentOnly 队列复核升级）」， <strong>不是 Action 队列正文</strong>，也不伪装</p>
+<ul><li>STD 题库同步到 <strong>7 题</strong>，<code>verify_std.py</code> 新增回归检查点：</li></ul>
+<p><strong>题面存档集合 == STD 题库集合</strong>（7=7）</p>
+<ul><li>每题配一份<strong>按题面直译的朴素算法</strong>（<code>tools/std/brute/</code>），与 std 逐字对跑：</li></ul>
+<p>源码 sha256 不同、题面样例两者一致、用例 0 不一致、自动变异版必须被抓到</p>
+<pre class="code"><code>python3 tools/std/verify_brute.py
+  → 7/7 PASS | 197 组用例 | 变异抓到 7/7 | 零外网</code></pre>
+<table class="tb"><thead><tr><th>题</th><th>朴素算法</th><th>规模（如实）</th></tr></thead><tbody><tr><td>P1001</td><td>十进制字符串竖式加法（Python，含异号大减小）</td><td>40 组全量</td></tr><tr><td>P1421</td><td>换角后一角一角累减 19，不用除法</td><td>40 组全量</td></tr><tr><td>P1002</td><td>递归枚举全部路径</td><td>n,m≤8（指数级）</td></tr><tr><td>P1909</td><td>逐盒累加，不用取整公式</td><td>40 组全量</td></tr><tr><td>P1028</td><td>递归枚举合法数列</td><td>n≤100（指数级）</td></tr><tr><td>P1044</td><td>递归枚举 push/pop 序列</td><td>n≤10（指数级）</td></tr><tr><td>P1059</td><td>O(N²) 查重 + 冒泡排序</td><td>40 组全量</td></tr></tbody></table>
+<p>期望表随之扩到 <strong>7 题 340 组</strong>，离线站本地评测 <strong>97 个测试点</strong>， submit 页新增「STD ↔ 朴素算法对拍台账」只读块。</p>
+<p><strong>已迁入 1（t-003 → P1001）</strong>：正文级证据到手后，代审六项证据全通过， <code>promote.py</code> 备份旧 std（<code>std/_backup/</code>）、逐字替换为 scanf 版、记旧/新 sha256； 迁入后 <code>verify_brute</code> / <code>verify_std</code> / 期望表全部重跑复验仍 PASS。 <code>promote</code> 已加幂等（sha 未变跳过），工单 t-003 标 <code>archived</code>， 候选/审核/bank 三台账迁入数一致 = 1。其余 5 题摘录级保持挂起。</p></main><footer>纯离线静态页 · 无外部资源 · 无网络请求</footer><script src="../assets/local.js"></script></body></html>

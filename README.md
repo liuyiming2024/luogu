@@ -196,7 +196,7 @@ python3 _build_site.py               # 渲染进离线站
 
 ## 现在呢：对面 Action 的真实进度（如实）
 
-**跑了，但没攒到题面正文。**
+**跑了；旧脚本没攒到题面正文，修好解析器后 run 2 真取回了 2 题完整正文。**
 
 | 事实 | 证据 |
 |---|---|
@@ -206,10 +206,17 @@ python3 _build_site.py               # 渲染进离线站
 | `crawl_state.seen` 里 22 个 P 号全判「未知」 | 无一条题面正文 |
 | 进度文件里「题面 10」是早期误计（503 页被当题面） | 已清理，不再计入 |
 
-所以「理论上应该有足够多题面」在**对面队列这一侧不成立**：攒到的是
-**86 篇题解正文**，不是题面。本轮已把 `fetch_problem.py` 补上洛谷 API 文档里的
-`x-lentille-request: content-only` 头 + 6 种有据组合，并把每个组合的真实响应
-编码进 artifact 名（零提交可读），异步再跑一次诊断。
+所以「理论上应该有足够多题面」**在旧脚本这一侧不成立**：那 9 次攒到的是
+**86 篇题解正文**，不是题面。根因是我把 contentOnly 的 `data.problem`
+当成题面对象，但正文其实在 `data.problem.contenu`（字段名 `formatI` / `formatO`，
+样例在 `data.problem.samples`）——只匹配到 `samples` 键就误判成功，字段全空。
+
+修法（洛谷 API 文档里的 `x-lentille-request: content-only` 头 + `www.luogu.com.cn`）：
+6 种有据组合低频试，要求 `description` 与 `formatI`/`hint` 都非空才算真·题面，
+并把诊断编码进 artifact 名（`diag-ok2-fail0-h200x10-r2`）。
+**run 2 实证：P1001 / P1909 已升级为「contentOnly 正文（队列取回）」**，
+范围引用改成正文逐字（`$-{10}^9 \le a,b \le {10}^9$` / `不超过 $10000$`），
+题面闸门 7 题全 PASS。另加内容幂等：正文没变就不写文件、不计新增，不造时间戳提交。
 
 ## 题面进度 7 题 → STD 进度 7 题（第 17 条）
 
@@ -234,4 +241,8 @@ python3 tools/std/verify_std.py     → PASS（含「题面存档集合 == STD �
 
 `site/data/std_expect.json` 现为 **7 题 340 组**期望输出，离线站本地评测
 **97 个测试点**；submit 页新增「STD↔朴素算法对拍台账」只读块。
-**已迁入仍为 0**：题面证据还是摘录级，`promote.py` 继续拒绝，不猜不补。
+**已迁入 1（t-003 → P1001）**：P1001 证据升级为正文级后，代审复核题面闸门、
+代码 sha256、重跑对拍、多轮方向一致、变异脚本在位全通过 → `promote.py`
+备份旧 std、逐字替换为 scanf 版、记旧/新 sha256 与审核证据。
+`promote` 现在幂等（sha 未变就跳过），三台账迁入数一致 = 1。
+其余 5 题仍是摘录级，保持挂起不迁。

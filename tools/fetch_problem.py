@@ -44,18 +44,34 @@ def sha(t): return hashlib.sha256(t.encode("utf-8", "replace")).hexdigest()
 
 
 def _problem_obj(j):
-    for getter in (lambda x: x,
-                   lambda x: x.get("data", {}).get("problem"),
-                   lambda x: x.get("currentData", {}).get("problem"),
-                   lambda x: x.get("data", {}),
-                   lambda x: x.get("currentData", {})):
-        try:
-            v = getter(j)
-            if isinstance(v, dict) and any(k in v for k in PROB_KEYS):
-                return v
-        except Exception:
-            pass
-    return None
+    """洛谷 contentOnly 题面详情（实测 2026-11-28 Actions run 2）：
+
+    正文在 data.problem.contenu，字段名是 formatI / formatO；
+    samples 在 data.problem.samples（[[输入,输出], ...]）。
+    必须 description 非空且 (formatI 或 hint) 非空才算真·题面，
+    绝不把只有 samples 的空壳当正文（第 16 条「不觉得对就放」）。
+    """
+    try:
+        p = j.get("data", {}).get("problem", {})
+        c = p.get("contenu", {})
+        if not isinstance(c, dict) or not isinstance(p, dict): return None
+        desc = str(c.get("description", "") or "")
+        fi = str(c.get("formatI", c.get("inputFormat", "")) or "")
+        fo = str(c.get("formatO", c.get("outputFormat", "")) or "")
+        hint = str(c.get("hint", "") or "")
+        if not (desc.strip() and (fi.strip() or hint.strip())):
+            return None
+        return {
+            "title": str(c.get("name", p.get("name", "")) or ""),
+            "background": str(c.get("background", "") or ""),
+            "description": desc,
+            "inputFormat": fi,
+            "outputFormat": fo,
+            "hint": hint,
+            "samples": p.get("samples", c.get("samples", [])),
+        }
+    except Exception:
+        return None
 
 
 def probe(pid, timeout=12, gap=1.0):
@@ -136,15 +152,20 @@ def main():
         all_diag += [{"pid": pid, **d} for d in diag]
         if doc:
             fp = os.path.join(OUT, pid + ".json")
-            # 只升级：contentOnly 正文覆盖检索摘录，反之绝不降级
-            if os.path.exists(fp):
-                old = json.load(open(fp, encoding="utf-8"))
+            old = json.load(open(fp, encoding="utf-8")) if os.path.exists(fp) else {}
+            unchanged = (str(old.get("证据等级", "")).startswith("contentOnly")
+                         and old.get("题面") == doc["题面"])
+            if unchanged:
+                # 内容完全没变：不写文件、不计入本轮新增，避免仅时间戳漂移造成无用提交
+                print("[problem] %s = 无变化（跳过写入，不造提交）" % pid)
+            else:
+                # 只升级：contentOnly 正文覆盖检索摘录，反之绝不降级
                 if str(old.get("证据等级", "")).startswith("contentOnly"):
                     doc = old
-            if not a.dry_run:
-                json.dump(doc, open(fp, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
-            got.append(pid)
-            print("[problem] %s ✓ %s | %s" % (pid, doc["题面"]["标题"][:24], doc["取回端点"]))
+                if not a.dry_run:
+                    json.dump(doc, open(fp, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+                got.append(pid)
+                print("[problem] %s ✓ %s | %s" % (pid, doc["题面"]["标题"][:24], doc["取回端点"]))
         else:
             failed.append((pid, err))
             print("[problem] %s ✗ %s（不写题面文件、不假装成功）" % (pid, err))

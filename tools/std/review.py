@@ -19,7 +19,7 @@ import os, sys, json, hashlib
 from datetime import datetime, timezone
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-import problem_gate, std_eval
+import problem_gate, std_eval, json as _json
 
 REPO = os.path.dirname(os.path.dirname(HERE))
 DATA = os.path.join(REPO, "site", "data")
@@ -52,6 +52,12 @@ def main():
              "原判定": x["verdict"], "原状态": x["status"],
              "checked_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
              "checks": {}, "结论": "", "理由": ""}
+        if x["status"] == "已迁入":
+            r["结论"] = "已迁入（归档）"; r["理由"] = x.get("reason", "工单已迁入")
+            pend.append({"id": tid, "pid": pid, "file": x.get("file", ""),
+                         "证据等级": "contentOnly 正文（队列取回）",
+                         "审核时间": r["checked_at"], "归档": True})
+            out.append(r); print("  %-6s %-8s 已迁入归档" % (tid, pid)); continue
         if x["status"] != "待人工审核":
             r["结论"] = "无需审核"; r["理由"] = "状态 " + x["status"]
             out.append(r); print("  %-6s %-8s 无需审核" % (tid, pid)); continue
@@ -124,13 +130,14 @@ def main():
                     "打回": sum(1 for x in out if x["结论"] == "打回"),
                     "准予迁入": sum(1 for x in out if x["结论"] == "准予迁入"),
                     "挂起": sum(1 for x in out if "挂起" in x["结论"]),
-                    "已迁入": 0},
+                    "已迁入": sum(1 for x in out if x["结论"] == "已迁入（归档）")},
            "条目": out}
     json.dump(doc, open(REV, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     json.dump({"说明": "挂起/准予的迁入候选；promote.py 仅在证据等级为 contentOnly 正文时执行",
                "条目": pend}, open(PEND, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
-    print("[review] → std_reviews.json | 打回 %d / 准予 %d / 挂起 %d / 已迁入 0"
-          % (doc["统计"]["打回"], doc["统计"]["准予迁入"], doc["统计"]["挂起"]))
+    print("[review] → std_reviews.json | 打回 %d / 准予 %d / 挂起 %d / 已迁入 %d"
+          % (doc["统计"]["打回"], doc["统计"]["准予迁入"],
+             doc["统计"]["挂起"], doc["统计"]["已迁入"]))
     return 0
 
 

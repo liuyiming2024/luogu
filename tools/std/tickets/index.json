@@ -1,6 +1,31 @@
 [
- {"id":"t-001","pid":"P1421","file":"P1421_double.cpp","lang":"cpp","note":"第7批甲类复现：double 反复减 1.9"},
- {"id":"t-002","pid":"P1002","file":"P1002_start_overwrite.cpp","lang":"cpp","note":"起点赋值在 DP 之后"},
- {"id":"t-003","pid":"P1001","file":"P1001_scanf.cpp","lang":"cpp","note":"scanf 版，等价"},
- {"id":"t-004","pid":"BENCH","file":"BENCH_fast.cpp","lang":"cpp","note":"流程演示夹具：明显更优（非题库真题）"}
+ {
+  "id": "t-001",
+  "pid": "P1421",
+  "file": "P1421_double.cpp",
+  "lang": "cpp",
+  "note": "第7批甲类复现：double 反复减 1.9"
+ },
+ {
+  "id": "t-002",
+  "pid": "P1002",
+  "file": "P1002_start_overwrite.cpp",
+  "lang": "cpp",
+  "note": "起点赋值在 DP 之后"
+ },
+ {
+  "id": "t-003",
+  "pid": "P1001",
+  "file": "P1001_scanf.cpp",
+  "lang": "cpp",
+  "note": "scanf/printf 版，CPU 中位数约 0.66× 原 std；已作为新 std",
+  "archived": "已迁入 std/P1001.cpp（2026-11-28，contentOnly 正文级证据）"
+ },
+ {
+  "id": "t-004",
+  "pid": "BENCH",
+  "file": "BENCH_fast.cpp",
+  "lang": "cpp",
+  "note": "流程演示夹具：明显更优（非题库真题）"
+ }
 ]

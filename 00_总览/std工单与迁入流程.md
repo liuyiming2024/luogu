@@ -110,19 +110,24 @@ CPU 时间取 `os.wait4` 的 `ru_utime+ru_stime`（**不用墙钟**，避开评�
 
 ### 对面 Action 到底跑没跑
 
-**跑了，但题面正文一条都没拿到。**
+**跑了；旧解析器没拿到正文，修好后 run 2 拿到了 2 题完整正文。**
 
 - `crawl_tick.yml` 共 9 次 run（最近 2026-11-28T03:21Z success），
   `problem_first.yml` 1 次手动 dispatch（17:40 CST）success 但 **0 新增正文 → 提交 skipped**
-- 取回日志里 23 条题面相关：17 条 **2885 字节 SPA 骨架**（判定「未知」）、
-  5 条「503 洛谷日爆」错误页；`crawl_state.seen` 的 22 个 P 号全是「未知」
-- 进度文件早期「题面 10」是误计（503 页被当题面），已清理不计入
-- 真正攒下的是 **86 篇题解正文**，不是题面
+- 取回日志里 23 条题面相关：17 条 **2885 字节 SPA 骨架**、5 条「503 洛谷日爆」
+  错误页；`crawl_state.seen` 的 22 个 P 号全是「未知」
+- 进度文件早期「题面 10」是误计（503 页被当题面），已清理
+- 那 9 次真正攒下的是 **86 篇题解正文**，不是题面
 
-修法（不编造成功）：`fetch_problem.py` 补洛谷 API 文档里的
-`x-lentille-request: content-only` 头，6 种有据 (URL, 头) 组合逐个低频试；
-每个组合的 HTTP / 是否 JSON / 是否含题目字段 / 前 100 字节都记进诊断，
-并把结论编码进 artifact 名（`diag-...`），**不进仓库、不造提交也能读到结论**。
+**根因**：contentOnly 题面正文在 `data.problem.contenu`（`formatI`/`formatO`），
+样例在 `data.problem.samples`；旧解析器只匹配到 `samples` 键就判成功，字段全空。
+**修法**：洛谷 API 文档的 `x-lentille-request: content-only` 头 + `www.luogu.com.cn`，
+6 种有据组合低频试（组合间 ≥1s），要求 `description` 与 `formatI`/`hint` 非空；
+诊断编码进 artifact 名（`diag-ok2-fail0-h200x10-r2`），零提交可读。
+
+**run 2 实证**：P1001 / P1909 取回 35 KB / 20 KB 完整 JSON → 重建题面存档 →
+证据等级升级为「contentOnly 正文（队列取回）」→ 范围引用改正文逐字 →
+闸门 7 题全 PASS → 自动提交 `c4fd11e`（有 2 份正文，不是无用提交）。
 
 ### 第 17 条：题面进度 = STD 进度 + 朴素算法对拍
 
@@ -155,5 +160,8 @@ python3 tools/std/verify_brute.py
 期望表随之扩到 **7 题 340 组**，离线站本地评测 **97 个测试点**，
 submit 页新增「STD ↔ 朴素算法对拍台账」只读块。
 
-**已迁入仍为 0**：7 份题面都还是摘录级证据，`promote.py` 继续拒绝，
-等对面队列真取回 contentOnly 正文并复核后才执行迁入。
+**已迁入 1（t-003 → P1001）**：正文级证据到手后，代审六项证据全通过，
+`promote.py` 备份旧 std（`std/_backup/`）、逐字替换为 scanf 版、记旧/新 sha256；
+迁入后 `verify_brute` / `verify_std` / 期望表全部重跑复验仍 PASS。
+`promote` 已加幂等（sha 未变跳过），工单 t-003 标 `archived`，
+候选/审核/bank 三台账迁入数一致 = 1。其余 5 题摘录级保持挂起。

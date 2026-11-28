@@ -58,6 +58,16 @@ def main():
         if not os.path.exists(src):
             rows.append({"id": t["id"], "pid": t["pid"], "verdict": "缺失",
                          "status": "去除", "reason": "源码文件不存在"}); continue
+        if t.get("archived"):
+            # 已迁入的工单归档：不再重复对跑，也不让脚本「自动迁入」
+            rows.append({"id": t["id"], "pid": t["pid"], "file": t["file"],
+                         "sha256_前16": sha(src), "note": t.get("note", ""),
+                         "verdict": "已迁入（工单归档）", "status": "已迁入",
+                         "reason": t["archived"], "_archived": True,
+                         "证据等级": "", "题面闸门": {},
+                         "checked_at": datetime.now(timezone.utc).isoformat(timespec="seconds")})
+            print("  %-6s %-8s 已迁入归档（skip）" % (t["id"], t["pid"]))
+            continue
         g = problem_gate.gate(t["pid"], verbose=False)
         if not g["pass"]:
             # 「先爬到题面的，你再做」：闸门未过一律不做、不判、不放
@@ -99,7 +109,9 @@ def main():
                     "已迁入": sum(1 for x in rows if x["status"] == "已迁入")},
            "条目": rows}
     json.dump(doc, open(CAND, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
-    assert doc["统计"]["已迁入"] == 0, "脚本不得自动迁入"
+    # 脚本绝不自动迁入：台账里出现「已迁入」只能来自显式 archived 标记
+    assert all(x.get("_archived") for x in rows if x["status"] == "已迁入"), \
+        "脚本不得自动迁入（已迁入条目必须有 archived 标记）"
 
     exp = std_eval.build_expect()
     exp_doc = {"说明": "由本地 std 逐条跑出的期望输出；供离线 IDE「本地评测」对照，不引用官方数据、不需要编译。",
@@ -113,7 +125,7 @@ def main():
     print("[std-pipeline] 待人工审核", doc["统计"]["待人工审核"],
           "| 去除", doc["统计"]["去除"], "| 不收", doc["统计"]["不收"],
           "| 不做", doc["统计"]["不做"],
-          "| 已迁入", doc["统计"]["已迁入"], "（必须为 0）")
+          "| 已迁入", doc["统计"]["已迁入"], "（仅来自显式 archived 归档）")
     return 0
 
 

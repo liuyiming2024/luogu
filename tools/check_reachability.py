@@ -197,8 +197,9 @@ def main():
         c = json.load(open(cand, encoding="utf-8"))
         e = json.load(open(expd, encoding="utf-8"))
         jc = open(p("site/assets/judge_cases.js"), encoding="utf-8").read()
-        std_ok = (c["统计"]["已迁入"] == 0
-                  and all(x["status"] != "已迁入" for x in c["条目"])
+        std_ok = (c["统计"]["已迁入"] == json.load(
+                      open(p("site/data/std_reviews.json"), encoding="utf-8"))["统计"]["已迁入"]
+                  and all(x["status"] != "已迁入" or x.get("_archived") for x in c["条目"])
                   and e["题目数"] >= 7 and e["用例总数"] >= 300
                   and len(json.load(open(sb, encoding="utf-8"))["题库"]) == e["题目数"]
                   and "std#" in jc
@@ -212,7 +213,7 @@ def main():
                 and b["统计"]["变异抓到"] == b["统计"]["题目数"]
                 and b["统计"]["用例总数"] >= 100)
     std_ok = std_ok and b_ok
-    print("  ✓ STD：题面进度=STD进度 / 朴素对拍全PASS / 期望表上页 / 已迁入=0"
+    print("  ✓ STD：题面进度=STD进度 / 朴素对拍全PASS / 期望表上页 / 迁入三者一致"
           if std_ok else "  ✗ STD 实物缺项或出现自动迁入")
     if not std_ok: fail.append("STD 实物缺项")
 
@@ -236,8 +237,15 @@ def main():
                and "steps.check.outputs.useful" in ck
                and os.path.exists(pf)
                and "luogu_problem_new" in open(pf, encoding="utf-8").read())
-    no_promote = (rv_d["统计"]["已迁入"] == 0)
-    print("  ✓ 第16条：题面证据/闸门/代审挂起/题面优先/严格本轮计数/已迁入=0"
+    bank = json.load(open(p("tools/std/std_bank.json"), encoding="utf-8"))
+    promoted = sum(1 for t in bank["题库"] if t.get("迁入记录"))
+    rv_d = json.load(open(p("site/data/std_reviews.json"), encoding="utf-8"))
+    cand_d = json.load(open(p("site/data/std_candidates.json"), encoding="utf-8"))
+    guard = ("contentOnly" in open(p("tools/std/promote.py"), encoding="utf-8").read()
+             and "幂等跳过" in open(p("tools/std/promote.py"), encoding="utf-8").read())
+    no_promote = (promoted == rv_d["统计"]["已迁入"] == cand_d["统计"]["已迁入"]
+                  and guard)
+    print("  ✓ 第16条：题面证据/闸门/代审/题面优先/严格本轮计数/迁入三者一致且带guard"
           if ev_ok and gate_ok and no_promote else "  ✗ 第16条缺项")
     if not (ev_ok and gate_ok and no_promote): fail.append("第16条缺项")
 
