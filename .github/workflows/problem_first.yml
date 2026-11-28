@@ -15,7 +15,7 @@ on:
     inputs:
       pids:
         description: 'P 号，逗号分隔'
-        required: true
+        required: false
         default: ''
         type: string
       delay:
