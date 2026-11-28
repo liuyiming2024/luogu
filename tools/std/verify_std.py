@@ -95,7 +95,7 @@ def main():
 
     # 题面闸门：先爬到题面、证据可核对，才允许做 std
     gates = problem_gate.gate_all()
-    check("题面闸门：三题证据文件/范围引用/样例实测/用例范围全过",
+    check("题面闸门：全部 STD 题证据/范围引用/样例实测/用例范围全过",
           all(g["pass"] for g in gates.values()),
           str({k: g["reason"][:26] for k, g in gates.items() if not g["pass"]}))
     check("范围引用逐字命中题面存档（不是凭记忆）",
@@ -112,8 +112,14 @@ def main():
     REPO = os.path.dirname(os.path.dirname(HERE))
     prob_files = {os.path.basename(x)[:-5] for x in
                   glob.glob(os.path.join(REPO, "site", "data", "problems", "P*.json"))}
-    check("题面存档集合 == STD 题库集合", prob_files == set(pids),
-          "题面 %d / STD %d" % (len(prob_files), len(pids)))
+    # 队列会持续爬到新题面（auto-range），STD 必须逐题补，不能凭空做。
+    # 硬口径：STD 不允许超出题面；题面领先则如实报告「待补 STD」，不假装已做。
+    todo = sorted(prob_files - set(pids))
+    check("STD 题库 ⊆ 题面存档（std 不凭空超出题面）",
+          not (set(pids) - prob_files),
+          "STD 无题面 %s" % sorted(set(pids) - prob_files))
+    print("  · 题面 %d / STD %d ｜题面待补 STD：%s" %
+          (len(prob_files), len(pids), ",".join(todo) if todo else "无"))
     bj = os.path.join(REPO, "site", "data", "std_brute_check.json")
     if os.path.exists(bj):
         b = json.load(open(bj, encoding="utf-8"))

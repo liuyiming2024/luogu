@@ -263,3 +263,12 @@ python3 tools/std/verify_std.py     → PASS（含「题面存档集合 == STD �
 
 另外 `fetch_problem.py` 加了 `--auto-range`：按 `crawl_state.problems_cursor` **有序推进**，
 跳过已有正文级存档的 P 号，每轮一批，成功才推进游标；不再靠手写 P 号列表。
+
+补充两点（本轮实测）：
+
+- **台账内容幂等**：`tools/std/stable_write.py` 剥离时间类元数据后比对，
+  内容没变就不写盘；连跑两次 `verify_brute` + 全链路，git 变更数不再增长。
+  这解决了「内容一样只有时间戳变了」的无用 diff。
+- **题面会领先 STD**：`--auto-range` 已自动爬到 `P1003`（远端第 8 份题面）。
+  检查口径改为 **STD ⊆ 题面**，并显式列出「题面待补 STD：P1003」——
+  不凭空写 std、不假装 8 题都做了朴素对拍。补 STD 是逐题的长期工作。

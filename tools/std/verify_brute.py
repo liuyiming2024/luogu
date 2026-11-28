@@ -159,10 +159,11 @@ def main():
            "统计": {"题目数": len(rows), "PASS": sum(1 for x in rows if x["verdict"] == "PASS"),
                     "用例总数": total_cases, "变异抓到": caught},
            "条目": rows}
-    json.dump(doc, open(OUT, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    from stable_write import stable_write
+    stable_write(OUT, doc)
     print("[brute] → std_brute_check.json | PASS %d/%d | 用例 %d | 变异抓到 %d" %
           (doc["统计"]["PASS"], len(rows), total_cases, caught))
-    print("结论：", "PASS · 题面进度=STD进度，朴素对拍全通过" if ok else "FAIL")
+    print("结论：", "PASS · STD⊆题面存档，逐题朴素对拍全通过" if ok else "FAIL")
     return 0 if ok else 1
 
 

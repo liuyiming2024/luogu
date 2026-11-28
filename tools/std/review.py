@@ -132,9 +132,10 @@ def main():
                     "挂起": sum(1 for x in out if "挂起" in x["结论"]),
                     "已迁入": sum(1 for x in out if x["结论"] == "已迁入（归档）")},
            "条目": out}
-    json.dump(doc, open(REV, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
-    json.dump({"说明": "挂起/准予的迁入候选；promote.py 仅在证据等级为 contentOnly 正文时执行",
-               "条目": pend}, open(PEND, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    from stable_write import stable_write
+    stable_write(REV, doc)
+    stable_write(PEND, {"说明": "挂起/准予的迁入候选；promote.py 仅在证据等级为 contentOnly 正文时执行",
+                        "条目": pend})
     print("[review] → std_reviews.json | 打回 %d / 准予 %d / 挂起 %d / 已迁入 %d"
           % (doc["统计"]["打回"], doc["统计"]["准予迁入"],
              doc["统计"]["挂起"], doc["统计"]["已迁入"]))

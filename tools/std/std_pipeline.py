@@ -108,7 +108,8 @@ def main():
                     "不做": sum(1 for x in rows if x["status"] == "不做"),
                     "已迁入": sum(1 for x in rows if x["status"] == "已迁入")},
            "条目": rows}
-    json.dump(doc, open(CAND, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    from stable_write import stable_write
+    stable_write(CAND, doc)
     # 脚本绝不自动迁入：台账里出现「已迁入」只能来自显式 archived 标记
     assert all(x.get("_archived") for x in rows if x["status"] == "已迁入"), \
         "脚本不得自动迁入（已迁入条目必须有 archived 标记）"
@@ -118,7 +119,8 @@ def main():
                "题目数": len(exp),
                "用例总数": sum(len(v["cases"]) for v in exp.values()),
                "题目": exp}
-    json.dump(exp_doc, open(EXPECT, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    from stable_write import stable_write
+    stable_write(EXPECT, exp_doc)
     print("[std-pipeline] 台账 →", os.path.relpath(CAND, REPO))
     print("[std-pipeline] 期望表 →", os.path.relpath(EXPECT, REPO),
           "|", exp_doc["题目数"], "题", exp_doc["用例总数"], "组")
