@@ -23,7 +23,10 @@ import runner, cases as cg, std_eval, problem_gate
 REPO = os.path.dirname(os.path.dirname(HERE))
 OUT = os.path.join(REPO, "site", "data", "std_brute_check.json")
 
-BRUTE_LANG = {"P1001": "python", "P1022": "python", "P1026": "python"}
+BRUTE_LANG = {"P1001": "python", "P1022": "python", "P1026": "python",
+              "P1034": "python", "P1036": "python", "P1037": "python",
+              "P1039": "python", "P1040": "python", "P1041": "python",
+              "P1042": "python"}
 BRUTE_EXT = {"P1001": ".py"}
 
 
@@ -69,6 +72,27 @@ def scale_inputs(pid):
         return base[:12], "S≤4（朴素 Floyd-Warshall 全源最短路，点数三次增长）"
     if pid == "P1032":
         return base[:12], "短串 + 2~3 条规则（朴素迭代加深 DFS）"
+    if pid == "P1033":
+        return base[:12], "位移网格 20001 点（数值扫描，非解析区间；用例避开临界边界）"
+    if pid == "P1034":
+        # 全量 40 组：曾在此抓到「区间 DP 对混合方向划分不精确」的真 bug，保留为回归检查点
+        return base[:40], "n≤7、k≤4 全量（子集枚举 k^n + 显式矩形分离检查，精确解）"
+    if pid == "P1035":
+        return base[:15], "k=1..15 全量（朴素二分 + Kahan 补偿重算）"
+    if pid == "P1036":
+        return base[:16], "n≤12、k≤4（Python 组合枚举 + Miller-Rabin）"
+    if pid == "P1037":
+        return base[:20], "n≤8 位（Python BFS 闭包 + 原生大整数）"
+    if pid == "P1038":
+        return base[:20], "n≤8 的 DAG（反图 DFS 记忆化；输入层 U=0 避免阈值歧义）"
+    if pid == "P1039":
+        return base[:10], "M≤6（显式枚举 2^M 说谎者标签组合）"
+    if pid == "P1040":
+        return base[:16], "n≤8（递归枚举全部二叉树，Catalan 指数级）"
+    if pid == "P1041":
+        return base[:8], "n≤9 的小树（bitmask 状态搜索，指数级；疑似错题如实标注）"
+    if pid == "P1042":
+        return base[:20], "题面内记录（Python 递归切出最早完局）"
     return base[:40], "题面内全量（本题朴素算法多项式时间）"
 
 

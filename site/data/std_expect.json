@@ -1,7 +1,7 @@
 {
  "说明": "由本地 std 逐条跑出的期望输出；供离线 IDE「本地评测」对照，不引用官方数据、不需要编译。",
- "题目数": 18,
- "用例总数": 780,
+ "题目数": 28,
+ "用例总数": 1180,
  "题目": {
   "P1001": {
    "title": "A+B Problem",
@@ -3228,6 +3228,1666 @@
     {
      "in": "llsi llai\ns a\nct y\n",
      "out": "1"
+    }
+   ]
+  },
+  "P1033": {
+   "title": "[NOIP 2002 提高组] 自由落体",
+   "范围": "1≤H,S1,V,L,K,n≤10^5",
+   "cases": [
+    {
+     "in": "5.0 9.0 5.0 2.5 1.8 5\n",
+     "out": "1"
+    },
+    {
+     "in": "167 45 2 3 4 13\n",
+     "out": "0"
+    },
+    {
+     "in": "149 8 9 14 12 8\n",
+     "out": "0"
+    },
+    {
+     "in": "141 35 8 6 4 9\n",
+     "out": "0"
+    },
+    {
+     "in": "142 12 1 11 20 8\n",
+     "out": "1"
+    },
+    {
+     "in": "155 26 7 12 14 6\n",
+     "out": "1"
+    },
+    {
+     "in": "72 17 10 6 11 14\n",
+     "out": "0"
+    },
+    {
+     "in": "57 29 3 9 5 9\n",
+     "out": "0"
+    },
+    {
+     "in": "129 37 4 11 8 9\n",
+     "out": "0"
+    },
+    {
+     "in": "170 58 4 3 12 7\n",
+     "out": "0"
+    },
+    {
+     "in": "108 54 2 4 3 4\n",
+     "out": "0"
+    },
+    {
+     "in": "142 60 1 9 4 1\n",
+     "out": "0"
+    },
+    {
+     "in": "125 40 7 12 20 12\n",
+     "out": "7"
+    },
+    {
+     "in": "132 19 1 13 6 4\n",
+     "out": "0"
+    },
+    {
+     "in": "189 18 9 12 7 13\n",
+     "out": "0"
+    },
+    {
+     "in": "187 30 7 12 19 16\n",
+     "out": "2"
+    },
+    {
+     "in": "62 8 6 14 12 18\n",
+     "out": "4"
+    },
+    {
+     "in": "152 52 8 3 14 2\n",
+     "out": "0"
+    },
+    {
+     "in": "160 30 3 3 16 16\n",
+     "out": "2"
+    },
+    {
+     "in": "64 46 10 12 10 9\n",
+     "out": "0"
+    },
+    {
+     "in": "155 60 6 10 5 2\n",
+     "out": "0"
+    },
+    {
+     "in": "59 32 3 11 3 4\n",
+     "out": "0"
+    },
+    {
+     "in": "57 27 4 7 3 16\n",
+     "out": "2"
+    },
+    {
+     "in": "138 27 2 15 5 13\n",
+     "out": "0"
+    },
+    {
+     "in": "188 43 8 13 8 13\n",
+     "out": "9"
+    },
+    {
+     "in": "195 33 2 11 1 6\n",
+     "out": "0"
+    },
+    {
+     "in": "177 49 6 11 3 3\n",
+     "out": "0"
+    },
+    {
+     "in": "95 48 1 11 3 17\n",
+     "out": "0"
+    },
+    {
+     "in": "66 30 8 11 15 20\n",
+     "out": "15"
+    },
+    {
+     "in": "178 59 8 10 19 4\n",
+     "out": "0"
+    },
+    {
+     "in": "146 55 4 5 5 8\n",
+     "out": "0"
+    },
+    {
+     "in": "160 57 8 13 8 5\n",
+     "out": "0"
+    },
+    {
+     "in": "135 59 10 14 10 7\n",
+     "out": "0"
+    },
+    {
+     "in": "102 9 5 13 19 1\n",
+     "out": "1"
+    },
+    {
+     "in": "195 39 8 6 14 9\n",
+     "out": "0"
+    },
+    {
+     "in": "194 25 5 9 19 6\n",
+     "out": "5"
+    },
+    {
+     "in": "188 27 5 15 20 4\n",
+     "out": "4"
+    },
+    {
+     "in": "98 13 4 11 14 10\n",
+     "out": "8"
+    },
+    {
+     "in": "96 24 9 14 17 18\n",
+     "out": "3"
+    },
+    {
+     "in": "75 39 5 6 18 15\n",
+     "out": "0"
+    }
+   ]
+  },
+  "P1034": {
+   "title": "[NOIP 2002 提高组] 矩形覆盖",
+   "范围": "1≤n≤50，1≤k≤4，0≤xi,yi≤500",
+   "cases": [
+    {
+     "in": "4 2\n1 1\n2 2\n3 6\n0 7\n",
+     "out": "4"
+    },
+    {
+     "in": "6 1\n1 7\n21 30\n34 16\n15 5\n8 1\n2 12\n",
+     "out": "957"
+    },
+    {
+     "in": "3 1\n38 38\n7 4\n29 36\n",
+     "out": "1054"
+    },
+    {
+     "in": "6 4\n22 1\n29 19\n24 34\n10 34\n28 21\n8 11\n",
+     "out": "2"
+    },
+    {
+     "in": "5 1\n17 11\n38 12\n1 31\n10 10\n16 11\n",
+     "out": "777"
+    },
+    {
+     "in": "4 3\n15 14\n39 22\n4 26\n17 6\n",
+     "out": "16"
+    },
+    {
+     "in": "3 4\n30 17\n29 28\n39 29\n",
+     "out": "0"
+    },
+    {
+     "in": "4 4\n20 11\n10 3\n38 14\n23 25\n",
+     "out": "0"
+    },
+    {
+     "in": "5 3\n25 28\n12 19\n38 34\n26 7\n27 17\n",
+     "out": "42"
+    },
+    {
+     "in": "7 1\n5 4\n0 9\n21 26\n20 20\n17 17\n25 39\n37 12\n",
+     "out": "1295"
+    },
+    {
+     "in": "7 1\n27 35\n18 13\n31 8\n8 19\n32 27\n31 16\n20 2\n",
+     "out": "792"
+    },
+    {
+     "in": "4 4\n13 38\n0 5\n10 2\n36 36\n",
+     "out": "0"
+    },
+    {
+     "in": "6 4\n27 37\n0 3\n3 10\n26 4\n19 30\n15 10\n",
+     "out": "26"
+    },
+    {
+     "in": "7 3\n14 6\n9 23\n21 19\n30 8\n7 17\n14 39\n22 17\n",
+     "out": "111"
+    },
+    {
+     "in": "4 1\n38 2\n27 13\n26 11\n11 39\n",
+     "out": "999"
+    },
+    {
+     "in": "5 2\n38 1\n38 20\n25 21\n15 12\n36 24\n",
+     "out": "136"
+    },
+    {
+     "in": "4 4\n15 32\n21 30\n35 19\n8 31\n",
+     "out": "0"
+    },
+    {
+     "in": "3 2\n27 6\n7 16\n22 15\n",
+     "out": "15"
+    },
+    {
+     "in": "4 4\n34 2\n26 33\n39 5\n18 32\n",
+     "out": "0"
+    },
+    {
+     "in": "6 3\n37 30\n35 3\n14 22\n33 29\n28 24\n19 34\n",
+     "out": "114"
+    },
+    {
+     "in": "5 2\n6 15\n5 18\n26 2\n39 1\n28 8\n",
+     "out": "94"
+    },
+    {
+     "in": "4 3\n11 36\n20 0\n24 36\n30 2\n",
+     "out": "0"
+    },
+    {
+     "in": "6 3\n5 5\n27 27\n3 27\n6 37\n38 8\n1 16\n",
+     "out": "160"
+    },
+    {
+     "in": "4 1\n38 11\n1 20\n12 17\n15 20\n",
+     "out": "333"
+    },
+    {
+     "in": "4 2\n13 31\n8 5\n12 23\n4 27\n",
+     "out": "72"
+    },
+    {
+     "in": "3 1\n4 38\n21 0\n15 12\n",
+     "out": "646"
+    },
+    {
+     "in": "3 1\n31 3\n5 7\n18 17\n",
+     "out": "364"
+    },
+    {
+     "in": "7 3\n10 1\n5 21\n2 3\n7 21\n37 13\n6 19\n4 15\n",
+     "out": "34"
+    },
+    {
+     "in": "3 1\n31 17\n30 6\n22 23\n",
+     "out": "153"
+    },
+    {
+     "in": "6 1\n7 17\n12 1\n23 15\n18 36\n2 25\n28 24\n",
+     "out": "910"
+    },
+    {
+     "in": "5 4\n36 0\n36 33\n36 31\n2 38\n21 39\n",
+     "out": "0"
+    },
+    {
+     "in": "7 3\n15 21\n37 21\n18 30\n34 9\n32 13\n37 28\n9 8\n",
+     "out": "122"
+    },
+    {
+     "in": "5 2\n15 23\n13 8\n34 7\n36 29\n35 10\n",
+     "out": "74"
+    },
+    {
+     "in": "3 2\n22 29\n8 28\n4 38\n",
+     "out": "14"
+    },
+    {
+     "in": "3 2\n19 32\n14 10\n24 18\n",
+     "out": "70"
+    },
+    {
+     "in": "7 2\n26 11\n5 33\n17 39\n32 29\n35 3\n37 10\n7 37\n",
+     "out": "358"
+    },
+    {
+     "in": "6 4\n24 36\n2 20\n31 5\n3 12\n2 8\n1 37\n",
+     "out": "12"
+    },
+    {
+     "in": "7 4\n32 4\n37 3\n34 25\n35 34\n18 11\n8 27\n14 8\n",
+     "out": "26"
+    },
+    {
+     "in": "6 1\n37 0\n0 8\n27 28\n18 28\n38 20\n24 22\n",
+     "out": "1064"
+    },
+    {
+     "in": "5 3\n8 26\n37 11\n0 30\n18 24\n17 38\n",
+     "out": "46"
+    }
+   ]
+  },
+  "P1035": {
+   "title": "[NOIP 2002 普及组] 级数求和",
+   "范围": "1≤k≤15",
+   "cases": [
+    {
+     "in": "1\n",
+     "out": "2"
+    },
+    {
+     "in": "1\n",
+     "out": "2"
+    },
+    {
+     "in": "2\n",
+     "out": "4"
+    },
+    {
+     "in": "3\n",
+     "out": "11"
+    },
+    {
+     "in": "4\n",
+     "out": "31"
+    },
+    {
+     "in": "5\n",
+     "out": "83"
+    },
+    {
+     "in": "6\n",
+     "out": "227"
+    },
+    {
+     "in": "7\n",
+     "out": "616"
+    },
+    {
+     "in": "8\n",
+     "out": "1674"
+    },
+    {
+     "in": "9\n",
+     "out": "4550"
+    },
+    {
+     "in": "10\n",
+     "out": "12367"
+    },
+    {
+     "in": "11\n",
+     "out": "33617"
+    },
+    {
+     "in": "12\n",
+     "out": "91380"
+    },
+    {
+     "in": "13\n",
+     "out": "248397"
+    },
+    {
+     "in": "14\n",
+     "out": "675214"
+    },
+    {
+     "in": "15\n",
+     "out": "1835421"
+    },
+    {
+     "in": "8\n",
+     "out": "1674"
+    },
+    {
+     "in": "2\n",
+     "out": "4"
+    },
+    {
+     "in": "12\n",
+     "out": "91380"
+    },
+    {
+     "in": "15\n",
+     "out": "1835421"
+    },
+    {
+     "in": "13\n",
+     "out": "248397"
+    },
+    {
+     "in": "2\n",
+     "out": "4"
+    },
+    {
+     "in": "1\n",
+     "out": "2"
+    },
+    {
+     "in": "11\n",
+     "out": "33617"
+    },
+    {
+     "in": "7\n",
+     "out": "616"
+    },
+    {
+     "in": "7\n",
+     "out": "616"
+    },
+    {
+     "in": "6\n",
+     "out": "227"
+    },
+    {
+     "in": "15\n",
+     "out": "1835421"
+    },
+    {
+     "in": "9\n",
+     "out": "4550"
+    },
+    {
+     "in": "14\n",
+     "out": "675214"
+    },
+    {
+     "in": "12\n",
+     "out": "91380"
+    },
+    {
+     "in": "1\n",
+     "out": "2"
+    },
+    {
+     "in": "4\n",
+     "out": "31"
+    },
+    {
+     "in": "12\n",
+     "out": "91380"
+    },
+    {
+     "in": "6\n",
+     "out": "227"
+    },
+    {
+     "in": "2\n",
+     "out": "4"
+    },
+    {
+     "in": "11\n",
+     "out": "33617"
+    },
+    {
+     "in": "15\n",
+     "out": "1835421"
+    },
+    {
+     "in": "8\n",
+     "out": "1674"
+    },
+    {
+     "in": "4\n",
+     "out": "31"
+    }
+   ]
+  },
+  "P1036": {
+   "title": "[NOIP 2002 普及组] 选数",
+   "范围": "1≤n≤20，k<n，1≤xi≤5×10^6",
+   "cases": [
+    {
+     "in": "4 3\n3 7 12 19\n",
+     "out": "1"
+    },
+    {
+     "in": "10 1\n752 907 799 98 15 656 404 400 369 956\n",
+     "out": "1"
+    },
+    {
+     "in": "11 1\n239 763 368 99 660 908 507 195 495 275 369\n",
+     "out": "1"
+    },
+    {
+     "in": "12 1\n541 127 233 899 672 422 430 431 629 348 170 808\n",
+     "out": "4"
+    },
+    {
+     "in": "4 3\n341 977 638 229\n",
+     "out": "0"
+    },
+    {
+     "in": "6 4\n31 148 187 880 386 900\n",
+     "out": "2"
+    },
+    {
+     "in": "9 3\n318 644 874 994 228 720 232 562 519\n",
+     "out": "9"
+    },
+    {
+     "in": "7 4\n810 383 961 828 787 215 64\n",
+     "out": "4"
+    },
+    {
+     "in": "6 2\n88 902 73 89 790 98\n",
+     "out": "2"
+    },
+    {
+     "in": "12 3\n118 766 975 8 404 890 938 8 911 303 620 414\n",
+     "out": "20"
+    },
+    {
+     "in": "12 3\n332 837 978 169 46 865 909 677 226 905 811 786\n",
+     "out": "30"
+    },
+    {
+     "in": "4 3\n214 570 621 224\n",
+     "out": "0"
+    },
+    {
+     "in": "9 4\n986 963 623 409 495 49 379 332 755\n",
+     "out": "17"
+    },
+    {
+     "in": "3 2\n794 441 922\n",
+     "out": "0"
+    },
+    {
+     "in": "10 1\n935 767 37 920 706 804 441 482 190 64\n",
+     "out": "1"
+    },
+    {
+     "in": "9 4\n638 857 797 994 60 312 791 637 614\n",
+     "out": "16"
+    },
+    {
+     "in": "7 4\n788 132 333 500 891 795 701\n",
+     "out": "5"
+    },
+    {
+     "in": "3 1\n848 91 828\n",
+     "out": "0"
+    },
+    {
+     "in": "5 4\n110 31 886 870 67\n",
+     "out": "1"
+    },
+    {
+     "in": "6 3\n357 498 356 736 159 734\n",
+     "out": "3"
+    },
+    {
+     "in": "4 2\n825 966 674 410\n",
+     "out": "1"
+    },
+    {
+     "in": "11 2\n461 697 614 698 416 916 583 12 80 539 452\n",
+     "out": "9"
+    },
+    {
+     "in": "5 4\n79 702 343 543 906\n",
+     "out": "2"
+    },
+    {
+     "in": "4 1\n72 64 538 699\n",
+     "out": "0"
+    },
+    {
+     "in": "11 1\n475 497 529 416 618 514 594 890 827 473 506\n",
+     "out": "1"
+    },
+    {
+     "in": "4 2\n159 217 141 801\n",
+     "out": "0"
+    },
+    {
+     "in": "6 4\n231 454 646 840 769 786\n",
+     "out": "3"
+    },
+    {
+     "in": "5 3\n304 723 610 716 875\n",
+     "out": "2"
+    },
+    {
+     "in": "6 2\n601 279 642 74 713 26\n",
+     "out": "3"
+    },
+    {
+     "in": "12 4\n450 240 962 548 276 580 607 302 420 933 321 161\n",
+     "out": "76"
+    },
+    {
+     "in": "12 3\n770 354 704 111 194 422 236 549 137 316 187 826\n",
+     "out": "32"
+    },
+    {
+     "in": "11 3\n554 101 552 872 282 209 554 455 674 808 89\n",
+     "out": "15"
+    },
+    {
+     "in": "5 3\n5 481 779 213 277\n",
+     "out": "3"
+    },
+    {
+     "in": "7 1\n187 328 134 275 594 723 880\n",
+     "out": "0"
+    },
+    {
+     "in": "8 3\n666 639 922 650 617 208 736 547\n",
+     "out": "7"
+    },
+    {
+     "in": "10 4\n423 589 996 279 856 147 364 502 889 162\n",
+     "out": "34"
+    },
+    {
+     "in": "4 1\n59 10 463 31\n",
+     "out": "3"
+    },
+    {
+     "in": "10 2\n270 327 10 403 169 286 311 685 144 786\n",
+     "out": "11"
+    },
+    {
+     "in": "10 4\n111 604 341 969 774 57 492 336 126 530\n",
+     "out": "28"
+    },
+    {
+     "in": "5 2\n2 955 285 160 639\n",
+     "out": "1"
+    }
+   ]
+  },
+  "P1037": {
+   "title": "[NOIP 2002 普及组] 产生数",
+   "范围": "n<10^30，k≤15，规则右部非零",
+   "cases": [
+    {
+     "in": "234 2\n2 5\n3 6\n",
+     "out": "4"
+    },
+    {
+     "in": "21066580 1\n5 2\n",
+     "out": "2"
+    },
+    {
+     "in": "47459081 1\n6 7\n",
+     "out": "1"
+    },
+    {
+     "in": "6215933 3\n0 3\n2 7\n6 5\n",
+     "out": "4"
+    },
+    {
+     "in": "43884 6\n7 6\n3 1\n3 4\n1 2\n1 2\n9 6\n",
+     "out": "4"
+    },
+    {
+     "in": "16 6\n0 5\n9 7\n9 9\n5 6\n2 1\n3 2\n",
+     "out": "1"
+    },
+    {
+     "in": "9936 4\n9 7\n9 7\n7 1\n5 6\n",
+     "out": "9"
+    },
+    {
+     "in": "9 3\n6 8\n0 1\n6 8\n",
+     "out": "1"
+    },
+    {
+     "in": "167 4\n0 5\n9 5\n6 3\n5 8\n",
+     "out": "2"
+    },
+    {
+     "in": "1 6\n1 3\n8 7\n1 1\n1 4\n4 6\n7 6\n",
+     "out": "4"
+    },
+    {
+     "in": "256 4\n3 8\n9 7\n9 1\n1 9\n",
+     "out": "1"
+    },
+    {
+     "in": "37158121 0\n",
+     "out": "1"
+    },
+    {
+     "in": "87 4\n6 9\n9 8\n7 2\n6 3\n",
+     "out": "2"
+    },
+    {
+     "in": "3396 1\n7 3\n",
+     "out": "1"
+    },
+    {
+     "in": "593394 5\n1 1\n9 7\n7 4\n8 5\n9 5\n",
+     "out": "16"
+    },
+    {
+     "in": "6298945 5\n1 4\n6 4\n8 3\n4 3\n8 9\n",
+     "out": "18"
+    },
+    {
+     "in": "91843 4\n7 2\n2 6\n0 8\n3 5\n",
+     "out": "2"
+    },
+    {
+     "in": "22524 4\n5 5\n9 4\n8 8\n8 8\n",
+     "out": "1"
+    },
+    {
+     "in": "5257213 0\n",
+     "out": "1"
+    },
+    {
+     "in": "8 0\n",
+     "out": "1"
+    },
+    {
+     "in": "34506244 5\n2 8\n9 8\n1 6\n0 8\n5 2\n",
+     "out": "12"
+    },
+    {
+     "in": "404 1\n9 4\n",
+     "out": "1"
+    },
+    {
+     "in": "8657 4\n6 5\n0 7\n6 3\n8 5\n",
+     "out": "6"
+    },
+    {
+     "in": "953390 0\n",
+     "out": "1"
+    },
+    {
+     "in": "7132 4\n2 2\n4 4\n1 8\n4 9\n",
+     "out": "2"
+    },
+    {
+     "in": "8 3\n6 3\n6 2\n0 5\n",
+     "out": "1"
+    },
+    {
+     "in": "2763 3\n5 6\n6 8\n3 4\n",
+     "out": "4"
+    },
+    {
+     "in": "647 6\n5 7\n2 8\n0 4\n8 3\n8 9\n3 9\n",
+     "out": "1"
+    },
+    {
+     "in": "5 6\n9 9\n6 2\n3 8\n5 1\n5 8\n1 2\n",
+     "out": "4"
+    },
+    {
+     "in": "40 5\n9 2\n7 7\n8 4\n6 2\n9 7\n",
+     "out": "1"
+    },
+    {
+     "in": "2 3\n1 7\n2 3\n8 1\n",
+     "out": "2"
+    },
+    {
+     "in": "605247 4\n4 9\n4 1\n4 4\n7 5\n",
+     "out": "6"
+    },
+    {
+     "in": "54 2\n7 2\n6 7\n",
+     "out": "1"
+    },
+    {
+     "in": "252 5\n8 1\n3 2\n8 2\n2 4\n1 9\n",
+     "out": "4"
+    },
+    {
+     "in": "15062 5\n9 2\n2 3\n1 2\n5 2\n2 1\n",
+     "out": "36"
+    },
+    {
+     "in": "288536 3\n2 1\n5 8\n1 3\n",
+     "out": "6"
+    },
+    {
+     "in": "3706518 5\n2 5\n5 5\n0 3\n4 7\n5 6\n",
+     "out": "4"
+    },
+    {
+     "in": "7839668 3\n3 3\n6 9\n6 4\n",
+     "out": "9"
+    },
+    {
+     "in": "133 3\n7 9\n8 9\n7 7\n",
+     "out": "1"
+    },
+    {
+     "in": "882742 5\n9 7\n6 7\n8 7\n0 4\n2 4\n",
+     "out": "16"
+    }
+   ]
+  },
+  "P1038": {
+   "title": "[NOIP 2003 提高组] 神经网络",
+   "范围": "1≤n≤100，|W|≤10^9",
+   "cases": [
+    {
+     "in": "5 6\n1 0\n1 0\n0 1\n0 1\n0 1\n1 3 1\n1 4 1\n1 5 1\n2 3 1\n2 4 1\n2 5 1\n",
+     "out": "3 1\n4 1\n5 1"
+    },
+    {
+     "in": "6 6\n5 0\n0 0\n0 1\n0 3\n0 3\n0 3\n1 2 -4\n2 3 1\n3 4 -5\n2 4 -4\n4 5 -2\n3 6 4\n",
+     "out": "NULL"
+    },
+    {
+     "in": "7 7\n3 0\n0 1\n0 0\n0 1\n0 1\n0 0\n0 0\n1 2 -3\n2 3 4\n1 4 -3\n2 4 1\n3 5 -1\n2 6 -2\n3 7 2\n",
+     "out": "NULL"
+    },
+    {
+     "in": "3 2\n1 0\n0 2\n0 3\n1 2 4\n1 3 1\n",
+     "out": "2 2"
+    },
+    {
+     "in": "7 7\n3 0\n0 2\n0 0\n0 3\n0 3\n0 3\n0 0\n1 2 0\n1 3 -5\n3 4 -2\n1 5 3\n2 5 1\n5 6 4\n5 7 1\n",
+     "out": "6 21\n7 6"
+    },
+    {
+     "in": "8 7\n2 0\n0 3\n0 0\n0 0\n0 0\n0 1\n0 2\n0 2\n1 2 1\n1 3 1\n1 4 -1\n3 5 1\n3 6 2\n6 7 -5\n1 8 -4\n",
+     "out": "5 2"
+    },
+    {
+     "in": "6 6\n2 0\n0 3\n0 0\n0 2\n0 0\n0 1\n1 2 -3\n1 3 0\n3 4 1\n2 5 2\n4 6 4\n5 6 2\n",
+     "out": "NULL"
+    },
+    {
+     "in": "3 2\n4 0\n0 3\n0 3\n1 2 3\n1 3 2\n",
+     "out": "2 9\n3 5"
+    },
+    {
+     "in": "3 2\n2 0\n0 2\n0 2\n1 2 -3\n2 3 -2\n",
+     "out": "NULL"
+    },
+    {
+     "in": "8 9\n3 0\n0 1\n0 2\n0 0\n0 2\n0 1\n0 3\n0 0\n1 2 -2\n1 3 -5\n2 4 2\n3 4 -1\n3 5 1\n2 6 4\n3 7 0\n2 8 1\n5 8 -3\n",
+     "out": "NULL"
+    },
+    {
+     "in": "4 4\n3 0\n0 2\n0 1\n0 3\n1 2 -5\n1 3 -1\n1 4 -3\n2 4 4\n",
+     "out": "NULL"
+    },
+    {
+     "in": "7 7\n4 0\n0 3\n0 0\n0 2\n0 0\n0 3\n0 2\n1 2 1\n2 3 -3\n1 4 -4\n1 5 2\n2 5 -1\n3 6 -5\n2 7 -1\n",
+     "out": "5 7"
+    },
+    {
+     "in": "3 3\n3 0\n0 3\n0 3\n1 2 -2\n1 3 4\n2 3 1\n",
+     "out": "3 9"
+    },
+    {
+     "in": "5 6\n2 0\n0 1\n0 1\n0 0\n0 2\n1 2 1\n1 3 3\n2 3 -2\n1 4 5\n1 5 -5\n4 5 -4\n",
+     "out": "3 3"
+    },
+    {
+     "in": "4 3\n1 0\n0 2\n0 1\n0 0\n1 2 2\n1 3 2\n2 4 -3\n",
+     "out": "3 1"
+    },
+    {
+     "in": "6 5\n2 0\n0 3\n0 0\n0 1\n0 1\n0 1\n1 2 -2\n2 3 1\n1 4 -2\n3 5 -1\n3 6 5\n",
+     "out": "NULL"
+    },
+    {
+     "in": "8 7\n5 0\n0 3\n0 0\n0 0\n0 3\n0 0\n0 3\n0 1\n1 2 -1\n2 3 -4\n1 4 0\n1 5 5\n2 6 -5\n1 7 2\n7 8 -2\n",
+     "out": "5 22"
+    },
+    {
+     "in": "7 9\n4 0\n0 3\n0 1\n0 0\n0 2\n0 1\n0 0\n1 2 3\n2 3 0\n1 3 -1\n2 4 4\n3 5 -5\n2 5 5\n4 6 -1\n3 6 -1\n4 7 -4\n",
+     "out": "5 43"
+    },
+    {
+     "in": "4 4\n2 0\n0 0\n0 1\n0 1\n1 2 3\n1 3 -2\n2 3 -5\n2 4 -5\n",
+     "out": "NULL"
+    },
+    {
+     "in": "8 7\n4 0\n0 2\n0 0\n0 1\n0 2\n0 2\n0 2\n0 0\n1 2 4\n1 3 -5\n3 4 3\n2 5 1\n1 6 0\n6 7 -3\n2 8 2\n",
+     "out": "5 12\n8 28"
+    },
+    {
+     "in": "4 3\n5 0\n0 3\n0 1\n0 1\n1 2 1\n2 3 1\n1 4 4\n",
+     "out": "3 1\n4 19"
+    },
+    {
+     "in": "6 6\n5 0\n0 3\n0 3\n0 3\n0 3\n0 0\n1 2 -2\n1 3 -5\n2 4 2\n4 5 1\n2 5 2\n3 6 -3\n",
+     "out": "NULL"
+    },
+    {
+     "in": "4 3\n3 0\n0 1\n0 1\n0 0\n1 2 -2\n1 3 4\n2 4 3\n",
+     "out": "3 11"
+    },
+    {
+     "in": "4 4\n5 0\n0 3\n0 2\n0 0\n1 2 2\n1 3 2\n1 4 -3\n2 4 -5\n",
+     "out": "3 8"
+    },
+    {
+     "in": "8 9\n4 0\n0 0\n0 3\n0 1\n0 3\n0 0\n0 2\n0 1\n1 2 -5\n1 3 2\n3 4 -4\n2 5 0\n4 5 -3\n4 6 -5\n1 7 5\n4 7 -3\n5 8 1\n",
+     "out": "7 18"
+    },
+    {
+     "in": "5 4\n4 0\n0 1\n0 3\n0 3\n0 2\n1 2 1\n2 3 4\n1 4 5\n3 5 -5\n",
+     "out": "4 17"
+    },
+    {
+     "in": "6 5\n2 0\n0 1\n0 1\n0 0\n0 3\n0 3\n1 2 3\n1 3 2\n3 4 2\n4 5 3\n1 6 -2\n",
+     "out": "2 5\n5 15"
+    },
+    {
+     "in": "4 5\n4 0\n0 0\n0 1\n0 2\n1 2 2\n1 3 2\n2 3 5\n1 4 2\n2 4 -5\n",
+     "out": "3 47"
+    },
+    {
+     "in": "7 7\n5 0\n0 3\n0 2\n0 0\n0 2\n0 0\n0 0\n1 2 -2\n1 3 -5\n3 4 1\n4 5 2\n1 5 1\n2 6 0\n5 7 3\n",
+     "out": "7 9"
+    },
+    {
+     "in": "7 8\n5 0\n0 2\n0 1\n0 1\n0 1\n0 1\n0 1\n1 2 1\n1 3 5\n3 4 -4\n2 4 5\n1 5 -2\n4 6 4\n2 6 -3\n4 7 5\n",
+     "out": "NULL"
+    },
+    {
+     "in": "4 3\n5 0\n0 0\n0 3\n0 2\n1 2 0\n1 3 3\n3 4 3\n",
+     "out": "4 34"
+    },
+    {
+     "in": "6 6\n1 0\n0 0\n0 3\n0 1\n0 1\n0 2\n1 2 4\n1 3 -5\n2 3 5\n2 4 5\n3 5 -5\n3 6 -2\n",
+     "out": "4 19"
+    },
+    {
+     "in": "3 2\n5 0\n0 2\n0 3\n1 2 -4\n2 3 -4\n",
+     "out": "NULL"
+    },
+    {
+     "in": "8 8\n3 0\n0 3\n0 3\n0 1\n0 0\n0 2\n0 3\n0 2\n1 2 -1\n2 3 -2\n1 4 -3\n3 5 3\n4 6 2\n3 7 5\n3 8 -1\n4 8 -3\n",
+     "out": "NULL"
+    },
+    {
+     "in": "3 2\n3 0\n0 3\n0 2\n1 2 5\n1 3 -4\n",
+     "out": "2 12"
+    },
+    {
+     "in": "7 7\n5 0\n0 3\n0 3\n0 2\n0 3\n0 2\n0 1\n1 2 -2\n2 3 4\n1 3 -1\n1 4 -2\n3 5 -1\n3 6 -1\n1 7 -5\n",
+     "out": "NULL"
+    },
+    {
+     "in": "6 6\n5 0\n0 0\n0 0\n0 3\n0 0\n0 0\n1 2 3\n1 3 5\n2 4 4\n3 5 0\n5 6 -4\n2 6 -5\n",
+     "out": "4 57"
+    },
+    {
+     "in": "5 5\n3 0\n0 3\n0 2\n0 1\n0 1\n1 2 0\n2 3 0\n1 3 -5\n2 4 2\n1 5 0\n",
+     "out": "NULL"
+    },
+    {
+     "in": "5 4\n1 0\n0 1\n0 3\n0 3\n0 1\n1 2 -4\n1 3 3\n3 4 -3\n2 5 0\n",
+     "out": "NULL"
+    },
+    {
+     "in": "3 3\n5 0\n0 3\n0 0\n1 2 4\n1 3 -4\n2 3 5\n",
+     "out": "3 65"
+    }
+   ]
+  },
+  "P1039": {
+   "title": "[NOIP 2003 提高组] 侦探推理",
+   "范围": "1≤M≤20，0≤N≤M，1≤P≤100",
+   "cases": [
+    {
+     "in": "3 1 5\nMIKE\nCHARLES\nKATE\nMIKE: I am guilty.\nMIKE: Today is Sunday.\nCHARLES: MIKE is guilty.\nKATE: I am guilty.\nKATE: How are you??\n",
+     "out": "MIKE"
+    },
+    {
+     "in": "6 0 8\nA\nB\nC\nD\nE\nF\nA: How are you??\nD: D is guilty.\nE: I am guilty.\nB: F is guilty.\nA: F is not guilty.\nB: D is guilty.\nC: Today is Sunday.\nA: I am guilty.\n",
+     "out": "Impossible"
+    },
+    {
+     "in": "4 3 6\nA\nB\nC\nD\nD: I am not guilty.\nA: Today is Tuesday.\nB: I am guilty.\nB: B is not guilty.\nD: C is guilty.\nB: Today is Friday.\n",
+     "out": "Impossible"
+    },
+    {
+     "in": "5 3 5\nA\nB\nC\nD\nE\nB: I am not guilty.\nB: I am guilty.\nA: Today is Wednesday.\nA: A is not guilty.\nA: Today is Thursday.\n",
+     "out": "Impossible"
+    },
+    {
+     "in": "5 2 4\nA\nB\nC\nD\nE\nA: I am guilty.\nE: Today is Friday.\nB: Today is Friday.\nD: E is not guilty.\n",
+     "out": "Cannot Determine"
+    },
+    {
+     "in": "6 0 5\nA\nB\nC\nD\nE\nF\nC: I am guilty.\nE: D is not guilty.\nD: How are you??\nA: F is not guilty.\nD: I am guilty.\n",
+     "out": "Impossible"
+    },
+    {
+     "in": "6 3 7\nA\nB\nC\nD\nE\nF\nA: Today is Friday.\nF: C is not guilty.\nB: C is not guilty.\nF: Today is Sunday.\nA: I am not guilty.\nE: I am guilty.\nA: I am not guilty.\n",
+     "out": "Cannot Determine"
+    },
+    {
+     "in": "5 2 6\nA\nB\nC\nD\nE\nC: How are you??\nA: How are you??\nD: I am not guilty.\nD: How are you??\nD: I am guilty.\nA: E is not guilty.\n",
+     "out": "Impossible"
+    },
+    {
+     "in": "4 3 3\nA\nB\nC\nD\nC: I am not guilty.\nA: Today is Saturday.\nA: D is not guilty.\n",
+     "out": "Cannot Determine"
+    },
+    {
+     "in": "6 4 7\nA\nB\nC\nD\nE\nF\nE: D is not guilty.\nA: I am not guilty.\nB: I am not guilty.\nE: I am not guilty.\nD: How are you??\nB: C is guilty.\nF: How are you??\n",
+     "out": "B"
+    },
+    {
+     "in": "4 1 7\nA\nB\nC\nD\nC: How are you??\nA: D is not guilty.\nB: Today is Friday.\nC: D is guilty.\nB: C is guilty.\nA: B is not guilty.\nB: B is guilty.\n",
+     "out": "Impossible"
+    },
+    {
+     "in": "4 4 7\nA\nB\nC\nD\nC: Today is Sunday.\nC: Today is Thursday.\nA: B is guilty.\nA: I am not guilty.\nC: I am guilty.\nB: I am not guilty.\nC: C is guilty.\n",
+     "out": "Impossible"
+    },
+    {
+     "in": "4 4 6\nA\nB\nC\nD\nD: Today is Wednesday.\nB: C is not guilty.\nB: I am not guilty.\nA: A is not guilty.\nA: I am not guilty.\nC: I am guilty.\n",
+     "out": "Impossible"
+    },
+    {
+     "in": "6 1 5\nA\nB\nC\nD\nE\nF\nC: I am not guilty.\nD: E is not guilty.\nA: E is guilty.\nA: D is guilty.\nA: I am not guilty.\n",
+     "out": "A"
+    },
+    {
+     "in": "4 0 5\nA\nB\nC\nD\nB: I am not guilty.\nD: D is guilty.\nD: D is guilty.\nA: D is not guilty.\nB: C is guilty.\n",
+     "out": "Impossible"
+    },
+    {
+     "in": "5 1 4\nA\nB\nC\nD\nE\nE: I am guilty.\nB: Today is Saturday.\nD: I am not guilty.\nB: I am not guilty.\n",
+     "out": "Cannot Determine"
+    },
+    {
+     "in": "3 2 4\nA\nB\nC\nA: B is guilty.\nC: Today is Friday.\nA: B is not guilty.\nB: I am not guilty.\n",
+     "out": "Impossible"
+    },
+    {
+     "in": "6 0 3\nA\nB\nC\nD\nE\nF\nC: I am guilty.\nD: I am not guilty.\nD: C is guilty.\n",
+     "out": "C"
+    },
+    {
+     "in": "6 3 4\nA\nB\nC\nD\nE\nF\nB: I am not guilty.\nC: C is not guilty.\nC: F is not guilty.\nB: I am guilty.\n",
+     "out": "Impossible"
+    },
+    {
+     "in": "4 4 4\nA\nB\nC\nD\nB: A is guilty.\nD: I am not guilty.\nD: I am guilty.\nC: I am guilty.\n",
+     "out": "Impossible"
+    },
+    {
+     "in": "3 0 4\nA\nB\nC\nA: Today is Monday.\nB: Today is Sunday.\nA: I am guilty.\nC: I am guilty.\n",
+     "out": "Impossible"
+    },
+    {
+     "in": "3 3 3\nA\nB\nC\nB: Today is Tuesday.\nC: A is guilty.\nB: A is guilty.\n",
+     "out": "Cannot Determine"
+    },
+    {
+     "in": "4 2 6\nA\nB\nC\nD\nC: I am guilty.\nC: How are you??\nD: I am guilty.\nC: C is guilty.\nD: How are you??\nD: I am not guilty.\n",
+     "out": "Impossible"
+    },
+    {
+     "in": "3 2 4\nA\nB\nC\nC: I am guilty.\nA: I am guilty.\nC: I am guilty.\nA: I am guilty.\n",
+     "out": "Cannot Determine"
+    },
+    {
+     "in": "5 0 5\nA\nB\nC\nD\nE\nA: How are you??\nB: I am guilty.\nB: I am not guilty.\nA: I am guilty.\nC: I am guilty.\n",
+     "out": "Impossible"
+    },
+    {
+     "in": "4 0 5\nA\nB\nC\nD\nA: I am not guilty.\nD: I am not guilty.\nA: C is not guilty.\nA: How are you??\nD: B is not guilty.\n",
+     "out": "Impossible"
+    },
+    {
+     "in": "3 3 8\nA\nB\nC\nC: C is guilty.\nA: How are you??\nA: B is guilty.\nC: C is guilty.\nC: I am not guilty.\nB: B is guilty.\nC: C is guilty.\nB: C is not guilty.\n",
+     "out": "Impossible"
+    },
+    {
+     "in": "4 4 6\nA\nB\nC\nD\nD: I am not guilty.\nB: Today is Thursday.\nB: How are you??\nA: I am not guilty.\nD: Today is Friday.\nD: D is guilty.\n",
+     "out": "Impossible"
+    },
+    {
+     "in": "6 4 4\nA\nB\nC\nD\nE\nF\nD: I am not guilty.\nF: E is not guilty.\nD: Today is Thursday.\nA: I am not guilty.\n",
+     "out": "Cannot Determine"
+    },
+    {
+     "in": "4 3 3\nA\nB\nC\nD\nC: How are you??\nA: Today is Thursday.\nD: I am not guilty.\n",
+     "out": "Cannot Determine"
+    },
+    {
+     "in": "4 0 4\nA\nB\nC\nD\nC: How are you??\nA: I am not guilty.\nB: Today is Sunday.\nD: Today is Saturday.\n",
+     "out": "Impossible"
+    },
+    {
+     "in": "6 4 5\nA\nB\nC\nD\nE\nF\nA: F is guilty.\nA: Today is Tuesday.\nD: D is not guilty.\nE: A is guilty.\nF: B is guilty.\n",
+     "out": "Cannot Determine"
+    },
+    {
+     "in": "5 1 6\nA\nB\nC\nD\nE\nB: I am guilty.\nA: I am not guilty.\nD: Today is Thursday.\nD: A is not guilty.\nB: I am guilty.\nC: B is guilty.\n",
+     "out": "B"
+    },
+    {
+     "in": "3 3 5\nA\nB\nC\nB: I am not guilty.\nB: How are you??\nA: C is not guilty.\nA: I am guilty.\nC: C is not guilty.\n",
+     "out": "Impossible"
+    },
+    {
+     "in": "4 4 6\nA\nB\nC\nD\nD: C is not guilty.\nA: B is guilty.\nB: A is not guilty.\nD: D is not guilty.\nA: I am not guilty.\nB: I am not guilty.\n",
+     "out": "Impossible"
+    },
+    {
+     "in": "4 0 6\nA\nB\nC\nD\nD: B is guilty.\nD: I am not guilty.\nD: C is guilty.\nC: B is not guilty.\nB: A is not guilty.\nA: How are you??\n",
+     "out": "Impossible"
+    },
+    {
+     "in": "3 1 5\nA\nB\nC\nC: I am not guilty.\nC: I am guilty.\nC: Today is Saturday.\nB: C is not guilty.\nB: A is not guilty.\n",
+     "out": "Impossible"
+    },
+    {
+     "in": "3 3 4\nA\nB\nC\nB: How are you??\nC: How are you??\nC: B is guilty.\nA: C is guilty.\n",
+     "out": "A"
+    },
+    {
+     "in": "3 0 7\nA\nB\nC\nB: Today is Monday.\nA: Today is Saturday.\nA: A is guilty.\nB: Today is Friday.\nC: I am not guilty.\nC: B is not guilty.\nC: How are you??\n",
+     "out": "Impossible"
+    },
+    {
+     "in": "4 1 6\nA\nB\nC\nD\nC: I am not guilty.\nB: Today is Tuesday.\nB: B is guilty.\nD: How are you??\nC: Today is Friday.\nA: D is guilty.\n",
+     "out": "D"
+    }
+   ]
+  },
+  "P1040": {
+   "title": "[NOIP 2003 提高组] 加分二叉树",
+   "范围": "1≤n<30，分数<100",
+   "cases": [
+    {
+     "in": "5\n5 7 1 2 10\n",
+     "out": "145\n3 1 2 4 5"
+    },
+    {
+     "in": "8\n15 94 13 2 82 51 50 47\n",
+     "out": "2313447\n4 2 1 3 6 5 7 8"
+    },
+    {
+     "in": "1\n30\n",
+     "out": "30\n1"
+    },
+    {
+     "in": "6\n13 83 64 25 62 35\n",
+     "out": "90016\n3 1 2 5 4 6"
+    },
+    {
+     "in": "6\n92 77 6 68 16 30\n",
+     "out": "347470\n3 1 2 5 4 6"
+    },
+    {
+     "in": "7\n54 54 79 44 22 12 85\n",
+     "out": "8183982\n6 2 1 4 3 5 7"
+    },
+    {
+     "in": "6\n80 29 25 55 4 19\n",
+     "out": "122155\n5 2 1 3 4 6"
+    },
+    {
+     "in": "3\n49 49 34\n",
+     "out": "1715\n2 1 3"
+    },
+    {
+     "in": "5\n81 29 90 29 71\n",
+     "out": "519968\n2 1 4 3 5"
+    },
+    {
+     "in": "5\n61 48 99 27 8\n",
+     "out": "50007\n2 1 4 3 5"
+    },
+    {
+     "in": "4\n30 11 10 12\n",
+     "out": "671\n2 1 3 4"
+    },
+    {
+     "in": "2\n77 47\n",
+     "out": "124\n1 2"
+    },
+    {
+     "in": "2\n96 1\n",
+     "out": "97\n1 2"
+    },
+    {
+     "in": "7\n1 38 78 52 78 72 48\n",
+     "out": "446524\n4 1 2 3 6 5 7"
+    },
+    {
+     "in": "6\n22 6 85 29 99 14\n",
+     "out": "212017\n4 2 1 3 5 6"
+    },
+    {
+     "in": "4\n72 78 28 49\n",
+     "out": "7378\n3 1 2 4"
+    },
+    {
+     "in": "7\n78 52 62 7 48 42 95\n",
+     "out": "22494583\n4 2 1 3 6 5 7"
+    },
+    {
+     "in": "1\n72\n",
+     "out": "72\n1"
+    },
+    {
+     "in": "7\n56 59 8 96 5 89 56\n",
+     "out": "1601965\n5 3 1 2 4 6 7"
+    },
+    {
+     "in": "8\n24 8 52 64 80 8 39 99\n",
+     "out": "13991000\n6 2 1 4 3 5 7 8"
+    },
+    {
+     "in": "5\n53 99 17 42 63\n",
+     "out": "63042\n4 2 1 3 5"
+    },
+    {
+     "in": "1\n80\n",
+     "out": "80\n1"
+    },
+    {
+     "in": "1\n12\n",
+     "out": "12\n1"
+    },
+    {
+     "in": "3\n69 56 14\n",
+     "out": "1022\n2 1 3"
+    },
+    {
+     "in": "1\n9\n",
+     "out": "9\n1"
+    },
+    {
+     "in": "4\n38 45 63 45\n",
+     "out": "4149\n2 1 3 4"
+    },
+    {
+     "in": "3\n92 11 99\n",
+     "out": "9119\n2 1 3"
+    },
+    {
+     "in": "6\n85 52 70 31 58 88\n",
+     "out": "876323\n4 2 1 3 5 6"
+    },
+    {
+     "in": "7\n73 2 10 68 57 21 64\n",
+     "out": "2982271\n2 1 6 4 3 5 7"
+    },
+    {
+     "in": "2\n88 43\n",
+     "out": "131\n1 2"
+    },
+    {
+     "in": "2\n23 9\n",
+     "out": "32\n1 2"
+    },
+    {
+     "in": "1\n68\n",
+     "out": "68\n1"
+    },
+    {
+     "in": "2\n60 63\n",
+     "out": "123\n1 2"
+    },
+    {
+     "in": "7\n78 65 75 60 64 13 49\n",
+     "out": "18626395\n4 2 1 3 6 5 7"
+    },
+    {
+     "in": "3\n28 18 31\n",
+     "out": "886\n2 1 3"
+    },
+    {
+     "in": "7\n29 57 81 97 99 90 17\n",
+     "out": "4265935\n4 2 1 3 6 5 7"
+    },
+    {
+     "in": "6\n38 91 77 90 27 27\n",
+     "out": "317030\n3 1 2 5 4 6"
+    },
+    {
+     "in": "5\n81 10 90 4 97\n",
+     "out": "708104\n4 2 1 3 5"
+    },
+    {
+     "in": "7\n57 30 69 35 73 76 38\n",
+     "out": "11294585\n4 2 1 3 6 5 7"
+    },
+    {
+     "in": "7\n41 21 79 70 77 34 97\n",
+     "out": "24472552\n6 2 1 4 3 5 7"
+    }
+   ]
+  },
+  "P1041": {
+   "title": "[NOIP 2003 提高组] 传染病控制（疑似错题）",
+   "范围": "1≤n≤300 的树",
+   "cases": [
+    {
+     "in": "7 6\n1 2\n1 3\n2 4\n2 5\n3 6\n3 7\n",
+     "out": "3"
+    },
+    {
+     "in": "6 5\n1 2\n1 3\n1 4\n4 5\n4 6\n",
+     "out": "3"
+    },
+    {
+     "in": "5 4\n1 2\n1 3\n3 4\n3 5\n",
+     "out": "2"
+    },
+    {
+     "in": "3 2\n1 2\n1 3\n",
+     "out": "2"
+    },
+    {
+     "in": "6 5\n1 2\n2 3\n3 4\n1 5\n5 6\n",
+     "out": "2"
+    },
+    {
+     "in": "3 2\n1 2\n2 3\n",
+     "out": "1"
+    },
+    {
+     "in": "6 5\n1 2\n2 3\n1 4\n1 5\n3 6\n",
+     "out": "3"
+    },
+    {
+     "in": "7 6\n1 2\n1 3\n2 4\n1 5\n2 6\n2 7\n",
+     "out": "3"
+    },
+    {
+     "in": "9 8\n1 2\n2 3\n2 4\n3 5\n2 6\n6 7\n2 8\n5 9\n",
+     "out": "1"
+    },
+    {
+     "in": "9 8\n1 2\n2 3\n1 4\n1 5\n2 6\n2 7\n1 8\n2 9\n",
+     "out": "4"
+    },
+    {
+     "in": "3 2\n1 2\n2 3\n",
+     "out": "1"
+    },
+    {
+     "in": "3 2\n1 2\n2 3\n",
+     "out": "1"
+    },
+    {
+     "in": "9 8\n1 2\n2 3\n3 4\n4 5\n5 6\n5 7\n3 8\n6 9\n",
+     "out": "1"
+    },
+    {
+     "in": "9 8\n1 2\n1 3\n3 4\n2 5\n1 6\n5 7\n2 8\n4 9\n",
+     "out": "3"
+    },
+    {
+     "in": "6 5\n1 2\n2 3\n2 4\n1 5\n3 6\n",
+     "out": "2"
+    },
+    {
+     "in": "5 4\n1 2\n2 3\n2 4\n4 5\n",
+     "out": "1"
+    },
+    {
+     "in": "3 2\n1 2\n2 3\n",
+     "out": "1"
+    },
+    {
+     "in": "6 5\n1 2\n1 3\n2 4\n4 5\n5 6\n",
+     "out": "2"
+    },
+    {
+     "in": "9 8\n1 2\n2 3\n3 4\n3 5\n4 6\n2 7\n3 8\n8 9\n",
+     "out": "1"
+    },
+    {
+     "in": "9 8\n1 2\n1 3\n1 4\n2 5\n5 6\n4 7\n1 8\n1 9\n",
+     "out": "5"
+    },
+    {
+     "in": "9 8\n1 2\n1 3\n2 4\n3 5\n4 6\n3 7\n6 8\n3 9\n",
+     "out": "2"
+    },
+    {
+     "in": "8 7\n1 2\n2 3\n3 4\n4 5\n5 6\n2 7\n4 8\n",
+     "out": "1"
+    },
+    {
+     "in": "8 7\n1 2\n1 3\n1 4\n4 5\n2 6\n4 7\n1 8\n",
+     "out": "4"
+    },
+    {
+     "in": "8 7\n1 2\n1 3\n1 4\n1 5\n1 6\n5 7\n6 8\n",
+     "out": "5"
+    },
+    {
+     "in": "9 8\n1 2\n2 3\n2 4\n4 5\n5 6\n5 7\n5 8\n8 9\n",
+     "out": "1"
+    },
+    {
+     "in": "6 5\n1 2\n2 3\n1 4\n2 5\n2 6\n",
+     "out": "2"
+    },
+    {
+     "in": "9 8\n1 2\n2 3\n1 4\n4 5\n2 6\n3 7\n3 8\n4 9\n",
+     "out": "3"
+    },
+    {
+     "in": "9 8\n1 2\n2 3\n3 4\n1 5\n1 6\n5 7\n4 8\n8 9\n",
+     "out": "3"
+    },
+    {
+     "in": "4 3\n1 2\n2 3\n2 4\n",
+     "out": "1"
+    },
+    {
+     "in": "5 4\n1 2\n2 3\n2 4\n1 5\n",
+     "out": "2"
+    },
+    {
+     "in": "4 3\n1 2\n1 3\n3 4\n",
+     "out": "2"
+    },
+    {
+     "in": "4 3\n1 2\n1 3\n3 4\n",
+     "out": "2"
+    },
+    {
+     "in": "7 6\n1 2\n1 3\n3 4\n3 5\n2 6\n5 7\n",
+     "out": "2"
+    },
+    {
+     "in": "6 5\n1 2\n1 3\n2 4\n1 5\n4 6\n",
+     "out": "3"
+    },
+    {
+     "in": "9 8\n1 2\n2 3\n2 4\n1 5\n2 6\n3 7\n2 8\n5 9\n",
+     "out": "2"
+    },
+    {
+     "in": "7 6\n1 2\n2 3\n3 4\n2 5\n5 6\n4 7\n",
+     "out": "1"
+    },
+    {
+     "in": "7 6\n1 2\n2 3\n3 4\n3 5\n2 6\n3 7\n",
+     "out": "1"
+    },
+    {
+     "in": "6 5\n1 2\n1 3\n1 4\n1 5\n1 6\n",
+     "out": "5"
+    },
+    {
+     "in": "6 5\n1 2\n2 3\n1 4\n3 5\n3 6\n",
+     "out": "2"
+    },
+    {
+     "in": "3 2\n1 2\n1 3\n",
+     "out": "2"
+    }
+   ]
+  },
+  "P1042": {
+   "title": "[NOIP 2003 普及组] 乒乓球",
+   "范围": "每行≤25 字母、≤2500 行，含 E",
+   "cases": [
+    {
+     "in": "WWWWWWWWWWWWWWWWWWWW\nWWLWE\n",
+     "out": "11:0\n11:0\n1:1\n\n21:0\n2:1"
+    },
+    {
+     "in": "WWLLLWWL\nLWLLLWWW\nLLLLWWLWWLWWWLLLLWWLLLWWW\nWWWWLWWLWLLL\nWWWWWWLLLLWLLWL\nE\n",
+     "out": "8:11\n12:10\n11:5\n4:7\n\n17:21\n18:12"
+    },
+    {
+     "in": "WWLLWWLLWLLLWLLWWWW\nLWWWWLLLLWWLLWLLWWLWLW\nWWWWWLLLLLWLWWW\nLWLWLLWWLWWL\nWLLLLWLLWWLWWLWLWLW\nE\n",
+     "out": "12:10\n12:10\n13:15\n8:7\n\n22:20\n23:22"
+    },
+    {
+     "in": "WWLWLWLLWWLWLLLWLLL\nLWLLWWWWWLWLWLLWLWLLWLL\nLWLLWWWW\nWWWLLLLLLWLLW\nLLLWWWWWLWWWWWLWWLLWL\nLWLWWLWWLLWLLLLLWWWL\nE\n",
+     "out": "8:11\n11:13\n10:12\n11:3\n8:11\n3:3\n\n18:21\n21:17\n12:15"
+    },
+    {
+     "in": "LLWLWWWWWLLWWLLWLLW\nWWWWWLLWLWLWWLWLWWWLLWLWL\nLLWLWLLWLLLLWLLWWLWW\nWWWWWLWLWLW\nE\n",
+     "out": "11:9\n11:6\n6:11\n11:6\n2:2\n\n21:15\n20:19"
+    },
+    {
+     "in": "WWWWLWWW\nWLWLLWWLLWWLWLWL\nWWLLLWWLLLLLLWLL\nLWWLLWWWWWLLLLLLWLLWLL\nLWWWWLWLLWLLLLWWWW\nLWLWWWLWLLWLWWL\nE\n",
+     "out": "11:4\n8:11\n8:11\n7:11\n11:9\n2:2\n\n25:23\n18:21\n4:4"
+    },
+    {
+     "in": "WLWLLWLWLWWWWLWLL\nLWLWLWL\nLLLWLW\nWLWLWLLLLWWLWWLLLL\nWWWWWWWWLLWLLLWLLLLWLW\nE\n",
+     "out": "12:14\n9:11\n12:12\n\n17:21\n16:16"
+    },
+    {
+     "in": "WLWWLLWLWWLLLWLWLW\nLLWLWWLLWWWWLLWW\nE\n",
+     "out": "9:11\n9:5\n\n18:16"
+    },
+    {
+     "in": "LLWWLLWWWWWWWLLWLWW\nLLLWWWWLLLWLWLLWWWWL\nWLWWWLLWWLL\nLLWWLWWWLLLLWLLLWLWLL\nWWLLLWWLWWWLLLLWLWW\nWWLLLLLLWWLLL\nE\n",
+     "out": "11:7\n11:9\n11:9\n5:11\n10:12\n2:5\n\n21:16\n17:21\n12:16"
+    },
+    {
+     "in": "LWLLLLWLLLLLLLLWWWWWWW\nWWLLLLWLLWWWLLWLL\nLWWLWWWWLWWLWWWLLW\nWWWWLW\nLLWWWLLLWWWWWLWLLLWLLLL\nE\n",
+     "out": "2:11\n11:8\n11:7\n11:6\n8:11\n0:0\n\n15:21\n21:11\n7:11"
+    },
+    {
+     "in": "WWWLWLWLWLL\nLWWLWLWWWLLWWLWLWLLLWWLWL\nLLWLLWLLLWLWLLWWWWWLLLWLW\nE\n",
+     "out": "11:8\n8:11\n9:11\n2:1\n\n21:23\n9:8"
+    },
+    {
+     "in": "LWWWLLWWWWWWLWLLL\nLLLLLLLLWLWLLLLWLLWWLL\nE\n",
+     "out": "10:12\n5:11\n0:1\n\n13:21\n2:3"
+    },
+    {
+     "in": "WLLLLLWWLWW\nLWLLWLWLLLWLLLWW\nWLWLWLLWLWWWLLWW\nLLWLWLLLLLLLLLWL\nE\n",
+     "out": "8:11\n10:12\n4:11\n1:2\n\n15:21\n8:15"
+    },
+    {
+     "in": "WWLWWLLLWWLLLLWLWLWLLWLL\nLLLWWLWLLWWWLWWWLWWWLLLWW\nE\n",
+     "out": "9:11\n13:11\n2:3\n\n16:21\n8:4"
+    },
+    {
+     "in": "LLWLWWLLWLWWWWLLLWWLWLW\nLWWWLLLLWWLWLWLLWLLW\nE\n",
+     "out": "14:12\n7:10\n\n20:22\n1:0"
+    },
+    {
+     "in": "WWWWWLWLLLWWWWLWWLLW\nLLWWLWWWWWLL\nLLWLLLLWWLLWWLLWWLWWW\nLWWLLWLWWLLWWWL\nE\n",
+     "out": "11:5\n10:12\n11:7\n6:6\n\n21:14\n17:16"
+    },
+    {
+     "in": "WLLWLWLWLWLW\nLWWLWLWWWLLWLLWLWLLWL\nE\n",
+     "out": "11:9\n5:8\n\n16:17"
+    },
+    {
+     "in": "WLWLLLWWLWLLWLLLWWWWLWW\nWWWLWLWWLWLLLLWLLLL\nWLLWLLLLLLWLWWLWLWWWL\nE\n",
+     "out": "13:11\n7:11\n6:11\n3:1\n\n20:22\n9:12"
+    },
+    {
+     "in": "WLWLLWWWLL\nLWLLWLLWLWWWL\nWWLLWLWWWLLWWWWWWWW\nWWLLLWL\nE\n",
+     "out": "8:11\n11:6\n9:4\n\n21:17\n7:4"
+    },
+    {
+     "in": "LLWWLLLWLLWWLLWWLWLLLLW\nLLLWWLWLWLLLL\nLWLLWLL\nE\n",
+     "out": "8:11\n5:11\n2:6\n\n13:21\n2:7"
+    },
+    {
+     "in": "LLLLLLLWWWWLWWWLLLWWLLLL\nLWWWLWLWWW\nWLLLWLWWWW\nLWLWWWWWWWLWWLLLWWW\nWLLWWLWLLLWWWLLL\nWWLWLWWWWW\nE\n",
+     "out": "7:11\n13:11\n11:3\n11:9\n8:5\n\n17:21\n21:9\n12:9"
+    },
+    {
+     "in": "LLWLWLWLWWLLWWLWL\nWLLLW\nLWLWWWLWWLLLWLW\nE\n",
+     "out": "9:11\n9:8\n\n18:19"
+    },
+    {
+     "in": "WLWWLWLLWWLWLWLLWLWWWWW\nLWWLWLWLWWWLWW\nWLLWLWWLLWWLWW\nE\n",
+     "out": "11:9\n11:5\n9:6\n\n21:13\n10:7"
+    },
+    {
+     "in": "WLLWLLWWLLWLLW\nLWWWWLLWL\nE\n",
+     "out": "11:12\n\n11:12"
+    },
+    {
+     "in": "LWWWWWWLLWWLLLWLLWWWLLW\nWWWLLLLLWWWWWLLW\nWWWLLWLWL\nWWWLWWLWLWLW\nWWWWLLWW\nE\n",
+     "out": "11:8\n11:9\n11:6\n8:4\n\n21:15\n20:12"
+    },
+    {
+     "in": "WWLLWLLLWWWWLLWWLL\nLLWLLLWWLWWLW\nWLLLLWWWWWW\nWWWLLLWLLLLLWWLWLLW\nWLWLWLLL\nE\n",
+     "out": "9:11\n11:9\n9:11\n4:5\n\n22:20\n11:16"
+    },
+    {
+     "in": "LLWWLLWWLWL\nLLLLWLLLWLLWWW\nLWWWWLWW\nE\n",
+     "out": "6:11\n10:6\n\n16:17"
+    },
+    {
+     "in": "WLWLWWLWLWWWLLLLLLLWWWLWW\nWLLWLWWWLLWLLLLLLLWWWL\nWWWWLWWLLLWLWW\nE\n",
+     "out": "8:11\n11:6\n9:11\n3:2\n\n19:21\n12:9"
+    },
+    {
+     "in": "WLWLWWWLWWL\nWWLWWLLLLWLWLWWLLLW\nLLWWLWWLLLLLWL\nWLLLLWLWLWWWWL\nE\n",
+     "out": "11:5\n5:11\n6:11\n6:3\n\n20:22\n8:8"
+    },
+    {
+     "in": "LWWLLLWWLWLWWWWWWLWWL\nLWWWWLWLLWW\nWLWLWLLLWWLWLW\nE\n",
+     "out": "11:6\n11:7\n5:6\n\n21:12\n6:7"
+    },
+    {
+     "in": "WLWLWWWLLWW\nWLWWWWLWLWWL\nE\n",
+     "out": "11:5\n4:3\n\n15:8"
+    },
+    {
+     "in": "LWLLW\nLWWWW\nLLWLLLL\nWWWWWWL\nE\n",
+     "out": "12:10\n1:1\n\n13:11"
+    },
+    {
+     "in": "WWWWL\nLLWWWLL\nLLLWWLWWWL\nWLWWLLW\nLWWWLL\nLWLWWWLWWLWWL\nE\n",
+     "out": "11:9\n11:9\n5:3\n\n21:18\n6:3"
+    },
+    {
+     "in": "LWWWWLWWWWLLLLWLWLLWLWW\nLLLWLLLWWWLLWLLWLWLWWW\nLLLWLLLLWLWWWWWWLWL\nWLLLWL\nLLLLLWWWLWWWWLLWLWWWWL\nLWWWW\nE\n",
+     "out": "11:9\n7:11\n12:10\n4:11\n11:4\n5:2\n\n19:21\n18:21\n13:5"
+    },
+    {
+     "in": "WLWLLWLWLWLWWLL\nLWWLWLLWLLWL\nWWLLWWWLWLWWWLWLWWWLWW\nE\n",
+     "out": "10:12\n11:7\n6:3\n\n21:19\n6:3"
+    },
+    {
+     "in": "WLLLWLLWWL\nWLLWWLLLWLLLWL\nWWLLLLWWW\nLLLWLLLWWW\nLLLWWWLWWLLLWWLWWL\nE\n",
+     "out": "7:11\n7:11\n13:11\n0:1\n\n14:21\n13:13"
+    },
+    {
+     "in": "WWWWLWLWLWWLLWWWLWLW\nLWLWWLLWLWWLWWLLLLLW\nE\n",
+     "out": "11:5\n10:12\n1:1\n\n21:13\n1:5"
+    },
+    {
+     "in": "WLWWWLWLLWLW\nLLWWLLLWLWLLLWLLWL\nWLLLWWWLLWL\nWLLLWWL\nLWLLWW\nLWLLWWWWLLLWWWLLWWLLWLLLW\nE\n",
+     "out": "11:13\n8:11\n10:12\n7:7\n\n17:21\n18:21\n1:1"
+    },
+    {
+     "in": "WLWLLWWL\nWWWLWLLLLWLWWWWL\nLWLWWLLWLLLLWLWLWLWWL\nE\n",
+     "out": "12:10\n7:11\n3:2\n\n19:21\n3:2"
+    },
+    {
+     "in": "WWWLLLWLLWLWLLWWW\nLWWWLLWLLLWWWL\nWLWLLW\nWLLLWLWWLLLLWWWWWL\nWLLWLWWW\nE\n",
+     "out": "11:9\n9:11\n12:10\n1:0\n\n23:25\n10:5"
     }
    ]
   }
